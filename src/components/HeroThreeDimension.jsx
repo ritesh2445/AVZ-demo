@@ -707,7 +707,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         preload="auto"
       />
 
-      {/* 1. Native Ultra-High-Definition Uncompressed Master Video Reel */}
+      {/* 1. Native Ultra-High-Definition Uncompressed Master Video Reel (Highest Quality) */}
       <video
         ref={videoRef}
         key={videoSource}
@@ -718,19 +718,24 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         preload="auto"
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-0 pointer-events-none ${
-          videoLoaded ? 'opacity-65' : 'opacity-0'
+        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-all duration-1000 ease-out ${
+          videoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
         }`}
+        style={{
+          filter: 'contrast(1.08) saturate(1.1) brightness(1.02)',
+          imageRendering: 'high-quality',
+          WebkitBackfaceVisibility: 'hidden',
+          transform: 'translateZ(0)'
+        }}
       >
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. Atmospheric Haute-Couture Vignette */}
+      {/* 2. Atmospheric Haute-Couture Edge Framing (Center 100% Unobstructed for Max Quality) */}
       <div
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
-          background: 'radial-gradient(circle at center, rgba(32, 10, 40, 0.45) 0%, rgba(10, 2, 15, 0.75) 60%, rgba(0, 0, 0, 0.94) 100%)',
-          mixBlendMode: 'multiply'
+          background: 'radial-gradient(circle at center, transparent 38%, rgba(20, 4, 25, 0.28) 68%, rgba(0, 0, 0, 0.88) 100%)'
         }}
       />
 

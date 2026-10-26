@@ -8,6 +8,7 @@ export default function LoadingExperience({ onComplete }) {
   const barRef = useRef(null);
   const phaseRef = useRef(null);
   const [isExiting, setIsExiting] = useState(false);
+  const [isCompleted100, setIsCompleted100] = useState(false);
   const hasFinishedRef = useRef(false);
 
   useEffect(() => {
@@ -122,74 +123,99 @@ export default function LoadingExperience({ onComplete }) {
     const particles = new THREE.Points(pGeom, pMat);
     scene.add(particles);
 
-    // Hypnotic, unhurried 4.6-second timeline progression
+    // GUARANTEED NON-SKIPPING DISCRETE STEPPER: 00 to 100
+    // Exactly 100 increments. 42ms per step = 4,200ms total + 350ms triumph hold = ~4.55 seconds
     let animId;
-    const startTime = performance.now();
-    const duration = 4600; // Exact 4.6s duration requested by client
+    let currentCount = 0;
+    let lastStepTime = performance.now();
+    const stepDuration = 42; // ms per count
 
     const triggerFinish = () => {
       if (hasFinishedRef.current) return;
       hasFinishedRef.current = true;
       setIsExiting(true);
-      playSound('baddie_alert');
+
+      // Play dramatic cinematic soundscape
+      playSound('subdrop');
+      playSound('blast');
+
+      // Allow 850ms for cinematic letterbox aperture & anamorphic light sweep to open
       setTimeout(() => {
         onComplete();
-      }, 350);
+      }, 850);
     };
 
     const animate = (time) => {
       animId = requestAnimationFrame(animate);
-      const elapsed = time - startTime;
-      const t = Math.min(1, Math.max(0, elapsed / duration));
 
-      // Continuous, fluid easing for majestic steady progression
-      const easeVal = 1 - Math.pow(1 - t, 2.8);
-      const currentPct = Math.min(100, Math.round(easeVal * 100));
+      // Strictly sequential 00 to 100 counter (NEVER skips any integer)
+      if (currentCount < 100) {
+        if (time - lastStepTime >= stepDuration) {
+          currentCount++;
+          lastStepTime = time;
 
-      // Direct DOM updates (Zero React re-render lag)
-      if (pctRef.current) {
-        pctRef.current.textContent = currentPct < 10 ? `0${currentPct}` : `${currentPct}`;
-      }
-      if (barRef.current) {
-        barRef.current.style.width = `${currentPct}%`;
-      }
-      if (phaseRef.current) {
-        if (currentPct < 22) {
-          phaseRef.current.textContent = "AWAKENING THE OTHER DIMENSION";
-        } else if (currentPct < 48) {
-          phaseRef.current.textContent = "SCULPTING 1-OF-1 WEARABLE ART FOR BADDIES";
-        } else if (currentPct < 72) {
-          phaseRef.current.textContent = "DECONSTRUCTING ARCHIVES & MOTHERBOARDS";
-        } else if (currentPct < 92) {
-          phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE RUNWAY GRAILS";
-        } else {
-          phaseRef.current.textContent = "DIMENSION UNLOCKED. CERTIFIED SLAY ERA.";
+          const formatted = currentCount < 10 ? `0${currentCount}` : `${currentCount}`;
+          if (pctRef.current) {
+            pctRef.current.textContent = formatted;
+          }
+          if (barRef.current) {
+            barRef.current.style.width = `${currentCount}%`;
+          }
+
+          // Subtle milestone audio feedback
+          if (currentCount === 25 || currentCount === 50 || currentCount === 75) {
+            playSound('pip');
+          } else if (currentCount === 100) {
+            setIsCompleted100(true);
+            playSound('baddie_alert');
+          }
+
+          // Dynamic phase subtitles
+          if (phaseRef.current) {
+            if (currentCount < 20) {
+              phaseRef.current.textContent = "AWAKENING THE OTHER DIMENSION";
+            } else if (currentCount < 45) {
+              phaseRef.current.textContent = "SCULPTING 1-OF-1 WEARABLE ART FOR BADDIES";
+            } else if (currentCount < 70) {
+              phaseRef.current.textContent = "DECONSTRUCTING ARCHIVES & MOTHERBOARDS";
+            } else if (currentCount < 90) {
+              phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE RUNWAY GRAILS";
+            } else if (currentCount < 100) {
+              phaseRef.current.textContent = "CHARGING HAUTE-COUTURE MATRIX";
+            } else {
+              phaseRef.current.textContent = "DIMENSION UNLOCKED. CERTIFIED SLAY ERA.";
+            }
+          }
+        }
+      } else if (!hasFinishedRef.current) {
+        // Triumphant hold at 100% for 380ms before triggering cinematic aperture
+        if (time - lastStepTime >= 380) {
+          triggerFinish();
         }
       }
 
-      // 3D rotations
-      ring1.rotation.z = elapsed * 0.0012;
-      ring1.rotation.x = elapsed * 0.0008;
-      ring2.rotation.y = -elapsed * 0.0015;
-      ring2.rotation.z = elapsed * 0.001;
-      core.rotation.y = elapsed * 0.0018;
-      core.rotation.x = elapsed * 0.0012;
-      wireMesh.rotation.y = -elapsed * 0.0009;
+      // Smooth kinetic 3D rotations
+      const speedMultiplier = currentCount >= 95 ? 2.5 : 1.0;
+      ring1.rotation.z += 0.015 * speedMultiplier;
+      ring1.rotation.x += 0.01 * speedMultiplier;
+      ring2.rotation.y -= 0.018 * speedMultiplier;
+      ring2.rotation.z += 0.012 * speedMultiplier;
+      core.rotation.y += 0.02 * speedMultiplier;
+      core.rotation.x += 0.015 * speedMultiplier;
+      wireMesh.rotation.y -= 0.01 * speedMultiplier;
+      particles.rotation.y += 0.003;
 
-      particles.rotation.y = elapsed * 0.0002;
-
-      // Camera rush in final stretch
-      if (t > 0.85) {
-        const rush = (t - 0.85) / 0.15;
-        camera.position.z = 12 - rush * 3.5;
-        group.scale.set(1 + rush * 0.35, 1 + rush * 0.35, 1 + rush * 0.35);
+      // Camera rush toward the core in final stretch (from 88% onwards)
+      if (currentCount > 88) {
+        const rush = (currentCount - 88) / 12;
+        camera.position.z = 12 - rush * 4.2;
+        group.scale.set(1 + rush * 0.45, 1 + rush * 0.45, 1 + rush * 0.45);
+        if (coreMat) {
+          coreMat.emissiveIntensity = 1 + rush * 3.5;
+        }
       }
 
       renderer.render(scene, camera);
-
-      if (t >= 1 && !hasFinishedRef.current) {
-        triggerFinish();
-      }
     };
 
     animId = requestAnimationFrame(animate);
@@ -238,67 +264,105 @@ export default function LoadingExperience({ onComplete }) {
   }, [onComplete]);
 
   return (
-    <div
-      className={`fixed inset-0 z-[9999] bg-pitch-black flex flex-col justify-between p-8 md:p-14 select-none transition-all duration-400 ease-out will-change-[opacity,transform] ${
-        isExiting ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
-    >
-      {/* 3D Kinetic Background */}
-      <div ref={mountRef} className="absolute inset-0 w-full h-full pointer-events-none" />
+    <div className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
+      {/* ========================================================
+          CINEMATIC APERTURE / LETTERBOX SHUTTER SYSTEM
+          Top and bottom cinema curtains split vertically on exit
+          ======================================================== */}
+      <div
+        className={`absolute top-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[850ms] pointer-events-auto will-change-transform z-20 ${
+          isExiting ? '-translate-y-full' : 'translate-y-0'
+        }`}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+      />
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[850ms] pointer-events-auto will-change-transform z-20 ${
+          isExiting ? 'translate-y-full' : 'translate-y-0'
+        }`}
+        style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+      />
 
-      {/* Top Bar - Clean Frameless Info */}
-      <div className="relative z-10 w-full flex items-center justify-between text-xs font-mono tracking-widest uppercase">
-        <div className="flex items-center gap-3 text-silver/80">
-          <span className="w-2 h-2 rounded-full bg-pink animate-ping" />
-          <span>AVZ VAGANZA // GUWAHATI ATELIER</span>
-        </div>
-        <div className="text-silver/50 hidden sm:block">
-          DHRISTROYER WEARABLE ART ARCHIVE
-        </div>
-      </div>
+      {/* ========================================================
+          ANAMORPHIC CINEMA LIGHT FLARE STREAK
+          Flashes horizontally across screen at moment of transition
+          ======================================================== */}
+      <div
+        className={`absolute top-1/2 left-0 right-0 h-[3px] -translate-y-1/2 bg-gradient-to-r from-transparent via-[#f472b6] via-white to-transparent pointer-events-none z-30 transition-all duration-700 ease-out ${
+          isExiting
+            ? 'scale-x-[3] opacity-0 blur-[2px]'
+            : isCompleted100
+            ? 'scale-x-100 opacity-90 blur-[1px]'
+            : 'scale-x-0 opacity-0'
+        }`}
+      />
 
-      {/* Center Kinetic Typography Counter */}
-      <div className="relative z-10 flex flex-col items-center justify-center my-auto pointer-events-none text-center">
-        <div className="text-[11px] font-mono tracking-[0.4em] text-pink/90 uppercase mb-3">
-          INITIALIZING DIMENSIONAL ENGINE
+      {/* ========================================================
+          MAIN LOADER CONTENT (Fades & zooms smoothly on exit)
+          ======================================================== */}
+      <div
+        className={`absolute inset-0 z-25 flex flex-col justify-between p-8 md:p-14 transition-all duration-700 ease-out will-change-[transform,opacity] ${
+          isExiting ? 'scale-115 opacity-0 blur-md' : 'scale-100 opacity-100'
+        }`}
+      >
+        {/* 3D Kinetic Background */}
+        <div ref={mountRef} className="absolute inset-0 w-full h-full pointer-events-none" />
+
+        {/* Top Bar - Clean Frameless Info */}
+        <div className="relative z-10 w-full flex items-center justify-between text-xs font-mono tracking-widest uppercase">
+          <div className="flex items-center gap-3 text-silver/80">
+            <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-ping" />
+            <span>AVZ VAGANZA // GUWAHATI ATELIER</span>
+          </div>
+          <div className="text-silver/50 hidden sm:block">
+            DHRISTROYER WEARABLE ART ARCHIVE
+          </div>
         </div>
 
-        {/* High FPS Numeric Display */}
-        <div className="flex items-baseline justify-center">
-          <span
-            ref={pctRef}
-            className="text-8xl sm:text-9xl md:text-[11rem] font-spartan font-black text-white leading-none tracking-tighter"
-          >
-            00
-          </span>
-          <span className="text-3xl sm:text-4xl md:text-5xl font-mono text-pink ml-2 font-bold">
-            %
-          </span>
-        </div>
+        {/* Center Kinetic Typography Counter */}
+        <div className="relative z-10 flex flex-col items-center justify-center my-auto pointer-events-none text-center">
+          <div className="text-[11px] font-mono tracking-[0.4em] text-[#f472b6] font-bold uppercase mb-3">
+            INITIALIZING DIMENSIONAL ENGINE
+          </div>
 
-        {/* Phase Subtitle Status */}
-        <div
-          ref={phaseRef}
-          className="text-xs sm:text-sm font-mono tracking-[0.25em] text-silver/80 uppercase mt-4"
-        >
-          LOCATING THE OTHER DIMENSION
-        </div>
-      </div>
+          {/* High FPS Numeric Display */}
+          <div className="flex items-baseline justify-center">
+            <span
+              ref={pctRef}
+              className={`text-8xl sm:text-9xl md:text-[11rem] font-spartan font-black text-white leading-none tracking-tighter transition-all duration-300 ${
+                isCompleted100 ? 'text-white drop-shadow-[0_0_40px_rgba(244,114,182,0.95)]' : ''
+              }`}
+            >
+              00
+            </span>
+            <span className="text-3xl sm:text-4xl md:text-5xl font-mono text-[#f472b6] ml-2 font-bold">
+              %
+            </span>
+          </div>
 
-      {/* Bottom Liquid Progress Bar & Metadata */}
-      <div className="relative z-10 w-full flex flex-col gap-3 max-w-3xl mx-auto">
-        {/* Progress Track */}
-        <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden relative">
+          {/* Phase Subtitle Status */}
           <div
-            ref={barRef}
-            className="h-full bg-gradient-to-r from-pink via-purple-400 to-white shadow-[0_0_15px_#F4C2C2] rounded-full transition-all duration-75"
-            style={{ width: '0%' }}
-          />
+            ref={phaseRef}
+            className="text-xs sm:text-sm font-mono tracking-[0.25em] text-silver/85 uppercase mt-4 font-medium"
+          >
+            LOCATING THE OTHER DIMENSION
+          </div>
         </div>
 
-        <div className="flex items-center justify-between text-[10px] font-mono text-silver/50 tracking-wider">
-          <span>EXPERIENCE SPATIAL LUXURY</span>
-          <span>PRESS SPACE OR ESC TO SKIP</span>
+        {/* Bottom Liquid Progress Bar & Metadata */}
+        <div className="relative z-10 w-full flex flex-col gap-3 max-w-3xl mx-auto">
+          {/* Progress Track */}
+          <div className="w-full h-[3px] bg-white/10 rounded-full overflow-hidden relative">
+            <div
+              ref={barRef}
+              className="h-full bg-gradient-to-r from-[#f472b6] via-[#c084fc] to-white shadow-[0_0_15px_#f472b6] rounded-full transition-all duration-75"
+              style={{ width: '0%' }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-[10px] font-mono text-silver/50 tracking-wider">
+            <span>EXPERIENCE SPATIAL LUXURY</span>
+            <span>PRESS SPACE OR ESC TO SKIP</span>
+          </div>
         </div>
       </div>
     </div>
