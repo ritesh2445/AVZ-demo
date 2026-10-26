@@ -1,11 +1,25 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ASSET_MANIFEST } from '../data/brandData';
+import { ASSET_MANIFEST, BRAND_INFO } from '../data/brandData';
+import { Play, Pause, Volume2, VolumeX, Maximize2, Film, Sparkles } from 'lucide-react';
+import { playSound } from '../utils/audio';
+import CinemaReelModal from './CinemaReelModal';
 
 export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady = true }) {
   const mountRef = useRef(null);
   const maskRef = useRef(null);
   const sectionRef = useRef(null);
+  const videoRef = useRef(null);
+
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isCinemaOpen, setIsCinemaOpen] = useState(false);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
+
+  useEffect(() => {
+    setIsMobileDevice(window.innerWidth < 768);
+  }, []);
 
   useEffect(() => {
     if (!isReady) return;
@@ -17,10 +31,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const height = container.clientHeight || window.innerHeight;
     const isMobile = window.innerWidth < 768;
 
-    // 1. Scene, Camera, WebGL Renderer
+    // 1. Scene, Camera, WebGL Renderer (Transparent to allow live native video reel through)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
-    scene.fog = new THREE.FogExp2(0x180b1e, 0.04);
+    scene.background = null;
+    scene.fog = new THREE.FogExp2(0x180b1e, 0.025);
 
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
     camera.position.set(0, 0, 13);
@@ -32,6 +46,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         alpha: true,
         powerPreference: 'high-performance'
       });
+      renderer.setClearColor(0x000000, 0);
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -310,31 +325,125 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     };
   }, [isReady]);
 
+  const handleTogglePlay = (e) => {
+    e?.stopPropagation();
+    playSound('click');
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleToggleMute = (e) => {
+    e?.stopPropagation();
+    playSound('click');
+    if (!videoRef.current) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setIsMuted(videoRef.current.muted);
+  };
+
+  const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
+
   return (
     <section
       ref={sectionRef}
       className="relative w-full h-[88vh] md:h-[92vh] flex items-center justify-center overflow-hidden bg-pitch-black touch-pan-y"
     >
-      {/* 3D WebGL Background Layer */}
+      {/* 0. Native Ultra-High-Definition Uncompressed Master Video Reel */}
+      <video
+        ref={videoRef}
+        key={videoSource}
+        autoPlay
+        loop
+        muted={isMuted}
+        playsInline
+        preload="auto"
+        onLoadedData={() => setVideoLoaded(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-0 pointer-events-none ${
+          videoLoaded ? 'opacity-65' : 'opacity-0'
+        }`}
+      >
+        <source src={videoSource} type="video/mp4" />
+      </video>
+
+      {/* 1. Atmospheric Haute-Couture Vignette (Deep violet & black scrim for contrast) */}
       <div
-        ref={mountRef}
-        className="absolute inset-0 w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing"
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(32, 10, 40, 0.45) 0%, rgba(10, 2, 15, 0.75) 60%, rgba(0, 0, 0, 0.94) 100%)',
+          mixBlendMode: 'multiply'
+        }}
       />
 
-      {/* Dynamic 2D Ambient Lighting Mask Following Pointer (Direct DOM driven for ultra smoothness) */}
+      {/* 2. 3D WebGL Three.js Layer with Transparent Background */}
+      <div
+        ref={mountRef}
+        className="absolute inset-0 w-full h-full pointer-events-auto cursor-grab active:cursor-grabbing z-[2]"
+      />
+
+      {/* 3. Dynamic 2D Ambient Lighting Mask Following Pointer */}
       <div
         ref={maskRef}
-        className="absolute inset-0 pointer-events-none transition-opacity duration-700"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-700 z-[3]"
         style={{
-          background: 'radial-gradient(750px circle at 50% 50%, rgba(244, 194, 194, 0.14) 0%, rgba(48, 25, 52, 0.25) 45%, rgba(0, 0, 0, 0.9) 85%)',
+          background: 'radial-gradient(750px circle at 50% 50%, rgba(244, 194, 194, 0.12) 0%, rgba(48, 25, 52, 0.22) 45%, rgba(0, 0, 0, 0.85) 85%)',
           mixBlendMode: 'screen'
         }}
       />
 
-      {/* Ultra-clean Minimalist Scroll Guide */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10 opacity-60">
+      {/* 4. Luxury Live Editorial Film HUD Badge (Top-Left) */}
+      <div className="absolute top-6 left-6 z-[10] flex items-center gap-2">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-pink/30 text-[10px] font-mono tracking-widest text-pink shadow-[0_0_20px_rgba(244,194,194,0.2)]">
+          <span className="w-2 h-2 rounded-full bg-pink animate-ping inline-block" />
+          <span>EDITORIAL FASHION REEL // SS26 ARCHIVE</span>
+        </div>
+      </div>
+
+      {/* 5. Luxury Video Controls HUD (Bottom-Left) */}
+      <div className="absolute bottom-6 left-6 z-[10] flex items-center gap-2.5">
+        <button
+          onClick={handleTogglePlay}
+          className="p-2.5 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all backdrop-blur-md cursor-pointer group shadow-lg"
+          title={isPlaying ? 'Pause Background Reel' : 'Play Background Reel'}
+        >
+          {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+        </button>
+
+        <button
+          onClick={handleToggleMute}
+          className="p-2.5 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all backdrop-blur-md cursor-pointer group shadow-lg"
+          title={isMuted ? 'Unmute Audio' : 'Mute Audio'}
+        >
+          {isMuted ? <VolumeX className="w-3.5 h-3.5 text-silver/70 group-hover:text-pink" /> : <Volume2 className="w-3.5 h-3.5 text-pink" />}
+        </button>
+
+        <button
+          onClick={() => {
+            playSound('modal_open');
+            setIsCinemaOpen(true);
+          }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-pink/20 via-black/80 to-purple-900/40 hover:from-pink/30 hover:to-purple-900/60 border border-pink/40 hover:border-pink text-[11px] font-spartan font-bold text-white hover:text-pink tracking-widest uppercase transition-all backdrop-blur-md cursor-pointer shadow-[0_0_25px_rgba(244,194,194,0.25)]"
+        >
+          <Film className="w-3.5 h-3.5 text-pink" />
+          <span>CINEMA REEL ↗</span>
+        </button>
+      </div>
+
+      {/* 6. Ultra-clean Minimalist Scroll Guide (Bottom-Center) */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
+
+      {/* 7. Dedicated Cinema Reel Modal */}
+      <CinemaReelModal
+        isOpen={isCinemaOpen}
+        onClose={() => setIsCinemaOpen(false)}
+        isMobile={isMobileDevice}
+      />
     </section>
   );
 }

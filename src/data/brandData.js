@@ -86,6 +86,14 @@ export const ASSET_MANIFEST = {
     chainmailArmor: "/assets/look_chainmail_armor.jpg",
     spikeBodice: "/assets/look_spike_bodice.jpg",
     motherboardCuff: "/assets/prod_motherboard_cuff.jpg"
+  },
+  videos: {
+    heroDesktop: "/assets/hero_reel_desktop.mp4",
+    heroMobile: "/assets/hero_reel_mobile.mp4",
+    vimeoDesktop: "https://vimeo.com/1239586933",
+    vimeoMobile: "https://vimeo.com/1239586843",
+    vimeoEmbedDesktop: "https://player.vimeo.com/video/1239586933?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0",
+    vimeoEmbedMobile: "https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0"
   }
 };
 
