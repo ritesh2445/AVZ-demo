@@ -5,6 +5,39 @@ import { Play, Pause, Volume2, VolumeX, Maximize2, Film, Sparkles, Zap, Flame } 
 import { playSound } from '../utils/audio';
 import CinemaReelModal from './CinemaReelModal';
 
+// Helper to create realistic 4-point starry sparkle texture
+function createStarrySparkleTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  const cx = 32;
+  const cy = 32;
+
+  // Soft purple circular glow
+  const radGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30);
+  radGlow.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  radGlow.addColorStop(0.2, 'rgba(230, 160, 255, 0.95)');
+  radGlow.addColorStop(0.5, 'rgba(168, 85, 247, 0.65)');
+  radGlow.addColorStop(0.8, 'rgba(123, 44, 191, 0.3)');
+  radGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = radGlow;
+  ctx.fillRect(0, 0, 64, 64);
+
+  // 4-point radiant diamond star spikes
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
+  ctx.beginPath();
+  ctx.moveTo(cx, 4);
+  ctx.bezierCurveTo(cx + 2, cy - 2, cx + 2, cy - 2, cx + 28, cy);
+  ctx.bezierCurveTo(cx + 2, cy + 2, cx + 2, cy + 2, cx, cy + 28);
+  ctx.bezierCurveTo(cx - 2, cy + 2, cx - 2, cy + 2, cx - 28, cy);
+  ctx.bezierCurveTo(cx - 2, cy - 2, cx - 2, cy - 2, cx, 4);
+  ctx.fill();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
+}
+
 export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady = true }) {
   const mountRef = useRef(null);
   const maskRef = useRef(null);
@@ -28,13 +61,16 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   });
   const [isHolding, setIsHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0); // 0 to 1
-  const [blastFlash, setBlastFlash] = useState(false);
+  const [blastActive, setBlastActive] = useState(false);
+  const [sparkleSprinkles, setSparkleSprinkles] = useState([]);
 
   const holdStartRef = useRef(null);
   const holdFrameRef = useRef(null);
   const shakeIntensityRef = useRef(0);
   const emblemGroupRef = useRef(null);
+  const photoPlanesGroupRef = useRef(null);
   const coreMatRef = useRef(null);
+  const blastTriggerFnRef = useRef(null);
 
   useEffect(() => {
     setIsMobileDevice(window.innerWidth < 768);
@@ -93,14 +129,20 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     deepViolet.position.set(6, 5, 2);
     scene.add(deepViolet);
 
-    // 3. Central Kinetic Sculpture (Subject to tap-and-hold blast Easter Egg)
+    // 3. Central Kinetic Sculpture (Vanish on blast)
     const emblemGroup = new THREE.Group();
     emblemGroupRef.current = emblemGroup;
     scene.add(emblemGroup);
 
-    // If already blasted this session, hide emblem completely
+    // 4. Floating Photo Planes Group (MUST ALSO VANISH ON BLAST)
+    const photoPlanesGroup = new THREE.Group();
+    photoPlanesGroupRef.current = photoPlanesGroup;
+    scene.add(photoPlanesGroup);
+
+    // If already blasted this session, hide both emblem and photo planes completely
     if (isBlasted) {
       emblemGroup.visible = false;
+      photoPlanesGroup.visible = false;
     }
 
     const chromeMat = new THREE.MeshPhysicalMaterial({
@@ -150,7 +192,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const wireMesh = new THREE.Mesh(wireGeom, wireMat);
     emblemGroup.add(wireMesh);
 
-    // 4. Client Photography Panels
+    // Construct Floating Photography Panels
     const textureLoader = new THREE.TextureLoader();
     const photoPlanes = [];
     const loadedTextures = [];
@@ -191,12 +233,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         const wireBorder = new THREE.LineSegments(wireBorderGeom, wireBorderMat);
         mesh.add(wireBorder);
 
-        scene.add(mesh);
+        photoPlanesGroup.add(mesh);
         photoPlanes.push(mesh);
       });
     });
 
-    // 5. Star Dust & Floating Metallic Scraps
+    // 5. Ambient Stardust
     const scrapCount = isMobile ? 120 : 200;
     const scrapGeom = new THREE.BufferGeometry();
     const scrapPos = new Float32Array(scrapCount * 3);
@@ -215,7 +257,103 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const scrapParticles = new THREE.Points(scrapGeom, scrapMat);
     scene.add(scrapParticles);
 
-    // 6. Interactive Spotlight & Camera Movement
+    // 6. REALISTIC PURPLE STAR SPARKLE SPRINKLE EXPLOSION SYSTEM
+    const sparkleCount = 1400;
+    const sparkleGeom = new THREE.BufferGeometry();
+    const sparklePositions = new Float32Array(sparkleCount * 3);
+    const sparkleVelocities = new Float32Array(sparkleCount * 3);
+    const sparkleColors = new Float32Array(sparkleCount * 3);
+    const sparkleSizes = new Float32Array(sparkleCount);
+    const sparkleAlphas = new Float32Array(sparkleCount);
+
+    const purplePalette = [
+      new THREE.Color(0xd946ef), // Radiant orchid
+      new THREE.Color(0xa855f7), // Galactic purple
+      new THREE.Color(0xc084fc), // Starry lavender
+      new THREE.Color(0xf472b6), // Neon pink
+      new THREE.Color(0xffffff)  // Star diamond core
+    ];
+
+    for (let i = 0; i < sparkleCount; i++) {
+      // Hidden initially far offscreen
+      sparklePositions[i * 3] = 0;
+      sparklePositions[i * 3 + 1] = -1000;
+      sparklePositions[i * 3 + 2] = 0;
+
+      sparkleVelocities[i * 3] = 0;
+      sparkleVelocities[i * 3 + 1] = 0;
+      sparkleVelocities[i * 3 + 2] = 0;
+
+      const col = purplePalette[Math.floor(Math.random() * purplePalette.length)];
+      sparkleColors[i * 3] = col.r;
+      sparkleColors[i * 3 + 1] = col.g;
+      sparkleColors[i * 3 + 2] = col.b;
+
+      sparkleSizes[i] = 0.3 + Math.random() * 0.7;
+      sparkleAlphas[i] = 0;
+    }
+
+    sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePositions, 3));
+    sparkleGeom.setAttribute('color', new THREE.BufferAttribute(sparkleColors, 3));
+
+    const starTexture = createStarrySparkleTexture();
+    const sparkleMat = new THREE.PointsMaterial({
+      size: 0.65,
+      map: starTexture,
+      transparent: true,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      opacity: 0
+    });
+
+    const sparkleSystem = new THREE.Points(sparkleGeom, sparkleMat);
+    scene.add(sparkleSystem);
+
+    let sparklesActive = false;
+    let sparkleStartTime = 0;
+
+    // Trigger Blast Sparkles Explosion Function
+    blastTriggerFnRef.current = () => {
+      sparklesActive = true;
+      sparkleStartTime = performance.now();
+      sparkleMat.opacity = 1;
+
+      // Instantly vanish both the central kinetic emblem and floating photo planes
+      emblemGroup.visible = false;
+      photoPlanesGroup.visible = false;
+
+      // Seed burst origins from center emblem + floating cards
+      const origins = [
+        { x: 0, y: 0, z: 0 },
+        { x: -4.2, y: 1.4, z: 1.2 },
+        { x: 4.2, y: -0.6, z: 1.8 },
+        { x: -3.4, y: -2.4, z: 0.6 },
+        { x: 3.6, y: 2.5, z: -0.8 }
+      ];
+
+      const posArr = sparkleGeom.attributes.position.array;
+      const velArr = sparkleVelocities;
+
+      for (let i = 0; i < sparkleCount; i++) {
+        const origin = origins[i % origins.length];
+        posArr[i * 3] = origin.x + (Math.random() - 0.5) * 0.5;
+        posArr[i * 3 + 1] = origin.y + (Math.random() - 0.5) * 0.5;
+        posArr[i * 3 + 2] = origin.z + (Math.random() - 0.5) * 0.5;
+
+        // Spherical outward burst velocity with air resistance
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(Math.random() * 2 - 1);
+        const speed = 0.15 + Math.random() * 0.45;
+
+        velArr[i * 3] = Math.sin(phi) * Math.cos(theta) * speed;
+        velArr[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * speed + 0.05; // slight upward pop
+        velArr[i * 3 + 2] = Math.cos(phi) * speed;
+      }
+      sparkleGeom.attributes.position.needsUpdate = true;
+    };
+
+    // 7. Interactive Spotlight & Camera Movement
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -287,7 +425,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         if (coreMatRef.current) {
           if (currentShake > 0.1) {
             coreMatRef.current.color.setHex(0xFFFFFF);
-            coreMatRef.current.emissive.setHex(0xFF1493);
+            coreMatRef.current.emissive.setHex(0xC084FC);
             coreMatRef.current.emissiveIntensity = 2 + currentShake * 10;
           } else {
             coreMatRef.current.color.setHex(0xF4C2C2);
@@ -297,11 +435,46 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         }
       }
 
-      // Floating photos gentle oscillation
-      for (let i = 0; i < photoPlanes.length; i++) {
-        const mesh = photoPlanes[i];
-        mesh.position.y += Math.sin(elapsedTime * 1.2 + i * 1.5) * 0.003;
-        mesh.rotation.z = Math.sin(elapsedTime * 0.8 + i) * 0.03;
+      // Floating photos gentle oscillation (if visible)
+      if (photoPlanesGroup.visible) {
+        for (let i = 0; i < photoPlanes.length; i++) {
+          const mesh = photoPlanes[i];
+          mesh.position.y += Math.sin(elapsedTime * 1.2 + i * 1.5) * 0.003;
+          mesh.rotation.z = Math.sin(elapsedTime * 0.8 + i) * 0.03;
+        }
+      }
+
+      // Animate Realistic Purple Star Sparkle Sprinkles
+      if (sparklesActive) {
+        const timeSinceBlast = (performance.now() - sparkleStartTime) / 1000;
+        const posArr = sparkleGeom.attributes.position.array;
+        const velArr = sparkleVelocities;
+
+        // Twinkling sparkle opacity decay over 4.5 seconds
+        if (timeSinceBlast > 4.5) {
+          sparklesActive = false;
+          sparkleMat.opacity = 0;
+        } else {
+          sparkleMat.opacity = Math.max(0, 1 - timeSinceBlast / 4.5);
+          // Sparkle twinkle scale fluttering
+          sparkleMat.size = 0.65 + Math.sin(elapsedTime * 18) * 0.15;
+
+          for (let i = 0; i < sparkleCount; i++) {
+            // Apply velocity with air drag
+            posArr[i * 3] += velArr[i * 3];
+            posArr[i * 3 + 1] += velArr[i * 3 + 1];
+            posArr[i * 3 + 2] += velArr[i * 3 + 2];
+
+            // Gentle gravity float: sprinkles fall like starry glitter
+            velArr[i * 3 + 1] -= 0.0025;
+
+            // Drag resistance
+            velArr[i * 3] *= 0.985;
+            velArr[i * 3 + 1] *= 0.985;
+            velArr[i * 3 + 2] *= 0.985;
+          }
+          sparkleGeom.attributes.position.needsUpdate = true;
+        }
       }
 
       scrapParticles.rotation.y = elapsedTime * 0.02;
@@ -354,10 +527,13 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       coreGeom.dispose();
       wireGeom.dispose();
       scrapGeom.dispose();
+      sparkleGeom.dispose();
       chromeMat.dispose();
       coreMat.dispose();
       wireMat.dispose();
       scrapMat.dispose();
+      sparkleMat.dispose();
+      starTexture.dispose();
 
       planeGeoms.forEach((g) => g.dispose());
       planeMats.forEach((m) => m.dispose());
@@ -396,7 +572,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     e?.stopPropagation();
     playSound('glitch_click');
     if (isMuted) {
-      // Unmute: Start audio in exact sync with video
       setIsMuted(false);
       if (audioRef.current && videoRef.current) {
         audioRef.current.currentTime = videoRef.current.currentTime || 0;
@@ -405,7 +580,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         });
       }
     } else {
-      // Mute: Pause audio track
       setIsMuted(true);
       if (audioRef.current) {
         audioRef.current.pause();
@@ -413,7 +587,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
   };
 
-  // Sync audio loop when video loops or updates
   const handleVideoTimeUpdate = () => {
     if (!isMuted && audioRef.current && videoRef.current) {
       const diff = Math.abs(audioRef.current.currentTime - videoRef.current.currentTime);
@@ -425,7 +598,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
   // EASTER EGG: TAP & HOLD TO VIBRATE & BLAST
   const startHold = (e) => {
-    // Ignore clicks on HUD control buttons
     if (e.target.closest('button') || e.target.closest('a')) return;
     if (isBlasted) return;
 
@@ -444,7 +616,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       if (progress < 1) {
         holdFrameRef.current = requestAnimationFrame(updateHold);
       } else {
-        // 4 SECONDS REACHED: BLAST SUPERNOVA!
         detonateBlast();
       }
     };
@@ -471,11 +642,31 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       cancelAnimationFrame(holdFrameRef.current);
     }
 
-    // Trigger visual blast flash & blast sound
-    setBlastFlash(true);
+    // Trigger Three.js purple sparkles explosion
+    if (blastTriggerFnRef.current) {
+      blastTriggerFnRef.current();
+    }
+
+    // Trigger visual blast flash & DOM purple starry sparkles
+    setBlastActive(true);
     playSound('blast');
 
-    // Permanently hide the 3D emblem for this session
+    // Generate 60 randomized DOM starry sparkles for full-screen sparkle sprinkles
+    const sparkles = [];
+    for (let i = 0; i < 60; i++) {
+      sparkles.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 10 + Math.random() * 26,
+        delay: Math.random() * 0.4,
+        duration: 1.5 + Math.random() * 1.5,
+        color: ['#f472b6', '#c084fc', '#e879f9', '#a855f7', '#ffffff'][Math.floor(Math.random() * 5)]
+      });
+    }
+    setSparkleSprinkles(sparkles);
+
+    // Permanently hide BOTH 3D emblem AND floating images for this session
     setIsBlasted(true);
     try {
       sessionStorage.setItem('avz_hero_blasted', 'true');
@@ -484,10 +675,14 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     if (emblemGroupRef.current) {
       emblemGroupRef.current.visible = false;
     }
+    if (photoPlanesGroupRef.current) {
+      photoPlanesGroupRef.current.visible = false;
+    }
 
     setTimeout(() => {
-      setBlastFlash(false);
-    }, 900);
+      setBlastActive(false);
+      setSparkleSprinkles([]);
+    }, 2800);
   };
 
   const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
@@ -530,7 +725,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. Atmospheric Haute-Couture Vignette (Deep violet & black scrim for contrast) */}
+      {/* 2. Atmospheric Haute-Couture Vignette */}
       <div
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
@@ -557,49 +752,78 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
       {/* 5. TAP & HOLD 4S CHARGING HUD OVERLAY */}
       {isHolding && !isBlasted && (
-        <div className="absolute inset-0 z-[25] pointer-events-none flex flex-col items-center justify-center bg-black/30 backdrop-blur-[1px] animate-in fade-in duration-200">
+        <div className="absolute inset-0 z-[25] pointer-events-none flex flex-col items-center justify-center bg-black/35 backdrop-blur-[1px] animate-in fade-in duration-200">
           <div className="relative flex flex-col items-center gap-3">
-            {/* Pulsating Cyber Reticle */}
             <div className="relative w-28 h-28 flex items-center justify-center">
               <div
-                className="absolute inset-0 rounded-full border-2 border-pink/30 animate-spin"
-                style={{ animationDuration: `${Math.max(0.4, 3 - holdProgress * 2.5)}s` }}
+                className="absolute inset-0 rounded-full border-2 border-purple-400/40 animate-spin"
+                style={{ animationDuration: `${Math.max(0.3, 2.5 - holdProgress * 2.2)}s` }}
               />
               <div
-                className="absolute inset-2 rounded-full border-2 border-t-pink border-r-transparent border-b-pink border-l-transparent animate-spin"
-                style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}
+                className="absolute inset-2 rounded-full border-2 border-t-pink border-r-transparent border-b-purple-400 border-l-transparent animate-spin"
+                style={{ animationDirection: 'reverse', animationDuration: '0.7s' }}
               />
               <div
-                className="w-16 h-16 rounded-full bg-pink/20 border border-pink flex items-center justify-center text-pink font-mono font-bold text-xs shadow-[0_0_35px_rgba(244,194,194,0.6)]"
+                className="w-16 h-16 rounded-full bg-purple-950/40 border border-pink flex items-center justify-center text-pink font-mono font-bold text-xs shadow-[0_0_35px_rgba(244,194,194,0.6)]"
               >
                 {(holdProgress * 4).toFixed(1)}s
               </div>
             </div>
 
-            {/* Warning Text with Baddie Energy */}
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/80 border border-pink/60 text-[11px] font-mono tracking-widest text-pink uppercase shadow-[0_0_20px_rgba(244,194,194,0.3)]">
-              <Flame className="w-3.5 h-3.5 text-pink animate-pulse" />
-              <span>HOLDING TO OVERCHARGE // {(holdProgress * 100).toFixed(0)}%</span>
+            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/85 border border-pink/60 text-[11px] font-mono tracking-widest text-pink uppercase shadow-[0_0_20px_rgba(244,194,194,0.3)]">
+              <Sparkles className="w-3.5 h-3.5 text-pink animate-pulse" />
+              <span>SUPERCHARGING VORTEX // {(holdProgress * 100).toFixed(0)}%</span>
             </div>
             <p className="text-silver/80 text-[11px] font-mono tracking-widest uppercase">
-              HOLD 4 SECONDS TO DETONATE DIMENSION
+              HOLD 4 SECONDS FOR PURPLE STARRY SUPERNOVA
             </p>
           </div>
         </div>
       )}
 
-      {/* 6. BLAST SUPERNOVA SHOCKWAVE FLASH */}
-      {blastFlash && (
-        <div className="absolute inset-0 z-[50] pointer-events-none bg-white animate-out fade-out duration-700 flex items-center justify-center">
-          <div className="w-full h-full bg-radial-gradient from-pink via-purple-600 to-transparent opacity-80 animate-ping" />
+      {/* 6. REALISTIC PURPLE STARRY GLITTER SPRINKLES OVERLAY */}
+      {blastActive && (
+        <div className="absolute inset-0 z-[50] pointer-events-none overflow-hidden flex items-center justify-center">
+          {/* Central Violet/Pink Shockwave Radial Flash */}
+          <div className="absolute w-[800px] h-[800px] rounded-full bg-radial-gradient from-white via-purple-500/60 to-transparent opacity-90 animate-ping duration-1000" />
+          <div className="absolute inset-0 bg-[#3b0764]/40 mix-blend-screen animate-out fade-out duration-1000" />
+
+          {/* Twinkling 4-Point Starry Sprinkles Drifting Across Viewport */}
+          {sparkleSprinkles.map((sp) => (
+            <div
+              key={sp.id}
+              className="absolute animate-in fade-in zoom-in duration-300"
+              style={{
+                left: `${sp.x}%`,
+                top: `${sp.y}%`,
+                animationDelay: `${sp.delay}s`,
+                transform: 'translate(-50%, -50%)'
+              }}
+            >
+              <svg
+                width={sp.size}
+                height={sp.size}
+                viewBox="0 0 24 24"
+                fill={sp.color}
+                className="animate-spin"
+                style={{
+                  filter: `drop-shadow(0 0 8px ${sp.color})`,
+                  animationDuration: `${sp.duration}s`
+                }}
+              >
+                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+              </svg>
+            </div>
+          ))}
         </div>
       )}
 
       {/* 7. Post-Blast Baddie Badge Notification */}
       {isBlasted && (
         <div className="absolute top-20 left-6 z-[10] flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-pink/40 text-[10px] font-mono tracking-widest text-pink shadow-[0_0_20px_rgba(244,194,194,0.25)]">
-            <span>💥 UNHINGED BLAST DETONATED // REFRESH TO REGENERATE EMBLEM</span>
+          <div className="px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-purple-400/50 text-[10px] font-mono tracking-widest text-pink shadow-[0_0_20px_rgba(168,85,247,0.35)] flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-pink" />
+            <span>PURPLE SUPERNOVA BLASTED // REFRESH TO REGENERATE EMBLEM & LOOKS</span>
           </div>
         </div>
       )}
