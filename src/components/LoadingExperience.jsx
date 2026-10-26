@@ -11,11 +11,8 @@ export default function LoadingExperience({ onComplete }) {
   const hasFinishedRef = useRef(false);
 
   useEffect(() => {
-    // Instant access if already loaded in this session or reduced motion preferred
-    if (
-      sessionStorage.getItem('avz_session_loaded') === 'true' ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    // Only bypass if user strictly requested reduced motion in OS settings
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       onComplete();
       return;
     }
@@ -125,24 +122,19 @@ export default function LoadingExperience({ onComplete }) {
     const particles = new THREE.Points(pGeom, pMat);
     scene.add(particles);
 
-    // Fast & responsive timeline progression
+    // Hypnotic, unhurried 4.6-second timeline progression
     let animId;
     const startTime = performance.now();
-    const duration = 950; // High-speed, responsive 950ms progression
+    const duration = 4600; // Exact 4.6s duration requested by client
 
     const triggerFinish = () => {
       if (hasFinishedRef.current) return;
       hasFinishedRef.current = true;
-      try {
-        sessionStorage.setItem('avz_session_loaded', 'true');
-      } catch (e) {
-        // ignore storage errors
-      }
       setIsExiting(true);
-      playSound('open');
+      playSound('baddie_alert');
       setTimeout(() => {
         onComplete();
-      }, 250);
+      }, 350);
     };
 
     const animate = (time) => {
@@ -150,8 +142,8 @@ export default function LoadingExperience({ onComplete }) {
       const elapsed = time - startTime;
       const t = Math.min(1, Math.max(0, elapsed / duration));
 
-      // Continuous, fluid easing (easeOutQuart for seamless acceleration to 100% without stalling)
-      const easeVal = 1 - Math.pow(1 - t, 3.2);
+      // Continuous, fluid easing for majestic steady progression
+      const easeVal = 1 - Math.pow(1 - t, 2.8);
       const currentPct = Math.min(100, Math.round(easeVal * 100));
 
       // Direct DOM updates (Zero React re-render lag)
@@ -162,25 +154,27 @@ export default function LoadingExperience({ onComplete }) {
         barRef.current.style.width = `${currentPct}%`;
       }
       if (phaseRef.current) {
-        if (currentPct < 30) {
-          phaseRef.current.textContent = "LOCATING THE OTHER DIMENSION";
-        } else if (currentPct < 70) {
-          phaseRef.current.textContent = "DECONSTRUCTING ARCHIVAL ARTIFACTS";
-        } else if (currentPct < 100) {
-          phaseRef.current.textContent = "TRANSCENDING RUNWAY GRAVITY";
+        if (currentPct < 22) {
+          phaseRef.current.textContent = "AWAKENING THE OTHER DIMENSION";
+        } else if (currentPct < 48) {
+          phaseRef.current.textContent = "SCULPTING 1-OF-1 WEARABLE ART FOR BADDIES";
+        } else if (currentPct < 72) {
+          phaseRef.current.textContent = "DECONSTRUCTING ARCHIVES & MOTHERBOARDS";
+        } else if (currentPct < 92) {
+          phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE RUNWAY GRAILS";
         } else {
-          phaseRef.current.textContent = "DIMENSION UNLOCKED";
+          phaseRef.current.textContent = "DIMENSION UNLOCKED. CERTIFIED SLAY ERA.";
         }
       }
 
       // 3D rotations
-      ring1.rotation.z = elapsed * 0.0016;
-      ring1.rotation.x = elapsed * 0.001;
-      ring2.rotation.y = -elapsed * 0.002;
-      ring2.rotation.z = elapsed * 0.0014;
-      core.rotation.y = elapsed * 0.0025;
-      core.rotation.x = elapsed * 0.0018;
-      wireMesh.rotation.y = -elapsed * 0.0012;
+      ring1.rotation.z = elapsed * 0.0012;
+      ring1.rotation.x = elapsed * 0.0008;
+      ring2.rotation.y = -elapsed * 0.0015;
+      ring2.rotation.z = elapsed * 0.001;
+      core.rotation.y = elapsed * 0.0018;
+      core.rotation.x = elapsed * 0.0012;
+      wireMesh.rotation.y = -elapsed * 0.0009;
 
       particles.rotation.y = elapsed * 0.0002;
 
@@ -201,16 +195,11 @@ export default function LoadingExperience({ onComplete }) {
     animId = requestAnimationFrame(animate);
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' || e.key === ' ') {
+      if (e.key === 'Escape') {
         triggerFinish();
       }
     };
-    const handleQuickBypass = () => {
-      triggerFinish();
-    };
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('pointerdown', handleQuickBypass, { once: true });
-    window.addEventListener('wheel', handleQuickBypass, { once: true, passive: true });
 
     const handleResize = () => {
       if (!renderer) return;
@@ -224,8 +213,6 @@ export default function LoadingExperience({ onComplete }) {
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('pointerdown', handleQuickBypass);
-      window.removeEventListener('wheel', handleQuickBypass);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animId);
 

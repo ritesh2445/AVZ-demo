@@ -9,13 +9,13 @@ export default function CatCompanion({ enabled = true }) {
   const [currentMessage, setCurrentMessage] = useState("hello, tiny human ♡");
 
   const messages = [
-    "hello, tiny human ♡",
-    "sniffing upcycled hardware...",
-    "Dhristroyer approved ✂️",
-    "real human hands > AI clones!",
-    "one-of-one wearable art ✨",
-    "purrhaps one more scroll?",
-    "inspecting motherboard seams 🐾"
+    "certified baddie approved 💅",
+    "sniffing 100% upcycled hardware...",
+    "Dhristroyer said what she said ✂️",
+    "she's giving main character energy period ✨",
+    "this grail ate and left zero crumbs ♡",
+    "purrhaps one more 1-of-1 grail?",
+    "gatekeeping this fit for the real ones ⛓️"
   ];
 
   useEffect(() => {

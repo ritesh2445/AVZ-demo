@@ -234,45 +234,7 @@ export default function App() {
           />
         </section>
 
-        {/* Section 4: Atelier Custom Commission Callout (Full-width, rounded glassmorphism) */}
-        <section className="w-full py-16 px-6 sm:px-12 lg:px-20">
-          <div className="w-full p-8 md:p-14 bg-gradient-to-r from-black via-[#240528]/50 to-black border border-[#be185d]/25 rounded-3xl backdrop-blur-2xl relative overflow-hidden flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 shadow-[0_20px_60px_rgba(18,2,22,0.8)]">
-            <div className="max-w-2xl text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 text-[11px] font-mono text-pink-300 uppercase mb-4 shadow-[0_0_15px_rgba(190,24,93,0.25)]">
-                <Scissors className="w-3.5 h-3.5 text-[#f472b6]" />
-                <span>DHRISTROYER GUWAHATI ATELIER</span>
-              </div>
-              <h3 className="text-3xl sm:text-5xl font-spartan font-black uppercase text-white mb-4 leading-tight tracking-tight text-left">
-                HAVE A CUSTOM CONCEPT IN MIND?
-              </h3>
-              <p className="text-silver/85 text-sm sm:text-base font-montserrat leading-relaxed text-left">
-                We sculpt custom corsets, motherboard tops, chainmail armor, and spiked outerwear tailored to your specific measurements in 2 to 3 weeks.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto items-stretch sm:items-center">
-              <button
-                onClick={() => {
-                  playSound('subdrop');
-                  scrollToSection('custom');
-                }}
-                className="btn-glass-pink py-4 px-8 text-xs font-spartan font-black tracking-widest uppercase whitespace-nowrap cursor-pointer text-center"
-              >
-                COMMISSION A PIECE ↗
-              </button>
-              <button
-                onClick={() => {
-                  playSound('metal');
-                  scrollToSection('museum');
-                }}
-                className="btn-glass py-4 px-8 text-xs font-spartan font-bold tracking-widest uppercase whitespace-nowrap cursor-pointer text-silver hover:text-white hover:border-[#be185d]/50 text-center"
-              >
-                INSPECT ARCHIVE VAULT
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 5: Full Shop Catalogue */}
+        {/* Section 4: Full Shop Catalogue */}
         <section id="shop" className="w-full">
           <ShopCatalogue
             onSelectProduct={setActiveProduct}

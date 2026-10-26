@@ -94,6 +94,10 @@ export const ASSET_MANIFEST = {
     vimeoMobile: "https://vimeo.com/1239586843",
     vimeoEmbedDesktop: "https://player.vimeo.com/video/1239586933?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0",
     vimeoEmbedMobile: "https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0"
+  },
+  audio: {
+    heroDesktop: "/assets/hero_audio_desktop.mp4",
+    heroMobile: "/assets/hero_audio_mobile.mp4"
   }
 };
 
