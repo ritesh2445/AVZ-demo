@@ -384,8 +384,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       currentMouseX += (targetMouseX - currentMouseX) * 0.06;
       currentMouseY += (targetMouseY - currentMouseY) * 0.06;
 
-      // Update 2D lighting mask directly on DOM ref
-      if (maskRef.current) {
+      // Update 2D lighting mask only when pointer actively shifts
+      if (maskRef.current && (Math.abs(targetMouseX - currentMouseX) > 0.005 || Math.abs(targetMouseY - currentMouseY) > 0.005)) {
         const px = ((currentMouseX + 1) * 50).toFixed(1);
         const py = ((1 - currentMouseY) * 50).toFixed(1);
         maskRef.current.style.background = `radial-gradient(750px circle at ${px}% ${py}%, rgba(244, 194, 194, 0.12) 0%, rgba(48, 25, 52, 0.22) 45%, rgba(0, 0, 0, 0.85) 85%)`;
@@ -695,7 +695,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       onPointerUp={endHold}
       onPointerLeave={endHold}
       onPointerCancel={endHold}
-      className={`relative w-full h-[88vh] md:h-[92vh] flex items-center justify-center overflow-hidden bg-pitch-black select-none touch-pan-y ${
+      className={`relative w-full min-h-screen h-screen flex items-center justify-center overflow-hidden bg-black select-none touch-pan-y ${
         isHolding ? 'cursor-crosshair' : 'cursor-grab active:cursor-grabbing'
       }`}
     >
@@ -707,7 +707,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         preload="auto"
       />
 
-      {/* 1. Native Ultra-High-Definition Uncompressed Master Video Reel (Highest Quality) */}
+      {/* 1. Native Ultra-High-Definition Uncompressed Master Video Reel (Complete, Uncropped) */}
       <video
         ref={videoRef}
         key={videoSource}
@@ -718,11 +718,11 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         preload="auto"
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-all duration-1000 ease-out ${
-          videoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+        className={`absolute inset-0 w-full h-full object-contain z-0 pointer-events-none transition-all duration-700 ease-out ${
+          videoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-100'
         }`}
         style={{
-          filter: 'contrast(1.08) saturate(1.1) brightness(1.02)',
+          filter: 'contrast(1.05) saturate(1.08) brightness(1.01)',
           imageRendering: 'high-quality',
           WebkitBackfaceVisibility: 'hidden',
           transform: 'translateZ(0)'
@@ -731,11 +731,11 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. Atmospheric Haute-Couture Edge Framing (Center 100% Unobstructed for Max Quality) */}
+      {/* 2. Haute-Couture Subtle Vignette (Clear center & edges for complete video visibility) */}
       <div
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
-          background: 'radial-gradient(circle at center, transparent 38%, rgba(20, 4, 25, 0.28) 68%, rgba(0, 0, 0, 0.88) 100%)'
+          background: 'radial-gradient(circle at center, transparent 70%, rgba(0, 0, 0, 0.4) 100%)'
         }}
       />
 

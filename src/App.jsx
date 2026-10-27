@@ -208,7 +208,7 @@ export default function App() {
       />
 
       {/* Single Continuous Page Scroll Pipeline */}
-      <main className="w-full pt-20 flex flex-col">
+      <main className="w-full flex flex-col">
         {/* Section 1: Pure 3D WebGL Hero */}
         <section id="hero" className="w-full">
           <HeroThreeDimension

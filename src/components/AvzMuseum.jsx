@@ -6,23 +6,29 @@ import { playSound } from '../utils/audio';
 
 export default function AvzMuseum({ onRequestCustomCommission }) {
   const mountRef = useRef(null);
+  const sectionRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [viewMode, setViewMode] = useState('3d'); // '3d' or 'grid'
 
+  const activeIndexRef = useRef(0);
   const activeItem = MUSEUM_ITEMS[activeIndex] || MUSEUM_ITEMS[0];
 
-  // Three.js references
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
+  // 3D references
+  const carouselGroupRef = useRef(null);
   const pedestalsRef = useRef([]);
-  const spotlightRef = useRef(null);
-  const targetCameraX = useRef(0);
-  const targetCameraZ = useRef(9);
-  const isDraggingRef = useRef(false);
-  const previousMousePositionRef = useRef({ x: 0, y: 0 });
+  const targetRotundaAngleRef = useRef(0);
+  const currentRotundaAngleRef = useRef(0);
   const orbitAngleRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const startDragXRef = useRef(0);
+  const prevMouseXRef = useRef(0);
 
+  // Keep activeIndexRef in sync
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  // Main 3D Canvas Lifecycle: Initialized ONCE per 3D view mode
   useEffect(() => {
     if (viewMode !== '3d') return;
 
@@ -35,13 +41,12 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    sceneRef.current = scene;
     scene.background = new THREE.Color(0x06010a);
     scene.fog = new THREE.FogExp2(0x06010a, 0.035);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    cameraRef.current = camera;
-    camera.position.set(0, 2.5, 9);
+    camera.position.set(0, 2.1, 11);
+    camera.lookAt(0, 1.8, 6.8);
 
     let renderer;
     try {
@@ -49,9 +54,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         antialias: !isMobile,
         powerPreference: 'high-performance'
       });
-      rendererRef.current = renderer;
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.3;
       container.appendChild(renderer.domElement);
@@ -61,46 +65,43 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     }
 
     // 2. Museum Atmospheric Lights
-    const ambientLight = new THREE.AmbientLight(0x280e34, 0.9);
+    const ambientLight = new THREE.AmbientLight(0x280e34, 0.95);
     scene.add(ambientLight);
 
-    // Dynamic Focused Spotlight on Active Pedestal
-    const spotlight = new THREE.SpotLight(0xF4C2C2, 24, 25, Math.PI / 4, 0.35, 1.2);
-    spotlight.position.set(0, 7, 5);
-    spotlightRef.current = spotlight;
+    // Focused Spotlight on Front Active Pedestal
+    const spotlight = new THREE.SpotLight(0xF4C2C2, 26, 30, Math.PI / 4, 0.35, 1.2);
+    spotlight.position.set(0, 8, 9);
+    spotlight.target.position.set(0, 1.8, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
     // Rim gallery lights
-    const rimViolet = new THREE.PointLight(0x9d4edd, 8, 20);
-    rimViolet.position.set(-6, 3, 2);
+    const rimViolet = new THREE.PointLight(0x9d4edd, 8, 22);
+    rimViolet.position.set(-7, 3, 4);
     scene.add(rimViolet);
 
-    const rimPink = new THREE.PointLight(0xf472b6, 8, 20);
-    rimPink.position.set(6, 3, 2);
+    const rimPink = new THREE.PointLight(0xf472b6, 8, 22);
+    rimPink.position.set(7, 3, 4);
     scene.add(rimPink);
 
     // 3. Reflective Obsidian Floor Grid
-    const floorGeom = new THREE.PlaneGeometry(60, 60, 30, 30);
-    const floorMat = new THREE.MeshPhysicalMaterial({
+    const floorGeom = new THREE.PlaneGeometry(60, 60);
+    const floorMat = new THREE.MeshStandardMaterial({
       color: 0x07010d,
-      roughness: 0.18,
-      metalness: 0.85,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1
+      roughness: 0.25,
+      metalness: 0.85
     });
     const floor = new THREE.Mesh(floorGeom, floorMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -1.6;
     scene.add(floor);
 
-    // Grid wireframe on floor
-    const gridHelper = new THREE.GridHelper(50, 50, 0xbe185d, 0x1f0627);
+    const gridHelper = new THREE.GridHelper(50, 40, 0xbe185d, 0x1f0627);
     gridHelper.position.y = -1.59;
     scene.add(gridHelper);
 
     // 4. Stardust floating dust particles
-    const dustCount = 80;
+    const dustCount = 60;
     const dustGeom = new THREE.BufferGeometry();
     const dustPos = new Float32Array(dustCount * 3);
     for (let i = 0; i < dustCount * 3; i += 3) {
@@ -111,177 +112,204 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
       color: 0xE6E6FA,
-      size: 0.06,
+      size: 0.05,
       transparent: true,
-      opacity: 0.5
+      opacity: 0.45
     });
     const dust = new THREE.Points(dustGeom, dustMat);
     scene.add(dust);
 
-    // 5. Construct 3D Pedestals for each Museum Item in an Arc
+    // 5. Continuous 360-Degree Circular Rotunda Carousel (Infinite)
+    const carouselGroup = new THREE.Group();
+    carouselGroupRef.current = carouselGroup;
+    scene.add(carouselGroup);
+
     const pedestals = [];
     const textureLoader = new THREE.TextureLoader();
-    const radius = 6.5;
+    const radius = 6.8;
     const total = MUSEUM_ITEMS.length;
 
+    // Shared high-performance materials
+    const plinthMat = new THREE.MeshStandardMaterial({
+      color: 0x14051a,
+      roughness: 0.35,
+      metalness: 0.85
+    });
+    const chromeMat = new THREE.MeshStandardMaterial({
+      color: 0xC0C0C0,
+      metalness: 0.95,
+      roughness: 0.15
+    });
+    const neonMat = new THREE.MeshBasicMaterial({ color: 0xF4C2C2 });
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0xE6E6FA,
+      transparent: true,
+      opacity: 0.22,
+      roughness: 0.1,
+      metalness: 0.2
+    });
+
     MUSEUM_ITEMS.forEach((item, idx) => {
-      const angle = ((idx - total / 2 + 0.5) / total) * (Math.PI * 0.7);
+      // Full continuous circle (Math.PI * 2)
+      const angle = (idx / total) * Math.PI * 2;
       const x = Math.sin(angle) * radius;
-      const z = -Math.cos(angle) * radius + 2.5;
+      const z = Math.cos(angle) * radius;
 
       const group = new THREE.Group();
       group.position.set(x, -0.6, z);
-      group.rotation.y = -angle;
+      // Face outwards so the front faces the camera when rotated to z = radius
+      group.rotation.y = angle;
 
-      // Pedestal Plinth Base
+      // Plinth Base
       const plinthGeom = new THREE.CylinderGeometry(1.2, 1.4, 1.8, 16);
-      const plinthMat = new THREE.MeshPhysicalMaterial({
-        color: 0x14051a,
-        emissive: 0x09010e,
-        metalness: 0.9,
-        roughness: 0.25,
-        clearcoat: 0.8
-      });
       const plinth = new THREE.Mesh(plinthGeom, plinthMat);
-      plinth.position.y = 0;
       group.add(plinth);
 
-      // Chrome Ring on Top of Plinth
-      const ringGeom = new THREE.TorusGeometry(1.25, 0.05, 12, 32);
-      const chromeMat = new THREE.MeshPhysicalMaterial({
-        color: 0xC0C0C0,
-        metalness: 0.95,
-        roughness: 0.1,
-        clearcoat: 1.0
-      });
+      // Chrome Ring on Top
+      const ringGeom = new THREE.TorusGeometry(1.25, 0.05, 10, 24);
       const ring = new THREE.Mesh(ringGeom, chromeMat);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = 0.9;
       group.add(ring);
 
       // Under-Plinth Neon Glow Ring
-      const neonGeom = new THREE.TorusGeometry(1.42, 0.04, 12, 32);
-      const neonMat = new THREE.MeshBasicMaterial({ color: 0xF4C2C2 });
+      const neonGeom = new THREE.TorusGeometry(1.42, 0.04, 10, 24);
       const neon = new THREE.Mesh(neonGeom, neonMat);
       neon.rotation.x = Math.PI / 2;
       neon.position.y = -0.85;
       group.add(neon);
 
-      // Floating Couture Artifact Display Tablet
+      // Display Artifact Mesh
       const artifactGeom = new THREE.BoxGeometry(2.0, 2.6, 0.1);
-      const defaultMat = new THREE.MeshPhysicalMaterial({
+      const defaultMat = new THREE.MeshStandardMaterial({
         color: 0x301934,
-        metalness: 0.5,
-        roughness: 0.3
+        metalness: 0.4,
+        roughness: 0.4
       });
-
       const artifactMesh = new THREE.Mesh(artifactGeom, defaultMat);
       artifactMesh.position.y = 2.4;
       group.add(artifactMesh);
 
-      // Load artifact texture
+      // Texture
       textureLoader.load(item.image, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace;
-        const frontMat = new THREE.MeshPhysicalMaterial({
+        const frontMat = new THREE.MeshStandardMaterial({
           map: tex,
-          roughness: 0.2,
-          metalness: 0.1,
-          clearcoat: 0.8
+          roughness: 0.3,
+          metalness: 0.15
         });
-        const edgeMat = new THREE.MeshPhysicalMaterial({
-          color: 0xC0C0C0,
-          metalness: 0.95,
-          roughness: 0.1
-        });
-        // Multi-material box
-        artifactMesh.material = [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, edgeMat];
+        artifactMesh.material = [chromeMat, chromeMat, chromeMat, chromeMat, frontMat, chromeMat];
       });
 
-      // Holographic Glass Vitrine (Outer protective enclosure)
+      // Protective Glass Vitrine
       const glassGeom = new THREE.BoxGeometry(2.3, 3.0, 0.6);
-      const glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0xE6E6FA,
-        transparent: true,
-        opacity: 0.2,
-        roughness: 0.1,
-        metalness: 0.1,
-        transmission: 0.85,
-        ior: 1.45
-      });
       const glassVitrine = new THREE.Mesh(glassGeom, glassMat);
       glassVitrine.position.y = 2.4;
       group.add(glassVitrine);
 
-      scene.add(group);
-      pedestals.push({ group, artifactMesh, x, z, angle });
+      carouselGroup.add(group);
+      pedestals.push({ group, artifactMesh, angle });
     });
 
     pedestalsRef.current = pedestals;
 
-    // Mouse / Touch Drag to Rotate Active Pedestal
+    // Set initial rotunda angle to match activeIndex
+    currentRotundaAngleRef.current = -(activeIndexRef.current / total) * Math.PI * 2;
+    targetRotundaAngleRef.current = currentRotundaAngleRef.current;
+    carouselGroup.rotation.y = currentRotundaAngleRef.current;
+
+    // Pointer Interaction (Orbit active piece & drag-to-swipe)
     const handlePointerDown = (e) => {
       isDraggingRef.current = true;
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
+      startDragXRef.current = e.clientX;
+      prevMouseXRef.current = e.clientX;
     };
 
     const handlePointerMove = (e) => {
       if (!isDraggingRef.current) return;
-      const deltaX = e.clientX - previousMousePositionRef.current.x;
-      orbitAngleRef.current += deltaX * 0.008;
-      previousMousePositionRef.current = { x: e.clientX, y: e.clientY };
+      const deltaX = e.clientX - prevMouseXRef.current;
+      orbitAngleRef.current += deltaX * 0.009;
+      prevMouseXRef.current = e.clientX;
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e) => {
+      if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
+      const totalDelta = e.clientX - startDragXRef.current;
+      // If user dragged horizontally > 55px, switch pedestal continuously
+      if (Math.abs(totalDelta) > 55) {
+        if (totalDelta < 0) {
+          selectPedestal((activeIndexRef.current + 1) % total);
+        } else {
+          selectPedestal((activeIndexRef.current - 1 + total) % total);
+        }
+      }
     };
 
     container.addEventListener('pointerdown', handlePointerDown);
-    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerup', handlePointerUp);
 
-    // Animation Loop
-    let animId;
+    // Render loop with IntersectionObserver
+    let animId = null;
+    let isVisible = true;
     const clock = new THREE.Clock();
 
     const animate = () => {
+      if (!isVisible) return;
       animId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
-      // Smooth camera interpolation towards selected pedestal
-      camera.position.x += (targetCameraX.current - camera.position.x) * 0.06;
-      camera.position.z += (targetCameraZ.current - camera.position.z) * 0.06;
-      camera.position.y = 2.4 + Math.sin(elapsed * 0.6) * 0.08;
+      // Continuous shortest-path angular rotation of carousel
+      let diff = targetRotundaAngleRef.current - currentRotundaAngleRef.current;
+      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+      currentRotundaAngleRef.current += diff * 0.08;
+      carouselGroup.rotation.y = currentRotundaAngleRef.current;
 
-      // Look at active pedestal center
-      const activePedestal = pedestals[activeIndex];
-      if (activePedestal) {
-        camera.lookAt(activePedestal.x, 1.8, activePedestal.z);
-
-        // Move spotlight smoothly
-        if (spotlight) {
-          spotlight.position.x += (activePedestal.x - spotlight.position.x) * 0.08;
-          spotlight.position.z += (activePedestal.z + 3 - spotlight.position.z) * 0.08;
-          spotlight.target.position.set(activePedestal.x, 1.8, activePedestal.z);
-          spotlight.target.updateMatrixWorld();
-        }
-
-        // Apply interactive drag rotation to active artifact
-        activePedestal.artifactMesh.rotation.y = orbitAngleRef.current + Math.sin(elapsed * 0.8) * 0.08;
+      // If user flips to the black space and releases pointer, smoothly spring back to normal (0)
+      if (!isDraggingRef.current) {
+        orbitAngleRef.current += (0 - orbitAngleRef.current) * 0.09;
       }
 
-      // Gentle floating animation for all pedestals
+      // Animate active artifact rotation
+      const currentIdx = activeIndexRef.current;
+      const activePed = pedestals[currentIdx];
+      if (activePed && activePed.artifactMesh) {
+        activePed.artifactMesh.rotation.y = orbitAngleRef.current + Math.sin(elapsed * 0.8) * 0.05;
+      }
+
+      // Gentle floating animation
       pedestals.forEach((p, i) => {
-        if (i !== activeIndex) {
-          p.artifactMesh.rotation.y = Math.sin(elapsed * 0.5 + i) * 0.15;
+        if (i !== currentIdx && p.artifactMesh) {
+          p.artifactMesh.rotation.y = Math.sin(elapsed * 0.5 + i) * 0.1;
         }
-        p.artifactMesh.position.y = 2.4 + Math.sin(elapsed * 1.2 + i * 1.5) * 0.05;
+        if (p.artifactMesh) {
+          p.artifactMesh.position.y = 2.4 + Math.sin(elapsed * 1.2 + i * 1.5) * 0.05;
+        }
       });
 
-      // Dust gentle drifting
       dust.rotation.y = elapsed * 0.015;
-
       renderer.render(scene, camera);
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          clock.start();
+          if (!animId) animId = requestAnimationFrame(animate);
+        } else if (!isVisible && animId) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
     animId = requestAnimationFrame(animate);
 
@@ -293,13 +321,14 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
       container.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('resize', handleResize);
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
       cancelAnimationFrame(animId);
 
       scene.clear();
@@ -310,32 +339,52 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         renderer.dispose();
       }
     };
-  }, [viewMode, activeIndex]);
+  }, [viewMode]);
 
-  // Handle active index change
+  // Infinite Pedestal Selection: Calculates continuous carousel angle
   const selectPedestal = (idx) => {
     playSound('museum_rotate');
-    setActiveIndex(idx);
+    const total = MUSEUM_ITEMS.length;
+    const safeIdx = (idx + total) % total;
+    setActiveIndex(safeIdx);
+    activeIndexRef.current = safeIdx;
     orbitAngleRef.current = 0;
-
-    const ped = pedestalsRef.current[idx];
-    if (ped) {
-      // Position camera right in front of this pedestal
-      targetCameraX.current = ped.x * 0.65;
-      targetCameraZ.current = ped.z + 5.5;
-    }
+    targetRotundaAngleRef.current = -(safeIdx / total) * Math.PI * 2;
   };
 
   const nextArtifact = () => {
-    selectPedestal((activeIndex + 1) % MUSEUM_ITEMS.length);
+    selectPedestal(activeIndex + 1);
   };
 
   const prevArtifact = () => {
-    selectPedestal((activeIndex - 1 + MUSEUM_ITEMS.length) % MUSEUM_ITEMS.length);
+    selectPedestal(activeIndex - 1);
+  };
+
+  // Mobile Touch Swipe Handlers
+  const touchStartXRef = useRef(null);
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    if (Math.abs(deltaX) > 45) {
+      if (deltaX < 0) {
+        nextArtifact();
+      } else {
+        prevArtifact();
+      }
+    }
+    touchStartXRef.current = null;
   };
 
   return (
-    <section id="museum" className="w-full py-24 px-4 sm:px-8 lg:px-16 bg-pitch-black select-none border-t border-white/5 text-left">
+    <section
+      id="museum"
+      ref={sectionRef}
+      className="w-full py-24 px-4 sm:px-8 lg:px-16 bg-pitch-black select-none border-t border-white/5 text-left"
+    >
       {/* Museum Header */}
       <div className="mb-10 pb-6 border-b border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -387,23 +436,27 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         /* 3D EXHIBITION STAGE */
         <div className="relative w-full rounded-3xl overflow-hidden border border-pink/25 bg-[#06010a] shadow-[0_20px_70px_rgba(18,2,24,0.9)] flex flex-col lg:flex-row">
           {/* Three.js 3D Canvas (Left / Main) */}
-          <div className="relative flex-1 h-[440px] sm:h-[520px] lg:h-[620px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="relative flex-1 h-[440px] sm:h-[520px] lg:h-[620px] w-full cursor-grab active:cursor-grabbing overflow-hidden"
+          >
             <div ref={mountRef} className="w-full h-full" />
 
             {/* Hint & Drag Badge */}
             <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[10px] font-mono text-pink tracking-widest uppercase">
               <RotateCcw className="w-3 h-3 text-pink" />
-              <span>DRAG TO ROTATE 3D ARTIFACT</span>
+              <span>DRAG TO ROTATE 3D ARTIFACT // SWIPE TO CYCLE</span>
             </div>
 
-            {/* Pedestal Navigation Arrows */}
+            {/* Continuous Carousel Pedestal Navigation Arrows */}
             <div className="absolute inset-y-0 left-3 right-3 z-10 pointer-events-none flex items-center justify-between">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   prevArtifact();
                 }}
-                className="pointer-events-auto p-3 rounded-full bg-black/70 hover:bg-pink/25 border border-white/20 hover:border-pink text-white hover:text-pink backdrop-blur-md transition-all cursor-pointer shadow-lg"
+                className="pointer-events-auto p-3 rounded-full bg-black/70 hover:bg-pink/25 border border-white/20 hover:border-pink text-white hover:text-pink backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95"
                 title="Previous Pedestal"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -413,7 +466,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   e.stopPropagation();
                   nextArtifact();
                 }}
-                className="pointer-events-auto p-3 rounded-full bg-black/70 hover:bg-pink/25 border border-white/20 hover:border-pink text-white hover:text-pink backdrop-blur-md transition-all cursor-pointer shadow-lg"
+                className="pointer-events-auto p-3 rounded-full bg-black/70 hover:bg-pink/25 border border-white/20 hover:border-pink text-white hover:text-pink backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95"
                 title="Next Pedestal"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -450,7 +503,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   {activeItem.tag}
                 </span>
                 <span className="text-xs font-mono text-silver/60">
-                  EST. {activeItem.year} // GRAIL #{activeIndex + 1}
+                  EST. {activeItem.year} // GRAIL #{activeIndex + 1} OF {MUSEUM_ITEMS.length}
                 </span>
               </div>
 

@@ -25,18 +25,30 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const touchStartYRef = useRef(null);
   const isDraggingRef = useRef(false);
 
-  // Mouse tilt tracking for 3D Spatial Stage
+  // RAF-throttled mouse tilt tracking for smooth 120fps/60fps 3D Spatial Stage
+  const rafRef = useRef(null);
   const handleMouseMove = (e) => {
     if (!stageRef.current) return;
-    const rect = stageRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1; // -1 to 1
-    const y = ((e.clientY - rect.top) / rect.height) * 2 - 1; // -1 to 1
-    setMousePos({ x, y });
+    if (rafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      if (!stageRef.current) return;
+      const rect = stageRef.current.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const y = ((clientY - rect.top) / rect.height) * 2 - 1;
+      setMousePos({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
+    });
   };
 
   const handleMouseEnter = () => setIsHoveringStage(true);
   const handleMouseLeave = () => {
     setIsHoveringStage(false);
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     setMousePos({ x: 0, y: 0 });
   };
 
@@ -265,19 +277,18 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 style={{
                   transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY + tiltY}deg) rotateX(${tiltX}deg) scale(${scale})`,
                   opacity,
-                  filter: `blur(${blur}px)`,
                   transformStyle: 'preserve-3d'
                 }}
               >
-                {/* Outer Holographic Glow Shell */}
+                {/* Ultra-Refined Frame Rim Light (Strictly contoured along border, no square shadow) */}
                 <div
                   className={`w-full h-full rounded-3xl p-[1.5px] transition-all duration-500 relative overflow-hidden ${
                     isCenter
-                      ? 'bg-gradient-to-br from-[#f472b6] via-[#c084fc] to-[#a855f7] shadow-[0_25px_70px_rgba(192,132,252,0.45)]'
+                      ? 'bg-gradient-to-b from-[#f472b6] via-[#c084fc]/70 to-[#a855f7]/30'
                       : 'bg-white/10 hover:bg-white/20'
                   }`}
                 >
-                  <div className="w-full h-full bg-[#0d0212]/95 rounded-[22px] overflow-hidden relative flex flex-col justify-between">
+                  <div className="w-full h-full bg-[#0d0212]/95 rounded-[22px] overflow-hidden relative flex flex-col justify-between border border-[#f472b6]/25">
                     {/* Image Layer */}
                     <img
                       src={item.image}
