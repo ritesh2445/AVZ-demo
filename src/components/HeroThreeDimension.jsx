@@ -52,13 +52,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
   // Easter Egg: Tap & Hold 4 seconds to Shake, Vibrate & Blast
-  const [isBlasted, setIsBlasted] = useState(() => {
-    try {
-      return sessionStorage.getItem('avz_hero_blasted') === 'true';
-    } catch (e) {
-      return false;
-    }
-  });
+  // Vanishes on blast; automatically restored whenever user refreshes screen or revisits the site
+  const [isBlasted, setIsBlasted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0); // 0 to 1
   const [blastActive, setBlastActive] = useState(false);
@@ -74,12 +69,13 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
   useEffect(() => {
     setIsMobileDevice(window.innerWidth < 768);
+    try {
+      sessionStorage.removeItem('avz_hero_blasted');
+    } catch (e) {}
   }, []);
 
-  // WebGL Scene Initialization
+  // WebGL Scene Initialization (Pre-warmed on mount for instant zero-lag visibility)
   useEffect(() => {
-    if (!isReady) return;
-
     const container = mountRef.current;
     if (!container) return;
 
@@ -666,11 +662,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
     setSparkleSprinkles(sparkles);
 
-    // Permanently hide BOTH 3D emblem AND floating images for this session
+    // Hide BOTH 3D emblem AND floating images during current session (restores on refresh)
     setIsBlasted(true);
-    try {
-      sessionStorage.setItem('avz_hero_blasted', 'true');
-    } catch (e) {}
 
     if (emblemGroupRef.current) {
       emblemGroupRef.current.visible = false;
