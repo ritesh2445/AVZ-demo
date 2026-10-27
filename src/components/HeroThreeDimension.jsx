@@ -28,7 +28,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const [isCinematicMode, setIsCinematicMode] = useState(false);
   const [isWarping, setIsWarping] = useState(false);
   const [hoveredPhotoIndex, setHoveredPhotoIndex] = useState(null);
-  const [autoTimerRemaining, setAutoTimerRemaining] = useState(6);
+  const [autoTimerRemaining, setAutoTimerRemaining] = useState(4);
 
   const emblemGroupRef = useRef(null);
   const photoPlanesGroupRef = useRef(null);
@@ -721,12 +721,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   };
 
   // =========================================================================
-  // AUTOMATIC VANISH TIMER (Vanishes automatically with movement in 5s if idle)
+  // AUTOMATIC VANISH TIMER (Vanishes automatically with movement in 4s if idle)
   // =========================================================================
   useEffect(() => {
     if (!isReady || isCinematicMode || isWarping) return;
 
-    let countdown = 5;
+    let countdown = 4;
     setAutoTimerRemaining(countdown);
 
     const interval = setInterval(() => {
