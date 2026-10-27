@@ -60,7 +60,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
   };
 
   return (
-    <section id="custom" className="w-full py-28 px-6 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
+    <section id="custom" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
       {/* Header */}
       <div className="mb-14 pb-8 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 backdrop-blur-md mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
@@ -68,7 +68,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
           <span>BESPOKE WEARABLE ART // DIRECT ATELIER COMMISSION</span>
         </div>
 
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white mb-6 leading-none text-left">
+        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white mb-4 sm:mb-6 leading-none text-left">
           COMMISSION A <span className="chrome-text">CUSTOM SPECIMEN</span>
         </h2>
 

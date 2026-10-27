@@ -12,7 +12,7 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="w-full py-28 px-6 sm:px-12 lg:px-20 bg-transparent select-none border-t border-[#be185d]/20 relative">
+    <section id="faq" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-transparent select-none border-t border-[#be185d]/20 relative">
       {/* Background Centered Ambient True Dark Purple Plum Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#2d052d]/30 rounded-full blur-[160px] pointer-events-none" />
 
@@ -22,7 +22,7 @@ export function FAQSection() {
           <HelpCircle className="w-3.5 h-3.5 text-[#f472b6]" />
           <span>AUTHENTIC CLIENT Q&A // SOURCE OF TRUTH</span>
         </div>
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-center">
+        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-center">
           FREQUENTLY ASKED <span className="chrome-text">QUESTIONS</span>
         </h2>
         <p className="text-silver/85 text-sm max-w-xl font-montserrat mt-4 text-center leading-relaxed">
@@ -75,13 +75,13 @@ export function FAQSection() {
 
 export function ContactSection() {
   return (
-    <section id="contact" className="w-full py-28 px-6 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
+    <section id="contact" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
       <div className="mb-14 pb-8 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 backdrop-blur-md mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
           <Mail className="w-3.5 h-3.5 text-[#f472b6]" />
           <span>GET IN TOUCH // GUWAHATI ATELIER</span>
         </div>
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-left">
+        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-left">
           CONTACT & <span className="chrome-text">COMMISSIONS</span>
         </h2>
       </div>
@@ -176,9 +176,9 @@ export function ContactSection() {
 
 export function ShippingPackagingReturns() {
   return (
-    <section id="specs" className="w-full py-28 px-6 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
-      <div className="mb-14 pb-8 border-b border-white/10">
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white mb-4 leading-none">
+    <section id="specs" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
+      <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10">
+        <h2 className="text-2xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white mb-4 leading-none">
           SHIPPING, PACKAGING & <span className="chrome-text">RETURNS</span>
         </h2>
         <p className="text-sm text-silver/70 font-montserrat max-w-xl">

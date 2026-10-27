@@ -730,7 +730,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-screen h-screen flex items-center justify-center overflow-hidden bg-black select-none cursor-default"
+      className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center overflow-hidden bg-black select-none cursor-default"
     >
       {/* 0. Synchronized Master Audio Soundtrack */}
       <audio
@@ -755,9 +755,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         disablePictureInPicture
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full ${
-          isMobileDevice ? 'object-cover' : 'object-contain'
-        } z-0 pointer-events-none transition-opacity duration-700 ease-out ${
+        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-opacity duration-700 ease-out ${
           videoLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
@@ -788,13 +786,13 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
       {/* 4. TOP-RIGHT HIDE 3D BUTTON (Clean, Minimalist) */}
       {!isCinematicMode && (
-        <div className="absolute top-20 right-6 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
+        <div className="absolute top-[60px] sm:top-[76px] right-4 sm:right-6 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
           <button
             onClick={triggerLightspeedWarp}
             title="Warp 3D satellites into distance to reveal pure video reel"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/80 hover:bg-[#be185d]/30 border border-white/20 hover:border-[#be185d]/80 text-white hover:text-pink text-xs font-mono tracking-wider backdrop-blur-md cursor-pointer transition-all shadow-lg active:scale-95 group"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-black/80 hover:bg-[#be185d]/30 border border-white/20 hover:border-[#be185d]/80 text-white hover:text-pink text-[10px] sm:text-xs font-mono tracking-wider backdrop-blur-md cursor-pointer transition-all shadow-lg active:scale-95 group"
           >
-            <EyeOff className="w-3.5 h-3.5 text-pink-300 group-hover:scale-110 transition-transform" />
+            <EyeOff className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink-300 group-hover:scale-110 transition-transform" />
             <span>HIDE 3D</span>
             <span className="text-[10px] text-silver/50 font-mono hidden sm:inline">
               ({autoTimerRemaining}s)
@@ -804,18 +802,18 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       )}
 
       {/* 5. Video, Audio & Mode Controls HUD (Bottom-Left) */}
-      <div className="absolute bottom-6 left-6 z-[10] flex items-center gap-2.5">
+      <div className="absolute bottom-4 sm:bottom-6 left-3 sm:left-6 z-[10] flex items-center gap-2">
         <button
           onClick={handleTogglePlay}
-          className="p-2.5 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all backdrop-blur-md cursor-pointer group shadow-lg"
+          className="p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all backdrop-blur-md cursor-pointer group shadow-lg"
           title={isPlaying ? 'Pause Background Reel' : 'Play Background Reel'}
         >
-          {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+          {isPlaying ? <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />}
         </button>
 
         <button
           onClick={handleToggleMute}
-          className={`p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer group shadow-lg flex items-center gap-1.5 ${
+          className={`p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer group shadow-lg flex items-center gap-1.5 ${
             isMuted
               ? 'bg-black/70 border-white/20 hover:border-pink text-silver/80 hover:text-pink'
               : 'bg-pink/20 border-pink text-pink shadow-[0_0_15px_rgba(244,194,194,0.4)]'
@@ -823,10 +821,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
           title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
         >
           {isMuted ? (
-            <VolumeX className="w-3.5 h-3.5 text-silver/70 group-hover:text-pink" />
+            <VolumeX className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-silver/70 group-hover:text-pink" />
           ) : (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-pink animate-pulse" />
+              <Volume2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink animate-pulse" />
               <span className="text-[10px] font-mono tracking-wider text-pink hidden sm:inline">SOUND ON</span>
             </>
           )}
@@ -836,11 +834,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         {isCinematicMode && (
           <button
             onClick={summon3dSatellites}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/85 hover:bg-pink/20 border border-[#be185d]/60 text-white hover:text-pink text-[10px] sm:text-xs font-mono tracking-wider uppercase transition-all backdrop-blur-md cursor-pointer shadow-[0_0_15px_rgba(190,24,93,0.3)] animate-in fade-in"
+            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-black/85 hover:bg-pink/20 border border-[#be185d]/60 text-white hover:text-pink text-[9px] sm:text-xs font-mono tracking-wider uppercase transition-all backdrop-blur-md cursor-pointer shadow-[0_0_15px_rgba(190,24,93,0.3)] animate-in fade-in"
             title="Summon 3D Satellite Sculptures back from distance"
           >
-            <Compass className="w-3.5 h-3.5 text-pink-300 animate-spin" />
-            <span>SUMMON 3D SATELLITES</span>
+            <Compass className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink-300 animate-spin" />
+            <span className="hidden xs:inline">SUMMON 3D</span>
+            <span className="xs:hidden">3D</span>
           </button>
         )}
 
@@ -850,11 +849,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
             playSound('pip');
             setIsCinemaOpen(true);
           }}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink text-xs font-mono transition-all backdrop-blur-md cursor-pointer shadow-lg"
+          className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-black/70 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink text-[9px] sm:text-xs font-mono transition-all backdrop-blur-md cursor-pointer shadow-lg"
           title="Open Cinema Master Reel Modal"
         >
-          <Film className="w-3.5 h-3.5 text-pink" />
+          <Film className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink" />
           <span className="hidden sm:inline">FULL CINEMA REEL</span>
+          <span className="sm:hidden">CINEMA</span>
         </button>
       </div>
 

@@ -61,9 +61,9 @@ export default function Navbar({
   };
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto max-w-5xl select-none transition-all duration-300">
+    <header className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-24px)] sm:w-auto sm:max-w-5xl select-none transition-all duration-300">
       {/* Floating Center Capsule Container with Purple Gradient Glassmorphism */}
-      <div className="glass-capsule-purple rounded-full px-3 sm:px-5 h-14 flex items-center justify-between gap-3 sm:gap-6 shadow-2xl">
+      <div className="glass-capsule-purple rounded-full px-3 sm:px-5 h-12 sm:h-14 flex items-center justify-between gap-1.5 sm:gap-4 shadow-2xl w-full">
         
         {/* Brand Logo & Monogram */}
         <div
@@ -113,10 +113,10 @@ export default function Navbar({
         </nav>
 
         {/* Right Tools Capsule (Squad Buy, Wishlist, Tracking, Bag, Audio) */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* Squad Buy Shortcut */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Squad Buy Shortcut - Hidden on mobile */}
           {onOpenSquadModal && (
-            <div className="relative group flex flex-col items-center">
+            <div className="relative group hidden sm:flex flex-col items-center">
               <button
                 onClick={() => {
                   playSound('snap');
@@ -134,9 +134,9 @@ export default function Navbar({
             </div>
           )}
 
-          {/* Wishlist / Vault Stash Shortcut */}
+          {/* Wishlist / Vault Stash Shortcut - Hidden on mobile (in mobile menu) */}
           {onOpenWishlist && (
-            <div className="relative group flex flex-col items-center">
+            <div className="relative group hidden sm:flex flex-col items-center">
               <button
                 onClick={() => {
                   playSound('snap');
@@ -159,9 +159,9 @@ export default function Navbar({
             </div>
           )}
 
-          {/* Live Order Tracking Shortcut */}
+          {/* Live Order Tracking Shortcut - Hidden on mobile */}
           {onOpenTrackingModal && (
-            <div className="relative group flex flex-col items-center">
+            <div className="relative group hidden sm:flex flex-col items-center">
               <button
                 onClick={() => {
                   playSound('snap');
@@ -197,7 +197,7 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Compact Currency Switcher */}
+          {/* Compact Currency Switcher - Hidden on mobile */}
           <select
             value={currency}
             onChange={(e) => {
@@ -205,7 +205,7 @@ export default function Navbar({
               onCurrencyChange(e.target.value);
             }}
             aria-label="Currency"
-            className="bg-transparent text-silver/80 hover:text-white text-xs font-mono cursor-pointer border-none outline-none py-1 transition-colors"
+            className="hidden sm:block bg-transparent text-silver/80 hover:text-white text-xs font-mono cursor-pointer border-none outline-none py-1 transition-colors"
           >
             {Object.keys(CURRENCIES).map((c) => (
               <option key={c} value={c} className="bg-neutral-950 text-silver">
@@ -266,7 +266,7 @@ export default function Navbar({
 
       {/* Mobile Drawer Menu (Glass Overlay) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed top-20 left-4 right-4 bg-black/95 backdrop-blur-2xl border border-[#be185d]/40 rounded-3xl p-5 shadow-2xl flex flex-col gap-2 z-50 animate-fade-in text-left">
+        <div className="lg:hidden fixed top-[60px] sm:top-[72px] left-3 right-3 bg-black/97 backdrop-blur-2xl border border-[#be185d]/40 rounded-3xl p-4 shadow-2xl flex flex-col gap-1 z-50 animate-fade-in text-left max-h-[80vh] overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -275,10 +275,10 @@ export default function Navbar({
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`flex items-center gap-3 w-full px-4 py-3 rounded-2xl text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
+                className={`flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl text-xs font-mono tracking-wider uppercase transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#be185d]/30 text-pink-300 font-bold border border-[#be185d]/50'
-                    : 'text-silver/80 hover:text-white hover:bg-white/5'
+                    : 'text-silver/80 hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
               >
                 <Icon className="w-4 h-4 text-pink" />
@@ -286,6 +286,56 @@ export default function Navbar({
               </button>
             );
           })}
+
+          {/* Mobile-only extras */}
+          <div className="border-t border-white/10 mt-2 pt-3 flex flex-col gap-1">
+            {/* Currency selector in mobile menu */}
+            <div className="flex items-center gap-3 px-4 py-2">
+              <span className="text-[10px] font-mono text-silver/50 uppercase tracking-widest">Currency</span>
+              <select
+                value={currency}
+                onChange={(e) => { playSound('snap'); onCurrencyChange(e.target.value); }}
+                className="bg-transparent text-silver/80 text-xs font-mono cursor-pointer border-none outline-none"
+              >
+                {Object.keys(CURRENCIES).map((c) => (
+                  <option key={c} value={c} className="bg-neutral-950 text-silver">{c}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Wishlist in mobile menu */}
+            {onOpenWishlist && (
+              <button
+                onClick={() => { playSound('snap'); setMobileMenuOpen(false); onOpenWishlist(); }}
+                className="flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl text-xs font-mono tracking-wider uppercase text-silver/80 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer"
+              >
+                <Heart className={`w-4 h-4 ${wishlistCount > 0 ? 'text-pink-400 fill-pink-400' : 'text-pink'}`} />
+                <span>Vault Stash {wishlistCount > 0 ? `(${wishlistCount})` : ''}</span>
+              </button>
+            )}
+
+            {/* Squad Buy in mobile menu */}
+            {onOpenSquadModal && (
+              <button
+                onClick={() => { playSound('snap'); setMobileMenuOpen(false); onOpenSquadModal(); }}
+                className="flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl text-xs font-mono tracking-wider uppercase text-silver/80 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer"
+              >
+                <Users className="w-4 h-4 text-pink" />
+                <span>Squad Buy (Save 20%)</span>
+              </button>
+            )}
+
+            {/* Track order in mobile menu */}
+            {onOpenTrackingModal && (
+              <button
+                onClick={() => { playSound('snap'); setMobileMenuOpen(false); onOpenTrackingModal(); }}
+                className="flex items-center gap-3 w-full px-4 py-3.5 rounded-2xl text-xs font-mono tracking-wider uppercase text-silver/80 hover:text-white hover:bg-white/5 border border-transparent transition-all cursor-pointer"
+              >
+                <Package className="w-4 h-4 text-pink" />
+                <span>Track Order</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
     </header>

@@ -138,11 +138,11 @@ export default function CartDrawer({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99997] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      className="fixed inset-0 z-[99997] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-6 animate-fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-gradient-to-b from-[#18031d] via-black to-[#0e0210] border border-[#be185d]/40 rounded-3xl max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(40,2,40,0.95)] relative text-left"
+        className="w-full max-w-xl bg-gradient-to-b from-[#18031d] via-black to-[#0e0210] border border-[#be185d]/40 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(40,2,40,0.95)] relative text-left"
       >
         {/* Header */}
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/5">
@@ -202,7 +202,7 @@ export default function CartDrawer({
         )}
 
         {/* Body Content */}
-        <div className="p-5 sm:p-6 flex-1 overflow-y-auto space-y-4">
+        <div className="p-4 sm:p-6 flex-1 overflow-y-auto space-y-4">
           {orderComplete ? (
             /* Order Success View */
             <div className="py-10 flex flex-col items-center text-center space-y-4">
@@ -522,7 +522,7 @@ export default function CartDrawer({
 
         {/* Footer Summary & Action */}
         {!orderComplete && items.length > 0 && !isCheckingOut && (
-          <div className="p-5 border-t border-white/10 bg-white/5 flex flex-col gap-2.5">
+          <div className="p-4 sm:p-5 border-t border-white/10 bg-white/5 flex flex-col gap-2.5">
             {/* Breakdown */}
             <div className="flex items-center justify-between text-xs font-mono text-silver/80">
               <span>Bag Subtotal:</span>

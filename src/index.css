@@ -66,8 +66,12 @@ body {
   color: #C0C0C0;
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  /* Prevent iOS rubber-band scroll from breaking layouts */
+  overscroll-behavior-y: contain;
 }
 
 /* Hardware-accelerated fixed ambient gradient layer - zero repaint on scroll (true deep dark purple) */
@@ -368,6 +372,23 @@ body::before {
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
   }
+  
+  /* Proper safe area support for devices with notches/home indicators */
+  .safe-bottom {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+  
+  /* Prevent text from overflowing on mobile */
+  h1, h2, h3, h4, h5, h6 {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Ensure buttons are always large enough to tap (44px minimum) */
+  button, a[role="button"] {
+    min-height: 36px;
+  }
 }
 
 /* Offscreen content rendering optimization for mobile */
@@ -449,4 +470,35 @@ article,
   will-change: transform;
 }
 
+/* Mobile section padding utility */
+@media (max-width: 640px) {
+  .section-px {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Prevent absolute positioned blooms from causing overflow */
+  .absolute.rounded-full.blur-\[170px\],
+  .absolute.rounded-full.blur-\[160px\] {
+    opacity: 0.5;
+    transform: scale(0.6) translate3d(0,0,0);
+  }
+}
 
+/* Touch-friendly active states */
+@media (hover: none) {
+  .btn-glass:active,
+  .btn-glass-pink:active,
+  .btn-avz:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  
+  /* Disable hover effects that don't work on touch */
+  .animate-marquee:hover {
+    animation-play-state: running;
+  }
+  .animate-marquee-reverse:hover {
+    animation-play-state: running;
+  }
+}

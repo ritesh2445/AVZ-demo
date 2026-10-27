@@ -15,10 +15,10 @@ export default function Footer({ onScrollToSection }) {
   };
 
   return (
-    <footer className="w-full bg-black border-t border-white/10 pt-20 pb-14 select-none text-silver">
-      <div className="w-full px-6 sm:px-12 lg:px-20">
+    <footer className="w-full bg-black border-t border-white/10 pt-12 sm:pt-20 pb-10 sm:pb-14 select-none text-silver">
+      <div className="w-full px-4 sm:px-12 lg:px-20">
         {/* Top Brand & Manifesto */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-12 sm:pb-16 border-b border-white/10">
           <div className="md:col-span-5 flex flex-col items-start gap-4">
             <div
               onClick={() => handleNav('hero')}
@@ -47,8 +47,8 @@ export default function Footer({ onScrollToSection }) {
             </div>
           </div>
 
-          {/* Navigation Links Columns */}
-          <div className="md:col-span-2 flex flex-col gap-3 text-left">
+          {/* Navigation Links Columns - Side by side on mobile */}
+          <div className="md:col-span-2 flex flex-col gap-2 sm:gap-3 text-left">
             <span className="text-xs font-mono uppercase text-[#f472b6] font-bold tracking-widest mb-2">EXPLORE</span>
             <button onClick={() => handleNav('shop')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
               Shop Catalogue

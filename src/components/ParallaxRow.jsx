@@ -146,13 +146,13 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   return (
     <section id="lookbook" className="w-full py-24 sm:py-32 bg-transparent select-none relative overflow-hidden">
       {/* Header Bar */}
-      <div className="w-full px-6 sm:px-12 lg:px-20 mb-16 sm:mb-20 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
+      <div className="w-full px-4 sm:px-12 lg:px-20 mb-10 sm:mb-16 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#f472b6]/40 mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_20px_rgba(244,114,182,0.25)]">
             <Radio className="w-3.5 h-3.5 text-[#f472b6] animate-pulse" />
             <span>DIMENSION 02 // 3D SPATIAL CATWALK</span>
           </div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none text-left">
+          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none text-left">
             SPATIAL <span className="chrome-text">LOOKBOOK</span>
           </h2>
           <p className="text-silver/85 text-xs sm:text-sm max-w-xl font-montserrat mt-3 leading-relaxed text-left">

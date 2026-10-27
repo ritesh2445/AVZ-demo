@@ -369,7 +369,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     <section
       id="museum"
       ref={sectionRef}
-      className="w-full py-24 px-4 sm:px-8 lg:px-16 bg-pitch-black select-none border-t border-white/5 text-left"
+      className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-16 bg-pitch-black select-none border-t border-white/5 text-left"
     >
       {/* Museum Header */}
       <div className="mb-10 pb-6 border-b border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -379,10 +379,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
             <span>3D ATELIER VAULT // PAST GRAILS & SOLD-OUT ARCHIVES</span>
           </div>
 
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none">
+          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none">
             AVZ <span className="chrome-text">3D MUSEUM</span>
           </h2>
-          <p className="text-silver/80 text-sm mt-3 font-montserrat max-w-2xl">
+          <p className="text-silver/80 text-xs sm:text-sm mt-3 font-montserrat max-w-2xl">
             Inspect our historic 1-of-1 creations on interactive 3D pedestals. Drag to orbit, explore the craft, or commission a bespoke version tailored for you.
           </p>
         </div>
@@ -430,9 +430,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
             <div ref={mountRef} className="w-full h-full" />
 
             {/* Hint & Drag Badge */}
-            <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[10px] font-mono text-pink tracking-widest uppercase">
+            <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[9px] sm:text-[10px] font-mono text-pink tracking-widest uppercase">
               <RotateCcw className="w-3 h-3 text-pink" />
-              <span>DRAG TO ROTATE 3D ARTIFACT // SWIPE TO CYCLE</span>
+              <span className="hidden sm:inline">DRAG TO ROTATE 3D ARTIFACT // SWIPE TO CYCLE</span>
+              <span className="sm:hidden">DRAG / SWIPE</span>
             </div>
 
             {/* Continuous Carousel Pedestal Navigation Arrows */}
@@ -550,7 +551,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         </div>
       ) : (
         /* ARCHIVE DOSSIER GRID VIEW */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {MUSEUM_ITEMS.map((item, idx) => (
             <div
               key={item.id}

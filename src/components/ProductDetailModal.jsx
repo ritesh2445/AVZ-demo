@@ -76,11 +76,11 @@ export default function ProductDetailModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99995] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fade-in"
+      className="fixed inset-0 z-[99995] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-6 overflow-y-auto animate-fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl bg-gradient-to-b from-[#140217] via-black to-[#0d020f] border border-[#be185d]/40 rounded-3xl shadow-[0_25px_80px_rgba(40,2,40,0.95)] my-auto flex flex-col md:flex-row overflow-hidden text-left"
+        className="relative w-full max-w-5xl bg-gradient-to-b from-[#140217] via-black to-[#0d020f] border border-[#be185d]/40 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(40,2,40,0.95)] my-auto max-h-[92vh] sm:max-h-none flex flex-col md:flex-row overflow-y-auto md:overflow-hidden text-left"
       >
         {/* Close Button */}
         <button
@@ -89,13 +89,13 @@ export default function ProductDetailModal({
             onClose();
           }}
           aria-label="Close product modal"
-          className="absolute top-5 right-5 z-20 w-10 h-10 rounded-full border border-white/20 bg-black/70 flex items-center justify-center text-silver hover:text-pink-300 hover:border-[#be185d] hover:bg-[#be185d]/20 transition-all cursor-pointer"
+          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/20 bg-black/80 flex items-center justify-center text-silver hover:text-pink-300 hover:border-[#be185d] hover:bg-[#be185d]/20 transition-all cursor-pointer shadow-lg"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
         {/* Left: Product Gallery Showcase Panel */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between bg-[#18031d]/90 border-b md:border-b-0 md:border-r border-[#be185d]/25">
+        <div className="w-full md:w-1/2 p-4 sm:p-8 flex flex-col justify-between bg-[#18031d]/90 border-b md:border-b-0 md:border-r border-[#be185d]/25">
           {/* Main Selected Image */}
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-black border border-[#be185d]/30 mb-4 shadow-2xl">
             <img
@@ -170,7 +170,7 @@ export default function ProductDetailModal({
         </div>
 
         {/* Right: Product Details & Purchase Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 flex flex-col justify-between bg-black/75 text-left">
+        <div className="w-full md:w-1/2 p-4 sm:p-8 md:p-10 flex flex-col justify-between bg-black/75 text-left">
           <div>
             <div className="flex items-center justify-between text-xs font-mono text-silver/60 uppercase mb-2">
               <span className="text-[#f472b6] font-semibold tracking-wider">{product.category}</span>

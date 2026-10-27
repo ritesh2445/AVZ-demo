@@ -133,18 +133,18 @@ export default function ShopCatalogue({
   }, []);
 
   return (
-    <section id="shop" className="w-full py-24 px-6 sm:px-12 lg:px-20 bg-transparent select-none border-t border-white/10 relative">
+    <section id="shop" className="w-full py-16 sm:py-24 px-4 sm:px-12 lg:px-20 bg-transparent select-none border-t border-white/10 relative">
       {/* Background True Dark Purple Velvet Bloom */}
       <div className="absolute top-1/3 right-10 w-[550px] h-[550px] bg-[#32082b]/35 rounded-full blur-[170px] pointer-events-none" />
 
       {/* Top Squad Buy Announcement Banner */}
-      <div className="mb-10 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#200424] via-[#35073c]/60 to-[#1b0320] border border-[#f472b6]/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
-        <div className="flex items-center gap-3 text-left">
-          <div className="w-10 h-10 rounded-full bg-pink/20 border border-pink flex items-center justify-center shrink-0">
-            <Users className="w-5 h-5 text-pink" />
+      <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-[#200424] via-[#35073c]/60 to-[#1b0320] border border-[#f472b6]/40 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+        <div className="flex items-center gap-3 text-left w-full sm:w-auto">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-pink/20 border border-pink flex items-center justify-center shrink-0">
+            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-pink" />
           </div>
           <div>
-            <span className="text-[10px] font-mono text-pink-300 font-bold uppercase tracking-wider block">
+            <span className="text-[9px] sm:text-[10px] font-mono text-pink-300 font-bold uppercase tracking-wider block">
               ✦ BADDIE SQUAD BUY ACTIVE // SPLIT & SAVE
             </span>
             <p className="text-xs sm:text-sm text-white font-spartan font-bold uppercase">
@@ -159,7 +159,7 @@ export default function ShopCatalogue({
               playSound('snap');
               onOpenSquadModal();
             }}
-            className="btn-glass-pink py-2.5 px-5 text-xs font-spartan font-black tracking-widest uppercase shrink-0 cursor-pointer"
+            className="btn-glass-pink py-2 px-4 sm:py-2.5 sm:px-5 text-xs font-spartan font-black tracking-widest uppercase shrink-0 cursor-pointer w-full sm:w-auto"
           >
             START SQUAD ORDER ↗
           </button>
@@ -167,16 +167,16 @@ export default function ShopCatalogue({
       </div>
 
       {/* Editorial Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 pb-8 border-b border-white/10 relative z-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-12 pb-6 sm:pb-8 border-b border-white/10 relative z-10">
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full btn-glass mb-3 text-pink text-[11px] font-mono tracking-widest uppercase">
             <Sparkles className="w-3.5 h-3.5 text-pink" />
             <span>DROP 01 // CERTIFIED BADDIE GRAILS</span>
           </div>
-          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none">
+          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none">
             WEARABLE ART <span className="chrome-text">CATALOGUE</span>
           </h2>
-          <p className="text-silver/80 text-sm max-w-xl font-montserrat mt-4 leading-relaxed text-left">
+          <p className="text-silver/80 text-xs sm:text-sm max-w-xl font-montserrat mt-3 sm:mt-4 leading-relaxed text-left">
             1-of-1 sculptural corsets, motherboard breastplates, and spiked outerwear hand-forged in our Guwahati atelier. Slay on your own terms.
           </p>
         </div>
@@ -380,9 +380,9 @@ export default function ShopCatalogue({
         </div>
 
         {/* Material & Sorting Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 sm:p-4 rounded-2xl bg-white/[0.02] border border-white/10">
           {/* Material Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full sm:w-auto">
             <Filter className="w-3.5 h-3.5 text-pink shrink-0" />
             <span className="text-[11px] font-mono text-silver/60 uppercase shrink-0">MATERIAL:</span>
             {MATERIALS.map((mat) => (
@@ -403,34 +403,36 @@ export default function ShopCatalogue({
             ))}
           </div>
 
-          {/* Search Box */}
-          <div className="relative flex-1 min-w-[220px] max-w-sm">
-            <Search className="w-3.5 h-3.5 text-silver/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search spikes, keycaps, motherboard..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-black/80 border border-white/15 pl-10 pr-4 py-2 rounded-full text-xs text-white placeholder:text-silver/40 font-mono outline-none focus:border-pink transition-colors"
-            />
-          </div>
+          {/* Search Box + Sort - row on mobile */}
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            {/* Search Box */}
+            <div className="relative flex-1 sm:flex-none sm:min-w-[220px] sm:max-w-sm">
+              <Search className="w-3.5 h-3.5 text-silver/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-black/80 border border-white/15 pl-10 pr-4 py-2 rounded-full text-xs text-white placeholder:text-silver/40 font-mono outline-none focus:border-pink transition-colors"
+              />
+            </div>
 
-          {/* Sort Selector */}
-          <div className="flex items-center gap-2">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-pink" />
-            <span className="text-[11px] font-mono text-silver/60 uppercase">SORT:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => {
-                playSound('snap');
-                setSortBy(e.target.value);
-              }}
-              className="bg-black/80 border border-white/15 text-silver text-xs font-mono px-3.5 py-1.5 rounded-full outline-none focus:border-pink cursor-pointer"
-            >
-              <option value="featured">Featured grails</option>
-              <option value="price-low">Price: Low to high</option>
-              <option value="price-high">Price: High to low</option>
-            </select>
+            {/* Sort Selector */}
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-pink hidden sm:block" />
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  playSound('snap');
+                  setSortBy(e.target.value);
+                }}
+                className="bg-black/80 border border-white/15 text-silver text-xs font-mono px-2.5 sm:px-3.5 py-1.5 rounded-full outline-none focus:border-pink cursor-pointer"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-low">Price ↑</option>
+                <option value="price-high">Price ↓</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -453,7 +455,7 @@ export default function ShopCatalogue({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 relative z-10 text-left">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 relative z-10 text-left">
           {filteredProducts.map((product) => {
             const isWish = wishlistIds.includes(product.id);
 
@@ -517,14 +519,14 @@ export default function ShopCatalogue({
                 </div>
 
                 {/* Product Card Details */}
-                <div className="p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d020f]/95 text-left">
+                <div className="p-3 sm:p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d020f]/95 text-left">
                   <div>
-                    <div className="flex items-center justify-between text-[11px] font-mono text-silver/60 uppercase mb-1.5">
-                      <span>{product.category}</span>
-                      <span className="text-[#f472b6] font-medium">{product.subCategory}</span>
+                    <div className="flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-silver/60 uppercase mb-1 sm:mb-1.5">
+                      <span className="truncate">{product.category}</span>
+                      <span className="text-[#f472b6] font-medium ml-1 shrink-0">{product.subCategory}</span>
                     </div>
 
-                    <h3 className="font-spartan font-black text-lg sm:text-xl text-white group-hover:text-pink-300 transition-colors uppercase leading-tight line-clamp-1 mb-2 text-left">
+                    <h3 className="font-spartan font-black text-sm sm:text-lg text-white group-hover:text-pink-300 transition-colors uppercase leading-tight line-clamp-1 mb-1 sm:mb-2 text-left">
                       {product.name}
                     </h3>
 
@@ -542,12 +544,12 @@ export default function ShopCatalogue({
                   </div>
 
                   {/* Price & Action Button Row */}
-                  <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
+                  <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-white/10 mt-auto">
                     <div className="flex flex-col text-left">
-                      <span className="text-[10px] font-mono text-silver/50 uppercase tracking-widest text-left">
-                        ATELIER GRAIL
+                      <span className="text-[9px] sm:text-[10px] font-mono text-silver/50 uppercase tracking-widest text-left">
+                        GRAIL
                       </span>
-                      <span className="text-base font-spartan font-black text-white group-hover:text-pink-300 transition-colors text-left">
+                      <span className="text-sm sm:text-base font-spartan font-black text-white group-hover:text-pink-300 transition-colors text-left">
                         {formatPrice(product.price, currency)}
                       </span>
                     </div>

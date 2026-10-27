@@ -152,7 +152,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       </div>
 
       {/* 2. EDITORIAL HEADER & NAVIGATION HUD */}
-      <div className="pt-10 pb-6 px-6 sm:px-12 lg:px-20 flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10">
+      <div className="pt-8 sm:pt-10 pb-4 sm:pb-6 px-4 sm:px-12 lg:px-20 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 sm:gap-6 border-b border-white/10">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 text-pink text-[10px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(244,194,194,0.2)] mb-3">
             <Scissors className="w-3 h-3 text-pink" />
@@ -198,7 +198,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       </div>
 
       {/* Milestone Tabs Quick Selector */}
-      <div className="px-6 sm:px-12 lg:px-20 py-3 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-white/5 bg-black/40">
+      <div className="px-4 sm:px-12 lg:px-20 py-2.5 sm:py-3 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-white/5 bg-black/40">
         {[
           '01 // MANIFESTO',
           '02 // THE SCISSORS LORE',
@@ -223,7 +223,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       {/* 3. DEDICATED HORIZONTAL SCROLL ONLY CONTAINER (Vertical scroll passes through smoothly) */}
       <div
         ref={scrollContainerRef}
-        className="w-full overflow-x-auto overflow-y-hidden py-10 px-6 sm:px-12 lg:px-20 flex items-stretch gap-8 lg:gap-10 scroll-smooth no-scrollbar"
+        className="w-full overflow-x-auto overflow-y-hidden py-6 sm:py-10 px-4 sm:px-12 lg:px-20 flex items-stretch gap-6 sm:gap-8 lg:gap-10 scroll-smooth no-scrollbar"
         style={{ scrollSnapType: 'x proximity' }}
       >
         {/* ========================================================
