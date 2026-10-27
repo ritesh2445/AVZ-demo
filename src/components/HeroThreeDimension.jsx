@@ -315,9 +315,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       sparkleStartTime = performance.now();
       sparkleMat.opacity = 1;
 
-      // Instantly vanish both the central kinetic emblem and floating photo planes
+      // Instantly vanish central kinetic emblem, floating photos, and all floating scrap/star particles
       emblemGroup.visible = false;
       photoPlanesGroup.visible = false;
+      scrapParticles.visible = false;
 
       // Seed burst origins from center emblem + floating cards
       const origins = [
@@ -380,13 +381,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       currentMouseX += (targetMouseX - currentMouseX) * 0.06;
       currentMouseY += (targetMouseY - currentMouseY) * 0.06;
 
-      // Update 2D lighting mask only when pointer actively shifts
-      if (maskRef.current && (Math.abs(targetMouseX - currentMouseX) > 0.005 || Math.abs(targetMouseY - currentMouseY) > 0.005)) {
-        const px = ((currentMouseX + 1) * 50).toFixed(1);
-        const py = ((1 - currentMouseY) * 50).toFixed(1);
-        maskRef.current.style.background = `radial-gradient(750px circle at ${px}% ${py}%, rgba(244, 194, 194, 0.12) 0%, rgba(48, 25, 52, 0.22) 45%, rgba(0, 0, 0, 0.85) 85%)`;
-      }
-
       // Spotlight tracks pointer in 3D
       spotlight.position.x = currentMouseX * 10;
       spotlight.position.y = currentMouseY * 7;
@@ -446,12 +440,13 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         const posArr = sparkleGeom.attributes.position.array;
         const velArr = sparkleVelocities;
 
-        // Twinkling sparkle opacity decay over 4.5 seconds
-        if (timeSinceBlast > 4.5) {
+        // Twinkling sparkle opacity decay over 1.6s; completely vanish to leave pure pitch black background
+        if (timeSinceBlast > 1.6) {
           sparklesActive = false;
           sparkleMat.opacity = 0;
+          sparkleSystem.visible = false;
         } else {
-          sparkleMat.opacity = Math.max(0, 1 - timeSinceBlast / 4.5);
+          sparkleMat.opacity = Math.max(0, 1 - timeSinceBlast / 1.6);
           // Sparkle twinkle scale fluttering
           sparkleMat.size = 0.65 + Math.sin(elapsedTime * 18) * 0.15;
 
@@ -675,7 +670,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     setTimeout(() => {
       setBlastActive(false);
       setSparkleSprinkles([]);
-    }, 2800);
+    }, 1400);
   };
 
   const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
@@ -711,11 +706,11 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         preload="auto"
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-contain z-0 pointer-events-none transition-all duration-700 ease-out ${
-          videoLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-100'
+        className={`absolute inset-0 w-full h-full object-contain z-0 pointer-events-none transition-opacity duration-700 ease-out ${
+          videoLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
-          filter: 'contrast(1.05) saturate(1.08) brightness(1.01)',
+          filter: 'none',
           imageRendering: 'high-quality',
           WebkitBackfaceVisibility: 'hidden',
           transform: 'translateZ(0)'
@@ -724,28 +719,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. Haute-Couture Subtle Vignette (Clear center & edges for complete video visibility) */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[1]"
-        style={{
-          background: 'radial-gradient(circle at center, transparent 70%, rgba(0, 0, 0, 0.4) 100%)'
-        }}
-      />
-
-      {/* 3. 3D WebGL Three.js Layer with Transparent Background */}
+      {/* 2. 3D WebGL Three.js Layer with Transparent Background */}
       <div
         ref={mountRef}
         className="absolute inset-0 w-full h-full pointer-events-auto z-[2]"
-      />
-
-      {/* 4. Dynamic 2D Ambient Lighting Mask Following Pointer */}
-      <div
-        ref={maskRef}
-        className="absolute inset-0 pointer-events-none transition-opacity duration-700 z-[3]"
-        style={{
-          background: 'radial-gradient(750px circle at 50% 50%, rgba(244, 194, 194, 0.12) 0%, rgba(48, 25, 52, 0.22) 45%, rgba(0, 0, 0, 0.85) 85%)',
-          mixBlendMode: 'screen'
-        }}
       />
 
       {/* 5. TAP & HOLD 4S CHARGING HUD OVERLAY */}
