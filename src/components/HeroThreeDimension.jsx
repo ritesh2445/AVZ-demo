@@ -823,25 +823,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         </div>
       )}
 
-      {/* 7. Post-Blast Baddie Badge Notification */}
-      {isBlasted && (
-        <div className="absolute top-20 left-6 z-[10] flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="px-3.5 py-1.5 rounded-full bg-black/80 backdrop-blur-md border border-purple-400/50 text-[10px] font-mono tracking-widest text-pink shadow-[0_0_20px_rgba(168,85,247,0.35)] flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 text-pink" />
-            <span>PURPLE SUPERNOVA BLASTED // REFRESH TO REGENERATE EMBLEM & LOOKS</span>
-          </div>
-        </div>
-      )}
-
-      {/* 8. Luxury Live Editorial Film HUD Badge (Top-Left) */}
-      <div className="absolute top-6 left-6 z-[10] flex items-center gap-2">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-pink/30 text-[10px] font-mono tracking-widest text-pink shadow-[0_0_20px_rgba(244,194,194,0.2)]">
-          <span className="w-2 h-2 rounded-full bg-pink animate-ping inline-block" />
-          <span>EDITORIAL FASHION REEL // SS26 ARCHIVE</span>
-        </div>
-      </div>
-
-      {/* 9. Luxury Video & Audio Controls HUD (Bottom-Left) */}
+      {/* Video & Audio Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-6 z-[10] flex items-center gap-2.5">
         <button
           onClick={handleTogglePlay}

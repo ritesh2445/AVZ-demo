@@ -238,6 +238,7 @@ export default function App() {
         <section id="shop" className="w-full">
           <ShopCatalogue
             onSelectProduct={setActiveProduct}
+            onAddToCart={handleAddToCart}
             currency={currency}
             initialCategory="All"
             onToggleWishlist={handleToggleWishlist}

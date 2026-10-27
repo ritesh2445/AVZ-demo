@@ -139,7 +139,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-[#831843]/20 rounded-full blur-[170px] pointer-events-none" />
 
       {/* Header Bar */}
-      <div className="w-full px-6 sm:px-12 lg:px-20 mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
+      <div className="w-full px-6 sm:px-12 lg:px-20 mb-16 sm:mb-20 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#f472b6]/40 mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_20px_rgba(244,114,182,0.25)]">
             <Radio className="w-3.5 h-3.5 text-[#f472b6] animate-pulse" />
@@ -189,7 +189,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         onTouchEnd={handleTouchEnd}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-full max-w-7xl mx-auto px-6 sm:px-12 py-8 flex flex-col items-center justify-center min-h-[580px] lg:min-h-[660px] select-none perspective-[1400px] cursor-grab active:cursor-grabbing touch-pan-y"
+        className="relative w-full max-w-7xl mx-auto px-4 sm:px-12 pt-6 pb-12 flex flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none perspective-[1400px] cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
         style={{ perspective: '1400px' }}
       >
         {/* Volumetric Spotlight from Top */}
@@ -222,7 +222,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
         {/* 3D Spatial Carousel Stage */}
         <div
-          className="relative w-full flex items-center justify-center transition-transform duration-500 ease-out z-20 py-6"
+          className="relative w-full h-[490px] sm:h-[560px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${mousePos.x * 6}deg) rotateX(${-mousePos.y * 5}deg)`
@@ -239,10 +239,10 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
             if (!isVisible) return null;
 
-            let translateX = diff * (typeof window !== 'undefined' && window.innerWidth < 640 ? 180 : 340);
+            let translateX = diff * (typeof window !== 'undefined' && window.innerWidth < 640 ? 160 : 330);
             let translateZ = isCenter ? 120 : -90 * Math.abs(diff);
             let rotateY = diff * -25;
-            let scale = isCenter ? 1.08 : 0.85;
+            let scale = isCenter ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 1.02 : 1.06) : 0.82;
             let opacity = isCenter ? 1 : Math.max(0.25, 1 - Math.abs(diff) * 0.45);
             let blur = isCenter ? 0 : Math.abs(diff) * 3;
 
@@ -259,7 +259,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     goToSlide(idx);
                   }
                 }}
-                className={`absolute w-[280px] sm:w-[350px] md:w-[400px] h-[480px] sm:h-[560px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
+                className={`absolute top-0 w-[270px] sm:w-[340px] md:w-[380px] h-[470px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
                   isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
                 }`}
                 style={{

@@ -23,7 +23,9 @@ import {
   Shield,
   Boxes,
   Wand2,
-  Users
+  Users,
+  Truck,
+  MessageCircle
 } from 'lucide-react';
 import { PRODUCTS, CATEGORIES, MATERIALS, formatPrice } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -50,6 +52,7 @@ const CATEGORY_ICONS = {
 
 export default function ShopCatalogue({
   onSelectProduct,
+  onAddToCart,
   currency = 'INR',
   initialCategory = 'All',
   onToggleWishlist,
@@ -281,21 +284,66 @@ export default function ShopCatalogue({
                     </div>
 
                     {/* Price and CTA */}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/10 mt-2">
-                      <span className="text-sm font-spartan font-black text-white">
-                        {formatPrice(item.price, currency)}
-                      </span>
+                    <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-2">
+                      <div className="flex flex-col text-left">
+                        <span className="text-[9px] font-mono text-silver/50 uppercase tracking-widest">
+                          GRAIL
+                        </span>
+                        <span className="text-sm font-spartan font-black text-white">
+                          {formatPrice(item.price, currency)}
+                        </span>
+                      </div>
 
-                      <span className="text-[10px] font-mono text-pink-300 group-hover:text-white flex items-center gap-1 font-bold">
-                        <span>CLAIM GRAIL</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {onAddToCart && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              playSound('snap');
+                              onAddToCart({
+                                ...item,
+                                selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
+                              });
+                            }}
+                            title="Instant Quick Add to Bag"
+                            className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#be185d] to-[#9333ea] hover:from-[#db2777] hover:to-[#a855f7] text-white text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1 shadow-md cursor-pointer active:scale-95 transition-all"
+                          >
+                            <ShoppingBag className="w-3 h-3" />
+                            <span>BAG +</span>
+                          </button>
+                        )}
+
+                        <span className="text-[10px] font-mono text-pink-300 group-hover:text-white flex items-center gap-0.5 font-bold">
+                          <span>VIEW</span>
+                          <ArrowUpRight className="w-3 h-3" />
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Atelier Trust & Security Bar */}
+      <div className="mb-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 rounded-2xl bg-white/[0.02] border border-[#f472b6]/25 text-[11px] font-mono text-silver/80 relative z-10 text-left">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-[#f472b6] shrink-0" />
+          <span>100% Handcrafted Wearable Art</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Truck className="w-4 h-4 text-purple-400 shrink-0" />
+          <span>Free Express Shipping Over ₹5k</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Shield className="w-4 h-4 text-pink-400 shrink-0" />
+          <span>Damage & Sizing Protection</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>Direct WhatsApp Atelier Line</span>
         </div>
       </div>
 
@@ -306,6 +354,7 @@ export default function ShopCatalogue({
           {CATEGORIES.map((cat) => {
             const Icon = CATEGORY_ICONS[cat] || LayoutGrid;
             const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
+            const count = cat === 'All' ? PRODUCTS.length : PRODUCTS.filter(p => p.category.toLowerCase() === cat.toLowerCase()).length;
 
             return (
               <button
@@ -322,6 +371,9 @@ export default function ShopCatalogue({
               >
                 <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#f472b6]' : 'text-silver/50'}`} />
                 <span>{cat}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isSelected ? 'bg-pink-500/40 text-white' : 'bg-white/10 text-silver/50'}`}>
+                  {count}
+                </span>
               </button>
             );
           })}
@@ -500,8 +552,28 @@ export default function ShopCatalogue({
                       </span>
                     </div>
 
-                    <div className="w-8 h-8 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-silver/80 group-hover:text-pink-300 group-hover:border-[#be185d] group-hover:bg-[#be185d]/20 transition-all">
-                      <ArrowUpRight className="w-4 h-4" />
+                    <div className="flex items-center gap-2">
+                      {onAddToCart && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playSound('snap');
+                            onAddToCart({
+                              ...product,
+                              selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
+                            });
+                          }}
+                          title="Instant Add to Bag"
+                          className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#be185d] to-[#9333ea] hover:from-[#db2777] hover:to-[#a855f7] text-white text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1 shadow-md cursor-pointer active:scale-95 transition-all"
+                        >
+                          <ShoppingBag className="w-3 h-3" />
+                          <span>BAG +</span>
+                        </button>
+                      )}
+
+                      <div className="w-8 h-8 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-silver/80 group-hover:text-pink-300 group-hover:border-[#be185d] group-hover:bg-[#be185d]/20 transition-all">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
                     </div>
                   </div>
                 </div>
