@@ -66,6 +66,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const photoPlanesGroupRef = useRef(null);
   const coreMatRef = useRef(null);
   const blastTriggerFnRef = useRef(null);
+  const scrapParticlesRef = useRef(null);
+  const sparkleSystemRef = useRef(null);
 
   useEffect(() => {
     setIsMobileDevice(window.innerWidth < 768);
@@ -251,6 +253,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       opacity: 0.65
     });
     const scrapParticles = new THREE.Points(scrapGeom, scrapMat);
+    scrapParticlesRef.current = scrapParticles;
     scene.add(scrapParticles);
 
     // 6. REALISTIC PURPLE STAR SPARKLE SPRINKLE EXPLOSION SYSTEM
@@ -304,6 +307,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     });
 
     const sparkleSystem = new THREE.Points(sparkleGeom, sparkleMat);
+    sparkleSystemRef.current = sparkleSystem;
     scene.add(sparkleSystem);
 
     let sparklesActive = false;
@@ -657,7 +661,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
     setSparkleSprinkles(sparkles);
 
-    // Hide BOTH 3D emblem AND floating images during current session (restores on refresh)
+    // Hide 3D emblem, floating photos, and all stars/particles (restores on refresh)
     setIsBlasted(true);
 
     if (emblemGroupRef.current) {
@@ -665,6 +669,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
     if (photoPlanesGroupRef.current) {
       photoPlanesGroupRef.current.visible = false;
+    }
+    if (scrapParticlesRef.current) {
+      scrapParticlesRef.current.visible = false;
+    }
+    if (sparkleSystemRef.current) {
+      sparkleSystemRef.current.visible = false;
     }
 
     setTimeout(() => {
@@ -683,6 +693,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       onPointerUp={endHold}
       onPointerLeave={endHold}
       onPointerCancel={endHold}
+      onMouseDown={startHold}
+      onMouseUp={endHold}
+      onTouchStart={startHold}
+      onTouchEnd={endHold}
       className={`relative w-full min-h-screen h-screen flex items-center justify-center overflow-hidden bg-black select-none touch-pan-y ${
         isHolding ? 'cursor-crosshair' : 'cursor-grab active:cursor-grabbing'
       }`}
