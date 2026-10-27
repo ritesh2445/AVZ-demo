@@ -16,6 +16,8 @@ import {
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
+import DhristroyerAnimatedHeading from './DhristroyerAnimatedHeading';
+
 const SCATTERED_PICTURES = [
   {
     id: 'pic-chainmail',
@@ -157,12 +159,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             <span>THE CREATOR'S MANIFESTO // GUWAHATI ATELIER</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black font-spartan uppercase tracking-tight text-white leading-tight">
-            DHRISNI{' '}
-            <span className="font-spartan font-black italic tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-pink to-purple-400 drop-shadow-[0_0_20px_rgba(244,194,194,0.4)]">
-              (DHRISTROYER)
-            </span>
-          </h2>
+          <DhristroyerAnimatedHeading />
           <p className="text-silver/80 text-sm mt-2 font-montserrat max-w-2xl">
             Swipe or scroll horizontally through the story, craft pillars, and authentic atelier archives. Vertical scroll continues untouched.
           </p>
