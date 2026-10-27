@@ -18,7 +18,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHoveringStage, setIsHoveringStage] = useState(false);
-  const [isTapped, setIsTapped] = useState(false);
   const stageRef = useRef(null);
 
   // Swipe & Drag Gesture Tracking
@@ -131,9 +130,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeLook, currentSlide]);
-
-  // Telemetry section is visible ONLY when user hovers or taps
-  const isTelemetryVisible = isHoveringStage || isTapped;
 
   return (
     <section id="lookbook" className="w-full py-24 sm:py-32 bg-transparent select-none relative overflow-hidden">
@@ -258,7 +254,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 key={item.id || idx}
                 onClick={() => {
                   if (isCenter) {
-                    setIsTapped((prev) => !prev);
+                    openLightbox(item, idx);
                   } else {
                     goToSlide(idx);
                   }
@@ -339,12 +335,20 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                         {item.subtitle || item.story}
                       </p>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs font-mono">
-                        <span className="text-pink-300 flex items-center gap-1 font-bold">
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>{isCenter ? (isTelemetryVisible ? 'HIDE DETAILS ▲' : 'TAP / HOVER FOR INTEL ▼') : 'FOCUS LOOK'}</span>
-                        </span>
-                        <span className="text-[10px] text-silver/60">
+                      {/* Small 'See Full Look' button on every card */}
+                      <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openLightbox(item, idx);
+                          }}
+                          className="btn-glass-pink py-1.5 px-3.5 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-all text-white"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-white" />
+                          <span>SEE FULL LOOK ↗</span>
+                        </button>
+
+                        <span className="text-[11px] font-mono text-silver/60">
                           {idx + 1} / {entries.length}
                         </span>
                       </div>
@@ -354,98 +358,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               </div>
             );
           })}
-        </div>
-
-        {/* Interactive Tap / Hover Indicator Pill */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            playSound('snap');
-            setIsTapped((prev) => !prev);
-          }}
-          className={`mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border text-xs font-mono tracking-wider cursor-pointer transition-all duration-300 z-30 ${
-            isTelemetryVisible
-              ? 'bg-[#be185d]/30 border-[#f472b6] text-white shadow-[0_0_15px_rgba(244,114,182,0.4)]'
-              : 'bg-black/60 border-white/20 text-silver/80 hover:text-white hover:border-[#f472b6]'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[#f472b6]" />
-          <span>{isTelemetryVisible ? 'HIDE SPECIMEN INTEL ▲' : 'TAP OR HOVER TO REVEAL SPECIMEN INTEL ▼'}</span>
-        </button>
-
-        {/* ========================================================
-            SPECIMEN TELEMETRY CARD:
-            ONLY VISIBLE WHEN USER HOVERS OR TAPS
-            ======================================================== */}
-        <div
-          className={`w-full max-w-3xl transition-all duration-500 ease-out will-change-[transform,opacity] z-30 text-left ${
-            isTelemetryVisible
-              ? 'opacity-100 translate-y-0 max-h-[500px] mt-4'
-              : 'opacity-0 translate-y-4 max-h-0 pointer-events-none overflow-hidden mt-0'
-          }`}
-        >
-          {currentEntry && (
-            <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#190422]/95 via-[#270635]/90 to-[#16031f]/95 border border-[#f472b6]/50 backdrop-blur-2xl shadow-[0_20px_60px_rgba(244,114,182,0.25)] flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-0.5 rounded-full bg-[#f472b6]/20 border border-[#f472b6]/60 text-pink-300 text-[10px] font-mono font-bold uppercase tracking-wider">
-                    CURRENT STAGED SPECIMEN
-                  </span>
-                  <span className="text-silver/50 text-[11px] font-mono">
-                    {currentEntry.code}
-                  </span>
-                </div>
-
-                <h4 className="text-xl sm:text-2xl font-spartan font-black uppercase text-white mb-1">
-                  {currentEntry.title}
-                </h4>
-
-                <p className="text-xs text-silver/80 font-montserrat leading-relaxed line-clamp-2">
-                  {currentEntry.story}
-                </p>
-
-                {/* Baddie Atelier Stats */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-[11px] font-mono">
-                  <div>
-                    <span className="text-silver/50 block text-[9px] uppercase">AURA / ENERGY</span>
-                    <strong className="text-pink-300">100% UNHINGED</strong>
-                  </div>
-                  <div>
-                    <span className="text-silver/50 block text-[9px] uppercase">GRAIL STATUS</span>
-                    <strong className="text-purple-300">ARCHIVE 1-OF-1</strong>
-                  </div>
-                  <div className="col-span-2 sm:col-span-1">
-                    <span className="text-silver/50 block text-[9px] uppercase">CRAFT LOCATION</span>
-                    <strong className="text-white">GUWAHATI ATELIER</strong>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col gap-2 shrink-0 w-full sm:w-auto">
-                <button
-                  onClick={() => openLightbox(currentEntry, currentSlide)}
-                  className="btn-glass-pink py-3 px-6 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(244,114,182,0.3)]"
-                >
-                  <Eye className="w-4 h-4" />
-                  <span>INSPECT FULL LOOK ↗</span>
-                </button>
-
-                {onCommissionLook && (
-                  <button
-                    onClick={() => {
-                      playSound('subdrop');
-                      onCommissionLook(currentEntry.title);
-                    }}
-                    className="btn-glass py-2.5 px-6 text-[11px] font-spartan font-bold tracking-widest uppercase text-silver hover:text-white flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <Scissors className="w-3.5 h-3.5 text-pink-400" />
-                    <span>COMMISSION SILHOUETTE</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Runway Slide Progress Indicators */}
