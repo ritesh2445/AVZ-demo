@@ -15,14 +15,10 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
 
   return (
     <section id="vault" className="w-full py-24 px-6 sm:px-12 lg:px-20 bg-transparent select-none relative">
-      {/* Ambient Dark Purple Background Glow (Zero Blue Tone) */}
-      <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-[#2d052d]/35 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-96 h-96 bg-[#be185d]/12 rounded-full blur-[140px] pointer-events-none" />
-
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 relative z-10 text-left">
         <div className="text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
-            <Sparkles className="w-3.5 h-3.5 text-[#f472b6] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/80 border border-white/15 mb-3 text-silver text-[11px] font-mono tracking-widest uppercase">
+            <Sparkles className="w-3.5 h-3.5 text-white animate-pulse" />
             <span>SIGNATURE INTERACTION 01 // EXPANDED RAIL</span>
           </div>
           <h2 className="text-4xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none text-left">
@@ -46,8 +42,8 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
               onClick={() => handleCardInteraction(idx)}
               className={`relative overflow-hidden rounded-3xl border transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer select-none transform-gpu touch-pan-y ${
                 isExpanded
-                  ? 'flex-[5] border-[#be185d]/80 shadow-[0_20px_60px_rgba(190,24,93,0.35),0_0_40px_rgba(45,5,45,0.7)]'
-                  : 'flex-[1] md:flex-[1.2] border-[#be185d]/25 hover:border-[#f472b6]/50 filter grayscale hover:grayscale-0'
+                  ? 'flex-[5] border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
+                  : 'flex-[1] md:flex-[1.2] border-white/10 hover:border-white/20 filter grayscale hover:grayscale-0'
               }`}
             >
               {/* Background Image */}

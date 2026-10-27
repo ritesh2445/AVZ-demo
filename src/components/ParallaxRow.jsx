@@ -145,11 +145,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
   return (
     <section id="lookbook" className="w-full py-24 sm:py-32 bg-transparent select-none relative overflow-hidden">
-      {/* Dynamic 3D Volumetric Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-[#6b21a8]/20 via-[#be185d]/15 to-transparent rounded-full blur-[180px] pointer-events-none" />
-      <div className="absolute top-1/2 left-10 w-[450px] h-[450px] bg-[#3b0764]/30 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-[#831843]/20 rounded-full blur-[170px] pointer-events-none" />
-
       {/* Header Bar */}
       <div className="w-full px-6 sm:px-12 lg:px-20 mb-16 sm:mb-20 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
         <div className="text-left">
@@ -204,15 +199,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         className="relative w-full max-w-7xl mx-auto px-4 sm:px-12 pt-6 pb-12 flex flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none perspective-[1400px] cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
         style={{ perspective: '1400px' }}
       >
-        {/* Volumetric Spotlight from Top */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[380px] sm:w-[500px] h-[650px] pointer-events-none transition-all duration-300"
-          style={{
-            background: `radial-gradient(ellipse at top, rgba(244, 114, 182, 0.28) 0%, rgba(147, 51, 234, 0.15) 40%, transparent 80%)`,
-            transform: `translateX(${mousePos.x * 40}px)`
-          }}
-        />
-
         {/* Perspective 3D Runway Grid Floor */}
         <div
           className="absolute bottom-4 left-0 right-0 h-44 pointer-events-none opacity-40 overflow-hidden"
@@ -280,89 +266,74 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   transformStyle: 'preserve-3d'
                 }}
               >
-                {/* Ultra-Refined Frame Rim Light (Strictly contoured along border, no square shadow) */}
+                {/* Pure Editorial Noir Card (Zero light shadows, zero neon glow rims) */}
                 <div
-                  className={`w-full h-full rounded-3xl p-[1.5px] transition-all duration-500 relative overflow-hidden ${
-                    isCenter
-                      ? 'bg-gradient-to-b from-[#f472b6] via-[#c084fc]/70 to-[#a855f7]/30'
-                      : 'bg-white/10 hover:bg-white/20'
+                  className={`w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] ${
+                    isCenter ? 'border border-white/20' : 'border border-white/10'
                   }`}
                 >
-                  <div className="w-full h-full bg-[#0d0212]/95 rounded-[22px] overflow-hidden relative flex flex-col justify-between border border-[#f472b6]/25">
-                    {/* Image Layer */}
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading={isCenter ? 'eager' : 'lazy'}
-                      className={`w-full h-full object-cover transition-transform duration-700 ${
-                        isCenter ? 'scale-105 brightness-105' : 'scale-100 brightness-90'
-                      }`}
-                    />
+                  {/* Image Layer */}
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading={isCenter ? 'eager' : 'lazy'}
+                    className={`w-full h-full object-cover transition-transform duration-700 ${
+                      isCenter ? 'scale-105 brightness-100' : 'scale-100 brightness-85'
+                    }`}
+                  />
 
-                    {/* Specular Sheen on Hover */}
-                    {isCenter && isHoveringStage && (
-                      <div
-                        className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-200"
-                        style={{
-                          background: `radial-gradient(circle 350px at ${((mousePos.x + 1) / 2) * 100}% ${((mousePos.y + 1) / 2) * 100}%, rgba(255,255,255,0.4) 0%, transparent 80%)`
-                        }}
-                      />
-                    )}
+                  {/* Scrim Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85" />
 
-                    {/* Scrim Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85" />
+                  {/* Top Badges */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20">
+                    <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase">
+                      <span>{item.code.split('//')[0] || `LOOK 00${idx + 1}`}</span>
+                    </span>
 
-                    {/* Top Badges */}
-                    <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20">
-                      <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-[#f472b6]/50 text-pink-300 text-[10px] font-mono tracking-widest uppercase shadow-md flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-ping" />
-                        <span>{item.code.split('//')[0] || `LOOK 00${idx + 1}`}</span>
-                      </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openLightbox(item, idx);
+                      }}
+                      aria-label="Inspect Full Look"
+                      className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:border-white/50 transition-all cursor-pointer"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                  </div>
 
+                  {/* Bottom Editorial Caption */}
+                  <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20">
+                    <span className="text-[10px] font-mono text-silver/80 font-bold tracking-widest uppercase mb-1 flex items-center gap-1">
+                      <Flame className="w-3 h-3 text-silver/80" />
+                      <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
+                    </span>
+
+                    <h3 className="text-2xl sm:text-3xl font-spartan font-black uppercase text-white leading-tight mb-2">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-xs text-silver/80 font-montserrat line-clamp-2 leading-relaxed mb-3">
+                      {item.subtitle || item.story}
+                    </p>
+
+                    {/* Small 'See Full Look' button on every card */}
+                    <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           openLightbox(item, idx);
                         }}
-                        aria-label="Inspect Full Look"
-                        className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] transition-all cursor-pointer"
+                        className="py-1.5 px-3.5 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all active:scale-95"
                       >
-                        <Maximize2 className="w-4 h-4" />
+                        <Eye className="w-3.5 h-3.5 text-white" />
+                        <span>SEE FULL LOOK ↗</span>
                       </button>
-                    </div>
 
-                    {/* Bottom Editorial Caption */}
-                    <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20">
-                      <span className="text-[10px] font-mono text-[#f472b6] font-bold tracking-widest uppercase mb-1 flex items-center gap-1">
-                        <Flame className="w-3 h-3 text-[#f472b6]" />
-                        <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
+                      <span className="text-[11px] font-mono text-silver/60">
+                        {idx + 1} / {entries.length}
                       </span>
-
-                      <h3 className="text-2xl sm:text-3xl font-spartan font-black uppercase text-white leading-tight mb-2">
-                        {item.title}
-                      </h3>
-
-                      <p className="text-xs text-silver/80 font-montserrat line-clamp-2 leading-relaxed mb-3">
-                        {item.subtitle || item.story}
-                      </p>
-
-                      {/* Small 'See Full Look' button on every card */}
-                      <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openLightbox(item, idx);
-                          }}
-                          className="btn-glass-pink py-1.5 px-3.5 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-105 active:scale-95 transition-all text-white"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-white" />
-                          <span>SEE FULL LOOK ↗</span>
-                        </button>
-
-                        <span className="text-[11px] font-mono text-silver/60">
-                          {idx + 1} / {entries.length}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
