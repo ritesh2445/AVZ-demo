@@ -1,49 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ASSET_MANIFEST, BRAND_INFO } from '../data/brandData';
-import { Play, Pause, Volume2, VolumeX, Maximize2, Film, Sparkles, Zap, Flame } from 'lucide-react';
+import { ASSET_MANIFEST } from '../data/brandData';
+import { Play, Pause, Volume2, VolumeX, Film, Sparkles } from 'lucide-react';
 import { playSound } from '../utils/audio';
 import CinemaReelModal from './CinemaReelModal';
 
-// Helper to create realistic 4-point starry sparkle texture
-function createStarrySparkleTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 64;
-  canvas.height = 64;
-  const ctx = canvas.getContext('2d');
-  const cx = 32;
-  const cy = 32;
-
-  // Soft purple circular glow
-  const radGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30);
-  radGlow.addColorStop(0, 'rgba(255, 255, 255, 1)');
-  radGlow.addColorStop(0.2, 'rgba(230, 160, 255, 0.95)');
-  radGlow.addColorStop(0.5, 'rgba(168, 85, 247, 0.65)');
-  radGlow.addColorStop(0.8, 'rgba(123, 44, 191, 0.3)');
-  radGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-  ctx.fillStyle = radGlow;
-  ctx.fillRect(0, 0, 64, 64);
-
-  // 4-point radiant diamond star spikes
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
-  ctx.beginPath();
-  ctx.moveTo(cx, 4);
-  ctx.bezierCurveTo(cx + 2, cy - 2, cx + 2, cy - 2, cx + 28, cy);
-  ctx.bezierCurveTo(cx + 2, cy + 2, cx + 2, cy + 2, cx, cy + 28);
-  ctx.bezierCurveTo(cx - 2, cy + 2, cx - 2, cy + 2, cx - 28, cy);
-  ctx.bezierCurveTo(cx - 2, cy - 2, cx - 2, cy - 2, cx, 4);
-  ctx.fill();
-
-  const texture = new THREE.CanvasTexture(canvas);
-  return texture;
-}
-
 export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady = true }) {
   const mountRef = useRef(null);
-  const maskRef = useRef(null);
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
+  const dustCanvasRef = useRef(null);
+  const dustAnimIdRef = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
@@ -51,13 +19,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
-  // Easter Egg: Tap & Hold 4 seconds to Shake, Vibrate & Blast
-  // Vanishes on blast; automatically restored whenever user refreshes screen or revisits the site
+  // Easter Egg: Tap & Hold 4 seconds to Shake, Vibrate & Blast into Purple Dust
+  // Restores automatically when user refreshes screen
   const [isBlasted, setIsBlasted] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0); // 0 to 1
   const [blastActive, setBlastActive] = useState(false);
-  const [sparkleSprinkles, setSparkleSprinkles] = useState([]);
 
   const holdStartRef = useRef(null);
   const holdFrameRef = useRef(null);
@@ -65,9 +32,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const emblemGroupRef = useRef(null);
   const photoPlanesGroupRef = useRef(null);
   const coreMatRef = useRef(null);
-  const blastTriggerFnRef = useRef(null);
-  const scrapParticlesRef = useRef(null);
-  const sparkleSystemRef = useRef(null);
 
   useEffect(() => {
     setIsMobileDevice(window.innerWidth < 768);
@@ -76,7 +40,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     } catch (e) {}
   }, []);
 
-  // WebGL Scene Initialization (Pre-warmed on mount for instant zero-lag visibility)
+  // WebGL 3D Scene Initialization
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
@@ -88,7 +52,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     // 1. Scene, Camera, WebGL Renderer (Transparent to allow live native video reel through)
     const scene = new THREE.Scene();
     scene.background = null;
-    scene.fog = new THREE.FogExp2(0x180b1e, 0.025);
 
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
     camera.position.set(0, 0, 13);
@@ -107,7 +70,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       renderer.toneMappingExposure = 1.35;
       container.appendChild(renderer.domElement);
     } catch (e) {
-      console.warn("WebGL not available for 3D Hero, using fallback", e);
+      console.warn("WebGL not available for 3D Hero", e);
       return;
     }
 
@@ -119,7 +82,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     spotlight.position.set(0, 2, 10);
     scene.add(spotlight);
 
-    const lavenderPoint = new THREE.PointLight(0xE6E6FA, 10, 25);
+    const lavenderPoint = new THREE.PointLight(0x9d4edd, 10, 25);
     lavenderPoint.position.set(-6, -4, 4);
     scene.add(lavenderPoint);
 
@@ -127,17 +90,17 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     deepViolet.position.set(6, 5, 2);
     scene.add(deepViolet);
 
-    // 3. Central Kinetic Sculpture (Vanish on blast)
+    // 3. Central Kinetic Sculpture (Vanishes on blast into purple dust)
     const emblemGroup = new THREE.Group();
     emblemGroupRef.current = emblemGroup;
     scene.add(emblemGroup);
 
-    // 4. Floating Photo Planes Group (MUST ALSO VANISH ON BLAST)
+    // 4. Floating Photo Planes Group (Vanishes on blast into purple dust)
     const photoPlanesGroup = new THREE.Group();
     photoPlanesGroupRef.current = photoPlanesGroup;
     scene.add(photoPlanesGroup);
 
-    // If already blasted this session, hide both emblem and photo planes completely
+    // If already blasted this session, hide both completely
     if (isBlasted) {
       emblemGroup.visible = false;
       photoPlanesGroup.visible = false;
@@ -182,7 +145,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     const wireGeom = new THREE.IcosahedronGeometry(1.8, 1);
     const wireMat = new THREE.MeshBasicMaterial({
-      color: 0xE6E6FA,
+      color: 0xc084fc,
       wireframe: true,
       transparent: true,
       opacity: 0.25
@@ -236,125 +199,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       });
     });
 
-    // 5. Ambient Stardust
-    const scrapCount = isMobile ? 120 : 200;
-    const scrapGeom = new THREE.BufferGeometry();
-    const scrapPos = new Float32Array(scrapCount * 3);
-    for (let i = 0; i < scrapCount * 3; i += 3) {
-      scrapPos[i] = (Math.random() - 0.5) * 32;
-      scrapPos[i + 1] = (Math.random() - 0.5) * 22;
-      scrapPos[i + 2] = (Math.random() - 0.5) * 26;
-    }
-    scrapGeom.setAttribute('position', new THREE.BufferAttribute(scrapPos, 3));
-    const scrapMat = new THREE.PointsMaterial({
-      color: 0xE6E6FA,
-      size: 0.08,
-      transparent: true,
-      opacity: 0.65
-    });
-    const scrapParticles = new THREE.Points(scrapGeom, scrapMat);
-    scrapParticlesRef.current = scrapParticles;
-    scene.add(scrapParticles);
+    // NOTE: All ambient white dots/stardust have been completely removed.
+    // Zero white dots exist in this 3D scene.
 
-    // 6. REALISTIC PURPLE STAR SPARKLE SPRINKLE EXPLOSION SYSTEM
-    const sparkleCount = 1400;
-    const sparkleGeom = new THREE.BufferGeometry();
-    const sparklePositions = new Float32Array(sparkleCount * 3);
-    const sparkleVelocities = new Float32Array(sparkleCount * 3);
-    const sparkleColors = new Float32Array(sparkleCount * 3);
-    const sparkleSizes = new Float32Array(sparkleCount);
-    const sparkleAlphas = new Float32Array(sparkleCount);
-
-    const purplePalette = [
-      new THREE.Color(0xd946ef), // Radiant orchid
-      new THREE.Color(0xa855f7), // Galactic purple
-      new THREE.Color(0xc084fc), // Starry lavender
-      new THREE.Color(0xf472b6), // Neon pink
-      new THREE.Color(0xffffff)  // Star diamond core
-    ];
-
-    for (let i = 0; i < sparkleCount; i++) {
-      // Hidden initially far offscreen
-      sparklePositions[i * 3] = 0;
-      sparklePositions[i * 3 + 1] = -1000;
-      sparklePositions[i * 3 + 2] = 0;
-
-      sparkleVelocities[i * 3] = 0;
-      sparkleVelocities[i * 3 + 1] = 0;
-      sparkleVelocities[i * 3 + 2] = 0;
-
-      const col = purplePalette[Math.floor(Math.random() * purplePalette.length)];
-      sparkleColors[i * 3] = col.r;
-      sparkleColors[i * 3 + 1] = col.g;
-      sparkleColors[i * 3 + 2] = col.b;
-
-      sparkleSizes[i] = 0.3 + Math.random() * 0.7;
-      sparkleAlphas[i] = 0;
-    }
-
-    sparkleGeom.setAttribute('position', new THREE.BufferAttribute(sparklePositions, 3));
-    sparkleGeom.setAttribute('color', new THREE.BufferAttribute(sparkleColors, 3));
-
-    const starTexture = createStarrySparkleTexture();
-    const sparkleMat = new THREE.PointsMaterial({
-      size: 0.65,
-      map: starTexture,
-      transparent: true,
-      vertexColors: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      opacity: 0
-    });
-
-    const sparkleSystem = new THREE.Points(sparkleGeom, sparkleMat);
-    sparkleSystemRef.current = sparkleSystem;
-    scene.add(sparkleSystem);
-
-    let sparklesActive = false;
-    let sparkleStartTime = 0;
-
-    // Trigger Blast Sparkles Explosion Function
-    blastTriggerFnRef.current = () => {
-      sparklesActive = true;
-      sparkleStartTime = performance.now();
-      sparkleMat.opacity = 1;
-
-      // Instantly vanish central kinetic emblem, floating photos, and all floating scrap/star particles
-      emblemGroup.visible = false;
-      photoPlanesGroup.visible = false;
-      scrapParticles.visible = false;
-
-      // Seed burst origins from center emblem + floating cards
-      const origins = [
-        { x: 0, y: 0, z: 0 },
-        { x: -4.2, y: 1.4, z: 1.2 },
-        { x: 4.2, y: -0.6, z: 1.8 },
-        { x: -3.4, y: -2.4, z: 0.6 },
-        { x: 3.6, y: 2.5, z: -0.8 }
-      ];
-
-      const posArr = sparkleGeom.attributes.position.array;
-      const velArr = sparkleVelocities;
-
-      for (let i = 0; i < sparkleCount; i++) {
-        const origin = origins[i % origins.length];
-        posArr[i * 3] = origin.x + (Math.random() - 0.5) * 0.5;
-        posArr[i * 3 + 1] = origin.y + (Math.random() - 0.5) * 0.5;
-        posArr[i * 3 + 2] = origin.z + (Math.random() - 0.5) * 0.5;
-
-        // Spherical outward burst velocity with air resistance
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(Math.random() * 2 - 1);
-        const speed = 0.15 + Math.random() * 0.45;
-
-        velArr[i * 3] = Math.sin(phi) * Math.cos(theta) * speed;
-        velArr[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * speed + 0.05; // slight upward pop
-        velArr[i * 3 + 2] = Math.cos(phi) * speed;
-      }
-      sparkleGeom.attributes.position.needsUpdate = true;
-    };
-
-    // 7. Interactive Spotlight & Camera Movement
+    // 5. Interactive Spotlight & Camera Movement
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -438,42 +286,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         }
       }
 
-      // Animate Realistic Purple Star Sparkle Sprinkles
-      if (sparklesActive) {
-        const timeSinceBlast = (performance.now() - sparkleStartTime) / 1000;
-        const posArr = sparkleGeom.attributes.position.array;
-        const velArr = sparkleVelocities;
-
-        // Twinkling sparkle opacity decay over 1.6s; completely vanish to leave pure pitch black background
-        if (timeSinceBlast > 1.6) {
-          sparklesActive = false;
-          sparkleMat.opacity = 0;
-          sparkleSystem.visible = false;
-        } else {
-          sparkleMat.opacity = Math.max(0, 1 - timeSinceBlast / 1.6);
-          // Sparkle twinkle scale fluttering
-          sparkleMat.size = 0.65 + Math.sin(elapsedTime * 18) * 0.15;
-
-          for (let i = 0; i < sparkleCount; i++) {
-            // Apply velocity with air drag
-            posArr[i * 3] += velArr[i * 3];
-            posArr[i * 3 + 1] += velArr[i * 3 + 1];
-            posArr[i * 3 + 2] += velArr[i * 3 + 2];
-
-            // Gentle gravity float: sprinkles fall like starry glitter
-            velArr[i * 3 + 1] -= 0.0025;
-
-            // Drag resistance
-            velArr[i * 3] *= 0.985;
-            velArr[i * 3 + 1] *= 0.985;
-            velArr[i * 3 + 2] *= 0.985;
-          }
-          sparkleGeom.attributes.position.needsUpdate = true;
-        }
-      }
-
-      scrapParticles.rotation.y = elapsedTime * 0.02;
-
       renderer.render(scene, camera);
     };
 
@@ -521,14 +333,9 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       thirdRingGeom.dispose();
       coreGeom.dispose();
       wireGeom.dispose();
-      scrapGeom.dispose();
-      sparkleGeom.dispose();
       chromeMat.dispose();
       coreMat.dispose();
       wireMat.dispose();
-      scrapMat.dispose();
-      sparkleMat.dispose();
-      starTexture.dispose();
 
       planeGeoms.forEach((g) => g.dispose());
       planeMats.forEach((m) => m.dispose());
@@ -591,6 +398,161 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
   };
 
+  // =========================================================================
+  // REAL PURPLE DUST PARTICLE VIEWPORT ENGINE (HTML5 Canvas + Vanilla JS)
+  // Zero white dots: authentic organic purple powder, micro-milled dust,
+  // glowing violet flecks, and billowing purple convective plumes.
+  // =========================================================================
+  const triggerPurpleDustBurst = () => {
+    const canvas = dustCanvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    // Authentic Rich Purple Dust Palette (Strictly purple hues: NO WHITE)
+    const purpleDustPalette = [
+      [147, 51, 234],  // #9333ea electric violet
+      [168, 85, 247],  // #a855f7 vibrant orchid powder
+      [217, 70, 239],  // #d946ef neon magenta-purple
+      [126, 34, 206],  // #7e22ce royal purple
+      [192, 132, 252], // #c084fc soft lilac dust
+      [107, 33, 168],  // #6b21a8 deep amethyst
+      [232, 121, 249], // #e879f9 luminous violet
+      [88, 28, 135]    // #581c87 deep shadow plum
+    ];
+
+    // Five Detonation Seed Points: Screen Center (50%) + 4 Floating Card Positions (12.5% each)
+    const origins = [
+      { x: (width * 0.5) * dpr, y: (height * 0.5) * dpr, weight: 0.5 },
+      { x: (width * 0.28) * dpr, y: (height * 0.38) * dpr, weight: 0.125 },
+      { x: (width * 0.72) * dpr, y: (height * 0.44) * dpr, weight: 0.125 },
+      { x: (width * 0.34) * dpr, y: (height * 0.68) * dpr, weight: 0.125 },
+      { x: (width * 0.68) * dpr, y: (height * 0.28) * dpr, weight: 0.125 }
+    ];
+
+    const particleCount = width < 768 ? 950 : 1800;
+    const particles = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      // Pick origin based on weighted distribution
+      const randOrigin = Math.random();
+      let chosenOrigin = origins[0];
+      let accWeight = 0;
+      for (const orig of origins) {
+        accWeight += orig.weight;
+        if (randOrigin <= accWeight) {
+          chosenOrigin = orig;
+          break;
+        }
+      }
+
+      const angle = Math.random() * Math.PI * 2;
+      const isBillow = Math.random() < 0.22; // 22% are soft billowing dust puffs, 78% micro dust specks
+      const speed = isBillow
+        ? (Math.random() * 3.5 + 0.8) * dpr
+        : (Math.random() * 12 + 2.5) * dpr;
+
+      const color = purpleDustPalette[Math.floor(Math.random() * purpleDustPalette.length)];
+      const radius = isBillow
+        ? (Math.random() * 9 + 4.5) * dpr
+        : (Math.random() * 2.2 + 0.8) * dpr;
+
+      particles.push({
+        x: chosenOrigin.x + (Math.random() - 0.5) * 24 * dpr,
+        y: chosenOrigin.y + (Math.random() - 0.5) * 24 * dpr,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        friction: isBillow ? 0.93 : 0.96,
+        radius,
+        isBillow,
+        color,
+        alpha: Math.random() * 0.35 + 0.65,
+        decay: Math.random() * 0.0075 + 0.0055, // ~2.2s total smooth dissipation
+        seed: Math.random() * 100,
+        age: 0
+      });
+    }
+
+    if (dustAnimIdRef.current) {
+      cancelAnimationFrame(dustAnimIdRef.current);
+    }
+
+    let lastTime = performance.now();
+
+    const renderDust = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'screen';
+
+      let aliveCount = 0;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        if (p.alpha <= 0) continue;
+
+        aliveCount++;
+        p.age += dt;
+
+        // Airborne dust physics: friction deceleration
+        p.vx *= p.friction;
+        p.vy *= p.friction;
+
+        // Thermal convection: warm dust plume gently lifts upwards
+        p.vy -= 0.045 * dpr;
+
+        // Fluid dust turbulence & curl drift
+        const curlX = Math.sin(p.age * 3.8 + p.seed) * 0.45 * dpr;
+        const curlY = Math.cos(p.age * 3.8 + p.seed) * 0.35 * dpr;
+
+        p.x += p.vx + curlX;
+        p.y += p.vy + curlY;
+        p.alpha -= p.decay;
+
+        const [r, g, b] = p.color;
+
+        if (p.isBillow) {
+          // Soft radial dust puff cloud
+          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2);
+          grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${p.alpha * 0.45})`);
+          grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${p.alpha * 0.18})`);
+          grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Microscopic purple powder grain
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${Math.max(0, p.alpha)})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      if (aliveCount > 0) {
+        dustAnimIdRef.current = requestAnimationFrame(renderDust);
+      } else {
+        // When completely faded, clear canvas cleanly and stop RAF loop
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dustAnimIdRef.current = null;
+      }
+    };
+
+    dustAnimIdRef.current = requestAnimationFrame(renderDust);
+  };
+
   // EASTER EGG: TAP & HOLD TO VIBRATE & BLAST
   const startHold = (e) => {
     if (e.target.closest('button') || e.target.closest('a')) return;
@@ -637,51 +599,35 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       cancelAnimationFrame(holdFrameRef.current);
     }
 
-    // Trigger Three.js purple sparkles explosion
-    if (blastTriggerFnRef.current) {
-      blastTriggerFnRef.current();
-    }
-
-    // Trigger visual blast flash & DOM purple starry sparkles
-    setBlastActive(true);
-    playSound('blast');
-
-    // Generate 60 randomized DOM starry sparkles for full-screen sparkle sprinkles
-    const sparkles = [];
-    for (let i = 0; i < 60; i++) {
-      sparkles.push({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 10 + Math.random() * 26,
-        delay: Math.random() * 0.4,
-        duration: 1.5 + Math.random() * 1.5,
-        color: ['#f472b6', '#c084fc', '#e879f9', '#a855f7', '#ffffff'][Math.floor(Math.random() * 5)]
-      });
-    }
-    setSparkleSprinkles(sparkles);
-
-    // Hide 3D emblem, floating photos, and all stars/particles (restores on refresh)
-    setIsBlasted(true);
-
+    // Instantly vanish 3D kinetic emblem and floating photos into pure purple dust
     if (emblemGroupRef.current) {
       emblemGroupRef.current.visible = false;
     }
     if (photoPlanesGroupRef.current) {
       photoPlanesGroupRef.current.visible = false;
     }
-    if (scrapParticlesRef.current) {
-      scrapParticlesRef.current.visible = false;
-    }
-    if (sparkleSystemRef.current) {
-      sparkleSystemRef.current.visible = false;
-    }
+    setIsBlasted(true);
+
+    // Detonate the real purple dust particle viewport engine
+    triggerPurpleDustBurst();
+
+    // Trigger visual purple shockwave and sound
+    setBlastActive(true);
+    playSound('blast');
 
     setTimeout(() => {
       setBlastActive(false);
-      setSparkleSprinkles([]);
     }, 1400);
   };
+
+  // Cleanup dust canvas RAF on unmount
+  useEffect(() => {
+    return () => {
+      if (dustAnimIdRef.current) {
+        cancelAnimationFrame(dustAnimIdRef.current);
+      }
+    };
+  }, []);
 
   const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
   const audioSource = isMobileDevice ? ASSET_MANIFEST.audio.heroMobile : ASSET_MANIFEST.audio.heroDesktop;
@@ -733,13 +679,19 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. 3D WebGL Three.js Layer with Transparent Background */}
+      {/* 2. 3D WebGL Three.js Layer (Zero white dots, disappears on blast) */}
       <div
         ref={mountRef}
         className="absolute inset-0 w-full h-full pointer-events-auto z-[2]"
       />
 
-      {/* 5. TAP & HOLD 4S CHARGING HUD OVERLAY */}
+      {/* 3. HTML5 Canvas Purple Dust Particle Viewport Overlay */}
+      <canvas
+        ref={dustCanvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-[30]"
+      />
+
+      {/* 4. TAP & HOLD 4S CHARGING HUD OVERLAY */}
       {isHolding && !isBlasted && (
         <div className="absolute inset-0 z-[25] pointer-events-none flex flex-col items-center justify-center bg-black/35 backdrop-blur-[1px] animate-in fade-in duration-200">
           <div className="relative flex flex-col items-center gap-3">
@@ -764,50 +716,21 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
               <span>SUPERCHARGING VORTEX // {(holdProgress * 100).toFixed(0)}%</span>
             </div>
             <p className="text-silver/80 text-[11px] font-mono tracking-widest uppercase">
-              HOLD 4 SECONDS FOR PURPLE STARRY SUPERNOVA
+              HOLD 4 SECONDS TO DISINTEGRATE INTO PURPLE DUST
             </p>
           </div>
         </div>
       )}
 
-      {/* 6. REALISTIC PURPLE STARRY GLITTER SPRINKLES OVERLAY */}
+      {/* 5. PURPLE SHOCKWAVE PULSE (Strictly Purple, Zero White) */}
       {blastActive && (
-        <div className="absolute inset-0 z-[50] pointer-events-none overflow-hidden flex items-center justify-center">
-          {/* Central Violet/Pink Shockwave Radial Flash */}
-          <div className="absolute w-[800px] h-[800px] rounded-full bg-radial-gradient from-white via-purple-500/60 to-transparent opacity-90 animate-ping duration-1000" />
-          <div className="absolute inset-0 bg-[#3b0764]/40 mix-blend-screen animate-out fade-out duration-1000" />
-
-          {/* Twinkling 4-Point Starry Sprinkles Drifting Across Viewport */}
-          {sparkleSprinkles.map((sp) => (
-            <div
-              key={sp.id}
-              className="absolute animate-in fade-in zoom-in duration-300"
-              style={{
-                left: `${sp.x}%`,
-                top: `${sp.y}%`,
-                animationDelay: `${sp.delay}s`,
-                transform: 'translate(-50%, -50%)'
-              }}
-            >
-              <svg
-                width={sp.size}
-                height={sp.size}
-                viewBox="0 0 24 24"
-                fill={sp.color}
-                className="animate-spin"
-                style={{
-                  filter: `drop-shadow(0 0 8px ${sp.color})`,
-                  animationDuration: `${sp.duration}s`
-                }}
-              >
-                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
-              </svg>
-            </div>
-          ))}
+        <div className="absolute inset-0 z-[40] pointer-events-none overflow-hidden flex items-center justify-center">
+          <div className="absolute w-[700px] h-[700px] rounded-full bg-radial-gradient from-purple-500/50 via-fuchsia-600/25 to-transparent opacity-90 animate-ping duration-1000" />
+          <div className="absolute inset-0 bg-[#3b0764]/25 mix-blend-screen animate-out fade-out duration-1000" />
         </div>
       )}
 
-      {/* Video & Audio Controls HUD (Bottom-Left) */}
+      {/* 6. Video & Audio Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-6 z-[10] flex items-center gap-2.5">
         <button
           onClick={handleTogglePlay}
@@ -848,12 +771,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         </button>
       </div>
 
-      {/* 10. Ultra-clean Minimalist Scroll Guide (Bottom-Center) */}
+      {/* 7. Ultra-clean Minimalist Scroll Guide (Bottom-Center) */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
 
-      {/* 11. Dedicated Cinema Reel Modal */}
+      {/* 8. Dedicated Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}
