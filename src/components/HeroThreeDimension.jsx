@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ASSET_MANIFEST } from '../data/brandData';
-import { Play, Pause, Volume2, VolumeX, Film, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Film, Sparkles, Eye, Zap, Compass } from 'lucide-react';
 import { playSound } from '../utils/audio';
 import CinemaReelModal from './CinemaReelModal';
 
@@ -17,20 +17,20 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
 
-  // Cinematic Transition State (Smooth, zero blast, zero violent shaking)
+  // Lightspeed Satellite Warp State
   const [isCinematicMode, setIsCinematicMode] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isHolding, setIsHolding] = useState(false);
-  const [holdProgress, setHoldProgress] = useState(0); // 0 to 1
-  const [sheenActive, setSheenActive] = useState(false);
+  const [isWarping, setIsWarping] = useState(false);
+  const [warpStreakActive, setWarpStreakActive] = useState(false);
+  const [hoveredPhotoIndex, setHoveredPhotoIndex] = useState(null);
+  const [autoTimerRemaining, setAutoTimerRemaining] = useState(6); // 6s countdown
 
-  const holdStartRef = useRef(null);
-  const holdFrameRef = useRef(null);
   const emblemGroupRef = useRef(null);
   const photoPlanesGroupRef = useRef(null);
+  const photoPlanesRef = useRef([]);
   const coreMatRef = useRef(null);
-  const materialsRef = useRef([]);
-  const dissolveAnimIdRef = useRef(null);
+  const warpAnimIdRef = useRef(null);
+  const autoWarpTimerRef = useRef(null);
+  const isInteractingRef = useRef(false);
 
   useEffect(() => {
     setIsMobileDevice(window.innerWidth < 768);
@@ -45,11 +45,11 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const height = container.clientHeight || window.innerHeight;
     const isMobile = window.innerWidth < 768;
 
-    // 1. Scene, Camera, WebGL Renderer (Transparent to reveal uncompressed native master video reel)
+    // 1. Scene, Camera, WebGL Renderer
     const scene = new THREE.Scene();
     scene.background = null;
 
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 120);
     camera.position.set(0, 0, 13);
 
     let renderer;
@@ -96,7 +96,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     photoPlanesGroupRef.current = photoPlanesGroup;
     scene.add(photoPlanesGroup);
 
-    // Store all materials for ultra-smooth opacity fading
     const allMaterials = [];
 
     const chromeMat = new THREE.MeshPhysicalMaterial({
@@ -110,7 +109,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       transparent: true,
       opacity: 1.0
     });
-    chromeMat.userData.baseOpacity = 1.0;
     allMaterials.push(chromeMat);
 
     const ringGeom = new THREE.TorusGeometry(3.6, 0.08, 16, isMobile ? 48 : 80);
@@ -138,7 +136,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       transparent: true,
       opacity: 1.0
     });
-    coreMat.userData.baseOpacity = 1.0;
     coreMatRef.current = coreMat;
     allMaterials.push(coreMat);
 
@@ -152,68 +149,141 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       transparent: true,
       opacity: 0.25
     });
-    wireMat.userData.baseOpacity = 0.25;
     allMaterials.push(wireMat);
 
     const wireMesh = new THREE.Mesh(wireGeom, wireMat);
     emblemGroup.add(wireMesh);
 
-    // Construct Floating Photography Panels
+    // =========================================================================
+    // DYNAMIC ORBITAL SATELLITE PHOTO ARRAY (Curated, High-Fashion, Interactive)
+    // =========================================================================
     const textureLoader = new THREE.TextureLoader();
     const photoPlanes = [];
     const loadedTextures = [];
     const planeGeoms = [];
 
-    const photoData = [
-      { url: ASSET_MANIFEST.products.divaTop, x: -4.2, y: 1.4, z: 1.2, rx: 0.05, ry: 0.22, w: 2.3, h: 2.8 },
-      { url: ASSET_MANIFEST.editorialHero, x: 4.2, y: -0.6, z: 1.8, rx: -0.08, ry: -0.25, w: 2.4, h: 3.2 },
-      { url: ASSET_MANIFEST.products.spikeBra, x: -3.4, y: -2.4, z: 0.6, rx: 0.12, ry: 0.18, w: 1.9, h: 2.1 },
-      { url: ASSET_MANIFEST.products.coordSet, x: 3.6, y: 2.5, z: -0.8, rx: -0.05, ry: -0.15, w: 2.1, h: 2.5 }
+    // Arranged in an orbital constellation around the central kinetic sculpture
+    const satelliteConfig = [
+      {
+        url: ASSET_MANIFEST.products.divaTop,
+        title: "DIVA CORSET // ARCHIVE 01",
+        baseX: -4.5,
+        baseY: 1.2,
+        baseZ: 1.8,
+        rotX: 0.08,
+        rotY: 0.28,
+        w: isMobile ? 1.8 : 2.4,
+        h: isMobile ? 2.3 : 3.0,
+        orbitSpeed: 0.35,
+        orbitRadius: 0.25
+      },
+      {
+        url: ASSET_MANIFEST.editorialHero,
+        title: "EDITORIAL HERO // ARCHIVE 02",
+        baseX: 4.6,
+        baseY: -0.8,
+        baseZ: 2.2,
+        rotX: -0.06,
+        rotY: -0.32,
+        w: isMobile ? 1.9 : 2.5,
+        h: isMobile ? 2.5 : 3.3,
+        orbitSpeed: 0.28,
+        orbitRadius: 0.3
+      },
+      {
+        url: ASSET_MANIFEST.products.spikeBra,
+        title: "SPIKE BRA // ARCHIVE 03",
+        baseX: -3.6,
+        baseY: -2.6,
+        baseZ: 0.8,
+        rotX: 0.14,
+        rotY: 0.22,
+        w: isMobile ? 1.6 : 2.0,
+        h: isMobile ? 1.8 : 2.4,
+        orbitSpeed: 0.42,
+        orbitRadius: 0.2
+      },
+      {
+        url: ASSET_MANIFEST.products.coordSet,
+        title: "CO-ORD ARMOR // ARCHIVE 04",
+        baseX: 3.8,
+        baseY: 2.4,
+        baseZ: -0.5,
+        rotX: -0.08,
+        rotY: -0.2,
+        w: isMobile ? 1.7 : 2.2,
+        h: isMobile ? 2.0 : 2.7,
+        orbitSpeed: 0.32,
+        orbitRadius: 0.22
+      }
     ];
 
-    photoData.forEach((pd) => {
-      textureLoader.load(pd.url, (tex) => {
+    satelliteConfig.forEach((cfg, idx) => {
+      textureLoader.load(cfg.url, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace;
         loadedTextures.push(tex);
-        const geom = new THREE.PlaneGeometry(pd.w, pd.h);
+
+        const geom = new THREE.PlaneGeometry(cfg.w, cfg.h);
         planeGeoms.push(geom);
+
         const mat = new THREE.MeshPhysicalMaterial({
           map: tex,
           side: THREE.DoubleSide,
           roughness: 0.35,
-          metalness: 0.1,
-          clearcoat: 0.5,
+          metalness: 0.12,
+          clearcoat: 0.6,
           transparent: true,
           opacity: 0.95
         });
-        mat.userData.baseOpacity = 0.95;
         allMaterials.push(mat);
 
         const mesh = new THREE.Mesh(geom, mat);
-        mesh.position.set(pd.x, pd.y, pd.z);
-        mesh.rotation.set(pd.rx, pd.ry, 0);
+        mesh.position.set(cfg.baseX, cfg.baseY, cfg.baseZ);
+        mesh.rotation.set(cfg.rotX, cfg.rotY, 0);
 
-        // Thin neon wireframe border
-        const wireBorderGeom = new THREE.EdgesGeometry(geom);
-        const wireBorderMat = new THREE.LineBasicMaterial({
+        // Store config and target values in mesh for buttery-smooth interactive interpolation
+        mesh.userData = {
+          index: idx,
+          title: cfg.title,
+          baseX: cfg.baseX,
+          baseY: cfg.baseY,
+          baseZ: cfg.baseZ,
+          baseRotX: cfg.rotX,
+          baseRotY: cfg.rotY,
+          currentScale: 1.0,
+          targetScale: 1.0,
+          targetZOffset: 0,
+          currentZOffset: 0,
+          orbitSpeed: cfg.orbitSpeed,
+          orbitRadius: cfg.orbitRadius,
+          isHovered: false
+        };
+
+        // Futuristic neon glowing wireframe edge border
+        const wireGeom = new THREE.EdgesGeometry(geom);
+        const wireMat = new THREE.LineBasicMaterial({
           color: 0xF4C2C2,
           transparent: true,
-          opacity: 0.4
+          opacity: 0.45
         });
-        wireBorderMat.userData.baseOpacity = 0.4;
-        allMaterials.push(wireBorderMat);
+        allMaterials.push(wireMat);
 
-        const wireBorder = new THREE.LineSegments(wireBorderGeom, wireBorderMat);
+        const wireBorder = new THREE.LineSegments(wireGeom, wireMat);
         mesh.add(wireBorder);
+        mesh.userData.wireBorder = wireBorder;
+        mesh.userData.wireMat = wireMat;
 
         photoPlanesGroup.add(mesh);
         photoPlanes.push(mesh);
       });
     });
 
-    materialsRef.current = allMaterials;
+    photoPlanesRef.current = photoPlanes;
 
-    // 5. Interactive Spotlight & Camera Movement
+    // Raycaster for 3D Photo Hover Interactivity
+    const raycaster = new THREE.Raycaster();
+    const mouseVector = new THREE.Vector2(-999, -999);
+
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -224,11 +294,28 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       const h = window.innerHeight;
       const x = (e.clientX / w) * 2 - 1;
       const y = -((e.clientY / h) * 2 - 1);
+
+      mouseVector.x = x;
+      mouseVector.y = y;
+
       targetMouseX = Math.max(-1, Math.min(1, x));
       targetMouseY = Math.max(-1, Math.min(1, y));
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
+
+    // Click handler for 3D photo satellite exploration
+    const handleClick = (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      raycaster.setFromCamera(mouseVector, camera);
+      const intersects = raycaster.intersectObjects(photoPlanes, false);
+      if (intersects.length > 0) {
+        playSound('sparkle');
+        setIsCinemaOpen(true);
+      }
+    };
+
+    window.addEventListener('click', handleClick);
 
     // Render loop
     let animId = null;
@@ -268,19 +355,69 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         wireMesh.rotation.y = -elapsedTime * 0.12;
       }
 
-      // Floating photos gentle oscillation (if visible)
-      if (photoPlanesGroup.visible) {
+      // Raycasting for interactive satellite cards
+      if (photoPlanesGroup.visible && !isWarping) {
+        raycaster.setFromCamera(mouseVector, camera);
+        const intersects = raycaster.intersectObjects(photoPlanes, false);
+        const intersectedMesh = intersects.length > 0 ? intersects[0].object : null;
+
+        if (intersectedMesh) {
+          isInteractingRef.current = true;
+          setHoveredPhotoIndex(intersectedMesh.userData.index);
+          if (container) container.style.cursor = 'pointer';
+        } else {
+          isInteractingRef.current = false;
+          setHoveredPhotoIndex(null);
+          if (container) container.style.cursor = 'default';
+        }
+
+        // Update each photo satellite mesh
         for (let i = 0; i < photoPlanes.length; i++) {
           const mesh = photoPlanes[i];
-          mesh.position.y += Math.sin(elapsedTime * 1.2 + i * 1.5) * 0.003;
-          mesh.rotation.z = Math.sin(elapsedTime * 0.8 + i) * 0.03;
+          const ud = mesh.userData;
+          const isCurrentHovered = intersectedMesh === mesh;
+
+          // Target hover scale and depth elevate
+          ud.targetScale = isCurrentHovered ? 1.15 : 1.0;
+          ud.targetZOffset = isCurrentHovered ? 1.8 : 0;
+
+          // Smooth interpolation
+          ud.currentScale += (ud.targetScale - ud.currentScale) * 0.1;
+          ud.currentZOffset += (ud.targetZOffset - ud.currentZOffset) * 0.1;
+
+          mesh.scale.setScalar(ud.currentScale);
+
+          // Organic orbital oscillation
+          const orbitX = Math.cos(elapsedTime * ud.orbitSpeed + i * 1.5) * ud.orbitRadius;
+          const orbitY = Math.sin(elapsedTime * ud.orbitSpeed * 1.2 + i) * (ud.orbitRadius * 0.8);
+
+          mesh.position.x = ud.baseX + orbitX;
+          mesh.position.y = ud.baseY + orbitY;
+          mesh.position.z = ud.baseZ + ud.currentZOffset;
+
+          // Facing angle adjustment on hover
+          if (isCurrentHovered) {
+            mesh.rotation.x += (0 - mesh.rotation.x) * 0.1;
+            mesh.rotation.y += (0 - mesh.rotation.y) * 0.1;
+            if (ud.wireMat) {
+              ud.wireMat.color.setHex(0xF472B6);
+              ud.wireMat.opacity = 0.9;
+            }
+          } else {
+            mesh.rotation.x += (ud.baseRotX - mesh.rotation.x) * 0.1;
+            mesh.rotation.y += (ud.baseRotY - mesh.rotation.y) * 0.1;
+            if (ud.wireMat) {
+              ud.wireMat.color.setHex(0xF4C2C2);
+              ud.wireMat.opacity = 0.4;
+            }
+          }
         }
       }
 
       renderer.render(scene, camera);
     };
 
-    // IntersectionObserver to suspend animation when offscreen
+    // IntersectionObserver
     const observer = new IntersectionObserver(
       ([entry]) => {
         const wasVisible = isVisible;
@@ -316,6 +453,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);
       if (animId) cancelAnimationFrame(animId);
       if (sectionRef.current) observer.unobserve(sectionRef.current);
@@ -340,7 +478,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         }
       }
     };
-  }, []);
+  }, [isWarping]);
 
   // Synchronized Master Video & Audio Controls
   useEffect(() => {
@@ -398,150 +536,183 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   };
 
   // =========================================================================
-  // CINEMATIC DISSOLVE TRANSITION (Smooth af, zero blast, zero vibration)
+  // LIGHTSPEED SATELLITE WARP EXIT TRANSITION
+  // "travels in lightspeed getting smaller and smaller inside screen to one direction like a satellite"
   // =========================================================================
-  const executeCinematicDissolve = () => {
-    setIsHolding(false);
-    setHoldProgress(1);
-    setIsTransitioning(true);
+  const triggerLightspeedWarp = (e) => {
+    if (e) e.stopPropagation();
+    if (isCinematicMode || isWarping) return;
+
+    setIsWarping(true);
+    setWarpStreakActive(true);
+    playSound('lightspeed_warp');
 
     const emblemGroup = emblemGroupRef.current;
     const photoPlanesGroup = photoPlanesGroupRef.current;
-    const mats = materialsRef.current;
 
-    // Trigger soft visual sheen and velvety harmonic sound
-    setSheenActive(true);
-    playSound('museum_rotate');
+    // Departure Vector: Accelerates into deep distance towards top-right corner
+    // Like a satellite firing hyperdrive towards the cosmos
+    const targetDx = 9.5;   // moves to the right
+    const targetDy = 5.5;   // moves upward
+    const targetDz = -42.0; // streaks deep into the cosmic background
 
-    // 1200ms silky-smooth cubic-bezier dissolve
-    const duration = 1200;
-    const startTime = performance.now();
-    const initialZ = emblemGroup ? emblemGroup.position.z : 0;
+    const initialEmblemX = emblemGroup ? emblemGroup.position.x : 0;
+    const initialEmblemY = emblemGroup ? emblemGroup.position.y : 0;
+    const initialEmblemZ = emblemGroup ? emblemGroup.position.z : 0;
     const initialScale = emblemGroup ? emblemGroup.scale.x : 1;
 
-    const dissolveLoop = (now) => {
+    const initialPhotoX = photoPlanesGroup ? photoPlanesGroup.position.x : 0;
+    const initialPhotoY = photoPlanesGroup ? photoPlanesGroup.position.y : 0;
+    const initialPhotoZ = photoPlanesGroup ? photoPlanesGroup.position.z : 0;
+
+    const duration = 1100; // 1.1s intense exponential acceleration
+    const startTime = performance.now();
+
+    const warpLoop = (now) => {
       const elapsed = now - startTime;
-      const progress = Math.min(1, Math.max(0, elapsed / duration));
-      // Smooth cubic-bezier(0.16, 1, 0.3, 1) easeOutCubic
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const alpha = 1 - ease;
+      const linearProgress = Math.min(1, Math.max(0, elapsed / duration));
 
-      // Smoothly fade opacities of all 3D mesh materials
-      mats.forEach((m) => {
-        if (m) {
-          const base = m.userData.baseOpacity !== undefined ? m.userData.baseOpacity : 1;
-          m.opacity = Math.max(0, base * alpha);
-        }
-      });
+      // Relativistic Exponential Lightspeed Curve
+      // Starts with subtle anticipation dip, then launches at lightspeed
+      const warpSpeedProgress = Math.pow(linearProgress, 2.8);
 
-      // Smoothly drift emblem into depth of space while dissolving
+      // Scale shrinks down rapidly: gets smaller and smaller into a pinpoint like a satellite
+      const currentScale = Math.max(0.001, initialScale * (1 - Math.pow(linearProgress, 2.2)));
+
       if (emblemGroup) {
-        emblemGroup.position.z = initialZ - ease * 3.5;
-        emblemGroup.scale.setScalar(initialScale * (1 - ease * 0.2));
-      }
-      if (photoPlanesGroup) {
-        photoPlanesGroup.position.z = initialZ - ease * 4.0;
+        emblemGroup.position.x = initialEmblemX + warpSpeedProgress * targetDx;
+        emblemGroup.position.y = initialEmblemY + warpSpeedProgress * targetDy;
+        emblemGroup.position.z = initialEmblemZ + warpSpeedProgress * targetDz;
+        emblemGroup.scale.setScalar(currentScale);
+        emblemGroup.rotation.z += 0.08 * (1 + warpSpeedProgress * 8);
       }
 
-      if (progress < 1) {
-        dissolveAnimIdRef.current = requestAnimationFrame(dissolveLoop);
+      if (photoPlanesGroup) {
+        photoPlanesGroup.position.x = initialPhotoX + warpSpeedProgress * targetDx;
+        photoPlanesGroup.position.y = initialPhotoY + warpSpeedProgress * targetDy;
+        photoPlanesGroup.position.z = initialPhotoZ + warpSpeedProgress * targetDz;
+        photoPlanesGroup.scale.setScalar(currentScale);
+      }
+
+      if (linearProgress < 1) {
+        warpAnimIdRef.current = requestAnimationFrame(warpLoop);
       } else {
-        // Complete dissolve: clean hide without abrupt cuts
-        if (emblemGroup) emblemGroup.visible = false;
-        if (photoPlanesGroup) photoPlanesGroup.visible = false;
+        // Complete Warp: Vanished deep into the screen
+        if (emblemGroup) {
+          emblemGroup.visible = false;
+          emblemGroup.scale.setScalar(1);
+          emblemGroup.position.set(0, 0, 0);
+        }
+        if (photoPlanesGroup) {
+          photoPlanesGroup.visible = false;
+          photoPlanesGroup.scale.setScalar(1);
+          photoPlanesGroup.position.set(0, 0, 0);
+        }
+
         setIsCinematicMode(true);
-        setIsTransitioning(false);
-        setSheenActive(false);
-        dissolveAnimIdRef.current = null;
+        setIsWarping(false);
+        setWarpStreakActive(false);
+        warpAnimIdRef.current = null;
       }
     };
 
-    dissolveAnimIdRef.current = requestAnimationFrame(dissolveLoop);
+    warpAnimIdRef.current = requestAnimationFrame(warpLoop);
   };
 
-  // Restore 3D Atelier (Smooth fade back in)
-  const restore3dAtelier = (e) => {
+  // REVERSE WARP (Summon 3D Satellites Back from Distance)
+  const summon3dSatellites = (e) => {
     if (e) e.stopPropagation();
-    playSound('sparkle');
+    playSound('lightspeed_warp');
+    setIsWarping(true);
 
     const emblemGroup = emblemGroupRef.current;
     const photoPlanesGroup = photoPlanesGroupRef.current;
-    const mats = materialsRef.current;
+
+    const startDx = 9.5;
+    const startDy = 5.5;
+    const startDz = -42.0;
 
     if (emblemGroup) {
       emblemGroup.visible = true;
-      emblemGroup.position.z = 0;
-      emblemGroup.scale.setScalar(1);
+      emblemGroup.position.set(startDx, startDy, startDz);
+      emblemGroup.scale.setScalar(0.01);
     }
     if (photoPlanesGroup) {
       photoPlanesGroup.visible = true;
-      photoPlanesGroup.position.z = 0;
+      photoPlanesGroup.position.set(startDx, startDy, startDz);
+      photoPlanesGroup.scale.setScalar(0.01);
     }
 
-    const duration = 800;
+    const duration = 1000;
     const startTime = performance.now();
 
-    const fadeInLoop = (now) => {
+    const returnLoop = (now) => {
       const elapsed = now - startTime;
       const progress = Math.min(1, Math.max(0, elapsed / duration));
+      // Ease out cubic deceleration arriving back into orbit
       const ease = 1 - Math.pow(1 - progress, 3);
 
-      mats.forEach((m) => {
-        if (m) {
-          const base = m.userData.baseOpacity !== undefined ? m.userData.baseOpacity : 1;
-          m.opacity = base * ease;
-        }
-      });
+      const currentScale = 0.01 + ease * 0.99;
+
+      if (emblemGroup) {
+        emblemGroup.position.x = startDx * (1 - ease);
+        emblemGroup.position.y = startDy * (1 - ease);
+        emblemGroup.position.z = startDz * (1 - ease);
+        emblemGroup.scale.setScalar(currentScale);
+      }
+      if (photoPlanesGroup) {
+        photoPlanesGroup.position.x = startDx * (1 - ease);
+        photoPlanesGroup.position.y = startDy * (1 - ease);
+        photoPlanesGroup.position.z = startDz * (1 - ease);
+        photoPlanesGroup.scale.setScalar(currentScale);
+      }
 
       if (progress < 1) {
-        requestAnimationFrame(fadeInLoop);
+        requestAnimationFrame(returnLoop);
       } else {
+        if (emblemGroup) emblemGroup.position.set(0, 0, 0);
+        if (photoPlanesGroup) photoPlanesGroup.position.set(0, 0, 0);
         setIsCinematicMode(false);
+        setIsWarping(false);
       }
     };
 
-    requestAnimationFrame(fadeInLoop);
+    requestAnimationFrame(returnLoop);
   };
 
-  // TAP & HOLD FOR CINEMATIC DISSOLVE
-  const startHold = (e) => {
-    if (e.target.closest('button') || e.target.closest('a')) return;
-    if (isCinematicMode || isTransitioning) return;
+  // =========================================================================
+  // AUTOMATIC VANISH TIMER (Vanishes automatically in ~6s if idle)
+  // =========================================================================
+  useEffect(() => {
+    if (isCinematicMode || isWarping) return;
 
-    setIsHolding(true);
-    holdStartRef.current = performance.now();
-    playSound('cyber_hover');
+    let countdown = 6;
+    setAutoTimerRemaining(countdown);
 
-    const updateHold = (now) => {
-      const elapsed = now - holdStartRef.current;
-      const progress = Math.min(1, Math.max(0, elapsed / 2800)); // 2.8s smooth duration
-      setHoldProgress(progress);
+    const interval = setInterval(() => {
+      // If user is actively hovering/interacting with a 3D photo, pause the timer
+      if (isInteractingRef.current) return;
 
-      if (progress < 1) {
-        holdFrameRef.current = requestAnimationFrame(updateHold);
-      } else {
-        executeCinematicDissolve();
+      countdown -= 1;
+      setAutoTimerRemaining(countdown);
+
+      if (countdown <= 0) {
+        clearInterval(interval);
+        triggerLightspeedWarp();
       }
+    }, 1000);
+
+    autoWarpTimerRef.current = interval;
+
+    return () => {
+      clearInterval(interval);
     };
+  }, [isCinematicMode]);
 
-    holdFrameRef.current = requestAnimationFrame(updateHold);
-  };
-
-  const endHold = () => {
-    if (!isHolding) return;
-    setIsHolding(false);
-    setHoldProgress(0);
-    if (holdFrameRef.current) {
-      cancelAnimationFrame(holdFrameRef.current);
-      holdFrameRef.current = null;
-    }
-  };
-
-  // Cleanup on unmount
+  // Cleanup RAF
   useEffect(() => {
     return () => {
-      if (dissolveAnimIdRef.current) cancelAnimationFrame(dissolveAnimIdRef.current);
-      if (holdFrameRef.current) cancelAnimationFrame(holdFrameRef.current);
+      if (warpAnimIdRef.current) cancelAnimationFrame(warpAnimIdRef.current);
     };
   }, []);
 
@@ -551,10 +722,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   return (
     <section
       ref={sectionRef}
-      onPointerDown={startHold}
-      onPointerUp={endHold}
-      onPointerLeave={endHold}
-      onPointerCancel={endHold}
       className="relative w-full min-h-screen h-screen flex items-center justify-center overflow-hidden bg-black select-none cursor-default"
     >
       {/* 0. Synchronized Master Audio Soundtrack */}
@@ -589,67 +756,55 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. 3D WebGL Three.js Layer with Butter-Smooth Dissolve Engine */}
+      {/* 2. 3D WebGL Three.js Layer with Lightspeed Satellite Warp */}
       <div
         ref={mountRef}
         className="absolute inset-0 w-full h-full pointer-events-auto z-[2]"
       />
 
-      {/* 3. ELEGANT CINEMATIC HOLD HUD (Smooth, Minimal, Refined) */}
-      {isHolding && !isCinematicMode && (
-        <div className="absolute inset-0 z-[25] pointer-events-none flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px] transition-opacity duration-200">
-          <div className="relative flex flex-col items-center gap-3">
-            {/* Elegant Radial Progress Dial */}
-            <div className="relative w-24 h-24 flex items-center justify-center">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  className="stroke-white/10"
-                  strokeWidth="3"
-                  fill="none"
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  className="stroke-[#f472b6]"
-                  strokeWidth="3.5"
-                  strokeDasharray="264"
-                  strokeDashoffset={264 * (1 - holdProgress)}
-                  strokeLinecap="round"
-                  fill="none"
-                  style={{
-                    filter: 'drop-shadow(0 0 8px rgba(244,114,182,0.8))',
-                    transition: 'stroke-dashoffset 0.05s linear'
-                  }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center font-mono text-xs text-white font-bold tracking-wider">
-                {(holdProgress * 100).toFixed(0)}%
-              </div>
-            </div>
+      {/* 3. LIGHTSPEED WARP LASER STREAK (Flashes toward upper-right cosmic vector) */}
+      {warpStreakActive && (
+        <div className="absolute inset-0 z-[30] pointer-events-none overflow-hidden flex items-center justify-center">
+          {/* Lightspeed streak trail beam pointing along trajectory vector */}
+          <div
+            className="absolute w-[200vw] h-[3px] bg-gradient-to-r from-transparent via-[#f472b6] via-white to-transparent shadow-[0_0_25px_#f472b6] animate-pulse"
+            style={{
+              transform: 'rotate(-32deg) translateY(-20px)',
+              filter: 'drop-shadow(0 0 15px rgba(244,114,182,0.9))'
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[#be185d]/10 to-transparent animate-out fade-out duration-700" />
+        </div>
+      )}
 
-            <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/80 border border-[#f472b6]/50 text-[10px] sm:text-[11px] font-mono tracking-widest text-[#f472b6] uppercase shadow-[0_0_20px_rgba(244,114,182,0.25)]">
-              <Sparkles className="w-3.5 h-3.5 text-pink animate-pulse" />
-              <span>DISSOLVING TO CINEMATIC REEL</span>
-            </div>
-            <p className="text-silver/60 text-[10px] font-mono tracking-widest uppercase">
-              HOLD TO REVEAL PURE MASTER REEL
-            </p>
+      {/* 4. HOVERED 3D SATELLITE PHOTO HUD BADGE */}
+      {hoveredPhotoIndex !== null && !isCinematicMode && (
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-[20] pointer-events-none animate-in fade-in zoom-in duration-200">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-[#f472b6] text-white text-xs font-mono tracking-widest shadow-[0_0_20px_rgba(244,114,182,0.4)]">
+            <Sparkles className="w-3.5 h-3.5 text-[#f472b6] animate-spin" />
+            <span>CLICK TO VIEW ATELIER GRAIL</span>
           </div>
         </div>
       )}
 
-      {/* 4. VELVETY CINEMATIC LIGHT SHEEN (Zero Blast, Smooth af) */}
-      {sheenActive && (
-        <div className="absolute inset-0 z-[30] pointer-events-none overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#f472b6]/15 to-transparent animate-out fade-out duration-1000" />
+      {/* 5. TOP-RIGHT HIDE 3D // SATELLITE WARP BUTTON */}
+      {!isCinematicMode && (
+        <div className="absolute top-20 right-6 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
+          <button
+            onClick={triggerLightspeedWarp}
+            title="Warp 3D satellites into distance to reveal pure video reel"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/80 hover:bg-[#be185d]/30 border border-[#f472b6]/50 hover:border-[#f472b6] text-white hover:text-pink text-xs font-mono tracking-wider backdrop-blur-md cursor-pointer transition-all shadow-[0_0_15px_rgba(244,114,182,0.3)] active:scale-95 group"
+          >
+            <Zap className="w-3.5 h-3.5 text-[#f472b6] group-hover:scale-125 transition-transform" />
+            <span>HIDE 3D</span>
+            <span className="text-[10px] text-silver/50 font-mono hidden sm:inline">
+              ({autoTimerRemaining}s)
+            </span>
+          </button>
         </div>
       )}
 
-      {/* 5. Video, Audio & Mode Controls HUD (Bottom-Left) */}
+      {/* 6. Video, Audio & Mode Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-6 z-[10] flex items-center gap-2.5">
         <button
           onClick={handleTogglePlay}
@@ -678,15 +833,15 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
           )}
         </button>
 
-        {/* Toggle between Cinematic Video Mode and 3D Atelier Mode */}
+        {/* Bring Back 3D Satellites Button (When in Cinematic Mode) */}
         {isCinematicMode && (
           <button
-            onClick={restore3dAtelier}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/80 hover:bg-pink/20 border border-[#f472b6]/50 text-white hover:text-pink text-[10px] font-mono tracking-wider uppercase transition-all backdrop-blur-md cursor-pointer shadow-lg animate-in fade-in"
-            title="Bring back 3D Kinetic Sculpture"
+            onClick={summon3dSatellites}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/85 hover:bg-pink/20 border border-[#f472b6]/60 text-white hover:text-pink text-[10px] sm:text-xs font-mono tracking-wider uppercase transition-all backdrop-blur-md cursor-pointer shadow-[0_0_15px_rgba(244,114,182,0.3)] animate-in fade-in"
+            title="Summon 3D Satellite Sculptures back from distance"
           >
-            <Eye className="w-3 h-3 text-[#f472b6]" />
-            <span>RE-ENGAGE 3D</span>
+            <Compass className="w-3.5 h-3.5 text-[#f472b6] animate-spin" />
+            <span>SUMMON 3D SATELLITES</span>
           </button>
         )}
 
@@ -704,12 +859,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         </button>
       </div>
 
-      {/* 6. Ultra-clean Minimalist Scroll Guide (Bottom-Center) */}
+      {/* 7. Ultra-clean Minimalist Scroll Guide (Bottom-Center) */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
 
-      {/* 7. Dedicated Cinema Reel Modal */}
+      {/* 8. Dedicated Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}

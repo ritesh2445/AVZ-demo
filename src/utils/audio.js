@@ -227,6 +227,32 @@ export function playSound(type = 'pip') {
       osc.start(now);
       osc.stop(now + 0.38);
 
+    } else if (type === 'lightspeed_warp') {
+      // Cosmic satellite lightspeed Doppler sweep
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(300, now);
+      filter.frequency.exponentialRampToValueAtTime(3200, now + 0.6);
+      filter.frequency.exponentialRampToValueAtTime(80, now + 0.95);
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.55);
+      osc.frequency.exponentialRampToValueAtTime(60, now + 0.95);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.045, now + 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.95);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.0);
     } else {
       // Fallback: warm micro click
       const osc = audioCtx.createOscillator();
