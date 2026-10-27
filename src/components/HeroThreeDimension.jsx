@@ -37,6 +37,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const warpAnimIdRef = useRef(null);
   const autoWarpTimerRef = useRef(null);
   const isInteractingRef = useRef(false);
+  const isWarpingRef = useRef(false);
+  const isCinematicModeRef = useRef(false);
   const hoveredIndexRef = useRef(null);
   const raycasterRef = useRef(null);
   const cameraRef = useRef(null);
@@ -65,7 +67,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 140);
-    camera.position.set(0, 0, 13);
+    // Camera is pulled back to Z=19 on mobile portrait so all 3D satellites and central rings fit inside the narrow viewport
+    camera.position.set(0, 0, isMobile ? 19 : 13);
     cameraRef.current = camera;
 
     let renderer;
@@ -181,58 +184,59 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const loadedTextures = [];
     const planeGeoms = [];
 
+    // Satellite arrangement: Responsive portrait framing on mobile, wide landscape on desktop
     const satelliteConfig = [
       {
         url: ASSET_MANIFEST.products.divaTop,
         title: "DIVA CORSET // ARCHIVE 01",
-        baseX: -4.5,
-        baseY: 1.2,
-        baseZ: 1.8,
+        baseX: isMobile ? -1.7 : -4.5,
+        baseY: isMobile ? 3.3 : 1.2,
+        baseZ: isMobile ? 0.6 : 1.8,
         rotX: 0.08,
-        rotY: 0.28,
-        w: isMobile ? 1.8 : 2.4,
-        h: isMobile ? 2.3 : 3.0,
+        rotY: isMobile ? 0.12 : 0.28,
+        w: isMobile ? 1.45 : 2.4,
+        h: isMobile ? 1.85 : 3.0,
         orbitSpeed: 0.35,
-        orbitRadius: 0.25
+        orbitRadius: isMobile ? 0.12 : 0.25
       },
       {
         url: ASSET_MANIFEST.editorialHero,
         title: "EDITORIAL HERO // ARCHIVE 02",
-        baseX: 4.6,
-        baseY: -0.8,
-        baseZ: 2.2,
+        baseX: isMobile ? 1.7 : 4.6,
+        baseY: isMobile ? -2.8 : -0.8,
+        baseZ: isMobile ? 0.8 : 2.2,
         rotX: -0.06,
-        rotY: -0.32,
-        w: isMobile ? 1.9 : 2.5,
-        h: isMobile ? 2.5 : 3.3,
+        rotY: isMobile ? -0.12 : -0.32,
+        w: isMobile ? 1.5 : 2.5,
+        h: isMobile ? 1.95 : 3.3,
         orbitSpeed: 0.28,
-        orbitRadius: 0.3
+        orbitRadius: isMobile ? 0.12 : 0.3
       },
       {
         url: ASSET_MANIFEST.products.spikeBra,
         title: "SPIKE BRA // ARCHIVE 03",
-        baseX: -3.6,
-        baseY: -2.6,
-        baseZ: 0.8,
+        baseX: isMobile ? -1.6 : -3.6,
+        baseY: isMobile ? -3.2 : -2.6,
+        baseZ: isMobile ? 0.4 : 0.8,
         rotX: 0.14,
-        rotY: 0.22,
-        w: isMobile ? 1.6 : 2.0,
-        h: isMobile ? 1.8 : 2.4,
+        rotY: isMobile ? 0.1 : 0.22,
+        w: isMobile ? 1.35 : 2.0,
+        h: isMobile ? 1.65 : 2.4,
         orbitSpeed: 0.42,
-        orbitRadius: 0.2
+        orbitRadius: isMobile ? 0.1 : 0.2
       },
       {
         url: ASSET_MANIFEST.products.coordSet,
         title: "CO-ORD ARMOR // ARCHIVE 04",
-        baseX: 3.8,
-        baseY: 2.4,
-        baseZ: -0.5,
+        baseX: isMobile ? 1.6 : 3.8,
+        baseY: isMobile ? 3.5 : 2.4,
+        baseZ: isMobile ? -0.2 : -0.5,
         rotX: -0.08,
-        rotY: -0.2,
-        w: isMobile ? 1.7 : 2.2,
-        h: isMobile ? 2.0 : 2.7,
+        rotY: isMobile ? -0.1 : -0.2,
+        w: isMobile ? 1.35 : 2.2,
+        h: isMobile ? 1.65 : 2.7,
         orbitSpeed: 0.32,
-        orbitRadius: 0.22
+        orbitRadius: isMobile ? 0.1 : 0.22
       }
     ];
 
@@ -337,6 +341,15 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
 
+    // Release pointer interaction on touch end / cancel so auto-timer always resumes on mobile
+    const handlePointerRelease = () => {
+      isInteractingRef.current = false;
+      hoveredIndexRef.current = null;
+      setHoveredPhotoIndex(null);
+    };
+    window.addEventListener('pointerup', handlePointerRelease, { passive: true });
+    window.addEventListener('pointercancel', handlePointerRelease, { passive: true });
+
     // Click handler for 3D photo satellite exploration
     const handleClick = (e) => {
       if (e.target.closest('button') || e.target.closest('a')) return;
@@ -386,7 +399,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       }
 
       // Smooth satellite mesh position & scale updates
-      if (photoPlanesGroup.visible && !isWarping) {
+      if (photoPlanesGroup.visible && !isWarpingRef.current) {
         const activeHoverIdx = hoveredIndexRef.current;
 
         for (let i = 0; i < photoPlanes.length; i++) {
@@ -454,10 +467,12 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       if (!container) return;
       const newW = container.clientWidth || window.innerWidth;
       const newH = container.clientHeight || window.innerHeight;
+      const isMob = newW < 768;
       camera.aspect = newW / newH;
+      camera.position.z = isMob ? 19 : 13;
       camera.updateProjectionMatrix();
       renderer.setSize(newW, newH);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.0 : 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.0 : 1.5));
     };
 
     window.addEventListener('resize', handleResize);
@@ -465,6 +480,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerRelease);
+      window.removeEventListener('pointercancel', handlePointerRelease);
       window.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);
       if (animId) cancelAnimationFrame(animId);
@@ -490,7 +507,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         }
       }
     };
-  }, [isWarping]);
+  }, []); // Only mount WebGL scene once! Must NOT depend on isWarping to prevent scene destruction during animation
 
   // Synchronized Master Video & Audio Controls
   useEffect(() => {
@@ -552,10 +569,16 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   // Vanishes purely with 3D movement shrinking into distance like a satellite
   // ZERO pink lines, ZERO streaks, ZERO extra DOM overlay clutter
   // =========================================================================
+  // =========================================================================
+  // PURE MOVEMENT LIGHTSPEED WARP EXIT
+  // Vanishes purely with 3D movement shrinking into distance like a satellite
+  // ZERO pink lines, ZERO streaks, ZERO extra DOM overlay clutter
+  // =========================================================================
   const triggerLightspeedWarp = (e) => {
-    if (e) e.stopPropagation();
-    if (isCinematicMode || isWarping) return;
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (isCinematicModeRef.current || isWarpingRef.current) return;
 
+    isWarpingRef.current = true;
     setIsWarping(true);
     playSound('lightspeed_warp');
 
@@ -563,9 +586,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const photoPlanesGroup = photoPlanesGroupRef.current;
 
     // Movement departure vector: Accelerates into the screen's depth towards upper-right
-    const targetDx = 11.0;
-    const targetDy = 6.5;
-    const targetDz = -52.0;
+    const isMob = window.innerWidth < 768;
+    const targetDx = isMob ? 7.0 : 12.0;
+    const targetDy = isMob ? 9.0 : 6.5;
+    const targetDz = -58.0;
 
     const initialEmblemX = emblemGroup ? emblemGroup.position.x : 0;
     const initialEmblemY = emblemGroup ? emblemGroup.position.y : 0;
@@ -619,6 +643,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
           photoPlanesGroup.position.set(0, 0, 0);
         }
 
+        isCinematicModeRef.current = true;
+        isWarpingRef.current = false;
         setIsCinematicMode(true);
         setIsWarping(false);
         warpAnimIdRef.current = null;
@@ -630,16 +656,20 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
   // REVERSE WARP (Summon 3D Satellites Back from Deep Space)
   const summon3dSatellites = (e) => {
-    if (e) e.stopPropagation();
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (isWarpingRef.current) return;
+
     playSound('lightspeed_warp');
+    isWarpingRef.current = true;
     setIsWarping(true);
 
     const emblemGroup = emblemGroupRef.current;
     const photoPlanesGroup = photoPlanesGroupRef.current;
 
-    const startDx = 11.0;
-    const startDy = 6.5;
-    const startDz = -52.0;
+    const isMob = window.innerWidth < 768;
+    const startDx = isMob ? 7.0 : 12.0;
+    const startDy = isMob ? 9.0 : 6.5;
+    const startDz = -58.0;
 
     if (emblemGroup) {
       emblemGroup.visible = true;
@@ -680,6 +710,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       } else {
         if (emblemGroup) emblemGroup.position.set(0, 0, 0);
         if (photoPlanesGroup) photoPlanesGroup.position.set(0, 0, 0);
+        isCinematicModeRef.current = false;
+        isWarpingRef.current = false;
         setIsCinematicMode(false);
         setIsWarping(false);
       }
@@ -689,16 +721,16 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   };
 
   // =========================================================================
-  // AUTOMATIC VANISH TIMER (Vanishes automatically with movement in 6s if idle)
+  // AUTOMATIC VANISH TIMER (Vanishes automatically with movement in 5s if idle)
   // =========================================================================
   useEffect(() => {
-    if (isCinematicMode || isWarping) return;
+    if (!isReady || isCinematicMode || isWarping) return;
 
-    let countdown = 6;
+    let countdown = 5;
     setAutoTimerRemaining(countdown);
 
     const interval = setInterval(() => {
-      // Pause countdown if user is hovering/interacting
+      // Pause countdown if user is actively touching or hovering
       if (isInteractingRef.current) return;
 
       countdown -= 1;
@@ -715,7 +747,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     return () => {
       clearInterval(interval);
     };
-  }, [isCinematicMode]);
+  }, [isReady, isCinematicMode, isWarping]);
 
   useEffect(() => {
     return () => {
@@ -784,9 +816,9 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         </div>
       )}
 
-      {/* 4. TOP-RIGHT HIDE 3D BUTTON (Clean, Minimalist) */}
+      {/* 4. TOP-RIGHT HIDE 3D BUTTON (Clean, Minimalist, safely below navbar on mobile) */}
       {!isCinematicMode && (
-        <div className="absolute top-[60px] sm:top-[76px] right-4 sm:right-6 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
+        <div className="absolute top-20 sm:top-24 right-3 sm:right-6 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
           <button
             onClick={triggerLightspeedWarp}
             title="Warp 3D satellites into distance to reveal pure video reel"
@@ -794,7 +826,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
           >
             <EyeOff className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-pink-300 group-hover:scale-110 transition-transform" />
             <span>HIDE 3D</span>
-            <span className="text-[10px] text-silver/50 font-mono hidden sm:inline">
+            <span className="text-[10px] text-silver/50 font-mono">
               ({autoTimerRemaining}s)
             </span>
           </button>
