@@ -141,13 +141,6 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       roughness: 0.15
     });
     const neonMat = new THREE.MeshBasicMaterial({ color: 0xF4C2C2 });
-    const glassMat = new THREE.MeshStandardMaterial({
-      color: 0xE6E6FA,
-      transparent: true,
-      opacity: 0.22,
-      roughness: 0.1,
-      metalness: 0.2
-    });
 
     MUSEUM_ITEMS.forEach((item, idx) => {
       // Full continuous circle (Math.PI * 2)
@@ -160,52 +153,45 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       // Face outwards so the front faces the camera when rotated to z = radius
       group.rotation.y = angle;
 
-      // Plinth Base
-      const plinthGeom = new THREE.CylinderGeometry(1.2, 1.4, 1.8, 16);
+      // Circular Plinth Base
+      const plinthGeom = new THREE.CylinderGeometry(1.2, 1.4, 1.8, 24);
       const plinth = new THREE.Mesh(plinthGeom, plinthMat);
       group.add(plinth);
 
       // Chrome Ring on Top
-      const ringGeom = new THREE.TorusGeometry(1.25, 0.05, 10, 24);
+      const ringGeom = new THREE.TorusGeometry(1.25, 0.05, 12, 32);
       const ring = new THREE.Mesh(ringGeom, chromeMat);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = 0.9;
       group.add(ring);
 
       // Under-Plinth Neon Glow Ring
-      const neonGeom = new THREE.TorusGeometry(1.42, 0.04, 10, 24);
+      const neonGeom = new THREE.TorusGeometry(1.42, 0.04, 12, 32);
       const neon = new THREE.Mesh(neonGeom, neonMat);
       neon.rotation.x = Math.PI / 2;
       neon.position.y = -0.85;
       group.add(neon);
 
-      // Display Artifact Mesh
-      const artifactGeom = new THREE.BoxGeometry(2.0, 2.6, 0.1);
+      // Display Artifact Mesh (Direct high-definition picture tablet on circular stand, zero glass cage)
+      const artifactGeom = new THREE.BoxGeometry(2.1, 2.7, 0.06);
       const defaultMat = new THREE.MeshStandardMaterial({
-        color: 0x301934,
-        metalness: 0.4,
-        roughness: 0.4
+        color: 0x14051a,
+        metalness: 0.8,
+        roughness: 0.2
       });
       const artifactMesh = new THREE.Mesh(artifactGeom, defaultMat);
-      artifactMesh.position.y = 2.4;
+      artifactMesh.position.y = 2.3;
       group.add(artifactMesh);
 
-      // Texture
+      // Load high quality texture directly with zero glass obstruction
       textureLoader.load(item.image, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace;
-        const frontMat = new THREE.MeshStandardMaterial({
-          map: tex,
-          roughness: 0.3,
-          metalness: 0.15
+        tex.anisotropy = 16;
+        const frontMat = new THREE.MeshBasicMaterial({
+          map: tex
         });
         artifactMesh.material = [chromeMat, chromeMat, chromeMat, chromeMat, frontMat, chromeMat];
       });
-
-      // Protective Glass Vitrine
-      const glassGeom = new THREE.BoxGeometry(2.3, 3.0, 0.6);
-      const glassVitrine = new THREE.Mesh(glassGeom, glassMat);
-      glassVitrine.position.y = 2.4;
-      group.add(glassVitrine);
 
       carouselGroup.add(group);
       pedestals.push({ group, artifactMesh, angle });
