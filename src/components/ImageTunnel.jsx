@@ -196,11 +196,11 @@ export default function ImageTunnel({ isOpen, onClose }) {
         className="relative z-50 p-6 sm:px-10 flex items-center justify-between pointer-events-auto bg-gradient-to-b from-black/90 to-transparent"
       >
         <div className="flex items-center gap-3">
-          <Compass className="w-5 h-5 text-pink animate-spin" />
-          <span className="font-spartan font-bold tracking-widest text-sm text-white uppercase">
-            AVZ CSS 3D HYPER-TUNNEL
+          <Compass className="w-4 h-4 text-zinc-400 animate-spin" />
+          <span className="font-mono text-xs tracking-[0.2em] text-white uppercase">
+            AVZ ARCHIVAL 3D TUNNEL
           </span>
-          <span className="text-[11px] font-mono text-pink/80">
+          <span className="text-[10px] font-mono text-zinc-400">
             {isPaused ? '[PAUSED]' : isAccelerating ? '[WARP ACCELERATION]' : '[CRUISE VELOCITY]'}
           </span>
         </div>
@@ -211,9 +211,9 @@ export default function ImageTunnel({ isOpen, onClose }) {
             playSound('pip');
             onClose();
           }}
-          className="btn-glass px-5 py-2.5 rounded-full text-white hover:text-pink transition-all font-mono text-xs tracking-widest flex items-center gap-2 cursor-pointer"
+          className="btn-glass px-4 py-2 rounded-full text-white hover:text-white transition-all font-mono text-[11px] tracking-widest flex items-center gap-2 cursor-pointer"
         >
-          <X className="w-4 h-4" />
+          <X className="w-3.5 h-3.5" />
           <span>EXIT TUNNEL</span>
         </button>
       </div>
@@ -223,7 +223,7 @@ export default function ImageTunnel({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="relative z-50 p-6 sm:px-10 flex flex-wrap items-center justify-between gap-4 pointer-events-auto bg-gradient-to-t from-black/90 to-transparent"
       >
-        <div className="text-xs font-mono text-silver/70">
+        <div className="text-[11px] font-mono text-zinc-400">
           Click viewport to {isPaused ? 'RESUME' : 'PAUSE'} · Tilt cursor to steer corridor
         </div>
 
@@ -233,9 +233,9 @@ export default function ImageTunnel({ isOpen, onClose }) {
               setIsPaused((p) => !p);
               playSound('pip');
             }}
-            className="btn-glass px-6 py-2.5 rounded-full text-white font-spartan font-bold text-xs tracking-wider transition-all flex items-center gap-2 cursor-pointer"
+            className="btn-glass px-5 py-2 rounded-full text-white font-mono text-xs tracking-wider transition-all flex items-center gap-2 cursor-pointer"
           >
-            {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+            {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
             <span>{isPaused ? 'RESUME WARP' : 'PAUSE MOTION'}</span>
           </button>
 
@@ -251,13 +251,13 @@ export default function ImageTunnel({ isOpen, onClose }) {
               playSound('warp');
             }}
             onTouchEnd={() => setIsAccelerating(false)}
-            className={`px-6 py-2.5 rounded-full font-spartan font-black text-xs tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer ${
+            className={`px-5 py-2 rounded-full font-mono text-xs tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer ${
               isAccelerating
                 ? 'btn-glass-pink scale-105'
-                : 'btn-glass text-pink'
+                : 'btn-glass text-zinc-300'
             }`}
           >
-            <Zap className={`w-4 h-4 ${isAccelerating ? 'fill-current animate-bounce' : ''}`} />
+            <Zap className={`w-3.5 h-3.5 ${isAccelerating ? 'fill-current animate-bounce' : ''}`} />
             <span>HOLD TO BOOST SPEED</span>
           </button>
         </div>

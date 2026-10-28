@@ -10,6 +10,7 @@ export default function LoadingExperience({ onComplete }) {
   const [isExiting, setIsExiting] = useState(false);
   const [isCompleted100, setIsCompleted100] = useState(false);
   const hasFinishedRef = useRef(false);
+  const triggerFinishRef = useRef(null);
 
   useEffect(() => {
     // Only bypass if user strictly requested reduced motion in OS settings
@@ -144,6 +145,7 @@ export default function LoadingExperience({ onComplete }) {
         onComplete();
       }, 850);
     };
+    triggerFinishRef.current = triggerFinish;
 
     const animate = (time) => {
       animId = requestAnimationFrame(animate);
@@ -167,23 +169,23 @@ export default function LoadingExperience({ onComplete }) {
             playSound('pip');
           } else if (currentCount === 100) {
             setIsCompleted100(true);
-            playSound('baddie_alert');
+            playSound('sparkle');
           }
 
           // Dynamic phase subtitles
           if (phaseRef.current) {
             if (currentCount < 20) {
-              phaseRef.current.textContent = "AWAKENING THE OTHER DIMENSION";
+              phaseRef.current.textContent = "INITIALIZING ATELIER FREQUENCY";
             } else if (currentCount < 45) {
-              phaseRef.current.textContent = "SCULPTING 1-OF-1 WEARABLE ART FOR BADDIES";
+              phaseRef.current.textContent = "SCULPTING ONE-OF-ONE WEARABLE ART";
             } else if (currentCount < 70) {
-              phaseRef.current.textContent = "DECONSTRUCTING ARCHIVES & MOTHERBOARDS";
+              phaseRef.current.textContent = "DECONSTRUCTING ARCHIVES & HARDWARE";
             } else if (currentCount < 90) {
-              phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE RUNWAY GRAILS";
+              phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE SILHOUETTES";
             } else if (currentCount < 100) {
-              phaseRef.current.textContent = "CHARGING HAUTE-COUTURE MATRIX";
+              phaseRef.current.textContent = "CALIBRATING HAUTE-COUTURE RUNWAY";
             } else {
-              phaseRef.current.textContent = "DIMENSION UNLOCKED. CERTIFIED SLAY ERA.";
+              phaseRef.current.textContent = "AVZ ATELIER DIMENSION INITIALIZED";
             }
           }
         }
@@ -220,8 +222,10 @@ export default function LoadingExperience({ onComplete }) {
 
     animId = requestAnimationFrame(animate);
 
+    window.__skipLoading = triggerFinish;
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' || e.key === ' ') {
         triggerFinish();
       }
     };
@@ -361,7 +365,12 @@ export default function LoadingExperience({ onComplete }) {
 
           <div className="flex items-center justify-between text-[10px] font-mono text-silver/50 tracking-wider">
             <span>EXPERIENCE SPATIAL LUXURY</span>
-            <span>PRESS SPACE OR ESC TO SKIP</span>
+            <button
+              onClick={() => triggerFinishRef.current?.()}
+              className="pointer-events-auto hover:text-white transition-colors cursor-pointer bg-transparent border-none text-[10px] font-mono text-silver/50"
+            >
+              PRESS SPACE OR ESC TO SKIP
+            </button>
           </div>
         </div>
       </div>

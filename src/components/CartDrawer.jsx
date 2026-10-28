@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   Trash2,
@@ -48,6 +48,14 @@ export default function CartDrawer({
     paymentMethod: 'UPI / Instant QR Code'
   });
   const [orderComplete, setOrderComplete] = useState(false);
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose?.();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -78,14 +86,14 @@ export default function CartDrawer({
     if (!code) return;
 
     playSound('snap');
-    if (code === 'BADDIE10') {
+    if (code === 'AVZ10' || code === 'BADDIE10') {
       setAppliedPromo({ code, percent: 10 });
       setPromoError('');
-    } else if (code === 'SLAY' && subtotalInr >= 3000) {
+    } else if ((code === 'ARCHIVE15' || code === 'SLAY') && subtotalInr >= 3000) {
       setAppliedPromo({ code, percent: 15 });
       setPromoError('');
-    } else if (code === 'SLAY' && subtotalInr < 3000) {
-      setPromoError('SLAY code requires a minimum bag value of ₹3,000 bestie!');
+    } else if ((code === 'ARCHIVE15' || code === 'SLAY') && subtotalInr < 3000) {
+      setPromoError('ARCHIVE15 code requires a minimum order value of ₹3,000.');
     } else if (code === 'SQUAD') {
       setAppliedPromo({ code, percent: 15 });
       setPromoError('');
@@ -94,7 +102,7 @@ export default function CartDrawer({
       setPromoError('');
     } else {
       playSound('glitch');
-      setPromoError('Invalid code bestie! Try BADDIE10 or SLAY.');
+      setPromoError('Invalid promotional code. Please check and try again.');
     }
   };
 
@@ -114,7 +122,7 @@ export default function CartDrawer({
   const handleWhatsAppCheckout = () => {
     playSound('warp');
     const itemsList = items.map((i) => `• ${i.name} (${i.selectedSize}) - ₹${i.price}`).join('%0A');
-    const msg = `Hey Dhrisni! 💕 I want to order from AVZ Vaganza:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A%0APlease share UPI details to secure my 1-of-1 grails!`;
+    const msg = `Hello AVZ Atelier, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A%0APlease share UPI / payment details to confirm reservation.`;
     window.open(`https://wa.me/917304264901?text=${msg}`, '_blank');
   };
 
@@ -142,16 +150,16 @@ export default function CartDrawer({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-gradient-to-b from-[#18031d] via-black to-[#0e0210] border border-[#be185d]/40 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(40,2,40,0.95)] relative text-left"
+        className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative text-left"
       >
         {/* Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/5">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40">
           <div className="flex items-center gap-2.5">
-            <ShoppingBag className="w-5 h-5 text-pink" />
-            <h2 className="text-lg font-spartan font-black uppercase text-white tracking-wider">
-              {isCheckingOut ? 'SECURE YOUR DRIP' : 'YOUR BADDIE BAG'}
+            <ShoppingBag className="w-4 h-4 text-white" />
+            <h2 className="text-sm sm:text-base font-mono font-medium uppercase text-white tracking-wider">
+              {isCheckingOut ? 'ATELIER CHECKOUT' : 'SHOPPING BAG'}
             </h2>
-            <span className="text-xs font-mono text-pink-300">({items.length} GRAILS)</span>
+            <span className="text-xs font-mono text-zinc-500">({items.length} {items.length === 1 ? 'PIECE' : 'PIECES'})</span>
           </div>
 
           <button
@@ -160,7 +168,7 @@ export default function CartDrawer({
               onClose();
             }}
             aria-label="Close bag"
-            className="btn-glass p-2 rounded-full cursor-pointer"
+            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -168,31 +176,31 @@ export default function CartDrawer({
 
         {/* Squad Discount Active Banner */}
         {squadDiscount && !orderComplete && (
-          <div className="px-5 py-2.5 bg-[#be185d]/20 border-b border-[#be185d]/40 text-xs font-mono text-pink-300 flex items-center justify-between">
-            <span className="flex items-center gap-1.5 font-bold">
-              <Users className="w-3.5 h-3.5 text-[#f472b6]" />
-              SQUAD DISCOUNT ACTIVE: {squadDiscount.discountPercent}% OFF
+          <div className="px-5 py-2.5 bg-white/5 border-b border-white/10 text-xs font-mono text-zinc-300 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Users className="w-3.5 h-3.5 text-zinc-400" />
+              GROUP PRIVILEGE: {squadDiscount.discountPercent}% OFF
             </span>
-            <span className="text-white text-[10px] font-mono">[{squadDiscount.squadCode}]</span>
+            <span className="text-zinc-500 text-[10px] font-mono">[{squadDiscount.squadCode}]</span>
           </div>
         )}
 
         {/* Free Shipping Progress Meter */}
         {!isCheckingOut && !orderComplete && items.length > 0 && (
-          <div className="px-5 py-2.5 bg-white/5 border-b border-white/10 text-xs font-mono">
+          <div className="px-5 py-2.5 bg-black/60 border-b border-white/10 text-xs font-mono">
             {isFreeShipping ? (
-              <span className="text-pink font-semibold flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                CONGRATS BADDIE! Free Express Shipping Unlocked across India.
+              <span className="text-zinc-300 font-medium flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
+                Complimentary Express Courier Unlocked across India.
               </span>
             ) : (
               <div>
-                <span className="text-silver/80">
-                  Add {formatPrice(freeShippingThreshold - discountedSubtotal, currency)} more for FREE Express Shipping!
+                <span className="text-zinc-400">
+                  Add {formatPrice(freeShippingThreshold - discountedSubtotal, currency)} more for complimentary Express Courier.
                 </span>
                 <div className="w-full h-1 bg-white/10 mt-1.5 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-pink transition-all duration-500"
+                    className="h-full bg-white transition-all duration-500"
                     style={{ width: `${Math.min(100, (discountedSubtotal / freeShippingThreshold) * 100)}%` }}
                   />
                 </div>
@@ -206,20 +214,20 @@ export default function CartDrawer({
           {orderComplete ? (
             /* Order Success View */
             <div className="py-10 flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-pink/20 border border-pink flex items-center justify-center animate-bounce">
-                <Sparkles className="w-8 h-8 text-pink" />
+              <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-2xl font-spartan font-black uppercase text-white">
-                GRAIL SECURED, BADDIE! 💅
+              <h3 className="text-xl font-mono font-medium uppercase text-white tracking-wider">
+                ORDER RESERVED // ATELIER NOTIFIED
               </h3>
-              <p className="text-xs text-silver/80 font-montserrat max-w-sm leading-relaxed">
-                Your order is officially in the works. Dhrisni and our Guwahati artisans are preparing your custom matte-black box, handwritten card, and chocolates.
+              <p className="text-xs text-zinc-400 font-montserrat max-w-sm leading-relaxed">
+                Your order is confirmed. Dhrisni and our Guwahati studio artisans are preparing your custom matte-black presentation box and certificate.
               </p>
-              <div className="p-4 rounded-2xl bg-[#1b0320] border border-[#be185d]/40 text-xs font-mono text-pink-300 w-full text-center">
-                <span className="text-white block font-bold mb-1">
-                  ORDER PROTOCOL: {`AVZ-${Math.floor(100000 + Math.random() * 900000)}`}
+              <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center">
+                <span className="text-white block font-medium mb-1">
+                  ORDER IDENTIFIER: {`AVZ-${Math.floor(100000 + Math.random() * 900000)}`}
                 </span>
-                DISPATCH TIME: 1–2 WEEKS (HAND-BUILT CRAFT)
+                PRODUCTION TIMELINE: 1–2 WEEKS (HANDCRAFTED)
               </div>
               <button
                 onClick={() => {
@@ -228,7 +236,7 @@ export default function CartDrawer({
                   setOrderComplete(false);
                   setIsCheckingOut(false);
                 }}
-                className="btn-glass-pink py-3 px-6 text-xs uppercase"
+                className="px-6 py-2.5 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-mono text-white tracking-widest uppercase transition-all"
               >
                 RETURN TO RUNWAY
               </button>
@@ -380,18 +388,18 @@ export default function CartDrawer({
           ) : items.length === 0 ? (
             /* Empty Cart */
             <div className="py-14 flex flex-col items-center text-center space-y-3">
-              <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-silver/40">
-                <ShoppingBag className="w-7 h-7" />
+              <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-500">
+                <ShoppingBag className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-spartan font-bold uppercase text-white">
-                YOUR BAG IS GIVING EMPTY 💔
+              <h3 className="text-base font-mono font-medium uppercase text-white tracking-wider">
+                SHOPPING BAG IS EMPTY
               </h3>
-              <p className="text-xs text-silver/60 font-montserrat max-w-xs">
-                You haven't secured any 1-of-1 wearable art grails yet bestie.
+              <p className="text-xs text-zinc-400 font-montserrat max-w-xs">
+                No wearable art pieces have been selected yet.
               </p>
               <button
                 onClick={onClose}
-                className="btn-glass-pink py-2.5 px-5 text-xs font-spartan uppercase mt-2"
+                className="px-5 py-2.5 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-mono text-white tracking-widest uppercase transition-all mt-2"
               >
                 EXPLORE CATALOGUE
               </button>
@@ -403,29 +411,29 @@ export default function CartDrawer({
                 {items.map((item) => (
                   <div
                     key={`${item.id}-${item.selectedSize}`}
-                    className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex gap-3.5 items-center"
+                    className="p-3.5 rounded-xl bg-black/60 border border-white/10 flex gap-3.5 items-center"
                   >
                     <img
                       src={item.images ? item.images[0] : item.image}
                       alt={item.name}
-                      className="w-16 h-20 object-cover rounded-xl border border-white/10 shrink-0"
+                      className="w-16 h-20 object-cover rounded-lg border border-white/10 shrink-0"
                     />
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h4 className="text-xs sm:text-sm font-spartan font-bold uppercase text-white truncate">
+                        <h4 className="text-xs sm:text-sm font-mono font-medium uppercase text-white truncate">
                           {item.name}
                         </h4>
                         <button
                           onClick={() => onRemoveItem(item.id, item.selectedSize)}
-                          className="text-silver/40 hover:text-red-400 p-1 cursor-pointer"
+                          className="text-zinc-500 hover:text-red-400 p-1 cursor-pointer transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
 
-                      <div className="text-[10px] font-mono text-pink-300 mt-0.5">
-                        FIT: {item.selectedSize} {item.stock === 1 && '• 1-OF-1 GRAIL'}
+                      <div className="text-[10px] font-mono text-zinc-400 mt-0.5">
+                        SIZE: {item.selectedSize} {item.stock === 1 && '• 1 OF 1 ARCHIVE'}
                       </div>
 
                       <div className="flex items-center justify-between mt-2">
@@ -467,10 +475,10 @@ export default function CartDrawer({
                     <Tag className="w-3.5 h-3.5 text-silver/40 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      placeholder="Promo Code (BADDIE10 / SLAY / SQUAD)"
+                      placeholder="Promo Code (AVZ10 / ARCHIVE15 / FREESHIP)"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
-                      className="w-full bg-black/80 border border-white/15 pl-9 pr-3 py-2 rounded-xl text-xs text-white font-mono uppercase outline-none focus:border-pink"
+                      className="w-full bg-black/80 border border-white/15 pl-9 pr-3 py-2 rounded-xl text-xs text-white font-mono uppercase outline-none focus:border-white/50"
                     />
                   </div>
                   <button
@@ -536,16 +544,16 @@ export default function CartDrawer({
               </div>
             )}
 
-            <div className="flex items-center justify-between text-xs font-mono text-silver/80">
-              <span>Express Air Shipping:</span>
-              <span className="text-pink">
-                {shippingCostInr === 0 ? 'FREE' : formatPrice(shippingCostInr, currency)}
+            <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+              <span>Express Courier:</span>
+              <span className="text-white">
+                {shippingCostInr === 0 ? 'COMPLIMENTARY' : formatPrice(shippingCostInr, currency)}
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-sm sm:text-base font-spartan font-black text-white pt-2 border-t border-white/10">
-              <span>Total Loot:</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-[#f472b6]">
+            <div className="flex items-center justify-between text-sm sm:text-base font-mono font-bold text-white pt-2 border-t border-white/10">
+              <span>ESTIMATED TOTAL:</span>
+              <span className="text-white">
                 {formatPrice(totalInr, currency)}
               </span>
             </div>
@@ -555,9 +563,9 @@ export default function CartDrawer({
                 playSound('snap');
                 setIsCheckingOut(true);
               }}
-              className="btn-glass-pink w-full py-3.5 text-xs font-spartan font-black tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 mt-1"
+              className="w-full py-3.5 px-6 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-mono font-semibold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 mt-1 transition-all active:scale-[0.99]"
             >
-              <span>PROCEED TO CHECKOUT (SERVE LOOKS) ↗</span>
+              <span>PROCEED TO CHECKOUT ↗</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

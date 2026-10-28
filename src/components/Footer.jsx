@@ -29,12 +29,12 @@ export default function Footer({ onScrollToSection }) {
                 alt="AVZ Emblem"
                 className="w-10 h-10 object-contain group-hover:rotate-12 transition-transform"
               />
-              <span className="font-spartan font-black text-2xl text-white tracking-[0.2em] uppercase group-hover:text-pink transition-colors">
+              <span className="font-mono font-medium text-lg text-white tracking-[0.2em] uppercase group-hover:text-pink transition-colors">
                 AVZ VAGANZA
               </span>
             </div>
 
-            <p className="text-pink-300 font-display italic text-lg text-left">
+            <p className="text-zinc-400 font-mono text-xs tracking-wider uppercase text-left">
               "{BRAND_INFO.tagline}"
             </p>
 
@@ -122,10 +122,10 @@ export default function Footer({ onScrollToSection }) {
 
             <button
               onClick={scrollToTop}
-              className="btn-glass mt-4 text-xs py-2.5 px-5 w-fit hover:border-[#be185d] hover:text-white"
+              className="btn-glass mt-4 text-[11px] font-mono tracking-widest py-2.5 px-5 w-fit hover:border-white/30 hover:text-white"
             >
-              <ArrowUp className="w-3.5 h-3.5 text-[#f472b6]" />
-              <span>TOP OF RUNWAY</span>
+              <ArrowUp className="w-3.5 h-3.5 text-zinc-400" />
+              <span>BACK TO TOP</span>
             </button>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function Footer({ onScrollToSection }) {
         {/* Bottom Bar & SEO Footnote */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-silver/50 gap-4">
           <div>
-            © {new Date().getFullYear()} AVZ VAGANZA. ALL RIGHTS RESERVED. CODED IN THE ALTERNATE DIMENSION.
+            © {new Date().getFullYear()} AVZ VAGANZA. ALL RIGHTS RESERVED. HAUTE COUTURE ARCHIVE.
           </div>
           <div className="flex items-center gap-3">
             <span>DOMAIN: {BRAND_INFO.domain}</span>

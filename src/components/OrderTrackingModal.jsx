@@ -16,18 +16,18 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
     // Simulate realistic D2C order timeline
     setOrderStatus({
       orderId: query.startsWith('AVZ-') ? query.toUpperCase() : `AVZ-${query}`,
-      customer: 'Certified Baddie',
+      customer: 'Private Client',
       placementDate: '24 Oct 2026',
       estimatedDelivery: '30 Oct 2026',
       courier: 'Blue Dart Air Express (AWB: BLUEDART-984129)',
       currentStage: 3,
       stages: [
-        { title: 'Order Secured', desc: 'Payment verified & craft ticket generated.', done: true },
-        { title: 'Raw Hardware Deconstructed', desc: 'Circuits, spikes, and reclaimed textiles gathered.', done: true },
-        { title: 'Hand-Built by Guwahati Artisans', desc: 'Women artisans crafting piece under Dhrisni’s supervision.', done: true, current: true },
-        { title: 'Quality & Tension Checked', desc: 'Dhrisni personally tests hardware strength and fit.', done: false },
-        { title: 'Packed With Chocolates & Freebies', desc: 'Sealed in matte-black AVZ box with handwritten note.', done: false },
-        { title: 'Dispatched via Air Courier', desc: 'On its way to your doorstep with tracking SMS.', done: false }
+        { title: 'Order Confirmed', desc: 'Craft ticket generated at atelier.', done: true },
+        { title: 'Raw Materials Sourced', desc: 'Circuits, hardware, and reclaimed textiles allocated.', done: true },
+        { title: 'Hand-Sculpted by Artisans', desc: 'Under Dhrisni’s direct studio supervision in Guwahati.', done: true, current: true },
+        { title: 'Tension & Fit Calibration', desc: 'Structural strength and hardware fit verified.', done: false },
+        { title: 'Packaging & Provenance Certificate', desc: 'Sealed in matte-black box with authentication card.', done: false },
+        { title: 'Dispatched via Air Courier', desc: 'In transit with real-time SMS delivery tracking.', done: false }
       ]
     });
   };
@@ -39,27 +39,27 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-gradient-to-b from-[#18031d] via-black to-[#0e0210] border border-[#be185d]/40 rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(40,2,40,0.9)] text-left relative"
+        className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative"
       >
         <button
           onClick={onClose}
           aria-label="Close tracking"
-          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-black/80 border border-white/20 flex items-center justify-center text-white hover:text-pink-300 hover:border-[#be185d] cursor-pointer transition-all"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
 
         <div className="mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1c041f] border border-[#be185d]/40 text-pink-300 text-[10px] font-mono tracking-widest uppercase mb-2">
-            <Package className="w-3.5 h-3.5 text-[#f472b6]" />
-            <span>LIVE ATELIER TRACKING // D2C PARCEL CONCIERGE</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2">
+            <Package className="w-3.5 h-3.5 text-zinc-400" />
+            <span>LIVE ATELIER TRACKING // CLIENT LOGISTICS</span>
           </div>
 
-          <h3 className="text-2xl font-black font-spartan uppercase text-white leading-tight">
-            TRACK YOUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-400">GRAIL DISPATCH</span>
+          <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white leading-tight">
+            TRACK ATELIER <span className="text-zinc-400 font-light">DISPATCH</span>
           </h3>
-          <p className="text-xs text-silver/80 font-montserrat mt-1">
-            Enter your AVZ Order ID (e.g. AVZ-781920) or phone number to see live craftsmanship & shipping progress.
+          <p className="text-xs text-zinc-400 font-montserrat mt-1">
+            Enter your AVZ Order Identifier (e.g. AVZ-781920) or phone number for production and courier updates.
           </p>
         </div>
 
@@ -70,11 +70,11 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
             placeholder="e.g. AVZ-891029 or 7304264901"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 bg-white/5 border border-white/15 focus:border-[#be185d] rounded-2xl px-4 py-3 text-xs font-mono text-white placeholder-silver/40 focus:outline-none"
+            className="flex-1 bg-black border border-white/15 focus:border-white/40 rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none"
           />
           <button
             type="submit"
-            className="btn-glass-pink py-3 px-5 text-xs font-spartan font-black tracking-widest uppercase cursor-pointer flex items-center gap-1.5"
+            className="px-5 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-mono font-semibold tracking-wider uppercase cursor-pointer flex items-center gap-1.5 transition-all"
           >
             <Search className="w-3.5 h-3.5" />
             <span>TRACK</span>
@@ -83,15 +83,15 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
 
         {/* Tracking Timeline Output */}
         {orderStatus && (
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-4 animate-fade-in">
+          <div className="p-5 rounded-xl bg-black/60 border border-white/10 space-y-4 animate-fade-in">
             <div className="flex items-center justify-between border-b border-white/10 pb-3 text-xs font-mono">
               <div>
-                <span className="text-silver/60 block">ORDER IDENTIFIER</span>
-                <span className="text-pink-300 font-bold">{orderStatus.orderId}</span>
+                <span className="text-zinc-500 block text-[10px]">ORDER IDENTIFIER</span>
+                <span className="text-white font-medium">{orderStatus.orderId}</span>
               </div>
               <div className="text-right">
-                <span className="text-silver/60 block">ESTIMATED ARRIVAL</span>
-                <span className="text-white font-bold">{orderStatus.estimatedDelivery}</span>
+                <span className="text-zinc-500 block text-[10px]">ESTIMATED ARRIVAL</span>
+                <span className="text-white font-medium">{orderStatus.estimatedDelivery}</span>
               </div>
             </div>
 
@@ -101,18 +101,18 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
                 <div key={i} className="relative text-left">
                   <div className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
                     stage.done
-                      ? 'bg-[#be185d] border-[#be185d] text-white'
+                      ? 'bg-white border-white text-black'
                       : stage.current
-                      ? 'bg-pink-400 border-white animate-pulse'
+                      ? 'bg-zinc-400 border-white animate-pulse'
                       : 'bg-black border-white/30'
                   }`}>
-                    {stage.done && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
+                    {stage.done && <CheckCircle2 className="w-2.5 h-2.5 text-black" />}
                   </div>
 
-                  <h5 className={`text-xs font-spartan font-bold uppercase ${stage.done || stage.current ? 'text-white' : 'text-silver/50'}`}>
+                  <h5 className={`text-xs font-mono font-medium uppercase ${stage.done || stage.current ? 'text-white' : 'text-zinc-500'}`}>
                     {stage.title}
                   </h5>
-                  <p className="text-[11px] font-montserrat text-silver/70">
+                  <p className="text-[11px] font-montserrat text-zinc-400">
                     {stage.desc}
                   </p>
                 </div>
@@ -120,15 +120,15 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
             </div>
 
             <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-              <span className="text-[10px] text-silver/60">{orderStatus.courier}</span>
+              <span className="text-[10px] text-zinc-500">{orderStatus.courier}</span>
               <a
                 href="https://wa.me/917304264901"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-pink-300 hover:text-white flex items-center gap-1 text-[11px]"
+                className="text-zinc-300 hover:text-white flex items-center gap-1 text-[11px] transition-colors"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                <span>WhatsApp Atelier Concierge</span>
+                <span>Atelier Concierge Line</span>
               </a>
             </div>
           </div>

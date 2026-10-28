@@ -93,36 +93,36 @@ export default function ShopCatalogue({
     });
   }, [selectedCategory, selectedMaterial, sortBy, searchQuery]);
 
-  // Curated Bestseller Grails with rank and social proof
+  // Curated Atelier Selections
   const bestsellers = useMemo(() => {
     const list = [
       {
         id: 'avz-001',
-        rank: '#1 BESTSELLER',
-        badge: '👑 ALL-TIME ICON',
-        hype: '🔥 184 BADDIES SAVED',
-        socialTag: 'VIRAL TECH CORSET'
+        rank: 'EDITION 01',
+        badge: 'ARCHIVE ICON',
+        provenance: 'Sculptural Hardware Corsetry',
+        socialTag: 'METALLIC ARCHITECTURE'
       },
       {
         id: 'avz-002',
-        rank: '#2 BESTSELLER',
-        badge: '⚡ SOLD OUT 3X',
-        hype: '🔥 142 BADDIES SAVED',
-        socialTag: 'COLD-FORGED REBELLION'
+        rank: 'EDITION 02',
+        badge: 'ATELIER PROTOTYPE',
+        provenance: 'Cold-Forged Raw Alloy',
+        socialTag: 'RECLAIMED ALLOY'
       },
       {
         id: 'avz-003',
-        rank: '#3 BESTSELLER',
-        badge: '💎 CELEB STYLED',
-        hype: '🔥 118 BADDIES SAVED',
-        socialTag: 'ZERO-WASTE ARMOR'
+        rank: 'EDITION 03',
+        badge: 'EDITORIAL VAULT',
+        provenance: 'Zero-Waste Breastplate',
+        socialTag: 'UPCYCLED CIRCUITRY'
       },
       {
         id: 'avz-004',
-        rank: '#4 BESTSELLER',
-        badge: '✦ HEAVY ART',
-        hype: '🔥 95 BADDIES SAVED',
-        socialTag: '18 HRS HAND-DISTRESSED'
+        rank: 'EDITION 04',
+        badge: 'BESPOKE RUNWAY',
+        provenance: 'Hand-Distressed Outerwear',
+        socialTag: '18 HRS ATELIER FINISH'
       }
     ];
 
@@ -134,85 +134,55 @@ export default function ShopCatalogue({
 
   return (
     <section id="shop" className="w-full py-16 sm:py-24 px-4 sm:px-12 lg:px-20 bg-transparent select-none border-t border-white/10 relative">
-      {/* Background True Dark Purple Velvet Bloom */}
-      <div className="absolute top-1/3 right-10 w-[550px] h-[550px] bg-[#32082b]/35 rounded-full blur-[170px] pointer-events-none" />
-
-      {/* Top Squad Buy Announcement Banner */}
-      <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-[#200424] via-[#35073c]/60 to-[#1b0320] border border-[#f472b6]/40 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
-        <div className="flex items-center gap-3 text-left w-full sm:w-auto">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-pink/20 border border-pink flex items-center justify-center shrink-0">
-            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-pink" />
-          </div>
-          <div>
-            <span className="text-[9px] sm:text-[10px] font-mono text-pink-300 font-bold uppercase tracking-wider block">
-              ✦ BADDIE SQUAD BUY ACTIVE // SPLIT & SAVE
-            </span>
-            <p className="text-xs sm:text-sm text-white font-spartan font-bold uppercase">
-              Cop 1-of-1 grails together with besties & unlock 10% to 20% OFF!
-            </p>
-          </div>
-        </div>
-
-        {onOpenSquadModal && (
-          <button
-            onClick={() => {
-              playSound('snap');
-              onOpenSquadModal();
-            }}
-            className="btn-glass-pink py-2 px-4 sm:py-2.5 sm:px-5 text-xs font-spartan font-black tracking-widest uppercase shrink-0 cursor-pointer w-full sm:w-auto"
-          >
-            START SQUAD ORDER ↗
-          </button>
-        )}
-      </div>
+      {/* Background Subtle Violet Ambient Bloom */}
+      <div className="absolute top-1/3 right-10 w-[550px] h-[550px] bg-[#32082b]/20 rounded-full blur-[170px] pointer-events-none" />
 
       {/* Editorial Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-12 pb-6 sm:pb-8 border-b border-white/10 relative z-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 relative z-10 text-left">
         <div className="text-left">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full btn-glass mb-3 text-pink text-[11px] font-mono tracking-widest uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-pink" />
-            <span>DROP 01 // CERTIFIED BADDIE GRAILS</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-silver/80 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+            <span>COLLECTION 01 // ARCHIVAL SILHOUETTES</span>
           </div>
-          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none">
-            WEARABLE ART <span className="chrome-text">CATALOGUE</span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight">
+            WEARABLE ART <span className="text-zinc-400 font-light">CATALOGUE</span>
           </h2>
-          <p className="text-silver/80 text-xs sm:text-sm max-w-xl font-montserrat mt-3 sm:mt-4 leading-relaxed text-left">
-            1-of-1 sculptural corsets, motherboard breastplates, and spiked outerwear hand-forged in our Guwahati atelier. Slay on your own terms.
+          <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 leading-relaxed text-left">
+            1-of-1 sculptural corsets, motherboard breastplates, and tailored outerwear handcrafted in our Guwahati atelier.
           </p>
         </div>
 
         {/* Filter Summary Counter */}
         <div className="flex items-center gap-3 self-start md:self-end">
-          <span className="text-xs font-mono text-silver/60 uppercase">
-            SHOWING: <strong className="text-pink">{filteredProducts.length}</strong> GRAILS
+          <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest">
+            SHOWING: <strong className="text-white font-mono">{filteredProducts.length}</strong> PIECES
           </span>
         </div>
       </div>
 
       {/* ========================================================
-          BESTSELLER GRAILS SEGMENT (INSIDE PRODUCT GALLERY)
+          CURATED ATELIER SELECTIONS (SOLID REFINED FRAMING)
           ======================================================== */}
       <div className="mb-16 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 text-left">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#35073c]/80 border border-[#f472b6]/50 text-pink-300 text-[10px] font-mono tracking-widest uppercase mb-2 shadow-[0_0_15px_rgba(244,114,182,0.3)]">
-              <Crown className="w-3.5 h-3.5 text-[#f472b6]" />
-              <span>THE REIGNING QUEENS // MOST WANTED</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 border border-white/15 text-zinc-300 text-[10px] font-mono tracking-widest uppercase mb-2">
+              <Crown className="w-3 h-3 text-zinc-300" />
+              <span>CURATED ATELIER SELECTIONS</span>
             </div>
-            <h3 className="text-2xl sm:text-4xl font-black font-spartan uppercase text-white tracking-tight leading-tight">
-              ALL-TIME <span className="chrome-text">BESTSELLERS</span>
+            <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white tracking-[0.15em] leading-tight">
+              KEY <span className="text-zinc-400">ARCHIVE PIECES</span>
             </h3>
-            <p className="text-silver/80 text-xs sm:text-sm font-montserrat mt-1 max-w-xl">
-              The viral wearable art pieces that broke our DMs and define the AVZ aesthetic. Hand-built 1-of-1 silhouettes with verified baddie co-signs.
+            <p className="text-zinc-400 text-xs sm:text-sm font-montserrat mt-1 max-w-xl">
+              Distinguished wearable art specimens defined by unique provenance and hand-forged materiality.
             </p>
           </div>
-          <span className="text-[11px] font-mono text-[#f472b6] tracking-wider uppercase shrink-0 flex items-center gap-1.5 font-bold">
-            <Flame className="w-3.5 h-3.5 text-[#f472b6]" />
-            <span>TOP OF THE ARCHIVE</span>
+          <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-wider uppercase shrink-0 flex items-center gap-1.5">
+            <span>PERMANENT ATELIER ARCHIVE</span>
           </span>
         </div>
 
-        {/* 4 Bestseller Cards Grid */}
+        {/* 4 Refined Selection Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
           {bestsellers.map((item) => {
             const isWish = wishlistIds.includes(item.id);
@@ -224,11 +194,11 @@ export default function ShopCatalogue({
                   playSound('metal');
                   onSelectProduct(item);
                 }}
-                className="group relative flex flex-col justify-between rounded-3xl p-[1.5px] bg-gradient-to-b from-[#f472b6]/50 via-[#9333ea]/25 to-[#be185d]/35 hover:from-[#f472b6] hover:to-[#c084fc] transition-all duration-500 cursor-pointer shadow-xl hover:shadow-[0_20px_50px_rgba(244,114,182,0.35)] transform-gpu hover:-translate-y-1"
+                className="group relative flex flex-col justify-between rounded-2xl border border-white/10 hover:border-white/30 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden"
               >
-                <div className="w-full h-full bg-[#0d0213]/95 rounded-[22px] overflow-hidden flex flex-col justify-between">
+                <div className="w-full h-full flex flex-col justify-between">
                   {/* Image Frame */}
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
+                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
                     <img
                       src={item.images ? item.images[0] : item.image}
                       alt={item.name}
@@ -236,23 +206,22 @@ export default function ShopCatalogue({
                     />
 
                     {/* Dark Vignette Scrim */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-75 group-hover:opacity-40 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity" />
 
-                    {/* Bestseller Rank Pill */}
+                    {/* Rank Pill */}
                     <div className="absolute top-3 left-3 z-10 flex flex-col gap-1 items-start">
-                      <span className="px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-[#f472b6] text-white text-[10px] font-spartan font-black tracking-widest uppercase shadow-lg flex items-center gap-1.5">
-                        <Crown className="w-3 h-3 text-[#f472b6]" />
-                        <span>{item.rank}</span>
+                      <span className="px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/20 text-white text-[9px] font-mono tracking-widest uppercase shadow-md">
+                        {item.rank}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#be185d]/80 text-pink-100 text-[9px] font-mono tracking-wider">
+                      <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-zinc-300 text-[8px] font-mono tracking-wider">
                         {item.badge}
                       </span>
                     </div>
 
-                    {/* Hype Pill */}
+                    {/* Provenance Tag */}
                     <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
-                      <span className="px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-pink-300 text-[9px] font-mono tracking-wide flex items-center gap-1">
-                        {item.hype}
+                      <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-zinc-300 text-[9px] font-mono tracking-wide">
+                        {item.provenance}
                       </span>
                     </div>
 
@@ -265,7 +234,7 @@ export default function ShopCatalogue({
                           onToggleWishlist(item);
                         }}
                         aria-label="Wishlist"
-                        className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 hover:border-[#f472b6] flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer"
+                        className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer"
                       >
                         <Heart className={`w-3.5 h-3.5 ${isWish ? 'text-pink-400 fill-pink-400' : ''}`} />
                       </button>
@@ -273,12 +242,12 @@ export default function ShopCatalogue({
                   </div>
 
                   {/* Card Info */}
-                  <div className="p-4 flex flex-col justify-between flex-1 text-left border-t border-white/10">
+                  <div className="p-4 flex flex-col justify-between flex-1 text-left border-t border-white/10 bg-[#0d0d12]">
                     <div>
-                      <span className="text-[10px] font-mono text-[#f472b6] uppercase tracking-wider block mb-1">
+                      <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block mb-1">
                         {item.socialTag}
                       </span>
-                      <h4 className="font-spartan font-black text-base sm:text-lg text-white group-hover:text-pink-300 transition-colors uppercase leading-tight line-clamp-1 mb-2">
+                      <h4 className="font-mono text-sm sm:text-base font-medium text-white group-hover:text-pink-200 transition-colors uppercase leading-snug line-clamp-1 mb-2">
                         {item.name}
                       </h4>
                     </div>
@@ -286,10 +255,10 @@ export default function ShopCatalogue({
                     {/* Price and CTA */}
                     <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-2">
                       <div className="flex flex-col text-left">
-                        <span className="text-[9px] font-mono text-silver/50 uppercase tracking-widest">
-                          GRAIL
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+                          PIECE
                         </span>
-                        <span className="text-sm font-spartan font-black text-white">
+                        <span className="text-sm font-mono font-bold text-white">
                           {formatPrice(item.price, currency)}
                         </span>
                       </div>
@@ -305,15 +274,15 @@ export default function ShopCatalogue({
                                 selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
                               });
                             }}
-                            title="Instant Quick Add to Bag"
-                            className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#be185d] to-[#9333ea] hover:from-[#db2777] hover:to-[#a855f7] text-white text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1 shadow-md cursor-pointer active:scale-95 transition-all"
+                            title="Quick Add to Bag"
+                            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[10px] font-mono tracking-wider uppercase flex items-center gap-1 cursor-pointer active:scale-95 transition-all"
                           >
                             <ShoppingBag className="w-3 h-3" />
                             <span>BAG +</span>
                           </button>
                         )}
 
-                        <span className="text-[10px] font-mono text-pink-300 group-hover:text-white flex items-center gap-0.5 font-bold">
+                        <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white flex items-center gap-0.5">
                           <span>VIEW</span>
                           <ArrowUpRight className="w-3 h-3" />
                         </span>
@@ -327,23 +296,23 @@ export default function ShopCatalogue({
         </div>
       </div>
 
-      {/* Atelier Trust & Security Bar */}
-      <div className="mb-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 rounded-2xl bg-white/[0.02] border border-[#f472b6]/25 text-[11px] font-mono text-silver/80 relative z-10 text-left">
+      {/* Atelier Craft & Service Bar */}
+      <div className="mb-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 rounded-2xl bg-black/60 border border-white/10 text-[11px] font-mono text-zinc-300 relative z-10 text-left">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#f472b6] shrink-0" />
-          <span>100% Handcrafted Wearable Art</span>
+          <Sparkles className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+          <span>Handcrafted Wearable Art</span>
         </div>
         <div className="flex items-center gap-2">
-          <Truck className="w-4 h-4 text-purple-400 shrink-0" />
-          <span>Free Express Shipping Over ₹5k</span>
+          <Truck className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+          <span>Express Courier Above ₹5k</span>
         </div>
         <div className="flex items-center gap-2">
-          <Shield className="w-4 h-4 text-pink-400 shrink-0" />
-          <span>Damage & Sizing Protection</span>
+          <Shield className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+          <span>Bespoke Sizing Verification</span>
         </div>
         <div className="flex items-center gap-2">
-          <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>Direct WhatsApp Atelier Line</span>
+          <MessageCircle className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+          <span>Direct Atelier Concierge</span>
         </div>
       </div>
 
@@ -439,9 +408,9 @@ export default function ShopCatalogue({
 
       {/* Enhanced Product Showcase Grid */}
       {filteredProducts.length === 0 ? (
-        <div className="py-20 text-center rounded-3xl border border-dashed border-white/15 p-8 bg-[#200520]/20 relative z-10">
-          <p className="text-silver/60 font-mono text-sm mb-4">
-            No grails found matching your current filter criteria bestie.
+        <div className="py-20 text-center rounded-2xl border border-dashed border-white/15 p-8 bg-black/40 relative z-10">
+          <p className="text-zinc-400 font-mono text-sm mb-4">
+            No pieces found matching your current filter criteria.
           </p>
           <button
             onClick={() => {
@@ -449,7 +418,7 @@ export default function ShopCatalogue({
               setSelectedMaterial('All Materials');
               setSearchQuery('');
             }}
-            className="btn-glass text-xs"
+            className="px-4 py-2 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-xs font-mono text-white transition-all cursor-pointer"
           >
             RESET ALL FILTERS
           </button>
@@ -466,10 +435,10 @@ export default function ShopCatalogue({
                   playSound('metal');
                   onSelectProduct(product);
                 }}
-                className="group relative flex flex-col justify-between bg-gradient-to-b from-[#19041e]/90 via-[#0e0212]/95 to-black border border-white/10 hover:border-pink-600/70 rounded-3xl transition-all duration-500 overflow-hidden cursor-pointer shadow-xl hover:shadow-[0_20px_50px_rgba(190,24,93,0.4)] transform-gpu"
+                className="group relative flex flex-col justify-between bg-[#0d0d12] border border-white/10 hover:border-white/30 rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl"
               >
                 {/* Product Image Frame */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/90">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
                   <img
                     src={product.images ? product.images[0] : product.image}
                     alt={product.name}
@@ -478,18 +447,17 @@ export default function ShopCatalogue({
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105"
                   />
 
-                  {/* Seductive Dark Vignette Scrim */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-65 group-hover:opacity-40 transition-opacity" />
+                  {/* Dark Vignette Scrim */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-40 transition-opacity" />
 
                   {/* Provenance Tag Badges */}
-                  <div className="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
-                    <span className="px-3.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-[#be185d]/40 text-pink-300 text-[10px] font-spartan font-black tracking-widest uppercase shadow-md">
+                  <div className="absolute top-3 left-3 flex flex-col gap-1 items-start">
+                    <span className="px-2.5 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-white/15 text-white text-[9px] font-mono tracking-widest uppercase shadow-md">
                       {product.tag}
                     </span>
                     {product.stock === 1 && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#2a052c]/90 border border-[#be185d]/60 text-pink-200 text-[9px] font-mono tracking-wider shadow-sm flex items-center gap-1">
-                        <Flame className="w-2.5 h-2.5 text-pink-400" />
-                        1 OF 1 GRAIL
+                      <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-zinc-300 text-[8px] font-mono tracking-wider shadow-sm flex items-center gap-1">
+                        1 OF 1 ARCHIVE
                       </span>
                     )}
                   </div>
@@ -503,30 +471,29 @@ export default function ShopCatalogue({
                         onToggleWishlist(product);
                       }}
                       aria-label="Wishlist"
-                      className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 hover:border-pink-400 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer"
+                      className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer"
                     >
                       <Heart className={`w-3.5 h-3.5 ${isWish ? 'text-pink-400 fill-pink-400' : ''}`} />
                     </button>
                   )}
 
-                  {/* Quick Peek Action Pill on Hover */}
+                  {/* Clean Quick Action on Hover */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
-                    <span className="btn-glass-pink shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform text-xs">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>INSPECT GRAIL</span>
+                    <span className="px-4 py-2 rounded-full bg-black/85 border border-white/25 text-white text-xs font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                      VIEW SPECIMEN ↗
                     </span>
                   </div>
                 </div>
 
                 {/* Product Card Details */}
-                <div className="p-3 sm:p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d020f]/95 text-left">
+                <div className="p-3 sm:p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d0d12] text-left">
                   <div>
-                    <div className="flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-silver/60 uppercase mb-1 sm:mb-1.5">
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase mb-1 sm:mb-1.5 tracking-wider">
                       <span className="truncate">{product.category}</span>
-                      <span className="text-[#f472b6] font-medium ml-1 shrink-0">{product.subCategory}</span>
+                      <span className="text-zinc-400 font-medium ml-1 shrink-0">{product.subCategory}</span>
                     </div>
 
-                    <h3 className="font-spartan font-black text-sm sm:text-lg text-white group-hover:text-pink-300 transition-colors uppercase leading-tight line-clamp-1 mb-1 sm:mb-2 text-left">
+                    <h3 className="font-mono text-sm sm:text-base font-medium text-white group-hover:text-pink-200 transition-colors uppercase leading-snug line-clamp-1 mb-1 sm:mb-2 text-left">
                       {product.name}
                     </h3>
 
@@ -535,7 +502,7 @@ export default function ShopCatalogue({
                       {product.materials.slice(0, 2).map((mat) => (
                         <span
                           key={mat}
-                          className="text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-[#be185d]/20 text-silver/80"
+                          className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-zinc-400"
                         >
                           {mat}
                         </span>
@@ -546,10 +513,10 @@ export default function ShopCatalogue({
                   {/* Price & Action Button Row */}
                   <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-white/10 mt-auto">
                     <div className="flex flex-col text-left">
-                      <span className="text-[9px] sm:text-[10px] font-mono text-silver/50 uppercase tracking-widest text-left">
-                        GRAIL
+                      <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest text-left">
+                        PIECE
                       </span>
-                      <span className="text-sm sm:text-base font-spartan font-black text-white group-hover:text-pink-300 transition-colors text-left">
+                      <span className="text-sm sm:text-base font-mono font-bold text-white group-hover:text-pink-200 transition-colors text-left">
                         {formatPrice(product.price, currency)}
                       </span>
                     </div>
@@ -565,16 +532,16 @@ export default function ShopCatalogue({
                               selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
                             });
                           }}
-                          title="Instant Add to Bag"
-                          className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#be185d] to-[#9333ea] hover:from-[#db2777] hover:to-[#a855f7] text-white text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1 shadow-md cursor-pointer active:scale-95 transition-all"
+                          title="Quick Add to Bag"
+                          className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[10px] font-mono tracking-wider uppercase flex items-center gap-1 cursor-pointer active:scale-95 transition-all"
                         >
                           <ShoppingBag className="w-3 h-3" />
                           <span>BAG +</span>
                         </button>
                       )}
 
-                      <div className="w-8 h-8 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-silver/80 group-hover:text-pink-300 group-hover:border-[#be185d] group-hover:bg-[#be185d]/20 transition-all">
-                        <ArrowUpRight className="w-4 h-4" />
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-white/15 bg-white/5 flex items-center justify-center text-zinc-400 group-hover:text-white group-hover:border-white/40 transition-all">
+                        <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </div>
                     </div>
                   </div>

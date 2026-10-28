@@ -4,7 +4,7 @@
 export const BRAND_INFO = {
   name: "AVZ Vaganza",
   legalName: "AVZ VAGANZA",
-  tagline: "A high fashion brand made by baddies for baddies",
+  tagline: "Sculptural Haute Couture & Archival Wearable Art",
   domain: "aveezahvaganza.com",
   instagram: "@avz.vaganza",
   instagramUrl: "https://www.instagram.com/avz.vaganza",
@@ -475,7 +475,7 @@ export const LOOKBOOK_ENTRIES = [
     id: "look-03",
     code: "LOOK 003 // SOFT ARMOUR AFTER HOURS",
     title: "Soft Armour After Hours",
-    subtitle: "Nightlife, Raves, and the Baddie Wardrobe",
+    subtitle: "Nightlife, Subculture, and Archival Armor",
     image: ASSET_MANIFEST.editorialLookbook,
     altImages: [
       ASSET_MANIFEST.products.reworkedJacket,

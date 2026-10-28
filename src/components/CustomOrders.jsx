@@ -63,17 +63,17 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
     <section id="custom" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
       {/* Header */}
       <div className="mb-14 pb-8 border-b border-white/10 text-left">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 backdrop-blur-md mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
-          <Sparkles className="w-3.5 h-3.5 text-[#f472b6]" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
           <span>BESPOKE WEARABLE ART // DIRECT ATELIER COMMISSION</span>
         </div>
 
-        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white mb-4 sm:mb-6 leading-none text-left">
-          COMMISSION A <span className="chrome-text">CUSTOM SPECIMEN</span>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase mb-3 leading-tight text-left">
+          COMMISSION A <span className="text-zinc-400 font-light">CUSTOM SPECIMEN</span>
         </h2>
 
-        <p className="text-silver/85 text-sm md:text-base leading-relaxed font-montserrat max-w-3xl text-left">
-          Everything at AVZ Vaganza is constructed by hand by Dhrisni and her Guwahati team. Have an idea for a motherboard harness, a chainmail corset, or a spiked denim relic? Fill out the brief below or contact our atelier directly via WhatsApp.
+        <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed font-montserrat max-w-3xl text-left">
+          Everything at AVZ Vaganza is constructed by hand by Dhrisni and her Guwahati team. Have a concept for a motherboard harness, chainmail corset, or tailored hardware outerwear? Submit your project brief below for private atelier consultation.
         </p>
       </div>
 
@@ -82,8 +82,8 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
         <div className="lg:col-span-5 flex flex-col gap-6 text-left">
           {/* Timeline & Craft Note */}
           <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left">
-            <div className="flex items-center gap-3 text-[#f472b6] font-spartan font-bold text-sm uppercase mb-3 text-left">
-              <Clock className="w-4 h-4" />
+            <div className="flex items-center gap-3 text-pink-300 font-mono text-xs uppercase tracking-wider mb-3 text-left">
+              <Clock className="w-4 h-4 text-pink-400" />
               <span>THE TIMELINE: 2 TO 3 WEEKS</span>
             </div>
             <p className="text-silver/80 text-xs sm:text-sm font-montserrat leading-relaxed text-left">
@@ -93,15 +93,15 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
           {/* Pricing Tiers Accordion Card */}
           <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#f472b6] uppercase mb-4 text-left">
-              <Tag className="w-4 h-4 text-[#f472b6]" />
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-pink-300 uppercase mb-4 text-left">
+              <Tag className="w-4 h-4 text-pink-400" />
               <span>OFFICIAL CLIENT PRICING TIERS</span>
             </div>
             <div className="flex flex-col gap-4 text-left">
               {BRAND_INFO.pricingTiers.map((tier, idx) => (
                 <div key={idx} className="p-4 rounded-2xl bg-black/60 border border-white/10 text-left">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-spartan font-bold text-white text-sm uppercase">
+                    <span className="font-mono text-xs uppercase tracking-wider text-white">
                       {tier.tier}
                     </span>
                     <span className="font-mono text-pink-300 text-xs font-bold px-3 py-1 rounded-full bg-[#be185d]/20 border border-[#be185d]/40 shadow-sm">
@@ -118,8 +118,8 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
           {/* Direct WhatsApp Contact CTA */}
           <div className="p-8 rounded-3xl bg-[#1c041f]/75 backdrop-blur-xl border border-[#be185d]/40 text-left shadow-[0_15px_40px_rgba(20,2,24,0.6)]">
-            <div className="flex items-center gap-2 text-[#f472b6] font-spartan font-bold text-sm uppercase mb-2 text-left">
-              <MessageCircle className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-pink-300 font-mono text-xs uppercase tracking-wider mb-2 text-left">
+              <MessageCircle className="w-4 h-4 text-pink-400" />
               <span>PREFER DIRECT WHATSAPP CONVERSATION?</span>
             </div>
             <p className="text-silver/85 text-xs sm:text-sm font-montserrat leading-relaxed mb-6 text-left">
@@ -146,11 +146,11 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
               <span className="text-[11px] font-mono tracking-widest text-pink uppercase block mb-1">
                 FORM 04 // COMMISSION SPECIFICATION
               </span>
-              <h3 className="text-2xl sm:text-3xl font-spartan font-black uppercase text-white">
+              <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase tracking-[0.2em] text-white">
                 YOUR COMMISSION BRIEF
               </h3>
             </div>
-            <ShieldCheck className="w-6 h-6 text-pink" />
+            <ShieldCheck className="w-5 h-5 text-zinc-400" />
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -247,18 +247,18 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
             {/* Measurements */}
             <div>
-              <label className="block text-xs font-mono uppercase text-silver/80 mb-2">
-                Drop Your Measurements (Bust / Waist / Hips) *
+              <label className="block text-xs font-mono uppercase text-zinc-400 mb-2">
+                Your Measurements (Bust / Waist / Hips) *
               </label>
               <input
                 type="text"
                 name="measurements"
                 value={formData.measurements}
                 onChange={handleChange}
-                placeholder="e.g. Bust 34B, Waist 26, Hips 36 (or Size S) — custom cinched fit bestie"
+                placeholder="e.g. Bust 34B, Waist 26, Hips 36 (or Size S) — bespoke atelier fit"
                 className={`w-full bg-black/80 border ${
                   errors.measurements ? 'border-red-500' : 'border-white/15'
-                } px-5 py-3 rounded-full text-xs text-silver font-mono outline-none focus:border-pink transition-colors`}
+                } px-5 py-3 rounded-full text-xs text-silver font-mono outline-none focus:border-white/50 transition-colors`}
               />
               {errors.measurements && <span className="text-[10px] text-red-400 font-mono mt-1 block">{errors.measurements}</span>}
             </div>
@@ -273,10 +273,10 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 rows={4}
                 value={formData.designNotes}
                 onChange={handleChange}
-                placeholder="Tell Dhrisni your vision: unhinged cyber spikes, green circuit board panels, iridescent wire, safety pins, or rave-ready main character armor."
+                placeholder="Detail your bespoke vision: sculptural hardware, circuit architecture, chainmail drape, or custom atelier sizing specifications."
                 className={`w-full bg-black/80 border ${
                   errors.designNotes ? 'border-red-500' : 'border-white/15'
-                } p-5 rounded-2xl text-xs text-silver font-mono outline-none focus:border-pink resize-none transition-colors`}
+                } p-5 rounded-2xl text-xs text-silver font-mono outline-none focus:border-white/50 resize-none transition-colors`}
               />
               {errors.designNotes && <span className="text-[10px] text-red-400 font-mono mt-1 block">{errors.designNotes}</span>}
             </div>
@@ -284,10 +284,10 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
             <button
               type="submit"
               disabled={submitting}
-              className="btn-glass-pink mt-3 py-4 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-glass-pink mt-3 py-4 text-xs font-mono font-medium tracking-[0.2em] uppercase flex items-center justify-center gap-2 cursor-pointer"
             >
               <Send className="w-4 h-4" />
-              <span>{submitting ? 'TRANSMITTING BRIEF TO DHRISNI...' : 'COMMISSION THIS GRAIL (SERVE DRIP) 💅'}</span>
+              <span>{submitting ? 'TRANSMITTING BRIEF TO ATELIER...' : 'COMMISSION BESPOKE ARCHIVE PIECE ↗'}</span>
             </button>
           </form>
         </div>

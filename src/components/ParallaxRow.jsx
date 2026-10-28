@@ -148,38 +148,37 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       {/* Header Bar */}
       <div className="w-full px-4 sm:px-12 lg:px-20 mb-10 sm:mb-16 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
         <div className="text-left">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#f472b6]/40 mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_20px_rgba(244,114,182,0.25)]">
-            <Radio className="w-3.5 h-3.5 text-[#f472b6] animate-pulse" />
-            <span>DIMENSION 02 // 3D SPATIAL CATWALK</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+            <span>COLLECTION ARCHIVE // SPATIAL RUNWAY</span>
           </div>
-          <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase tracking-tight text-white leading-none text-left">
-            SPATIAL <span className="chrome-text">LOOKBOOK</span>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
+            SPATIAL <span className="text-zinc-400 font-light">LOOKBOOK</span>
           </h2>
-          <p className="text-silver/85 text-xs sm:text-sm max-w-xl font-montserrat mt-3 leading-relaxed text-left">
-            Interactive 3D wearable art catwalk. Swipe horizontally or drag to rotate through the archive. Tap or hover over any look to inspect full details.
+          <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 leading-relaxed text-left">
+            Interactive spatial runway presentation. Navigate horizontally through editorial looks and bespoke studio silhouettes.
           </p>
         </div>
 
-        {/* Clean Swipeable Navigation Controls (Archive Rail Removed) */}
+        {/* Clean Swipeable Navigation Controls */}
         <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
-          <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 border border-white/15 text-[11px] font-mono text-pink-300">
-            <Hand className="w-3.5 h-3.5 text-[#f472b6]" />
-            <span>SWIPEABLE 3D RUNWAY</span>
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-zinc-400">
+            <span>NAVIGATE RUNWAY</span>
           </div>
 
           <button
             onClick={prevSlide}
             aria-label="Previous look"
-            className="w-11 h-11 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer active:scale-95"
+            className="w-10 h-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all cursor-pointer active:scale-95"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next look"
-            className="w-11 h-11 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer active:scale-95"
+            className="w-10 h-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all cursor-pointer active:scale-95"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

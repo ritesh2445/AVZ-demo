@@ -37,7 +37,7 @@ export default function App() {
   const [customInquiryConfirm, setCustomInquiryConfirm] = useState(null);
   const [customOrderPrefill, setCustomOrderPrefill] = useState('');
 
-  // 4. Baddie Squad Buy state
+  // 4. Collective atelier group buy state
   const [squadModalOpen, setSquadModalOpen] = useState(false);
   const [squadModalProduct, setSquadModalProduct] = useState(null);
   const [squadDiscount, setSquadDiscount] = useState(null); // { squadCode, discountPercent, memberCount }

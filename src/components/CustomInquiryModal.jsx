@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CheckCircle2, MessageCircle, X } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
 export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !inquiryData) return null;
 
   // Format WhatsApp message
@@ -15,7 +25,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
     `• Measurements: ${inquiryData.measurements}\n` +
     `• Target Price Tier: ${inquiryData.budgetTier}\n` +
     `• Design Notes: ${inquiryData.designNotes}\n\n` +
-    `Looking forward to forging this wearable art with you!`
+    `Looking forward to discussing this wearable art piece with you.`
   );
 
   const directWhatsAppUrl = `https://wa.me/917304264901?text=${textMessage}`;
@@ -27,35 +37,38 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-[#0d020f]/95 backdrop-blur-2xl border border-[#be185d]/40 rounded-3xl p-6 sm:p-8 relative text-center shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
+        className="w-full max-w-lg bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative text-center shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
       >
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-9 h-9 rounded-full border border-white/20 bg-black/60 flex items-center justify-center text-silver hover:text-white hover:border-[#be185d] hover:bg-[#be185d]/20 cursor-pointer transition-all"
+          aria-label="Close modal"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer transition-all"
         >
           <X className="w-4 h-4" />
         </button>
 
-        <CheckCircle2 className="w-14 h-14 text-[#f472b6] mx-auto mb-4 animate-bounce" />
+        <div className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-6 h-6 text-white" />
+        </div>
 
-        <div className="text-xs font-mono tracking-widest text-[#f472b6] uppercase mb-2">
+        <div className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase mb-2">
           INQUIRY BRIEF LOGGED // GUWAHATI ATELIER
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-black font-spartan uppercase text-white mb-3">
-          BRIEF READY FOR DHRISTROYER
+        <h2 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
+          COMMISSION BRIEF READY
         </h2>
 
-        <p className="text-xs sm:text-sm text-silver/80 font-montserrat leading-relaxed mb-6">
-          Thank you, <strong className="text-white">{inquiryData.name}</strong>. Your custom specifications have been validated. To get immediate real-time priority feedback on fabric choice and hardware scheduling, send this brief directly to Dhrisni on WhatsApp.
+        <p className="text-xs sm:text-sm text-zinc-400 font-montserrat leading-relaxed mb-6">
+          Thank you, <strong className="text-white">{inquiryData.name}</strong>. Your custom specifications have been validated. For real-time consultation on hardware allocation and scheduling, forward this brief directly to Dhrisni.
         </p>
 
         {/* Inquiry Brief Summary */}
-        <div className="p-4 bg-[#19041b]/70 border border-[#be185d]/25 rounded-2xl text-left text-xs font-mono text-silver mb-6 space-y-1.5 shadow-inner">
-          <div><strong className="text-[#f472b6]">Piece:</strong> {inquiryData.category}</div>
-          <div><strong className="text-[#f472b6]">Reference:</strong> {inquiryData.referencePiece || 'N/A'}</div>
-          <div><strong className="text-[#f472b6]">Budget Tier:</strong> {inquiryData.budgetTier}</div>
-          <div><strong className="text-[#f472b6]">Measurements:</strong> {inquiryData.measurements}</div>
+        <div className="p-4 bg-black/60 border border-white/10 rounded-xl text-left text-xs font-mono text-zinc-300 mb-6 space-y-1.5">
+          <div><strong className="text-white">Category:</strong> {inquiryData.category}</div>
+          <div><strong className="text-white">Reference:</strong> {inquiryData.referencePiece || 'Bespoke Concept'}</div>
+          <div><strong className="text-white">Price Tier:</strong> {inquiryData.budgetTier}</div>
+          <div><strong className="text-white">Measurements:</strong> {inquiryData.measurements}</div>
         </div>
 
         {/* WhatsApp Dispatch Button */}
@@ -64,17 +77,17 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => playSound('warp')}
-          className="btn-glass-pink w-full py-4 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 mb-3 cursor-pointer no-underline"
+          className="w-full py-3.5 px-6 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-mono font-semibold tracking-widest uppercase flex items-center justify-center gap-2 mb-3 cursor-pointer no-underline transition-all active:scale-[0.99]"
         >
           <MessageCircle className="w-4 h-4" />
-          <span>SEND BRIEF TO DHRISNI VIA WHATSAPP ↗</span>
+          <span>FORWARD BRIEF TO ATELIER ↗</span>
         </a>
 
         <button
           onClick={onClose}
-          className="text-xs font-mono text-silver/60 hover:text-white underline cursor-pointer bg-transparent border-none transition-colors"
+          className="text-xs font-mono text-zinc-500 hover:text-white cursor-pointer bg-transparent border-none transition-colors"
         >
-          Close & return to website
+          Close & return to archive
         </button>
       </div>
     </div>

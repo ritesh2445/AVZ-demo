@@ -17,16 +17,16 @@ export function FAQSection() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#2d052d]/30 rounded-full blur-[160px] pointer-events-none" />
 
       {/* Centered Editorial Header */}
-      <div className="max-w-3xl mx-auto text-center mb-14 pb-8 border-b border-[#be185d]/20 relative z-10 flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 mb-4 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
-          <HelpCircle className="w-3.5 h-3.5 text-[#f472b6]" />
-          <span>AUTHENTIC CLIENT Q&A // SOURCE OF TRUTH</span>
+      <div className="max-w-3xl mx-auto text-center mb-14 pb-8 border-b border-white/10 relative z-10 flex flex-col items-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <span>CLIENT Q&A // ATELIER KNOWLEDGE BASE</span>
         </div>
-        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-center">
-          FREQUENTLY ASKED <span className="chrome-text">QUESTIONS</span>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-center">
+          FREQUENTLY ASKED <span className="text-zinc-400 font-light">QUESTIONS</span>
         </h2>
-        <p className="text-silver/85 text-sm max-w-xl font-montserrat mt-4 text-center leading-relaxed">
-          Everything you need to know about AVZ Vaganza, Dhrisni (Dhristroyer), custom orders, and our upcycled atelier.
+        <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 text-center leading-relaxed">
+          Information regarding atelier commissions, sizing specifications, and care instructions.
         </p>
       </div>
 
@@ -77,12 +77,12 @@ export function ContactSection() {
   return (
     <section id="contact" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
       <div className="mb-14 pb-8 border-b border-white/10 text-left">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 backdrop-blur-md mb-3 text-pink-300 text-[11px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(190,24,93,0.2)]">
-          <Mail className="w-3.5 h-3.5 text-[#f472b6]" />
-          <span>GET IN TOUCH // GUWAHATI ATELIER</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <span>CLIENT RELATIONS // GUWAHATI ATELIER</span>
         </div>
-        <h2 className="text-3xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white leading-none text-left">
-          CONTACT & <span className="chrome-text">COMMISSIONS</span>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
+          CONTACT & <span className="text-zinc-400 font-light">COMMISSIONS</span>
         </h2>
       </div>
 
@@ -177,12 +177,16 @@ export function ContactSection() {
 export function ShippingPackagingReturns() {
   return (
     <section id="specs" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
-      <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10">
-        <h2 className="text-2xl sm:text-6xl lg:text-7xl font-black font-spartan uppercase text-white mb-4 leading-none">
-          SHIPPING, PACKAGING & <span className="chrome-text">RETURNS</span>
+      <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 text-left">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <span>CLIENT LOGISTICS // GLOBAL COURIER</span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase mb-3 leading-tight">
+          SHIPPING, PACKAGING & <span className="text-zinc-400 font-light">RETURNS</span>
         </h2>
-        <p className="text-sm text-silver/70 font-montserrat max-w-xl">
-          Direct operational policies from the official AVZ client questionnaire.
+        <p className="text-xs sm:text-sm text-zinc-400 font-montserrat max-w-xl">
+          Standard logistics, bespoke presentation packaging, and damage verification protocols.
         </p>
       </div>
 
