@@ -157,28 +157,6 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
     return () => observer.disconnect();
   }, []);
 
-  // Smooth mouse-wheel translation on horizontal track (desktop convenience)
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const onWheelHandler = (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        const { scrollLeft, scrollWidth, clientWidth } = container;
-        const maxScroll = scrollWidth - clientWidth;
-        const canScrollRight = e.deltaY > 0 && scrollLeft < maxScroll - 4;
-        const canScrollLeft = e.deltaY < 0 && scrollLeft > 4;
-
-        if (canScrollRight || canScrollLeft) {
-          e.preventDefault();
-          container.scrollBy({ left: e.deltaY * 1.1, behavior: 'auto' });
-        }
-      }
-    };
-
-    container.addEventListener('wheel', onWheelHandler, { passive: false });
-    return () => container.removeEventListener('wheel', onWheelHandler);
-  }, []);
 
   const scrollToCard = (index) => {
     playSound('cyber_hover');
@@ -293,7 +271,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       <div
         ref={scrollContainerRef}
         className="relative z-10 w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-16 py-4 flex items-stretch gap-6 sm:gap-8 scroll-smooth no-scrollbar"
-        style={{ scrollSnapType: 'x mandatory' }}
+        style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}
       >
         {/* =====================================================================
             CARD 1: ABOUT MOTHER (With just ONE image of her)

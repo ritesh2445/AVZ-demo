@@ -4,20 +4,25 @@ import { ChevronLeft, ChevronRight, RotateCcw, ArrowUpRight, Scissors } from 'lu
 import { MUSEUM_ITEMS } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-// Helper to generate a 2D rounded-rectangle shape for solid beveled gallery frames
+// Helper to generate a 2D rounded-rectangle shape with true circular absarc corners
 function createRoundedRectShape(width, height, radius) {
   const shape = new THREE.Shape();
-  const x = -width / 2;
-  const y = -height / 2;
-  shape.moveTo(x + radius, y);
-  shape.lineTo(x + width - radius, y);
-  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
-  shape.lineTo(x + width, y + height - radius);
-  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  shape.lineTo(x + radius, y + height);
-  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
-  shape.lineTo(x, y + radius);
-  shape.quadraticCurveTo(x, y, x + radius, y);
+  const x0 = -width / 2;
+  const x1 = width / 2;
+  const y0 = -height / 2;
+  const y1 = height / 2;
+  const r = Math.min(radius, width / 2, height / 2);
+
+  // Clockwise perimeter with smooth circular arcs at all 4 corners
+  shape.moveTo(x0 + r, y0);
+  shape.lineTo(x1 - r, y0);
+  shape.absarc(x1 - r, y0 + r, r, -Math.PI / 2, 0, false);
+  shape.lineTo(x1, y1 - r);
+  shape.absarc(x1 - r, y1 - r, r, 0, Math.PI / 2, false);
+  shape.lineTo(x0 + r, y1);
+  shape.absarc(x0 + r, y1 - r, r, Math.PI / 2, Math.PI, false);
+  shape.lineTo(x0, y0 + r);
+  shape.absarc(x0 + r, y0 + r, r, Math.PI, (3 * Math.PI) / 2, false);
   return shape;
 }
 
@@ -153,35 +158,48 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       metalness: 0.8
     });
     const frameChassisMat = new THREE.MeshStandardMaterial({
-      color: 0x18181f, // Solid dark titanium
-      metalness: 0.9,
-      roughness: 0.22
+      color: 0x16161b, // Solid dark titanium
+      metalness: 0.88,
+      roughness: 0.25
     });
     const frameTrimMat = new THREE.MeshStandardMaterial({
       color: 0xC5A880, // Subtle luxury pale bronze/gold rim
       metalness: 0.95,
       roughness: 0.15
     });
-
-    // Precision Rounded Frame Geometry (Solid with slightly rounded corners)
-    const frameShape = createRoundedRectShape(2.15, 2.75, 0.1);
-    const frameGeom = new THREE.ExtrudeGeometry(frameShape, {
-      depth: 0.08,
-      bevelEnabled: true,
-      bevelSegments: 3,
-      bevelSize: 0.02,
-      bevelThickness: 0.02
+    const backMat = new THREE.MeshStandardMaterial({
+      color: 0x101014,
+      roughness: 0.35,
+      metalness: 0.85
     });
 
-    // Picture Plane Geometry (Sitting inside the frame)
-    const picShape = createRoundedRectShape(2.05, 2.65, 0.08);
-    const picGeom = new THREE.ShapeGeometry(picShape);
-    // Assign UVs to ShapeGeometry
+    // Precision Rounded Frame Geometry (Solid with prominently rounded corners)
+    const frameWidth = 2.4;
+    const frameHeight = 3.0;
+    const frameRadius = 0.35; // Distinct, elegant Apple-style corner curvature
+    const frameShape = createRoundedRectShape(frameWidth, frameHeight, frameRadius);
+    const frameGeom = new THREE.ExtrudeGeometry(frameShape, {
+      depth: 0.07,
+      bevelEnabled: true,
+      bevelSegments: 4,
+      bevelSize: 0.025,
+      bevelThickness: 0.025,
+      curveSegments: 32
+    });
+
+    // Picture Plane Geometry (Conforms to inner frame with matching rounded corners)
+    const picWidth = 2.16;
+    const picHeight = 2.76;
+    const picRadius = 0.23;
+    const picShape = createRoundedRectShape(picWidth, picHeight, picRadius);
+    const picGeom = new THREE.ShapeGeometry(picShape, 32);
+
+    // Assign normalized UV coordinates across the rounded picture shape
     const pos = picGeom.attributes.position;
     const uvs = [];
     for (let i = 0; i < pos.count; i++) {
-      const u = (pos.getX(i) + 1.025) / 2.05;
-      const v = (pos.getY(i) + 1.325) / 2.65;
+      const u = (pos.getX(i) + picWidth / 2) / picWidth;
+      const v = (pos.getY(i) + picHeight / 2) / picHeight;
       uvs.push(u, v);
     }
     picGeom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
@@ -207,29 +225,51 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       ring.position.y = 0.9;
       group.add(ring);
 
-      // Artifact Sub-Group (Frame + Picture Canvas)
+      // Artifact Sub-Group (Frame + Picture Canvas + Solid Backing)
       const artifactGroup = new THREE.Group();
       artifactGroup.position.y = 2.3;
 
-      // 1. Solid Frame Chassis with Rounded Corners
+      // 1. Solid Frame Chassis with Prominently Rounded Corners
+      // Front face of frame sits at z = -0.07 + 0.07 + 0.025 = +0.025
       const frameMesh = new THREE.Mesh(frameGeom, frameChassisMat);
-      frameMesh.position.z = -0.04;
+      frameMesh.position.z = -0.07;
       artifactGroup.add(frameMesh);
 
-      // 2. Picture Display Surface with High-Def Texture
-      const picMat = new THREE.MeshBasicMaterial({
-        color: 0x111116
-      });
-      const picMesh = new THREE.Mesh(picGeom, picMat);
-      picMesh.position.z = 0.045; // Sits snugly on front of solid frame
-      artifactGroup.add(picMesh);
+      // 2. Solid Back Enclosure Plate
+      const backMesh = new THREE.Mesh(picGeom, backMat);
+      backMesh.position.z = -0.071;
+      backMesh.rotation.y = Math.PI;
+      artifactGroup.add(backMesh);
 
-      // Load texture smoothly
-      textureLoader.load(item.image, (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = 16;
-        picMesh.material = new THREE.MeshBasicMaterial({ map: tex });
+      // 3. Picture Display Surface with High-Def Texture (Proud on front of frame)
+      const texture = textureLoader.load(
+        item.image,
+        (tex) => {
+          tex.colorSpace = THREE.SRGBColorSpace;
+          tex.generateMipmaps = true;
+          tex.minFilter = THREE.LinearMipmapLinearFilter;
+          tex.magFilter = THREE.LinearFilter;
+          if (picMat) picMat.needsUpdate = true;
+        },
+        undefined,
+        (err) => {
+          console.error(`Museum texture load error [${item.id}]:`, err);
+        }
+      );
+
+      const picMat = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        toneMapped: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -1.0,
+        polygonOffsetUnits: -4.0
       });
+
+      const picMesh = new THREE.Mesh(picGeom, picMat);
+      picMesh.position.z = 0.032; // Proud of the frame's +0.025 front bevel: zero occlusion
+      picMesh.renderOrder = 2;
+      artifactGroup.add(picMesh);
 
       group.add(artifactGroup);
       carouselGroup.add(group);
@@ -533,6 +573,23 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 </span>
               </div>
 
+              {/* Active Specimen Archival Photograph Card */}
+              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/15 bg-black mb-5 group shadow-inner">
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.name}
+                  className="w-full h-full object-cover object-center filter brightness-95 group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 text-[9px] font-mono tracking-widest text-zinc-300 uppercase">
+                  SPECIMEN // 0{activeIndex + 1}
+                </div>
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-zinc-300">
+                  <span className="tracking-wider truncate">{activeItem.name}</span>
+                  <span className="text-zinc-400 shrink-0 ml-2">ATELIER ARCHIVE</span>
+                </div>
+              </div>
+
               {/* Title */}
               <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white tracking-[0.15em] mb-4 leading-snug">
                 {activeItem.name}
@@ -595,7 +652,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
           </div>
         </div>
       ) : (
-        /* ARCHIVE INDEX GRID VIEW — SOLID FRAMES WITH SLIGHTLY ROUNDED CORNERS */
+        /* ARCHIVE INDEX GRID VIEW — SOLID FRAMES WITH PROMINENTLY ROUNDED CORNERS */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {MUSEUM_ITEMS.map((item, idx) => (
             <div
@@ -604,10 +661,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 selectPedestal(idx);
                 setViewMode('3d');
               }}
-              className="group bg-[#0d0d12] border border-white/12 hover:border-white/30 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1"
+              className="group bg-[#0d0d12] border border-white/12 hover:border-white/30 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/60 p-3 pb-0">
-                <div className="w-full h-full rounded-xl overflow-hidden relative">
+                <div className="w-full h-full rounded-2xl overflow-hidden relative">
                   <img
                     src={item.image}
                     alt={item.name}
