@@ -1,421 +1,485 @@
-import React, { useState, useRef } from 'react';
-import {
-  Sparkles,
-  Scissors,
-  Cpu,
-  ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck,
-  Instagram,
-  HeartHandshake,
-  Layers,
-  Flame,
-  ArrowRight
-} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-import DhristroyerAnimatedHeading from './DhristroyerAnimatedHeading';
-
-const SCATTERED_PICTURES = [
-  {
-    id: 'pic-chainmail',
-    title: 'Chainmail Armor Bodice',
-    subtitle: 'Stainless steel jump rings woven in Guwahati',
-    image: ASSET_MANIFEST.products.chainmailArmor,
-    tag: 'GRAIL 01 // CHAINMAIL ARMOR',
-    provenance: 'Hand-woven over 36 hours by our Guwahati women artisans. Stainless jump rings fluidly hug your curves with pure main character energy. Slay certified.'
+// EXACT UNCHANGED SOURCE COPY
+const COPY = {
+  aboutMother: {
+    heading: 'ABOUT MOTHER'
   },
-  {
-    id: 'pic-motherboard',
-    title: 'Silicon Circuit Ear Cuff',
-    subtitle: 'Decommissioned motherboards & copper traces',
-    image: ASSET_MANIFEST.products.motherboardCuff,
-    tag: 'ARTIFACT // RECLAIMED SILICON',
-    provenance: 'Salvaged printed circuit boards cut into geometric wearable tech. No two silicon trace patterns are ever identical. Period.'
+  professionalRoots: {
+    heading: 'PROFESSIONAL ROOTS',
+    paragraphs: [
+      'growing up between shillong and guwahati, she was already building her digital footprint on youtube by sixteen before dominating instagram as a creator.',
+      'at eighteen she packed up and moved to mumbai, stepping straight into modeling and working with massive brands while landing roles in commercials, reality tv, and a feature film.',
+      'she has always been entirely about her vision, fiercely protective of her art, and unapologetically ahead of the curve when it comes to fashion, culture, and beauty.'
+    ]
   },
-  {
-    id: 'pic-spike-bodice',
-    title: 'Cone Spike Armor Bodice',
-    subtitle: 'Industrial hardware, cone spikes & harness',
-    image: ASSET_MANIFEST.products.spikeBodice,
-    tag: 'ARMOR // SPIKE ARCHITECTURE',
-    provenance: 'Protective avant-garde armor designed for midnight raves. Sharp attitude, immaculate fit, zero apologies for looking this hot.'
+  howBorn: {
+    heading: 'HOW VAGANZA WAS BORN',
+    paragraphs: [
+      'it all started because she looked at the boring predictable fashion industry and decided to completely burn the rulebook. avz vaganza was born out of sheer necessity to create something real and uncompromised where dark alternative aesthetics and cyber grunge met actual technical mastery. she wanted a world where garments are heavily constructed with industrial hardware and raw attitude rather than mass produced corporate trends. she poured her entire soul into engineering this universe from scratch making sure every single piece feels alive and dangerous and completely yours'
+    ]
   },
-  {
-    id: 'pic-hero-editorial',
-    title: 'Dhristroyer Atelier Shoot',
-    subtitle: 'Dhrisni directing wearable art construction',
-    image: ASSET_MANIFEST.editorialHero,
-    tag: 'ATELIER // GUWAHATI PROVENANCE',
-    provenance: 'Dhrisni in the Guwahati atelier. Hand-trimming raw hardware and ensuring every single stitch serves absolute baddie excellence.'
+  sustainability: {
+    heading: 'SUSTAINABILITY CORE',
+    paragraphs: [
+      'we do not just talk about sustainability like some corporate buzzword to look good on a tag because for us it is the absolute core of how we survive and create. instead of feeding into the endless cycle of fast fashion waste we take things apart and flip them completely breathing raw new life into dead materials and industrial castoffs. every single piece of hardware or discarded textile is rescued and transformed into something aggressively original. we thrive on taking what society throws away and turning it into high end rebellion proving that true luxury does not come from new factory lines but from the art of ruthless upcycling and giving trash a god tier second chance'
+    ]
   },
-  {
-    id: 'pic-diva-top',
-    title: 'Diva Distressed Denim Corset',
-    subtitle: 'Deconstructed zero-waste denim & eyelets',
-    image: ASSET_MANIFEST.products.divaTop,
-    tag: 'UPCYCLE // DECONSTRUCTED DENIM',
-    provenance: 'Old jeans rescued from landfill, bleached, distressed, and reconstructed into an iconic waist-cinching corset that ate and left no crumbs.'
+  aesthetic: {
+    heading: 'AESTHETIC INSPIRATION',
+    paragraphs: [
+      'avz also known as aveezah is an entire alternative dimension that you do not need a passport or a visa to enter because the aesthetic itself is the destination. it is a dark cyber grunge fantasy where you are already part of the inner circle the moment you tap into the frequency. you do not need permission to exist in this world of high fashion rebellion and unapologetic art. the doors are wide open for anyone who lives for the underground and dresses like they own the night'
+    ]
   }
+};
+
+const CARDS = [
+  { id: 'card-about-mother', label: 'ABOUT MOTHER', tag: '01' },
+  { id: 'card-professional-roots', label: 'PROFESSIONAL ROOTS', tag: '02' },
+  { id: 'card-how-born', label: 'HOW VAGANZA WAS BORN', tag: '03' },
+  { id: 'card-sustainability', label: 'SUSTAINABILITY CORE', tag: '04' },
+  { id: 'card-aesthetic', label: 'AESTHETIC INSPIRATION', tag: '05' }
 ];
 
-const ATELIER_PILLARS = [
-  {
-    num: '01',
-    tag: 'RECLAIMED CIRCUITS',
-    title: 'Computer Motherboards',
-    desc: 'Decommissioned PCBs sliced into geometric breastplates and cuffs. Silicon traces catch rave strobe lights like cyberpunk precious gems, no cap.',
-    icon: Cpu
-  },
-  {
-    num: '02',
-    tag: 'STAINLESS METALS',
-    title: 'Spikes & Chainmail',
-    desc: 'Industrial cone spikes, washers, and hand-linked jump rings assembled into fluid, protective armor built for certified baddies who command the room.',
-    icon: Scissors
-  },
-  {
-    num: '03',
-    tag: 'ETHICAL PRODUCTION',
-    title: 'Guwahati Women Artisans',
-    desc: 'AVZ exclusively hires and trains local women under Dhrisni’s personal direction, paying dignified ethical living wages and preserving authentic human craft.',
-    icon: HeartHandshake
-  },
-  {
-    num: '04',
-    tag: 'UPCYCLED TEXTILES',
-    title: 'Zero-Waste Denim',
-    desc: 'Discarded vintage denim deconstructed, bleached, distressed, and transformed into waist-cinching statement grails that refuse boring fast-fashion boxes.',
-    icon: Layers
-  }
-];
+/**
+ * TypewriterText: Progressively streams text in when the card scrolls into view.
+ * Paced for a fluid, sophisticated cyber-terminal typewriter rhythm.
+ * Clicking instantly completes the paragraph.
+ */
+function TypewriterBlock({ paragraphs, isVisible }) {
+  const [revealedChars, setRevealedChars] = useState(
+    paragraphs.map(() => 0)
+  );
+  const [currentParaIdx, setCurrentParaIdx] = useState(0);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    if (currentParaIdx >= paragraphs.length) return;
+
+    const currentText = paragraphs[currentParaIdx];
+    const timer = setInterval(() => {
+      setRevealedChars((prev) => {
+        const next = [...prev];
+        const currentCount = next[currentParaIdx];
+        if (currentCount >= currentText.length) {
+          clearInterval(timer);
+          setCurrentParaIdx((p) => p + 1);
+          return next;
+        }
+        // Advance by 2 characters per tick for crisp, effortless cadence
+        const step = currentCount + 2 >= currentText.length ? currentText.length - currentCount : 2;
+        next[currentParaIdx] = currentCount + step;
+        return next;
+      });
+    }, 14);
+
+    return () => clearInterval(timer);
+  }, [isVisible, currentParaIdx, paragraphs]);
+
+  // Click card to instantly reveal all text if desired
+  const handleRevealAll = () => {
+    setRevealedChars(paragraphs.map((p) => p.length));
+    setCurrentParaIdx(paragraphs.length);
+  };
+
+  return (
+    <div onClick={handleRevealAll} className="space-y-6 cursor-pointer select-text">
+      {paragraphs.map((para, i) => {
+        const count = revealedChars[i];
+        const isCurrent = i === currentParaIdx && count < para.length && isVisible;
+
+        return (
+          <div key={i} className="relative">
+            {paragraphs.length > 1 && (
+              <span className="font-mono text-[11px] text-pink/60 tracking-widest block mb-1.5">
+                {(i + 1).toString().padStart(2, '0')} //
+              </span>
+            )}
+            <p className="font-montserrat text-sm sm:text-base leading-[1.85] text-zinc-300 font-normal tracking-wide normal-case">
+              {para.slice(0, count)}
+              {isCurrent && (
+                <span className="inline-block w-1.5 h-4 ml-1 bg-pink/80 align-middle animate-pulse" />
+              )}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function FoundersSection({ onScrollToSection, onOpenSquadModal }) {
   const scrollContainerRef = useRef(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [visibleCards, setVisibleCards] = useState({
+    'card-about-mother': true,
+    'card-professional-roots': false,
+    'card-how-born': false,
+    'card-sustainability': false,
+    'card-aesthetic': false
+  });
 
-  // Horizontal scroll only — vertical scrolling continues normally down the page
-  const scrollLeft = () => {
+  // Observe horizontal intersection of each card to trigger typing & update index
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleCards((prev) => ({
+              ...prev,
+              [entry.target.id]: true
+            }));
+
+            const idx = CARDS.findIndex((c) => c.id === entry.target.id);
+            if (idx !== -1) {
+              setActiveCardIndex(idx);
+            }
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.35
+      }
+    );
+
+    CARDS.forEach((card) => {
+      const el = document.getElementById(card.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Smooth mouse-wheel translation on horizontal track (desktop convenience)
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const onWheelHandler = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        const maxScroll = scrollWidth - clientWidth;
+        const canScrollRight = e.deltaY > 0 && scrollLeft < maxScroll - 4;
+        const canScrollLeft = e.deltaY < 0 && scrollLeft > 4;
+
+        if (canScrollRight || canScrollLeft) {
+          e.preventDefault();
+          container.scrollBy({ left: e.deltaY * 1.1, behavior: 'auto' });
+        }
+      }
+    };
+
+    container.addEventListener('wheel', onWheelHandler, { passive: false });
+    return () => container.removeEventListener('wheel', onWheelHandler);
+  }, []);
+
+  const scrollToCard = (index) => {
     playSound('cyber_hover');
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -460, behavior: 'smooth' });
+    setActiveCardIndex(index);
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const cardEl = document.getElementById(CARDS[index].id);
+    if (cardEl) {
+      cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     }
   };
 
-  const scrollRight = () => {
-    playSound('cyber_hover');
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 460, behavior: 'smooth' });
-    }
+  const scrollPrev = () => {
+    const prev = Math.max(0, activeCardIndex - 1);
+    scrollToCard(prev);
   };
 
-  const scrollToMilestone = (index) => {
-    playSound('glitch_click');
-    setActiveTab(index);
-    if (!scrollContainerRef.current) return;
-    const cards = scrollContainerRef.current.querySelectorAll('.milestone-card');
-    if (cards[index]) {
-      cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-    }
+  const scrollNext = () => {
+    const next = Math.min(CARDS.length - 1, activeCardIndex + 1);
+    scrollToCard(next);
   };
 
   return (
     <section
       id="about"
-      className="relative w-full bg-pitch-black select-none text-left border-t border-[#be185d]/30 overflow-hidden"
+      className="relative w-full bg-pitch-black text-silver overflow-hidden border-t border-[#be185d]/30 selection:bg-pink selection:text-black py-12 sm:py-16"
     >
-      {/* 1. TOP MARQUEE BANNER */}
-      <div className="w-full bg-[#1b0320] border-b border-[#be185d]/30 py-2.5 overflow-hidden whitespace-nowrap relative z-20">
-        <div className="animate-marquee flex items-center gap-8 text-[11px] sm:text-xs font-mono tracking-[0.25em] text-pink-300 uppercase">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="flex items-center gap-8 shrink-0">
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-pink" />
-                AVZ VAGANZA
-              </span>
-              <span>✦</span>
-              <span className="text-white font-bold">BEYOND THE ALGORITHM</span>
-              <span>✦</span>
-              <span>HAUTE WEARABLE ART</span>
-              <span>✦</span>
-              <span className="text-pink">HANDMADE IN GUWAHATI</span>
-              <span>✦</span>
-              <span>REBELLION AGAINST FAST FASHION</span>
-              <span>✦</span>
-              <span className="text-white">BY BADDIES FOR BADDIES</span>
-              <span>✦</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Background Architectural Mesh & Subtle Ambient Violet Glow */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      />
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(190,24,93,0.14),transparent_70%)]" />
 
-      {/* 2. EDITORIAL HEADER & NAVIGATION HUD */}
-      <div className="pt-8 sm:pt-10 pb-4 sm:pb-6 px-4 sm:px-12 lg:px-20 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 sm:gap-6 border-b border-white/10">
+      {/* TOP HEADER & HORIZONTAL NAVIGATION HUD */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-white/10 pb-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1c041f]/90 border border-[#be185d]/40 text-pink text-[10px] font-mono tracking-widest uppercase shadow-[0_0_15px_rgba(244,194,194,0.2)] mb-3">
-            <Scissors className="w-3 h-3 text-pink" />
-            <span>THE CREATOR'S MANIFESTO // GUWAHATI ATELIER</span>
+          <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
+            <span>FOUNDER MANIFESTO // HORIZONTAL ARCHIVE</span>
+          </div>
+          <h2 className="font-mono text-xl sm:text-2xl font-medium tracking-[0.2em] text-white uppercase">
+            ABOUT MOTHER & THE AVZ DIMENSION
+          </h2>
+        </div>
+
+        {/* Controls & Quick Selector */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] text-zinc-500 mr-2">
+            <span>[ 0{activeCardIndex + 1} / 0{CARDS.length} ]</span>
           </div>
 
-          <DhristroyerAnimatedHeading />
-          <p className="text-silver/80 text-sm mt-2 font-montserrat max-w-2xl">
-            Swipe or scroll horizontally through the story, craft pillars, and authentic atelier archives. Vertical scroll continues untouched.
-          </p>
-        </div>
-
-        {/* Milestone Navigation Controls */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
-              onClick={scrollLeft}
-              className="p-3 rounded-full bg-black/80 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all cursor-pointer shadow-lg"
-              title="Scroll Left"
+              onClick={scrollPrev}
+              disabled={activeCardIndex === 0}
+              className={`p-2.5 rounded-full border transition-all cursor-pointer ${
+                activeCardIndex === 0
+                  ? 'border-white/5 text-zinc-600 cursor-not-allowed'
+                  : 'border-white/15 bg-black/80 hover:border-pink text-white hover:text-pink'
+              }`}
+              title="Previous Card"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={scrollRight}
-              className="p-3 rounded-full bg-black/80 hover:bg-pink/20 border border-white/20 hover:border-pink text-white hover:text-pink transition-all cursor-pointer shadow-lg"
-              title="Scroll Right"
+              onClick={scrollNext}
+              disabled={activeCardIndex === CARDS.length - 1}
+              className={`p-2.5 rounded-full border transition-all cursor-pointer ${
+                activeCardIndex === CARDS.length - 1
+                  ? 'border-white/5 text-zinc-600 cursor-not-allowed'
+                  : 'border-white/15 bg-black/80 hover:border-pink text-white hover:text-pink'
+              }`}
+              title="Next Card"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-
-          <a
-            href={BRAND_INFO.instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/5 border border-white/20 hover:border-pink text-white hover:text-pink text-xs font-mono transition-all group cursor-pointer"
-          >
-            <Instagram className="w-3.5 h-3.5 text-pink group-hover:scale-110 transition-transform" />
-            <span>@avz.vaganza</span>
-            <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
         </div>
       </div>
 
-      {/* Milestone Tabs Quick Selector */}
-      <div className="px-4 sm:px-12 lg:px-20 py-2.5 sm:py-3 flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-white/5 bg-black/40">
-        {[
-          '01 // MANIFESTO',
-          '02 // THE SCISSORS LORE',
-          '03 // CRAFT PILLARS',
-          '04 // ATELIER ARCHIVE',
-          '05 // WOMEN ARTISANS'
-        ].map((tabName, idx) => (
-          <button
-            key={idx}
-            onClick={() => scrollToMilestone(idx)}
-            className={`px-3 py-1.5 rounded-full text-[10px] font-mono tracking-wider whitespace-nowrap transition-all cursor-pointer border ${
-              activeTab === idx
-                ? 'bg-pink text-black font-bold border-pink shadow-[0_0_15px_rgba(244,194,194,0.3)]'
-                : 'bg-black/60 text-silver/70 border-white/10 hover:border-pink/40 hover:text-white'
-            }`}
-          >
-            {tabName}
-          </button>
-        ))}
+      {/* QUICK CARD SELECTOR TABS */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-6">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          {CARDS.map((card, idx) => {
+            const isActive = activeCardIndex === idx;
+            return (
+              <button
+                key={card.id}
+                onClick={() => scrollToCard(idx)}
+                className={`px-3 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider whitespace-nowrap transition-all duration-300 cursor-pointer border ${
+                  isActive
+                    ? 'bg-pink text-black font-semibold border-pink shadow-[0_0_12px_rgba(244,194,194,0.3)]'
+                    : 'bg-black/60 text-zinc-400 border-white/10 hover:border-pink/40 hover:text-white'
+                }`}
+              >
+                {card.tag} // {card.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* 3. DEDICATED HORIZONTAL SCROLL ONLY CONTAINER (Vertical scroll passes through smoothly) */}
+      {/* =========================================================================
+          HORIZONTAL SCROLL CONTAINER
+          Card 1 has her image. All other cards are pure text info cards with typewriter.
+          ========================================================================= */}
       <div
         ref={scrollContainerRef}
-        className="w-full overflow-x-auto overflow-y-hidden py-6 sm:py-10 px-4 sm:px-12 lg:px-20 flex items-stretch gap-6 sm:gap-8 lg:gap-10 scroll-smooth no-scrollbar"
-        style={{ scrollSnapType: 'x proximity' }}
+        className="relative z-10 w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-16 py-4 flex items-stretch gap-6 sm:gap-8 scroll-smooth no-scrollbar"
+        style={{ scrollSnapType: 'x mandatory' }}
       >
-        {/* ========================================================
-            CARD 0: THE MANIFESTO
-           ======================================================== */}
-        <div className="milestone-card w-[88vw] sm:w-[540px] shrink-0 flex flex-col justify-between p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#1b0320]/95 via-black to-[#140217]/95 border border-pink/35 shadow-[0_20px_50px_rgba(30,2,30,0.8)] snap-start">
+        {/* =====================================================================
+            CARD 1: ABOUT MOTHER (With just ONE image of her)
+            ===================================================================== */}
+        <div
+          id="card-about-mother"
+          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+        >
+          {/* Subtle Corner Markers */}
+          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+
           <div>
-            <div className="text-pink text-[11px] font-mono tracking-widest uppercase mb-3 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
-              FOUNDER, CREATIVE DIRECTOR & MASTER ARTISAN
+            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
+              <span className="text-pink/80 font-semibold">01 // VISUAL INTRODUCTION</span>
+              <span>ATELIER PROVENANCE</span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-black font-spartan uppercase text-white mb-4 leading-snug">
-              "In a world drowning in fast fashion & AI slop, making things with real human hands is the ultimate rebellion."
+            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100">
+              {COPY.aboutMother.heading}
             </h3>
-
-            <div className="space-y-3 text-silver/85 text-xs sm:text-sm font-montserrat leading-relaxed">
-              <p>
-                AVZ Vaganza started staring at a stuffed closet, sick of seeing the exact same cookie-cutter clones on everyone.
-              </p>
-              <p>
-                Tired of landfills and fast-fashion waste, Dhrisni grabbed scissors and began cutting up her own fits to craft something unhinged. Zero mass production. Zero corporate filler. Wearable art sculpted for baddies who refuse to be boring.
-              </p>
-            </div>
           </div>
 
-          <div className="mt-8 pt-5 border-t border-white/10 flex flex-wrap items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-pink">
-              #Maximalism
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-pink">
-              #WearableArt
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-pink">
-              #CertifiedBaddie
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-pink">
-              #NoFastFashion
-            </span>
-          </div>
-        </div>
-
-        {/* ========================================================
-            CARD 1: THE SCISSORS REBELLION (LORE)
-           ======================================================== */}
-        <div className="milestone-card w-[85vw] sm:w-[460px] shrink-0 flex flex-col justify-between rounded-3xl overflow-hidden border border-pink/35 bg-black group shadow-[0_20px_50px_rgba(40,5,40,0.6)] relative snap-start">
-          <div className="relative h-[300px] w-full overflow-hidden">
+          {/* Founder's Single Authentic Photograph */}
+          <div className="relative my-4 flex-1 w-full rounded-2xl overflow-hidden border border-white/10 bg-black group-hover:border-pink/40 transition-colors duration-500">
             <img
-              src={ASSET_MANIFEST.products.divaTop}
-              alt="Dhrisni scissors craft"
-              className="w-full h-full object-cover filter brightness-90 group-hover:scale-105 transition-all duration-700"
+              src={ASSET_MANIFEST.editorialHero}
+              alt="Dhrisni - Founder visual introduction"
+              className="w-full h-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-            <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-pink/40 text-pink text-[10px] font-mono uppercase">
-              SCISSORS & REBELLION ✂️
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20 pointer-events-none" />
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-zinc-300">
+              <span className="tracking-widest">DHRISNI (DHRISTROYER)</span>
+              <span className="text-pink/70">GUWAHATI</span>
             </div>
           </div>
 
-          <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-mono text-pink tracking-widest uppercase mb-1 block">
-                THE ORIGIN // RESTRICTION INTO DRIP
-              </span>
-              <h4 className="text-xl font-spartan font-black uppercase text-white mb-2 leading-tight">
-                Forbidden Fits Turned Into Haute Armor
-              </h4>
-              <p className="text-xs text-silver/85 font-montserrat leading-relaxed">
-                Growing up where revealing clothes were strictly off-limits, restriction became the blueprint. When pushed into a corner, Dhrisni turned scissors into paintbrushes and transformed humble cotton into wearable cyber-grunge armor. She ate and left no crumbs.
-              </p>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between pt-4 border-t border-white/10 text-xs font-mono text-silver/60">
-              <span>GUWAHATI ATELIER</span>
-              <span className="text-pink">100% HAND-SCULPTED</span>
-            </div>
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+            <span>FOUNDER & CREATIVE DIRECTOR</span>
+            <span className="text-pink/80">AVZ VAGANZA</span>
           </div>
         </div>
 
-        {/* ========================================================
-            CARD 2: THE 4 CRAFT PILLARS
-           ======================================================== */}
-        <div className="milestone-card w-[90vw] sm:w-[600px] shrink-0 p-8 sm:p-10 rounded-3xl bg-[#120317]/95 border border-pink/35 shadow-[0_20px_50px_rgba(30,2,30,0.8)] flex flex-col justify-between snap-start">
+        {/* =====================================================================
+            CARD 2: PROFESSIONAL ROOTS (Info Card With Typewriter Text)
+            ===================================================================== */}
+        <div
+          id="card-professional-roots"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+        >
+          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+
           <div>
-            <div className="text-pink text-[10px] font-mono tracking-widest uppercase mb-2">
-              CORE ATELIER PILLARS // MATERIAL PURITY
+            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
+              <span className="text-pink/80 font-semibold">02 // INFO CARD</span>
+              <span>CHRONOLOGY</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black font-spartan uppercase text-white mb-6">
-              REJECTING CORPORATE MINIMALISM
+
+            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+              {COPY.professionalRoots.heading}
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {ATELIER_PILLARS.map((pillar) => {
-                const IconComponent = pillar.icon;
-                return (
-                  <div
-                    key={pillar.num}
-                    className="p-4 rounded-2xl bg-black/60 border border-white/10 hover:border-pink/40 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-mono text-pink font-bold">PILLAR {pillar.num}</span>
-                      <IconComponent className="w-4 h-4 text-pink" />
-                    </div>
-                    <h5 className="text-sm font-spartan font-bold text-white mb-1 uppercase">{pillar.title}</h5>
-                    <p className="text-[11px] text-silver/80 font-montserrat leading-relaxed">{pillar.desc}</p>
-                  </div>
-                );
-              })}
+            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+              <TypewriterBlock
+                paragraphs={COPY.professionalRoots.paragraphs}
+                isVisible={visibleCards['card-professional-roots']}
+              />
             </div>
           </div>
 
-          <p className="text-[11px] font-mono text-silver/60 pt-6 border-t border-white/10 uppercase tracking-widest mt-6">
-            ✦ NO AI GENERATION ✦ ZERO MASS-PRODUCTION ✦ ALL HAND-CRAFTED
-          </p>
-        </div>
-
-        {/* ========================================================
-            CARD 3: ATELIER ARCHIVE SHOWCASE
-           ======================================================== */}
-        <div className="milestone-card w-[90vw] sm:w-[620px] shrink-0 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-black via-[#16021d] to-black border border-pink/35 shadow-[0_20px_50px_rgba(30,2,30,0.8)] flex flex-col justify-between snap-start">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-pink text-[10px] font-mono tracking-widest uppercase">
-                AUTHENTIC ATELIER ARTIFACTS
-              </span>
-              <span className="text-xs font-mono text-silver/60">5 LOOKS SHOWN</span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-black font-spartan uppercase text-white mb-6">
-              THE GRAILS IN DETAIL
-            </h3>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {SCATTERED_PICTURES.slice(0, 3).map((pic) => (
-                <div key={pic.id} className="rounded-2xl overflow-hidden border border-white/10 bg-black group relative">
-                  <div className="aspect-[4/5] w-full overflow-hidden">
-                    <img
-                      src={pic.image}
-                      alt={pic.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-2.5 bg-black/90">
-                    <span className="text-[9px] font-mono text-pink block truncate">{pic.tag}</span>
-                    <span className="text-xs font-spartan font-bold text-white block truncate">{pic.title}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-            <span className="text-xs font-montserrat text-silver/80">Commission your bespoke size anytime</span>
-            <button
-              onClick={() => {
-                playSound('baddie_alert');
-                const el = document.getElementById('custom');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="px-4 py-2 rounded-full bg-pink text-black font-spartan font-black text-xs uppercase tracking-wider hover:bg-white transition-colors cursor-pointer"
-            >
-              COMMISSION NOW ↗
-            </button>
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+            <span>SHILLONG → GUWAHATI → MUMBAI</span>
+            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
           </div>
         </div>
 
-        {/* ========================================================
-            CARD 4: GUWAHATI WOMEN ARTISANS EMPOWERMENT
-           ======================================================== */}
-        <div className="milestone-card w-[85vw] sm:w-[480px] shrink-0 p-8 sm:p-10 rounded-3xl bg-[#140217]/95 border border-pink/35 shadow-[0_20px_50px_rgba(30,2,30,0.8)] flex flex-col justify-between snap-start">
+        {/* =====================================================================
+            CARD 3: HOW VAGANZA WAS BORN (Info Card With Typewriter Text)
+            ===================================================================== */}
+        <div
+          id="card-how-born"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+        >
+          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-pink text-[10px] font-mono uppercase mb-4">
-              <HeartHandshake className="w-3.5 h-3.5" />
-              <span>ETHICAL EMPOWERMENT</span>
+            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
+              <span className="text-pink/80 font-semibold">03 // INFO CARD</span>
+              <span>GENESIS</span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-black font-spartan uppercase text-white mb-4">
-              WOMEN OF GUWAHATI
+            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+              {COPY.howBorn.heading}
             </h3>
 
-            <p className="text-silver/85 text-xs sm:text-sm font-montserrat leading-relaxed mb-4">
-              Fast fashion exploits labor for shareholder greed. AVZ rejects that entirely. We train local women in Guwahati, paying living wages and celebrating their craftsmanship as true couture artists.
-            </p>
-
-            <div className="p-4 rounded-2xl bg-black/60 border border-white/10 text-xs font-mono text-pink space-y-1">
-              <div>✦ Direct atelier oversight by Dhrisni</div>
-              <div>✦ Ethical living wages & creative dignity</div>
-              <div>✦ Hand-woven chainmail & soldered circuits</div>
+            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+              <TypewriterBlock
+                paragraphs={COPY.howBorn.paragraphs}
+                isVisible={visibleCards['card-how-born']}
+              />
             </div>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-silver/60">
-            <span>RUKMINIGAON, GUWAHATI</span>
-            <span className="text-pink">781006</span>
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+            <span>DARK ALTERNATIVE // INDUSTRIAL ATTITUDE</span>
+            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+          </div>
+        </div>
+
+        {/* =====================================================================
+            CARD 4: SUSTAINABILITY CORE (Info Card With Typewriter Text)
+            ===================================================================== */}
+        <div
+          id="card-sustainability"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+        >
+          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+
+          <div>
+            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
+              <span className="text-pink/80 font-semibold">04 // INFO CARD</span>
+              <span>RUTHLESS UPCYCLING</span>
+            </div>
+
+            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+              {COPY.sustainability.heading}
+            </h3>
+
+            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+              <TypewriterBlock
+                paragraphs={COPY.sustainability.paragraphs}
+                isVisible={visibleCards['card-sustainability']}
+              />
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+            <span>DISCARDED HARDWARE // RAW TRANSFORMATION</span>
+            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+          </div>
+        </div>
+
+        {/* =====================================================================
+            CARD 5: AESTHETIC INSPIRATION (Info Card With Typewriter Text)
+            ===================================================================== */}
+        <div
+          id="card-aesthetic"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+        >
+          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+
+          <div>
+            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
+              <span className="text-pink/80 font-semibold">05 // INFO CARD</span>
+              <span>THE DESTINATION</span>
+            </div>
+
+            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+              {COPY.aesthetic.heading}
+            </h3>
+
+            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+              <TypewriterBlock
+                paragraphs={COPY.aesthetic.paragraphs}
+                isVisible={visibleCards['card-aesthetic']}
+              />
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+            <span>THE FREQUENCY // UNDERGROUND HIGH FASHION</span>
+            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
           </div>
         </div>
       </div>
