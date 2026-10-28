@@ -65,7 +65,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
           <button
             onClick={onClose}
             aria-label="Close search"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer shrink-0 transition-all"
+            className="w-8 h-8 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer shrink-0 transition-all active:scale-95 ml-1"
           >
             <X className="w-4 h-4" />
           </button>

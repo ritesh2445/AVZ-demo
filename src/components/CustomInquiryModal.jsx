@@ -39,10 +39,11 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-lg bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative text-center shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
       >
+        {/* Close Button with safe clearance */}
         <button
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer transition-all"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer transition-all z-30 shadow-md active:scale-95"
         >
           <X className="w-4 h-4" />
         </button>
@@ -51,11 +52,11 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
           <CheckCircle2 className="w-6 h-6 text-white" />
         </div>
 
-        <div className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase mb-2">
+        <div className="px-6 text-[10px] font-mono tracking-widest text-zinc-400 uppercase mb-2">
           INQUIRY BRIEF LOGGED // GUWAHATI ATELIER
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
+        <h2 className="px-4 text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
           COMMISSION BRIEF READY
         </h2>
 

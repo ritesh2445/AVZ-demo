@@ -98,27 +98,27 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
       <div className="relative w-full max-w-5xl h-[85vh] max-h-[850px] bg-black border border-pink/30 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(244,194,194,0.25)] flex flex-col justify-between">
         
         {/* Top Header Bar */}
-        <div className="relative z-20 flex items-center justify-between p-4 sm:p-6 bg-gradient-to-b from-black/90 via-black/60 to-transparent">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[10px] font-mono tracking-widest text-pink uppercase">
-              <span className="w-2 h-2 rounded-full bg-pink animate-ping inline-block" />
-              <span>AVZ EDITORIAL CINEMA</span>
+        <div className="relative z-20 flex items-center justify-between gap-3 p-4 sm:p-6 bg-gradient-to-b from-black/90 via-black/60 to-transparent">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[9px] sm:text-[10px] font-mono tracking-widest text-pink uppercase shrink-0">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pink animate-ping inline-block" />
+              <span>EDITORIAL CINEMA</span>
             </div>
-            <span className="text-silver/80 text-xs hidden sm:inline font-montserrat">
+            <span className="text-silver/80 text-xs hidden md:inline font-montserrat truncate">
               {isMobile ? 'Mobile Vertical Edit' : 'Desktop 16:9 Master Reel'}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <a
               href={activeVimeoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs text-silver font-mono hover:text-pink transition-all"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs text-silver font-mono hover:text-pink transition-all"
               title="Open on Vimeo"
             >
-              <span>Vimeo Master</span>
-              <ExternalLink className="w-3 h-3" />
+              <span className="hidden sm:inline">Vimeo Master</span>
+              <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
             <button
@@ -126,10 +126,10 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
                 playSound('modal_close');
                 onClose();
               }}
-              className="p-2 rounded-full bg-black/60 hover:bg-pink/20 border border-white/20 hover:border-pink text-white transition-all cursor-pointer"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/80 hover:bg-pink/20 border border-white/20 hover:border-pink text-white flex items-center justify-center transition-all cursor-pointer shrink-0 active:scale-95"
               aria-label="Close Cinema Mode"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>

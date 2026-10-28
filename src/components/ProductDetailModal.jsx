@@ -92,14 +92,14 @@ export default function ProductDetailModal({
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-5xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-auto max-h-[92vh] sm:max-h-none flex flex-col md:flex-row overflow-y-auto md:overflow-hidden text-left"
       >
-        {/* Close Button */}
+        {/* Close Button — Elevated, Independent Clearance */}
         <button
           onClick={() => {
             playSound('pip');
             onClose();
           }}
           aria-label="Close product modal"
-          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/20 bg-black/80 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/40 transition-all cursor-pointer shadow-lg"
+          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/20 bg-black/90 backdrop-blur-xl flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/40 transition-all cursor-pointer shadow-xl active:scale-95"
         >
           <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
@@ -115,13 +115,13 @@ export default function ProductDetailModal({
             />
 
             {/* Provenance Badge */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
               <span className="px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/20 text-white text-[10px] font-mono tracking-widest uppercase shadow-md">
                 {product.tag || 'ONE OF ONE'}
               </span>
             </div>
 
-            {/* Wishlist Heart Toggle */}
+            {/* Wishlist Heart Toggle — Moved to Bottom-Right of Image to Never Collide with Modal Close X */}
             {onToggleWishlist && (
               <button
                 onClick={() => {
@@ -129,7 +129,7 @@ export default function ProductDetailModal({
                   onToggleWishlist(product);
                 }}
                 aria-label="Save to Curated Wishlist"
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/80 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer"
+                className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-black/85 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer shadow-lg z-20 active:scale-95"
               >
                 <Heart className={`w-4 h-4 ${isWishlisted ? 'text-pink-400 fill-pink-400' : ''}`} />
               </button>
@@ -171,10 +171,10 @@ export default function ProductDetailModal({
 
         {/* Right: Product Details & Purchase Form */}
         <div className="w-full md:w-1/2 p-4 sm:p-8 md:p-10 flex flex-col justify-between bg-[#0c0c10] text-left">
-          <div>
+          <div className="pr-12 md:pr-14">
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 uppercase mb-2">
               <span className="text-white font-medium tracking-wider">{product.category}</span>
-              <span className="tracking-widest text-zinc-500">GUWAHATI ATELIER</span>
+              <span className="tracking-widest text-zinc-500 hidden sm:inline">GUWAHATI ATELIER</span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">

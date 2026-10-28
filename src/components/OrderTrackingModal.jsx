@@ -41,18 +41,19 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative"
       >
+        {/* Close Button with safe clearance */}
         <button
           onClick={onClose}
           aria-label="Close tracking"
-          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer z-30 shadow-md active:scale-95"
         >
           <X className="w-4 h-4" />
         </button>
 
-        <div className="mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2">
-            <Package className="w-3.5 h-3.5 text-zinc-400" />
-            <span>LIVE ATELIER TRACKING // CLIENT LOGISTICS</span>
+        <div className="mb-6 pr-10 sm:pr-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2 max-w-full">
+            <Package className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+            <span className="truncate">LIVE ATELIER TRACKING // CLIENT LOGISTICS</span>
           </div>
 
           <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white leading-tight">

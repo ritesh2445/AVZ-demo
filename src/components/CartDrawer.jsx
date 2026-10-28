@@ -153,13 +153,13 @@ export default function CartDrawer({
         className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative text-left"
       >
         {/* Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-black/40">
-          <div className="flex items-center gap-2.5">
-            <ShoppingBag className="w-4 h-4 text-white" />
-            <h2 className="text-sm sm:text-base font-mono font-medium uppercase text-white tracking-wider">
+        <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between gap-3 bg-black/40 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+            <ShoppingBag className="w-4 h-4 text-white shrink-0" />
+            <h2 className="text-xs sm:text-sm md:text-base font-mono font-medium uppercase text-white tracking-wider truncate">
               {isCheckingOut ? 'ATELIER CHECKOUT' : 'SHOPPING BAG'}
             </h2>
-            <span className="text-xs font-mono text-zinc-500">({items.length} {items.length === 1 ? 'PIECE' : 'PIECES'})</span>
+            <span className="text-xs font-mono text-zinc-500 shrink-0">({items.length})</span>
           </div>
 
           <button
@@ -168,7 +168,7 @@ export default function CartDrawer({
               onClose();
             }}
             aria-label="Close bag"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer"
+            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer shrink-0 active:scale-95"
           >
             <X className="w-4 h-4" />
           </button>

@@ -278,17 +278,13 @@ export default function App() {
         </section>
 
         {/* Section 6: AVZ Museum Archive Vault */}
-        <section id="museum" className="w-full">
-          <AvzMuseum onRequestCustomCommission={handleRequestCustom} />
-        </section>
+        <AvzMuseum onRequestCustomCommission={handleRequestCustom} />
 
         {/* Section 7: Custom Atelier Bespoke Orders */}
-        <section id="custom" className="w-full">
-          <CustomOrders
-            initialReference={customOrderPrefill}
-            onInquirySubmitted={handleInquirySubmitted}
-          />
-        </section>
+        <CustomOrders
+          initialReference={customOrderPrefill}
+          onInquirySubmitted={handleInquirySubmitted}
+        />
 
         {/* Section 8: Founder's World & Atelier Parallax Journey (Fixed Horizontal Scroll Lock) */}
         <section id="about" className="w-full">

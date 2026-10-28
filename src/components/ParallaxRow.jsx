@@ -144,9 +144,9 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   }, [activeLook, currentSlide]);
 
   return (
-    <section id="lookbook" className="w-full py-24 sm:py-32 bg-transparent select-none relative overflow-hidden">
+    <section id="lookbook" className="w-full py-10 sm:py-14 bg-transparent select-none relative overflow-hidden">
       {/* Header Bar */}
-      <div className="w-full px-4 sm:px-12 lg:px-20 mb-10 sm:mb-16 lg:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
+      <div className="w-full px-4 sm:px-8 lg:px-12 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
@@ -364,63 +364,78 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       {activeLook && (
         <div
           onClick={closeLightbox}
-          className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-8 animate-fade-in"
+          className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fade-in"
         >
-          {/* Top Controls */}
-          <div className="absolute top-5 left-6 right-6 flex items-center justify-between text-silver z-50">
-            <div className="text-xs font-mono tracking-widest text-pink-300 uppercase flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
-              <span>{activeLook.code} // {currentSlide + 1} OF {entries.length}</span>
-            </div>
-
-            <button
-              onClick={closeLightbox}
-              aria-label="Close modal"
-              className="w-10 h-10 rounded-full border border-white/20 bg-black/70 flex items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
           {/* Left Arrow */}
           <button
-            onClick={prevSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              prevSlide();
+            }}
             aria-label="Previous look"
-            className="hidden sm:flex absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/20 bg-black/70 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer"
+            className="hidden sm:flex absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           {/* Right Arrow */}
           <button
-            onClick={nextSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
             aria-label="Next look"
-            className="hidden sm:flex absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/20 bg-black/70 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer"
+            className="hidden sm:flex absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5" />
           </button>
 
           {/* Modal Content Card */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-5xl max-h-[90vh] bg-[#0d020f]/95 border border-[#f472b6]/40 rounded-3xl p-6 sm:p-10 shadow-[0_20px_70px_rgba(244,114,182,0.3)] flex flex-col md:flex-row gap-8 items-center overflow-y-auto"
+            className="relative w-full max-w-5xl max-h-[92vh] bg-[#0d020f]/95 border border-[#f472b6]/40 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-[0_20px_70px_rgba(244,114,182,0.3)] flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto"
           >
+            {/* Desktop Close Button — Elevated and Padded */}
+            <button
+              onClick={closeLightbox}
+              aria-label="Close modal"
+              className="hidden md:flex absolute top-5 right-5 z-50 w-9 h-9 rounded-full border border-white/20 bg-black/80 items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer shadow-lg active:scale-95"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Mobile Header Bar — Safe Non-Overlapping Header */}
+            <div className="w-full flex md:hidden items-center justify-between border-b border-white/10 pb-3 shrink-0">
+              <div className="text-xs font-mono tracking-widest text-pink-300 uppercase flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
+                <span>{activeLook.code} // {currentSlide + 1} OF {entries.length}</span>
+              </div>
+              <button
+                onClick={closeLightbox}
+                aria-label="Close modal"
+                className="w-8 h-8 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer active:scale-95"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
             {/* Main Visual Frame */}
-            <div className="relative w-full md:w-1/2 max-h-[50vh] md:max-h-[70vh] flex items-center justify-center rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+            <div className="relative w-full md:w-1/2 max-h-[48vh] md:max-h-[68vh] flex items-center justify-center rounded-2xl overflow-hidden bg-black/60 border border-white/10 shrink-0">
               <img
                 src={activeLook.image}
                 alt={activeLook.title}
-                className="max-h-[50vh] md:max-h-[70vh] w-full object-contain rounded-2xl"
+                className="max-h-[48vh] md:max-h-[68vh] w-full object-contain rounded-2xl"
               />
             </div>
 
             {/* Information & Action */}
-            <div className="w-full md:w-1/2 flex flex-col justify-between text-left">
+            <div className="w-full md:w-1/2 flex flex-col justify-between text-left md:pr-10">
               <div>
-                <span className="text-xs font-mono tracking-widest text-[#f472b6] uppercase block mb-1 font-bold">
-                  {activeLook.code}
-                </span>
-                <h3 className="text-3xl sm:text-4xl font-spartan font-black uppercase text-white mb-2 leading-tight text-left">
+                <div className="hidden md:flex items-center gap-2 mb-2 text-xs font-mono tracking-widest text-pink-300 uppercase font-bold">
+                  <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
+                  <span>{activeLook.code} // {currentSlide + 1} OF {entries.length}</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-mono font-medium uppercase text-white mb-2 leading-tight text-left">
                   {activeLook.title}
                 </h3>
                 <div className="text-sm font-display text-lavender mb-4 italic text-left">

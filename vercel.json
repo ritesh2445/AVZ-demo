@@ -1,11 +1,5 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
+  "framework": "nextjs",
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -18,3 +12,4 @@
     }
   ]
 }
+

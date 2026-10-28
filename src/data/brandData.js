@@ -390,6 +390,8 @@ export const MUSEUM_ITEMS = [
   {
     id: "mus-001",
     name: "The Original Dhristroyer Motherboard Bralette (Archived Prototype 01)",
+    shortName: "Original Motherboard",
+    aspectRatio: 220 / 415,
     year: "2023",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Salvaged 1998 Motherboard, Copper Wire, Velvet Ties",
@@ -402,6 +404,8 @@ export const MUSEUM_ITEMS = [
   {
     id: "mus-002",
     name: "The Mechanical Keycap 'CTRL+Z' Choker Harness",
+    shortName: "'CTRL+Z' Choker",
+    aspectRatio: 360 / 460,
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "IBM Model M Keycaps, Silver Chainmail, Stainless Steel Carabiner",
@@ -414,6 +418,8 @@ export const MUSEUM_ITEMS = [
   {
     id: "mus-003",
     name: "The Heavy Industry Spiked Moto Shrug",
+    shortName: "Spiked Moto Shrug",
+    aspectRatio: 245 / 435,
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Reclaimed Biker Leather, 72 Solid Steel Spikes, Raw Hardware",
@@ -426,6 +432,8 @@ export const MUSEUM_ITEMS = [
   {
     id: "mus-004",
     name: "Mermaidcore Cyber-Chitin Bodice",
+    shortName: "Cyber-Chitin Bodice",
+    aspectRatio: 832 / 1152,
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Iridescent Tech Scrap, Wire Weave, Glass Crystal Beads",

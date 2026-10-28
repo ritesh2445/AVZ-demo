@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { ChevronLeft, ChevronRight, RotateCcw, ArrowUpRight, Scissors } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, Scissors, Sparkles, Layers } from 'lucide-react';
 import { MUSEUM_ITEMS } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
@@ -13,7 +13,6 @@ function createRoundedRectShape(width, height, radius) {
   const y1 = height / 2;
   const r = Math.min(radius, width / 2, height / 2);
 
-  // Clockwise perimeter with smooth circular arcs at all 4 corners
   shape.moveTo(x0 + r, y0);
   shape.lineTo(x1 - r, y0);
   shape.absarc(x1 - r, y0 + r, r, -Math.PI / 2, 0, false);
@@ -31,6 +30,12 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
   const sectionRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [viewMode, setViewMode] = useState('3d'); // '3d' or 'grid'
+
+  // Mobile Card Stack Gesture State
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isSwiping, setIsSwiping] = useState(false);
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
 
   const activeIndexRef = useRef(0);
   const activeItem = MUSEUM_ITEMS[activeIndex] || MUSEUM_ITEMS[0];
@@ -50,36 +55,46 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  // Main 3D Canvas Lifecycle: Initialized ONCE per 3D view mode
+  // Main 3D Canvas Lifecycle: Initialized for Desktop 3D view mode
   useEffect(() => {
     if (viewMode !== '3d') return;
+    if (typeof window === 'undefined') return;
+
+    // Only instantiate WebGL when on desktop screens to save battery and avoid touch conflicts
+    if (window.innerWidth < 768) return;
 
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || window.innerWidth;
-    const height = container.clientHeight || 550;
-    const isMobile = width < 768;
+    // Clean up any residual child canvas
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    const width = container.clientWidth || 800;
+    const height = container.clientHeight || 560;
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x060608);
-    scene.fog = new THREE.FogExp2(0x060608, 0.032);
+    scene.fog = new THREE.FogExp2(0x060608, 0.024);
 
-    const camera = new THREE.PerspectiveCamera(44, width / height, 0.1, 100);
-    camera.position.set(0, 2.1, 11);
-    camera.lookAt(0, 1.8, 6.8);
+    // Camera calibrated for balanced gallery viewing:
+    // Full plinth rests solidly on the floor grid, collar gleams, and framed piece floats with ample breathing room
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    camera.position.set(0, 1.25, 15.0);
+    camera.lookAt(0, 0.85, 6.8);
 
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({
-        antialias: !isMobile,
+        antialias: true,
         powerPreference: 'high-performance'
       });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.25;
+      renderer.toneMappingExposure = 1.3;
       container.appendChild(renderer.domElement);
     } catch (e) {
       console.warn("Museum WebGL not available", e);
@@ -87,42 +102,42 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     }
 
     // 2. Curatorial Gallery Lighting
-    const ambientLight = new THREE.AmbientLight(0x1a1a24, 1.0);
+    const ambientLight = new THREE.AmbientLight(0x252535, 1.4);
     scene.add(ambientLight);
 
-    // Focused Warm Spotlight on Front Active Pedestal
-    const spotlight = new THREE.SpotLight(0xF5EBE6, 24, 30, Math.PI / 4, 0.35, 1.2);
-    spotlight.position.set(0, 8, 9);
-    spotlight.target.position.set(0, 1.8, 6.8);
+    // Warm museum spotlight focused on the front active pedestal
+    const spotlight = new THREE.SpotLight(0xF5EBE6, 28, 35, Math.PI / 4, 0.35, 1.2);
+    spotlight.position.set(0, 9, 11);
+    spotlight.target.position.set(0, 1.2, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
-    // Subtle Architectural Rim Lights
-    const rimLeft = new THREE.PointLight(0xa06cd5, 5, 20);
-    rimLeft.position.set(-7, 3, 4);
+    // Architectural rim lights for edge glow
+    const rimLeft = new THREE.PointLight(0xa06cd5, 5, 22);
+    rimLeft.position.set(-8, 3.5, 4);
     scene.add(rimLeft);
 
-    const rimRight = new THREE.PointLight(0xd4afb9, 5, 20);
-    rimRight.position.set(7, 3, 4);
+    const rimRight = new THREE.PointLight(0xd4afb9, 5, 22);
+    rimRight.position.set(8, 3.5, 4);
     scene.add(rimRight);
 
     // 3. Reflective Obsidian Floor Grid
     const floorGeom = new THREE.PlaneGeometry(60, 60);
     const floorMat = new THREE.MeshStandardMaterial({
       color: 0x08080a,
-      roughness: 0.3,
+      roughness: 0.35,
       metalness: 0.8
     });
     const floor = new THREE.Mesh(floorGeom, floorMat);
     floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -1.6;
+    floor.position.y = -1.55;
     scene.add(floor);
 
     const gridHelper = new THREE.GridHelper(50, 40, 0x33333f, 0x14141a);
-    gridHelper.position.y = -1.59;
+    gridHelper.position.y = -1.54;
     scene.add(gridHelper);
 
-    // 4. Stardust floating dust particles
+    // 4. Stardust floating particles
     const dustCount = 45;
     const dustGeom = new THREE.BufferGeometry();
     const dustPos = new Float32Array(dustCount * 3);
@@ -141,7 +156,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     const dust = new THREE.Points(dustGeom, dustMat);
     scene.add(dust);
 
-    // 5. Continuous 360-Degree Circular Rotunda Carousel (Infinite)
+    // 5. Circular Rotunda Carousel
     const carouselGroup = new THREE.Group();
     carouselGroupRef.current = carouselGroup;
     scene.add(carouselGroup);
@@ -151,19 +166,19 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     const radius = 6.8;
     const total = MUSEUM_ITEMS.length;
 
-    // Reusable Materials for Solid, Premium Frames
+    // Shared materials
     const plinthMat = new THREE.MeshStandardMaterial({
       color: 0x111116,
       roughness: 0.4,
       metalness: 0.8
     });
     const frameChassisMat = new THREE.MeshStandardMaterial({
-      color: 0x16161b, // Solid dark titanium
-      metalness: 0.88,
-      roughness: 0.25
+      color: 0x16161b,
+      metalness: 0.9,
+      roughness: 0.22
     });
     const frameTrimMat = new THREE.MeshStandardMaterial({
-      color: 0xC5A880, // Subtle luxury pale bronze/gold rim
+      color: 0xC5A880,
       metalness: 0.95,
       roughness: 0.15
     });
@@ -173,36 +188,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       metalness: 0.85
     });
 
-    // Precision Rounded Frame Geometry (Solid with prominently rounded corners)
-    const frameWidth = 2.4;
-    const frameHeight = 3.0;
-    const frameRadius = 0.35; // Distinct, elegant Apple-style corner curvature
-    const frameShape = createRoundedRectShape(frameWidth, frameHeight, frameRadius);
-    const frameGeom = new THREE.ExtrudeGeometry(frameShape, {
-      depth: 0.07,
-      bevelEnabled: true,
-      bevelSegments: 4,
-      bevelSize: 0.025,
-      bevelThickness: 0.025,
-      curveSegments: 32
-    });
-
-    // Picture Plane Geometry (Conforms to inner frame with matching rounded corners)
-    const picWidth = 2.16;
-    const picHeight = 2.76;
-    const picRadius = 0.23;
-    const picShape = createRoundedRectShape(picWidth, picHeight, picRadius);
-    const picGeom = new THREE.ShapeGeometry(picShape, 32);
-
-    // Assign normalized UV coordinates across the rounded picture shape
-    const pos = picGeom.attributes.position;
-    const uvs = [];
-    for (let i = 0; i < pos.count; i++) {
-      const u = (pos.getX(i) + picWidth / 2) / picWidth;
-      const v = (pos.getY(i) + picHeight / 2) / picHeight;
-      uvs.push(u, v);
-    }
-    picGeom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    const plinthGeom = new THREE.CylinderGeometry(1.2, 1.35, 1.8, 28);
+    const ringGeom = new THREE.TorusGeometry(1.22, 0.035, 12, 32);
 
     MUSEUM_ITEMS.forEach((item, idx) => {
       const angle = (idx / total) * Math.PI * 2;
@@ -214,34 +201,71 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       group.rotation.y = angle;
 
       // Solid Circular Plinth Base
-      const plinthGeom = new THREE.CylinderGeometry(1.2, 1.35, 1.8, 28);
       const plinth = new THREE.Mesh(plinthGeom, plinthMat);
       group.add(plinth);
 
-      // Subtle Metallic Frame Collar Ring
-      const ringGeom = new THREE.TorusGeometry(1.22, 0.035, 12, 32);
+      // Metallic Collar Ring
       const ring = new THREE.Mesh(ringGeom, frameTrimMat);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = 0.9;
       group.add(ring);
 
-      // Artifact Sub-Group (Frame + Picture Canvas + Solid Backing)
-      const artifactGroup = new THREE.Group();
-      artifactGroup.position.y = 2.3;
+      // Tailored Frame and Surface Proportions:
+      // Preserves 100% natural aspect ratio of the garment photograph (zero stretching!)
+      const targetHeight = 2.65;
+      const itemAspect = item.aspectRatio || (
+        idx === 0 ? 220 / 415 :
+        idx === 1 ? 360 / 460 :
+        idx === 2 ? 245 / 435 :
+        832 / 1152
+      );
 
-      // 1. Solid Frame Chassis with Prominently Rounded Corners
-      // Front face of frame sits at z = -0.07 + 0.07 + 0.025 = +0.025
+      const picW = targetHeight * itemAspect;
+      const picH = targetHeight;
+      const frameW = picW + 0.22;
+      const frameH = picH + 0.22;
+      const frameR = Math.min(0.2, picW * 0.12);
+      const picR = Math.min(0.14, picW * 0.09);
+
+      const frameShape = createRoundedRectShape(frameW, frameH, frameR);
+      const frameGeom = new THREE.ExtrudeGeometry(frameShape, {
+        depth: 0.06,
+        bevelEnabled: true,
+        bevelSegments: 3,
+        bevelSize: 0.02,
+        bevelThickness: 0.02,
+        curveSegments: 24
+      });
+
+      const picShape = createRoundedRectShape(picW, picH, picR);
+      const picGeom = new THREE.ShapeGeometry(picShape, 24);
+
+      // Precise normalized UV mapping preventing any distortion
+      const pos = picGeom.attributes.position;
+      const uvs = [];
+      for (let pIdx = 0; pIdx < pos.count; pIdx++) {
+        const u = (pos.getX(pIdx) + picW / 2) / picW;
+        const v = (pos.getY(pIdx) + picH / 2) / picH;
+        uvs.push(u, v);
+      }
+      picGeom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+
+      // Artifact Sub-Group floating smoothly above the pedestal collar
+      const artifactGroup = new THREE.Group();
+      artifactGroup.position.y = 2.45;
+
+      // Frame Chassis
       const frameMesh = new THREE.Mesh(frameGeom, frameChassisMat);
-      frameMesh.position.z = -0.07;
+      frameMesh.position.z = -0.06;
       artifactGroup.add(frameMesh);
 
-      // 2. Solid Back Enclosure Plate
+      // Solid Back
       const backMesh = new THREE.Mesh(picGeom, backMat);
-      backMesh.position.z = -0.071;
+      backMesh.position.z = -0.061;
       backMesh.rotation.y = Math.PI;
       artifactGroup.add(backMesh);
 
-      // 3. Picture Display Surface with High-Def Texture (Proud on front of frame)
+      // Picture Display Surface
       const texture = textureLoader.load(
         item.image,
         (tex) => {
@@ -267,13 +291,13 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       });
 
       const picMesh = new THREE.Mesh(picGeom, picMat);
-      picMesh.position.z = 0.032; // Proud of the frame's +0.025 front bevel: zero occlusion
+      picMesh.position.z = 0.028;
       picMesh.renderOrder = 2;
       artifactGroup.add(picMesh);
 
       group.add(artifactGroup);
       carouselGroup.add(group);
-      pedestals.push({ group, artifactGroup, angle });
+      pedestals.push({ group, artifactGroup, angle, frameGeom, picGeom, picMat, texture });
     });
 
     pedestalsRef.current = pedestals;
@@ -283,7 +307,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     targetRotundaAngleRef.current = currentRotundaAngleRef.current;
     carouselGroup.rotation.y = currentRotundaAngleRef.current;
 
-    // Pointer Interaction (Orbit active piece & drag-to-swipe)
+    // Pointer Interaction (Desktop drag-to-swipe)
     const handlePointerDown = (e) => {
       isDraggingRef.current = true;
       startDragXRef.current = e.clientX;
@@ -300,175 +324,192 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     const handlePointerUp = (e) => {
       if (!isDraggingRef.current) return;
       isDraggingRef.current = false;
+
       const totalDelta = e.clientX - startDragXRef.current;
-      // If user dragged horizontally > 60px, switch pedestal
-      if (Math.abs(totalDelta) > 60) {
+      if (Math.abs(totalDelta) > 40) {
         if (totalDelta < 0) {
-          selectPedestal((activeIndexRef.current + 1) % total);
+          nextArtifact();
         } else {
-          selectPedestal((activeIndexRef.current - 1 + total) % total);
+          prevArtifact();
         }
       }
     };
 
-    container.addEventListener('pointerdown', handlePointerDown);
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    const domEl = renderer.domElement;
+    domEl.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
 
-    // Render loop with IntersectionObserver
-    let animId = null;
-    let isVisible = true;
-    const clock = new THREE.Clock();
+    // Animation Loop
+    let animationFrameId;
+    let clock = new THREE.Clock();
 
     const animate = () => {
-      if (!isVisible) return;
-      animId = requestAnimationFrame(animate);
-      const elapsed = clock.getElapsedTime();
+      animationFrameId = requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
 
-      // Smooth shortest-path angular rotation of carousel
-      let diff = targetRotundaAngleRef.current - currentRotundaAngleRef.current;
-      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-      currentRotundaAngleRef.current += diff * 0.07;
-      carouselGroup.rotation.y = currentRotundaAngleRef.current;
+      // Smoothly interpolate rotunda carousel angle
+      currentRotundaAngleRef.current += (targetRotundaAngleRef.current - currentRotundaAngleRef.current) * 0.08;
+      if (carouselGroupRef.current) {
+        carouselGroupRef.current.rotation.y = currentRotundaAngleRef.current;
+      }
 
-      // Spring back orbit rotation when pointer is released
+      // Smoothly return active piece orbit angle to zero
       if (!isDraggingRef.current) {
-        orbitAngleRef.current += (0 - orbitAngleRef.current) * 0.08;
+        orbitAngleRef.current *= 0.94;
       }
 
-      // REDUCED, CALM MOVEMENT (Solid, poised gallery feel instead of bobbing)
+      // Subtly animate active front piece levitation
       const currentIdx = activeIndexRef.current;
-      const activePed = pedestals[currentIdx];
-      if (activePed && activePed.artifactGroup) {
-        // Minimal subtle breathing: 0.008 rad (less than half a degree)
-        activePed.artifactGroup.rotation.y = orbitAngleRef.current + Math.sin(elapsed * 0.3) * 0.008;
-      }
-
-      // Background pedestals remain rock-steady
-      pedestals.forEach((p, i) => {
-        if (i !== currentIdx && p.artifactGroup) {
-          p.artifactGroup.rotation.y = Math.sin(elapsed * 0.2 + i) * 0.005;
-        }
-        if (p.artifactGroup) {
-          // Extremely subtle vertical presence
-          p.artifactGroup.position.y = 2.3 + Math.sin(elapsed * 0.35 + i) * 0.006;
+      pedestalsRef.current.forEach((ped, idx) => {
+        if (idx === currentIdx) {
+          ped.artifactGroup.position.y = 2.45 + Math.sin(elapsedTime * 1.5) * 0.03;
+          ped.artifactGroup.rotation.y = orbitAngleRef.current;
+        } else {
+          ped.artifactGroup.position.y = 2.45;
+          ped.artifactGroup.rotation.y = 0;
         }
       });
 
-      dust.rotation.y = elapsed * 0.01;
+      // Animate dust particles
+      dust.rotation.y = elapsedTime * 0.02;
+
       renderer.render(scene, camera);
     };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const wasVisible = isVisible;
-        isVisible = entry.isIntersecting;
-        if (isVisible && !wasVisible) {
-          clock.start();
-          if (!animId) animId = requestAnimationFrame(animate);
-        } else if (!isVisible && animId) {
-          cancelAnimationFrame(animId);
-          animId = null;
-        }
-      },
-      { threshold: 0.05 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    animId = requestAnimationFrame(animate);
+    animate();
 
     const handleResize = () => {
-      if (!renderer || !container) return;
-      const w = container.clientWidth || window.innerWidth;
-      const h = container.clientHeight || 550;
-      camera.aspect = w / h;
+      if (!container || !renderer || !camera) return;
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight || 560;
+      camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(newWidth, newHeight);
     };
-    window.addEventListener('resize', handleResize, { passive: true });
+
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      container.removeEventListener('pointerdown', handlePointerDown);
+      cancelAnimationFrame(animationFrameId);
+      domEl.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('resize', handleResize);
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
-      cancelAnimationFrame(animId);
 
-      scene.clear();
-      if (renderer) {
-        if (renderer.domElement && container.contains(renderer.domElement)) {
-          container.removeChild(renderer.domElement);
-        }
+      // Clean disposal
+      pedestalsRef.current.forEach((ped) => {
+        if (ped.frameGeom) ped.frameGeom.dispose();
+        if (ped.picGeom) ped.picGeom.dispose();
+        if (ped.picMat) ped.picMat.dispose();
+        if (ped.texture) ped.texture.dispose();
+      });
+      plinthGeom.dispose();
+      ringGeom.dispose();
+      dustGeom.dispose();
+      floorGeom.dispose();
+
+      pedestalsRef.current = [];
+      if (renderer && renderer.domElement && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
         renderer.dispose();
       }
     };
   }, [viewMode]);
 
-  // Infinite Pedestal Selection: Calculates continuous carousel angle
-  const selectPedestal = (idx) => {
-    playSound('museum_rotate');
+  // Rotunda Navigation Handlers
+  const selectPedestal = (index) => {
+    playSound('pip');
+    setActiveIndex(index);
     const total = MUSEUM_ITEMS.length;
-    const safeIdx = (idx + total) % total;
-    setActiveIndex(safeIdx);
-    activeIndexRef.current = safeIdx;
+    let target = -(index / total) * Math.PI * 2;
+    const current = targetRotundaAngleRef.current;
+    const diff = (target - current) % (Math.PI * 2);
+    let shortest = diff;
+    if (diff > Math.PI) shortest -= Math.PI * 2;
+    if (diff < -Math.PI) shortest += Math.PI * 2;
+    targetRotundaAngleRef.current = current + shortest;
     orbitAngleRef.current = 0;
-    targetRotundaAngleRef.current = -(safeIdx / total) * Math.PI * 2;
   };
 
   const nextArtifact = () => {
-    selectPedestal(activeIndex + 1);
+    playSound('pip');
+    const nextIdx = (activeIndexRef.current + 1) % MUSEUM_ITEMS.length;
+    selectPedestal(nextIdx);
   };
 
   const prevArtifact = () => {
-    selectPedestal(activeIndex - 1);
+    playSound('pip');
+    const prevIdx = (activeIndexRef.current - 1 + MUSEUM_ITEMS.length) % MUSEUM_ITEMS.length;
+    selectPedestal(prevIdx);
   };
 
-  // Mobile Touch Swipe Handlers
-  const touchStartXRef = useRef(null);
+  // Mobile Touch Gestures for Cinematic Card Stack
   const handleTouchStart = (e) => {
     touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    setIsSwiping(true);
   };
 
-  const handleTouchEnd = (e) => {
-    if (touchStartXRef.current === null) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
-    if (Math.abs(deltaX) > 50) {
-      if (deltaX < 0) {
-        nextArtifact();
-      } else {
-        prevArtifact();
-      }
+  const handleTouchMove = (e) => {
+    if (!isSwiping) return;
+    const deltaX = e.touches[0].clientX - touchStartXRef.current;
+    const deltaY = e.touches[0].clientY - touchStartYRef.current;
+
+    // If scrolling mostly vertically, release swipe lock
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaX) < 15) {
+      return;
     }
-    touchStartXRef.current = null;
+
+    setDragOffset(deltaX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isSwiping) return;
+    setIsSwiping(false);
+
+    if (dragOffset < -50) {
+      nextArtifact();
+    } else if (dragOffset > 50) {
+      prevArtifact();
+    }
+
+    setDragOffset(0);
+  };
+
+  const handleCommissionClick = (item) => {
+    playSound('click');
+    if (onRequestCustomCommission) {
+      onRequestCustomCommission(`Archival Recreation: ${item.name}`);
+    }
+    const el = document.getElementById('custom');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <section
       id="museum"
       ref={sectionRef}
-      className="w-full py-20 sm:py-28 px-4 sm:px-8 lg:px-16 bg-[#060608] select-none border-t border-white/8 text-left"
+      className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-[#060608] select-none border-t border-white/8 text-left transition-colors duration-300"
     >
-      {/* Museum Header */}
-      <div className="mb-12 pb-6 border-b border-white/8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      {/* Museum Editorial Header */}
+      <div className="mb-6 sm:mb-8 pb-4 border-b border-white/8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 mb-3 text-zinc-400 text-[10px] font-mono tracking-[0.25em] uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-2 text-zinc-400 text-[10px] font-mono tracking-[0.25em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
             <span>PERMANENT ARCHIVE // ONE-OF-ONE SPECIMENS</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-light font-mono uppercase tracking-[0.2em] text-white leading-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono uppercase tracking-[0.2em] text-white leading-tight">
             ARCHIVE <span className="text-zinc-500 font-normal">MUSEUM</span>
           </h2>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-3 font-mono tracking-wider max-w-xl leading-relaxed">
-            Historic gallery of commissioned wearable art and sold-out atelier artifacts. Inspect in interactive 3D space or request a private bespoke recreation.
+          <p className="text-zinc-400 text-xs sm:text-sm mt-1.5 font-mono tracking-wider max-w-xl leading-relaxed">
+            Permanent vault of bespoke wearable art and sold-out atelier artifacts. Hand-sculpted specimens available for archival commission.
           </p>
         </div>
 
-        {/* View Mode Switcher */}
-        <div className="flex items-center gap-1.5 bg-[#101014] p-1.5 rounded-full border border-white/10">
+        {/* View Mode Switcher (Desktop only) */}
+        <div className="hidden md:flex items-center gap-1.5 bg-[#101014] p-1.5 rounded-full border border-white/10 shrink-0">
           <button
             onClick={() => {
               playSound('glitch_click');
@@ -480,7 +521,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            3D Gallery
+            3D Rotunda
           </button>
           <button
             onClick={() => {
@@ -493,207 +534,347 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
-            Index
+            Archive Index
           </button>
         </div>
       </div>
 
-      {viewMode === '3d' ? (
-        /* 3D EXHIBITION STAGE */
-        <div className="relative w-full rounded-2xl overflow-hidden border border-white/12 bg-[#09090c] shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col lg:flex-row">
-          {/* Three.js 3D Canvas (Left / Main) */}
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="relative flex-1 h-[440px] sm:h-[520px] lg:h-[620px] w-full cursor-grab active:cursor-grabbing overflow-hidden"
-          >
-            <div ref={mountRef} className="w-full h-full" />
-
-            {/* Hint & Drag Badge */}
-            <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/12 text-[10px] font-mono text-zinc-400 tracking-wider uppercase">
-              <RotateCcw className="w-3 h-3 text-zinc-400" />
-              <span>DRAG TO ROTATE // SWIPE TO CYCLE</span>
-            </div>
-
-            {/* Continuous Carousel Pedestal Navigation Arrows */}
-            <div className="absolute inset-y-0 left-3 right-3 z-10 pointer-events-none flex items-center justify-between">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  prevArtifact();
-                }}
-                className="pointer-events-auto p-2.5 rounded-full bg-black/80 hover:bg-white/15 border border-white/15 hover:border-white/40 text-white backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95"
-                title="Previous Artifact"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  nextArtifact();
-                }}
-                className="pointer-events-auto p-2.5 rounded-full bg-black/80 hover:bg-white/15 border border-white/15 hover:border-white/40 text-white backdrop-blur-md transition-all cursor-pointer shadow-lg active:scale-95"
-                title="Next Artifact"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Quick Artifact Switcher Strip */}
-            <div className="absolute bottom-4 inset-x-4 z-10 flex items-center justify-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-              {MUSEUM_ITEMS.map((item, idx) => (
-                <button
-                  key={item.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectPedestal(idx);
-                  }}
-                  className={`px-3 py-1.5 rounded-full text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer border ${
-                    activeIndex === idx
-                      ? 'bg-white text-black font-semibold border-white shadow-md'
-                      : 'bg-black/80 text-zinc-400 border-white/10 hover:border-white/30 hover:text-white backdrop-blur-md'
-                  }`}
-                >
-                  [{idx + 1 < 10 ? `0${idx + 1}` : idx + 1}] {item.name.slice(0, 18)}...
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Curatorial Archival Plaque (Right Panel - Solid, Refined) */}
-          <div className="w-full lg:w-[420px] bg-[#0d0d11] p-6 sm:p-8 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/10 mobile-grunge-card">
-            <div>
-              {/* Top Meta Badges */}
-              <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/12 text-[10px] font-mono text-zinc-300 tracking-[0.2em] uppercase">
-                  {activeItem.tag}
-                </span>
-                <span className="text-[11px] font-mono text-zinc-500">
-                  EST. {activeItem.year} // 0{activeIndex + 1} OF 0{MUSEUM_ITEMS.length}
-                </span>
-              </div>
-
-              {/* Active Specimen Archival Photograph Card */}
-              <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/15 bg-black mb-5 group shadow-inner">
-                <img
-                  src={activeItem.image}
-                  alt={activeItem.name}
-                  className="w-full h-full object-cover object-center filter brightness-95 group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/15 text-[9px] font-mono tracking-widest text-zinc-300 uppercase">
-                  SPECIMEN // 0{activeIndex + 1}
-                </div>
-                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-zinc-300">
-                  <span className="tracking-wider truncate">{activeItem.name}</span>
-                  <span className="text-zinc-400 shrink-0 ml-2">ATELIER ARCHIVE</span>
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white tracking-[0.15em] mb-4 leading-snug">
-                {activeItem.name}
-              </h3>
-
-              {/* Provenance Story */}
-              <div className="p-4 rounded-xl bg-black/60 border border-white/8 mb-6">
-                <p className="text-xs text-zinc-300 font-mono leading-relaxed">
-                  "{activeItem.story}"
-                </p>
-              </div>
-
-              {/* Materials & Provenance Specs */}
-              <div className="space-y-4 mb-6 text-xs font-mono">
-                <div>
-                  <span className="text-zinc-500 block uppercase text-[10px] tracking-[0.2em] mb-1.5">
-                    CRAFT & MEDIUM
-                  </span>
-                  <span className="text-white bg-white/5 px-2.5 py-1 rounded border border-white/10 inline-block text-[11px]">
-                    {activeItem.materials}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-zinc-500 block uppercase text-[10px] tracking-[0.2em] mb-1.5">
-                    PROVENANCE
-                  </span>
-                  <span className="text-zinc-300 text-[11px]">{activeItem.originalOwner}</span>
-                </div>
-
-                <div>
-                  <span className="text-zinc-500 block uppercase text-[10px] tracking-[0.2em] mb-1.5">
-                    ARCHIVAL RECREATION
-                  </span>
-                  <span className="text-zinc-400 text-[11px] leading-relaxed block">
-                    {activeItem.recreationNote}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Direct Bespoke Recreation Action */}
-            <div className="pt-5 border-t border-white/10">
-              <button
-                onClick={() => {
-                  playSound('click');
-                  onRequestCustomCommission?.(`Recreate Archival Specimen: ${activeItem.name}`);
-                  const el = document.getElementById('custom');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="w-full py-3.5 px-6 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-semibold text-xs tracking-[0.2em] uppercase transition-all duration-200 shadow-lg cursor-pointer flex items-center justify-center gap-2 group"
-              >
-                <Scissors className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
-                <span>COMMISSION ARCHIVAL RECREATION ↗</span>
-              </button>
-              <p className="text-[10px] font-mono text-zinc-500 text-center mt-2.5 uppercase tracking-wider">
-                Hand-sculpted in Guwahati Atelier • 2 to 3 weeks
-              </p>
-            </div>
-          </div>
+      {/* =========================================================================
+          MOBILE VIEW: CINEMATIC SWIPABLE CARD STACK (STRICTLY CARD STACK ON MOBILE)
+          Zero Three.js lag, zero scroll interference, buttery smooth physical card gestures
+          ========================================================================= */}
+      <div className="block md:hidden w-full">
+        {/* Stack Progress HUD */}
+        <div className="flex items-center justify-between mb-4 px-1">
+          <span className="text-[10px] font-mono tracking-widest text-pink uppercase font-semibold flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-ping inline-block" />
+            <span>SPECIMEN [ 0{activeIndex + 1} / 0{MUSEUM_ITEMS.length} ]</span>
+          </span>
+          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
+            [ ⚡ SWIPE OR TAP TO CYCLE ]
+          </span>
         </div>
-      ) : (
-        /* ARCHIVE INDEX GRID VIEW — SOLID FRAMES WITH PROMINENTLY ROUNDED CORNERS */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MUSEUM_ITEMS.map((item, idx) => (
-            <div
-              key={item.id}
-              onClick={() => {
-                selectPedestal(idx);
-                setViewMode('3d');
-              }}
-              className="group bg-[#0d0d12] border border-white/12 hover:border-white/30 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1 mobile-grunge-card"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/60 p-3 pb-0">
-                <div className="w-full h-full rounded-2xl overflow-hidden relative">
+
+        {/* Card Stack Container */}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          className="relative w-full h-[510px] flex items-center justify-center select-none touch-pan-y"
+        >
+          {MUSEUM_ITEMS.map((item, idx) => {
+            // Compute stack position relative to activeIndex
+            const total = MUSEUM_ITEMS.length;
+            const diff = (idx - activeIndex + total) % total;
+
+            // Only render top 3 cards in the visual deck
+            if (diff > 2 && diff < total - 1) return null;
+
+            const isTop = diff === 0;
+            const isSecond = diff === 1;
+            const isThird = diff === 2;
+
+            // Interactive drag styling for top card
+            const transformStyle = isTop
+              ? `translate3d(${dragOffset}px, 0, 0) rotate(${dragOffset * 0.05}deg)`
+              : isSecond
+              ? 'translate3d(0, 14px, 0) scale(0.95)'
+              : isThird
+              ? 'translate3d(0, 28px, 0) scale(0.90)'
+              : 'translate3d(0, 0, 0) scale(0.85)';
+
+            const opacityStyle = isTop ? 1 : isSecond ? 0.7 : isThird ? 0.4 : 0;
+            const zIndexStyle = isTop ? 30 : isSecond ? 20 : isThird ? 10 : 0;
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  transform: transformStyle,
+                  opacity: opacityStyle,
+                  zIndex: zIndexStyle,
+                  transition: isSwiping && isTop ? 'none' : 'transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.35s ease'
+                }}
+                className="absolute inset-x-0 top-0 h-[490px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden mobile-grunge-card"
+              >
+                {/* Top Badge Bar */}
+                <div className="flex items-center justify-between shrink-0 mb-3">
+                  <span className="px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[9px] font-mono tracking-widest text-pink uppercase font-semibold">
+                    {item.tag}
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-400 tracking-wider">
+                    EST. {item.year}
+                  </span>
+                </div>
+
+                {/* Main Specimen Image Frame (Object-contain preserves full garment & head) */}
+                <div className="relative w-full h-[225px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-1">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-105"
+                    className="w-full h-full object-contain filter brightness-95"
                   />
-                  <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[9px] font-mono tracking-widest text-zinc-300 uppercase">
-                    {item.tag}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                  
+                  {/* Photo Corner Badge */}
+                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-white">
+                    <span className="bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 uppercase tracking-widest text-[9px]">
+                      {item.originalOwner}
+                    </span>
+                    <span className="text-pink text-[9px] font-bold">1-OF-1 ARCHIVE</span>
+                  </div>
+                </div>
+
+                {/* Details & Curatorial Copy */}
+                <div className="flex flex-col justify-between flex-1 pt-3 pb-1 text-left">
+                  <div>
+                    <h3 className="font-mono text-sm sm:text-base font-semibold uppercase text-white leading-tight line-clamp-1 mb-1.5">
+                      {item.name}
+                    </h3>
+                    <p className="text-[11px] font-montserrat text-zinc-300 italic line-clamp-2 leading-relaxed mb-2">
+                      "{item.story}"
+                    </p>
+                  </div>
+
+                  {/* Materials Pill */}
+                  <div className="py-1 px-2.5 rounded-lg bg-black/60 border border-white/10 text-[10px] font-mono text-zinc-300 line-clamp-1 mb-2.5">
+                    <span className="text-pink font-semibold">CRAFT: </span>
+                    {item.materials}
+                  </div>
+
+                  {/* Recreation Action Button */}
+                  <button
+                    onClick={() => handleCommissionClick(item)}
+                    className="w-full py-3 px-4 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.18em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Scissors className="w-3.5 h-3.5" />
+                    <span>COMMISSION RECREATION ↗</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Stack Interactive Controls Strip */}
+        <div className="flex items-center justify-between mt-2 px-2">
+          {/* Previous / Next Arrow Controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={prevArtifact}
+              aria-label="Previous Artifact"
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all active:scale-95 cursor-pointer shadow-md"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={nextArtifact}
+              aria-label="Next Artifact"
+              className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white transition-all active:scale-95 cursor-pointer shadow-md"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Direct Specimen Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+            {MUSEUM_ITEMS.map((item, idx) => (
+              <button
+                key={item.id}
+                onClick={() => selectPedestal(idx)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all cursor-pointer border ${
+                  activeIndex === idx
+                    ? 'bg-pink text-black font-bold border-pink shadow-md'
+                    : 'bg-white/5 text-zinc-400 border-white/10'
+                }`}
+              >
+                0{idx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          DESKTOP VIEW: PROPORTIONATE 3D ROTUNDA & CURATORIAL PLAQUE (MD+ SCREENS)
+          Spacious luxury gallery camera, solid titanium frames, pristine typography
+          ========================================================================= */}
+      <div className="hidden md:block w-full">
+        {viewMode === '3d' ? (
+          <div className="relative w-full rounded-2xl overflow-hidden border border-white/12 bg-[#09090c] shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-row items-stretch">
+            {/* Three.js 3D Canvas (Left / Main) */}
+            <div className="museum-dark-canvas relative flex-1 h-[540px] lg:h-[580px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
+              <div ref={mountRef} className="w-full h-full" />
+
+              {/* Hint & Drag Badge */}
+              <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono text-zinc-300 tracking-wider uppercase">
+                <RotateCcw className="w-3 h-3 text-pink" />
+                <span>DRAG TO ROTATE // CLICK TO CYCLE</span>
+              </div>
+
+              {/* Pedestal Navigation Arrows */}
+              <div className="absolute inset-y-0 left-4 right-4 z-10 pointer-events-none flex items-center justify-between">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevArtifact();
+                  }}
+                  className="pointer-events-auto p-3.5 rounded-full bg-black/75 hover:bg-black/95 border border-white/20 text-white backdrop-blur-md transition-all cursor-pointer shadow-2xl active:scale-95"
+                  title="Previous Artifact"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextArtifact();
+                  }}
+                  className="pointer-events-auto p-3.5 rounded-full bg-black/75 hover:bg-black/95 border border-white/20 text-white backdrop-blur-md transition-all cursor-pointer shadow-2xl active:scale-95"
+                  title="Next Artifact"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Artifact Selector Strip (Framed above floor, never occluding plinth) */}
+              <div className="absolute bottom-4 inset-x-4 z-10 flex items-center justify-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                {MUSEUM_ITEMS.map((item, idx) => (
+                  <button
+                    key={item.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      selectPedestal(idx);
+                    }}
+                    className={`px-3.5 py-1.5 rounded-full text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer border ${
+                      activeIndex === idx
+                        ? 'bg-white text-black font-semibold border-white shadow-lg'
+                        : 'bg-black/80 text-zinc-300 border-white/15 hover:border-pink hover:text-white backdrop-blur-md'
+                    }`}
+                  >
+                    [0{idx + 1}] {item.shortName || item.name.slice(0, 20)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Curatorial Archival Plaque (Right Panel - Clean, spacious editorial layout) */}
+            <div className="museum-plaque w-[390px] lg:w-[440px] bg-[#0c0c10] p-6 lg:p-7 flex flex-col justify-between border-l border-white/10 shrink-0 text-left">
+              <div>
+                {/* Top Meta Badges */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="px-3 py-0.5 rounded-full bg-pink/15 border border-pink/30 text-[10px] font-mono text-pink tracking-[0.2em] uppercase font-semibold">
+                    {activeItem.tag}
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-400">
+                    EST. {activeItem.year} // 0{activeIndex + 1} OF 0{MUSEUM_ITEMS.length}
+                  </span>
+                </div>
+
+                {/* Specimen Title */}
+                <h3 className="text-lg lg:text-xl font-mono font-semibold uppercase text-white tracking-[0.14em] mb-2 leading-snug">
+                  {activeItem.name}
+                </h3>
+
+                {/* Commission Tier Pill */}
+                <div className="mb-3.5">
+                  <span className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-mono text-zinc-300 inline-block">
+                    {activeItem.commissionTier}
+                  </span>
+                </div>
+
+                {/* Provenance Story Box with Left Accent */}
+                <div className="story-box p-4 rounded-xl bg-black/60 border border-white/10 relative overflow-hidden mb-4">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-pink" />
+                  <p className="text-xs text-zinc-200 font-mono italic leading-relaxed pl-1.5">
+                    "{activeItem.story}"
+                  </p>
+                </div>
+
+                {/* Materials & Provenance Specs */}
+                <div className="space-y-3 mb-4 text-xs font-mono">
+                  <div className="craft-box p-3 rounded-lg bg-black/40 border border-white/10">
+                    <span className="text-zinc-400 block uppercase text-[9px] tracking-[0.2em] mb-1 font-semibold">
+                      CRAFT & MEDIUM
+                    </span>
+                    <span className="text-white text-xs font-medium">
+                      {activeItem.materials}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between px-1">
+                    <span className="text-zinc-400 uppercase text-[9px] tracking-[0.2em]">
+                      PROVENANCE
+                    </span>
+                    <span className="text-zinc-200 text-xs font-medium">
+                      {activeItem.originalOwner}
+                    </span>
+                  </div>
+
+                  <div className="px-1">
+                    <span className="text-zinc-400 block uppercase text-[9px] tracking-[0.2em] mb-1">
+                      ARCHIVAL RECREATION NOTE
+                    </span>
+                    <p className="text-zinc-300 text-[11px] leading-relaxed">
+                      {activeItem.recreationNote}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div className="p-6">
-                <div className="text-[10px] font-mono text-zinc-500 tracking-[0.2em] uppercase mb-1">
-                  SPECIMEN #{idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
-                </div>
-                <h4 className="text-base font-mono font-medium tracking-[0.15em] uppercase text-white mb-2">
-                  {item.name}
-                </h4>
-                <p className="text-xs text-zinc-400 font-mono line-clamp-2 mb-4 leading-relaxed">
-                  "{item.story}"
+
+              {/* Commission Archival Recreation Button */}
+              <div className="pt-3 border-t border-white/10 shrink-0">
+                <button
+                  onClick={() => handleCommissionClick(activeItem)}
+                  className="btn-commission w-full py-3.5 px-5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.2em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer group"
+                >
+                  <Scissors className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
+                  <span>COMMISSION RECREATION ↗</span>
+                </button>
+                <p className="text-[9px] font-mono text-zinc-400 text-center mt-2 uppercase tracking-wider">
+                  Hand-sculpted in Guwahati Atelier • 2 to 3 weeks
                 </p>
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-300 tracking-[0.15em] uppercase group-hover:text-white transition-colors">
-                  <span>INSPECT IN 3D</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ) : (
+          /* Archive Index Grid View */
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {MUSEUM_ITEMS.map((item, idx) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  selectPedestal(idx);
+                  setViewMode('3d');
+                }}
+                className="group p-5 rounded-2xl border border-white/10 bg-[#0d0d12] hover:border-pink/40 transition-all cursor-pointer flex flex-col justify-between"
+              >
+                <div>
+                  <div className="aspect-[4/5] rounded-xl overflow-hidden border border-white/10 bg-black mb-3 relative flex items-center justify-center p-2">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-[9px] font-mono text-pink uppercase">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <h4 className="font-mono text-sm uppercase text-white font-medium mb-1 line-clamp-1">
+                    {item.name}
+                  </h4>
+                  <p className="text-[11px] font-mono text-zinc-400 line-clamp-2">
+                    {item.materials}
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-white/10 mt-3 flex items-center justify-between text-[10px] font-mono text-zinc-400 group-hover:text-pink transition-colors">
+                  <span>SPECIMEN 0{idx + 1}</span>
+                  <span>VIEW IN 3D ↗</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

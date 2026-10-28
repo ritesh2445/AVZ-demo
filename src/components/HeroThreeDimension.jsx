@@ -13,7 +13,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(true);
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
 
   // Synchronous initial mobile detection for instant, lag-free mobile video selection
@@ -23,6 +23,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     }
     return false;
   });
+
+  // Distinct Video Reel for Mobile vs Desktop
+  const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
+  const audioSource = isMobileDevice ? ASSET_MANIFEST.audio.heroMobile : ASSET_MANIFEST.audio.heroDesktop;
 
   // Lightspeed Satellite Warp State (Pure 3D movement, zero pink line / extra effects)
   const [isCinematicMode, setIsCinematicMode] = useState(false);
@@ -509,22 +513,72 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     };
   }, []); // Only mount WebGL scene once! Must NOT depend on isWarping to prevent scene destruction during animation
 
+  // Ensure video element plays reliably across all browsers and devices
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Explicitly set DOM properties for 100% browser autoplay policy compliance
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
+    const markLoaded = () => setVideoLoaded(true);
+
+    if (video.readyState >= 2) {
+      markLoaded();
+    }
+
+    video.addEventListener('loadeddata', markLoaded);
+    video.addEventListener('canplay', markLoaded);
+    video.addEventListener('playing', markLoaded);
+
+    try {
+      video.load();
+    } catch (e) {}
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => markLoaded())
+        .catch(() => {
+          video.muted = true;
+          video.play().then(markLoaded).catch(() => {});
+        });
+    }
+
+    return () => {
+      video.removeEventListener('loadeddata', markLoaded);
+      video.removeEventListener('canplay', markLoaded);
+      video.removeEventListener('playing', markLoaded);
+    };
+  }, [videoSource]);
+
   // Synchronized Master Video & Audio Controls
   useEffect(() => {
     const video = videoRef.current;
-    const audio = audioRef.current;
-    if (!video || !audio) return;
+    if (video) {
+      if (isPlaying) {
+        const p1 = video.play();
+        if (p1 && p1.catch) {
+          p1.catch(() => {
+            video.muted = true;
+            video.play().catch(() => {});
+          });
+        }
+      } else {
+        video.pause();
+      }
+    }
 
-    if (isPlaying) {
-      const p1 = video.play();
-      if (p1 && p1.catch) p1.catch(() => {});
-      if (!isMuted) {
+    const audio = audioRef.current;
+    if (audio) {
+      if (isPlaying && !isMuted) {
         const p2 = audio.play();
         if (p2 && p2.catch) p2.catch(() => {});
+      } else {
+        audio.pause();
       }
-    } else {
-      video.pause();
-      audio.pause();
     }
   }, [isPlaying, isMuted, isMobileDevice]);
 
@@ -755,10 +809,6 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     };
   }, []);
 
-  // Distinct Video Reel for Mobile vs Desktop
-  const videoSource = isMobileDevice ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
-  const audioSource = isMobileDevice ? ASSET_MANIFEST.audio.heroMobile : ASSET_MANIFEST.audio.heroDesktop;
-
   return (
     <section
       ref={sectionRef}
@@ -777,6 +827,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       <video
         ref={videoRef}
         key={videoSource}
+        src={videoSource}
         autoPlay
         loop
         muted
@@ -787,8 +838,11 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         disablePictureInPicture
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-opacity duration-700 ease-out ${
-          videoLoaded ? 'opacity-100' : 'opacity-0'
+        onCanPlay={() => setVideoLoaded(true)}
+        onPlay={() => setVideoLoaded(true)}
+        onPlaying={() => setVideoLoaded(true)}
+        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-opacity duration-500 ease-out ${
+          videoLoaded ? 'opacity-100' : 'opacity-90'
         }`}
         style={{
           filter: 'none',

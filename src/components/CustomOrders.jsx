@@ -60,9 +60,9 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
   };
 
   return (
-    <section id="custom" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
+    <section id="custom" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-pitch-black select-none border-t border-white/5 text-left">
       {/* Header */}
-      <div className="mb-14 pb-8 border-b border-white/10 text-left">
+      <div className="mb-8 pb-5 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
           <span>BESPOKE WEARABLE ART // DIRECT ATELIER COMMISSION</span>
