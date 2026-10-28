@@ -40,6 +40,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   const coreMatRef = useRef(null);
   const warpAnimIdRef = useRef(null);
   const autoWarpTimerRef = useRef(null);
+  const lastInteractionTimeRef = useRef(0);
   const isInteractingRef = useRef(false);
   const isWarpingRef = useRef(false);
   const isCinematicModeRef = useRef(false);
@@ -313,6 +314,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     let currentMouseY = 0;
 
     const handlePointerMove = (e) => {
+      lastInteractionTimeRef.current = Date.now();
       const w = window.innerWidth;
       const h = window.innerHeight;
       const x = (e.clientX / w) * 2 - 1;
@@ -343,7 +345,13 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       }
     };
 
+    const handleUserActivity = () => {
+      lastInteractionTimeRef.current = Date.now();
+    };
+
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
+    window.addEventListener('touchstart', handleUserActivity, { passive: true });
 
     // Release pointer interaction on touch end / cancel so auto-timer always resumes on mobile
     const handlePointerRelease = () => {
@@ -484,6 +492,8 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     return () => {
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerdown', handleUserActivity);
+      window.removeEventListener('touchstart', handleUserActivity);
       window.removeEventListener('pointerup', handlePointerRelease);
       window.removeEventListener('pointercancel', handlePointerRelease);
       window.removeEventListener('click', handleClick);
@@ -630,17 +640,36 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
   // =========================================================================
   const triggerLightspeedWarp = (e) => {
     if (e && e.stopPropagation) e.stopPropagation();
-    if (isCinematicModeRef.current || isWarpingRef.current) return;
+    if (isCinematicModeRef.current) return;
 
+    // Clear auto-warp timer so it never double-fires
+    if (autoWarpTimerRef.current) {
+      clearInterval(autoWarpTimerRef.current);
+      autoWarpTimerRef.current = null;
+    }
+
+    if (isWarpingRef.current) return;
     isWarpingRef.current = true;
     setIsWarping(true);
-    playSound('lightspeed_warp');
+
+    try {
+      playSound('lightspeed_warp');
+    } catch (err) {}
 
     const emblemGroup = emblemGroupRef.current;
     const photoPlanesGroup = photoPlanesGroupRef.current;
 
+    // Safety fallback: If 3D groups are absent, complete transition immediately
+    if (!emblemGroup && !photoPlanesGroup) {
+      isCinematicModeRef.current = true;
+      isWarpingRef.current = false;
+      setIsCinematicMode(true);
+      setIsWarping(false);
+      return;
+    }
+
     // Movement departure vector: Accelerates into the screen's depth towards upper-right
-    const isMob = window.innerWidth < 768;
+    const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
     const targetDx = isMob ? 7.0 : 12.0;
     const targetDy = isMob ? 9.0 : 6.5;
     const targetDz = -58.0;
@@ -654,17 +683,38 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const initialPhotoY = photoPlanesGroup ? photoPlanesGroup.position.y : 0;
     const initialPhotoZ = photoPlanesGroup ? photoPlanesGroup.position.z : 0;
 
-    const duration = 1000; // 1s pure kinetic hyperdrive
+    const duration = 900; // 0.9s kinetic hyperdrive
     const startTime = performance.now();
+
+    const finishWarp = () => {
+      clearTimeout(safetyTimeout);
+      if (warpAnimIdRef.current) {
+        cancelAnimationFrame(warpAnimIdRef.current);
+        warpAnimIdRef.current = null;
+      }
+      if (emblemGroup) {
+        emblemGroup.visible = false;
+        emblemGroup.scale.setScalar(1);
+        emblemGroup.position.set(0, 0, 0);
+      }
+      if (photoPlanesGroup) {
+        photoPlanesGroup.visible = false;
+        photoPlanesGroup.scale.setScalar(1);
+        photoPlanesGroup.position.set(0, 0, 0);
+      }
+      isCinematicModeRef.current = true;
+      isWarpingRef.current = false;
+      setIsCinematicMode(true);
+      setIsWarping(false);
+    };
+
+    // Guaranteed safety timeout: Even if browser throttles RAF, guarantee 3D vanishes cleanly
+    const safetyTimeout = setTimeout(finishWarp, duration + 250);
 
     const warpLoop = (now) => {
       const elapsed = now - startTime;
       const linearProgress = Math.min(1, Math.max(0, elapsed / duration));
-
-      // Relativistic exponential warp velocity
       const warpSpeed = Math.pow(linearProgress, 2.7);
-
-      // Shrinks progressively smaller and smaller like a distant satellite into deep space
       const currentScale = Math.max(0.0001, initialScale * (1 - Math.pow(linearProgress, 2.0)));
 
       if (emblemGroup) {
@@ -685,23 +735,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       if (linearProgress < 1) {
         warpAnimIdRef.current = requestAnimationFrame(warpLoop);
       } else {
-        // Complete pure movement vanish
-        if (emblemGroup) {
-          emblemGroup.visible = false;
-          emblemGroup.scale.setScalar(1);
-          emblemGroup.position.set(0, 0, 0);
-        }
-        if (photoPlanesGroup) {
-          photoPlanesGroup.visible = false;
-          photoPlanesGroup.scale.setScalar(1);
-          photoPlanesGroup.position.set(0, 0, 0);
-        }
-
-        isCinematicModeRef.current = true;
-        isWarpingRef.current = false;
-        setIsCinematicMode(true);
-        setIsWarping(false);
-        warpAnimIdRef.current = null;
+        finishWarp();
       }
     };
 
@@ -713,14 +747,17 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     if (e && e.stopPropagation) e.stopPropagation();
     if (isWarpingRef.current) return;
 
-    playSound('lightspeed_warp');
+    try {
+      playSound('lightspeed_warp');
+    } catch (err) {}
+
     isWarpingRef.current = true;
     setIsWarping(true);
 
     const emblemGroup = emblemGroupRef.current;
     const photoPlanesGroup = photoPlanesGroupRef.current;
 
-    const isMob = window.innerWidth < 768;
+    const isMob = typeof window !== 'undefined' && window.innerWidth < 768;
     const startDx = isMob ? 7.0 : 12.0;
     const startDy = isMob ? 9.0 : 6.5;
     const startDz = -58.0;
@@ -736,14 +773,38 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       photoPlanesGroup.scale.setScalar(0.01);
     }
 
-    const duration = 950;
+    const duration = 900;
     const startTime = performance.now();
+
+    const finishSummon = () => {
+      clearTimeout(safetyTimeout);
+      if (warpAnimIdRef.current) {
+        cancelAnimationFrame(warpAnimIdRef.current);
+        warpAnimIdRef.current = null;
+      }
+      if (emblemGroup) {
+        emblemGroup.visible = true;
+        emblemGroup.position.set(0, 0, 0);
+        emblemGroup.scale.setScalar(1);
+      }
+      if (photoPlanesGroup) {
+        photoPlanesGroup.visible = true;
+        photoPlanesGroup.position.set(0, 0, 0);
+        photoPlanesGroup.scale.setScalar(1);
+      }
+      isCinematicModeRef.current = false;
+      isWarpingRef.current = false;
+      setIsCinematicMode(false);
+      setIsWarping(false);
+      lastInteractionTimeRef.current = Date.now();
+    };
+
+    const safetyTimeout = setTimeout(finishSummon, duration + 250);
 
     const returnLoop = (now) => {
       const elapsed = now - startTime;
       const progress = Math.min(1, Math.max(0, elapsed / duration));
       const ease = 1 - Math.pow(1 - progress, 3);
-
       const currentScale = 0.01 + ease * 0.99;
 
       if (emblemGroup) {
@@ -760,22 +821,17 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       }
 
       if (progress < 1) {
-        requestAnimationFrame(returnLoop);
+        warpAnimIdRef.current = requestAnimationFrame(returnLoop);
       } else {
-        if (emblemGroup) emblemGroup.position.set(0, 0, 0);
-        if (photoPlanesGroup) photoPlanesGroup.position.set(0, 0, 0);
-        isCinematicModeRef.current = false;
-        isWarpingRef.current = false;
-        setIsCinematicMode(false);
-        setIsWarping(false);
+        finishSummon();
       }
     };
 
-    requestAnimationFrame(returnLoop);
+    warpAnimIdRef.current = requestAnimationFrame(returnLoop);
   };
 
   // =========================================================================
-  // AUTOMATIC VANISH TIMER (Vanishes automatically with movement in 4s if idle)
+  // AUTOMATIC VANISH TIMER (Vanishes automatically in 4s if idle)
   // =========================================================================
   useEffect(() => {
     if (!isReady || isCinematicMode || isWarping) return;
@@ -784,14 +840,20 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     setAutoTimerRemaining(countdown);
 
     const interval = setInterval(() => {
-      // Pause countdown if user is actively touching or hovering
-      if (isInteractingRef.current) return;
+      // If user interacted recently (within 1.5s), reset countdown to 4s and hold
+      const timeSinceActivity = Date.now() - lastInteractionTimeRef.current;
+      if (timeSinceActivity < 1500) {
+        countdown = 4;
+        setAutoTimerRemaining(4);
+        return;
+      }
 
       countdown -= 1;
       setAutoTimerRemaining(countdown);
 
       if (countdown <= 0) {
         clearInterval(interval);
+        autoWarpTimerRef.current = null;
         triggerLightspeedWarp();
       }
     }, 1000);
@@ -800,6 +862,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
 
     return () => {
       clearInterval(interval);
+      autoWarpTimerRef.current = null;
     };
   }, [isReady, isCinematicMode, isWarping]);
 
@@ -864,7 +927,10 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       {!isCinematicMode && (
         <div className="absolute top-20 sm:top-24 right-4 sm:right-8 z-[20] flex items-center gap-2 animate-in fade-in duration-300">
           <button
-            onClick={triggerLightspeedWarp}
+            onClick={(e) => {
+              e.stopPropagation();
+              triggerLightspeedWarp(e);
+            }}
             title="Reveal background video reel"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 hover:bg-black/80 border border-white/15 hover:border-white/30 text-zinc-300 hover:text-white text-[10px] sm:text-[11px] font-mono tracking-wider backdrop-blur-md cursor-pointer transition-all shadow-md active:scale-95"
           >
