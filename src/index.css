@@ -502,3 +502,281 @@ article,
     animation-play-state: running;
   }
 }
+
+/* =========================================================================
+   STYLIZED CARDS: SOFT PURPLE GRUNGE GLOW + CONTINUOUS MOVING EDGE LIGHT
+   Mobile & Responsive High-Fashion Cyberpunk Aesthetics
+   ========================================================================= */
+.mobile-grunge-card {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.18), rgba(190, 24, 93, 0.12) 45%, rgba(10, 2, 14, 0.96) 100%);
+  box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.85), 0 0 30px -4px rgba(168, 85, 247, 0.32), 0 0 14px rgba(190, 24, 93, 0.22);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  overflow: hidden;
+}
+
+/* Continuously gliding laser edge light from one edge around to the other */
+.mobile-grunge-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(244, 114, 182, 0.15) 20%, 
+    rgba(192, 132, 252, 0.95) 50%, 
+    rgba(244, 114, 182, 0.15) 80%, 
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: smoothEdgeLightSweep 4.5s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes smoothEdgeLightSweep {
+  0% {
+    background-position: 250% 0;
+  }
+  100% {
+    background-position: -250% 0;
+  }
+}
+
+/* =========================================================================
+   ELECTRIC DECRYPTION TYPING ANIMATION (CYBER GLITCH + NEON SPARK)
+   ========================================================================= */
+@keyframes electricGlow {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(244, 114, 182, 0.9), 0 0 20px rgba(192, 132, 252, 0.6);
+    color: #ffffff;
+  }
+  50% {
+    text-shadow: 0 0 14px rgba(236, 72, 153, 1), 0 0 28px rgba(168, 85, 247, 0.9);
+    color: #fce7f3;
+  }
+}
+
+.electric-char {
+  display: inline-block;
+  animation: electricGlow 0.18s ease-in-out infinite alternate;
+  font-family: var(--font-mono, monospace);
+  color: #f472b6;
+}
+
+.electric-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: middle;
+  background: linear-gradient(180deg, #f472b6, #c084fc, #38bdf8);
+  box-shadow: 0 0 10px #f472b6, 0 0 20px #c084fc;
+  border-radius: 1px;
+  animation: pulse 0.75s ease-in-out infinite;
+}
+
+/* =========================================================================
+   ARCHITECTURAL HAUTE-COUTURE LIGHT MODE (ALABASTER, CHALK & DEEP INK)
+   Zero Vanished Text, Impeccable WCAG AAA Contrast, Luxury Brand Aesthetics
+   ========================================================================= */
+html.light-theme, [data-theme="light"] {
+  --color-pitch-black: #f8f8fa !important;
+  --color-pure-black: #ffffff !important;
+  --color-dark-purple: #f3f3f7 !important;
+  --color-deep-surface: #ffffff !important;
+  --color-mid-purple: #ebebf2 !important;
+  --color-silver: #18181b !important;
+  --color-bright-silver: #09090b !important;
+  --color-white: #09090b !important;
+  --pitch-black: #f8f8fa !important;
+  --pure-black: #ffffff !important;
+  --dark-purple: #f3f3f7 !important;
+  --deep-purple-surface: #ffffff !important;
+  --mid-purple: #ebebf2 !important;
+  --metallic-silver: #27272a !important;
+  --bright-silver: #09090b !important;
+  background-color: #f8f8fa !important;
+  color: #18181b !important;
+}
+
+html.light-theme body {
+  background-color: #f8f8fa !important;
+  color: #18181b !important;
+}
+
+html.light-theme body::before {
+  background-color: #f8f8fa !important;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(190, 24, 93, 0.05) 0%, transparent 60%),
+    radial-gradient(circle at 15% 35%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 85% 65%, rgba(244, 114, 182, 0.05) 0%, transparent 55%),
+    radial-gradient(circle at 50% 95%, rgba(220, 200, 230, 0.08) 0%, transparent 60%) !important;
+}
+
+/* Sections in Light Mode */
+html.light-theme section {
+  background-color: transparent !important;
+}
+
+html.light-theme .bg-pitch-black,
+html.light-theme [class*="bg-[#060608]"],
+html.light-theme [class*="bg-[#08080a]"],
+html.light-theme [class*="bg-[#000000]"] {
+  background-color: #f8f8fa !important;
+}
+
+html.light-theme [class*="bg-[#09090c]"],
+html.light-theme [class*="bg-[#0d0d11]"],
+html.light-theme [class*="bg-[#0d0d12]"],
+html.light-theme [class*="bg-[#101014]"],
+html.light-theme [class*="bg-[#111116]"] {
+  background-color: #ffffff !important;
+}
+
+/* Light Mode Card Surfaces & Background Gradient Resets */
+html.light-theme [id^="card-"],
+html.light-theme .mobile-grunge-card {
+  background-image: none !important;
+  background: radial-gradient(circle at 50% 0%, rgba(244, 114, 182, 0.12), rgba(192, 132, 252, 0.08) 50%, #ffffff 100%) !important;
+  border-color: rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.08), 0 0 20px rgba(192, 132, 252, 0.15) !important;
+}
+
+html.light-theme .mobile-grunge-card::after {
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(190, 24, 93, 0.2) 20%, 
+    rgba(168, 85, 247, 0.85) 50%, 
+    rgba(190, 24, 93, 0.2) 80%, 
+    transparent 100%
+  ) !important;
+  background-size: 250% 100% !important;
+}
+
+html.light-theme [class*="bg-[#140217]"],
+html.light-theme [class*="bg-[#120317]"],
+html.light-theme [class*="bg-[#0a020d]"],
+html.light-theme [class*="bg-[#0d020f]"],
+html.light-theme [class*="bg-[#1c041f]"],
+html.light-theme [class*="bg-[#0b030f]"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 10px 35px -8px rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Contrast Typography: Zero Text Vanishing */
+html.light-theme .text-white,
+html.light-theme [id^="card-"] h3,
+html.light-theme .mobile-grunge-card h3,
+html.light-theme .mobile-grunge-card h4 {
+  color: #09090b !important;
+}
+
+html.light-theme .text-silver,
+html.light-theme .text-zinc-100,
+html.light-theme .text-zinc-200,
+html.light-theme .text-zinc-300,
+html.light-theme [id^="card-"] p,
+html.light-theme .mobile-grunge-card p {
+  color: #18181b !important;
+}
+
+html.light-theme [class*="text-silver/"] {
+  color: #27272a !important;
+}
+
+html.light-theme .text-zinc-400,
+html.light-theme .text-zinc-500,
+html.light-theme [id^="card-"] span.font-mono,
+html.light-theme .mobile-grunge-card span.font-mono {
+  color: #52525b !important;
+}
+
+html.light-theme [id^="card-"] .text-pink,
+html.light-theme [class*="text-pink/"],
+html.light-theme .mobile-grunge-card .text-pink,
+html.light-theme .mobile-grunge-card .text-pink-300,
+html.light-theme .mobile-grunge-card .text-pink-400 {
+  color: #be185d !important;
+}
+
+html.light-theme .electric-char {
+  color: #be185d !important;
+  text-shadow: 0 0 8px rgba(190, 24, 93, 0.4) !important;
+}
+
+html.light-theme .electric-cursor {
+  background: linear-gradient(180deg, #be185d, #a855f7) !important;
+  box-shadow: 0 0 8px rgba(190, 24, 93, 0.6) !important;
+}
+
+/* Hairline Borders in Light Mode */
+html.light-theme [class*="border-white/"] {
+  border-color: rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Dark Accents in Light Mode */
+html.light-theme [class*="bg-black/"] {
+  background-color: rgba(244, 244, 247, 0.95) !important;
+  color: #18181b !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme [class*="bg-white/"] {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Inverted Solid Buttons for Premium Feel */
+html.light-theme .bg-white.text-black {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+html.light-theme .bg-white.text-black:hover {
+  background-color: #27272a !important;
+}
+
+/* Navbar Capsule in Light Mode */
+html.light-theme header > div {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08) !important;
+}
+html.light-theme header span {
+  color: #09090b !important;
+}
+html.light-theme header nav button {
+  color: #52525b !important;
+}
+html.light-theme header nav button:hover {
+  color: #09090b !important;
+}
+html.light-theme header button svg {
+  color: #27272a !important;
+}
+html.light-theme header button:hover svg {
+  color: #09090b !important;
+}
+
+/* Mobile Drawer in Light Mode */
+html.light-theme .fixed.inset-0.z-40 {
+  background-color: rgba(248, 248, 250, 0.98) !important;
+  color: #09090b !important;
+}
+html.light-theme .fixed.inset-0.z-40 span {
+  color: #09090b !important;
+}
+html.light-theme .fixed.inset-0.z-40 span.text-zinc-500 {
+  color: #71717a !important;
+}
+html.light-theme .fixed.inset-0.z-40 button {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+html.light-theme .fixed.inset-0.z-40 button svg {
+  color: #27272a !important;
+}

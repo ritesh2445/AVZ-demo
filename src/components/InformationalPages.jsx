@@ -192,7 +192,7 @@ export function ShippingPackagingReturns() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Shipping */}
-        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between">
+        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between mobile-grunge-card">
           <div>
             <div className="p-3 w-fit rounded-2xl bg-black/60 border border-white/10 mb-4">
               <Truck className="w-6 h-6 text-pink" />
@@ -208,7 +208,7 @@ export function ShippingPackagingReturns() {
         </div>
 
         {/* Packaging */}
-        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between">
+        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between mobile-grunge-card">
           <div>
             <div className="p-3 w-fit rounded-2xl bg-black/60 border border-white/10 mb-4">
               <Package className="w-6 h-6 text-pink" />
@@ -224,7 +224,7 @@ export function ShippingPackagingReturns() {
         </div>
 
         {/* Returns */}
-        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between">
+        <div className="p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 flex flex-col justify-between mobile-grunge-card">
           <div>
             <div className="p-3 w-fit rounded-2xl bg-black/60 border border-white/10 mb-4">
               <RefreshCw className="w-6 h-6 text-pink" />

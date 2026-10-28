@@ -44,64 +44,97 @@ const CARDS = [
   { id: 'card-aesthetic', label: 'AESTHETIC INSPIRATION', tag: '05' }
 ];
 
+const GLYPHS = ['⚡', 'Ξ', 'Ø', 'Δ', 'X', '§', '0', '1', '•', '+', '#', 'F', '9', '⚡'];
+
 /**
- * TypewriterText: Progressively streams text in when the card scrolls into view.
- * Paced for a fluid, sophisticated cyber-terminal typewriter rhythm.
- * Clicking instantly completes the paragraph.
+ * ElectricTypewriterBlock: Cyberpunk decoding glitch + neon electric spark typing effect.
+ * Each character dynamically resolves through electric glitch glyphs before snapping into place.
+ * Guaranteed sequential paragraph progression with zero skipped points.
  */
-function TypewriterBlock({ paragraphs, isVisible }) {
-  const [revealedChars, setRevealedChars] = useState(
-    paragraphs.map(() => 0)
-  );
-  const [currentParaIdx, setCurrentParaIdx] = useState(0);
+function ElectricTypewriterBlock({ paragraphs, isVisible }) {
+  const [revealedLengths, setRevealedLengths] = useState(() => paragraphs.map(() => 0));
+  const [activeParaIdx, setActiveParaIdx] = useState(0);
+  const [glitchChar, setGlitchChar] = useState('');
+
+  // Reset if paragraphs change
+  useEffect(() => {
+    setRevealedLengths(paragraphs.map(() => 0));
+    setActiveParaIdx(0);
+    setGlitchChar('');
+  }, [paragraphs]);
 
   useEffect(() => {
     if (!isVisible) return;
-    if (currentParaIdx >= paragraphs.length) return;
+    if (activeParaIdx >= paragraphs.length) {
+      setGlitchChar('');
+      return;
+    }
 
-    const currentText = paragraphs[currentParaIdx];
-    const timer = setInterval(() => {
-      setRevealedChars((prev) => {
-        const next = [...prev];
-        const currentCount = next[currentParaIdx];
-        if (currentCount >= currentText.length) {
-          clearInterval(timer);
-          setCurrentParaIdx((p) => p + 1);
-          return next;
-        }
-        // Advance by 2 characters per tick for crisp, effortless cadence
-        const step = currentCount + 2 >= currentText.length ? currentText.length - currentCount : 2;
-        next[currentParaIdx] = currentCount + step;
-        return next;
-      });
-    }, 14);
+    const currentText = paragraphs[activeParaIdx];
+    let charPos = revealedLengths[activeParaIdx] || 0;
 
-    return () => clearInterval(timer);
-  }, [isVisible, currentParaIdx, paragraphs]);
+    // If already fully revealed for some reason, advance immediately
+    if (charPos >= currentText.length) {
+      setActiveParaIdx((prev) => prev + 1);
+      return;
+    }
 
-  // Click card to instantly reveal all text if desired
+    const interval = setInterval(() => {
+      // Advance by 2 characters per tick for fluid, crisp electric cadence
+      charPos += 2;
+      const randomGlyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      setGlitchChar(randomGlyph);
+
+      if (charPos >= currentText.length) {
+        clearInterval(interval);
+        setRevealedLengths((prev) => {
+          const updated = [...prev];
+          updated[activeParaIdx] = currentText.length;
+          return updated;
+        });
+        // Pause briefly between paragraphs before decoding the next paragraph
+        setTimeout(() => {
+          setActiveParaIdx((prev) => prev + 1);
+        }, 120);
+      } else {
+        setRevealedLengths((prev) => {
+          const updated = [...prev];
+          updated[activeParaIdx] = charPos;
+          return updated;
+        });
+      }
+    }, 16);
+
+    return () => clearInterval(interval);
+  }, [isVisible, activeParaIdx, paragraphs]);
+
+  // Click card to instantly reveal all text
   const handleRevealAll = () => {
-    setRevealedChars(paragraphs.map((p) => p.length));
-    setCurrentParaIdx(paragraphs.length);
+    setRevealedLengths(paragraphs.map((p) => p.length));
+    setActiveParaIdx(paragraphs.length);
+    setGlitchChar('');
   };
 
   return (
     <div onClick={handleRevealAll} className="space-y-6 cursor-pointer select-text">
       {paragraphs.map((para, i) => {
-        const count = revealedChars[i];
-        const isCurrent = i === currentParaIdx && count < para.length && isVisible;
+        const count = revealedLengths[i] || 0;
+        const isCurrent = i === activeParaIdx && count < para.length && isVisible;
 
         return (
           <div key={i} className="relative">
             {paragraphs.length > 1 && (
-              <span className="font-mono text-[11px] text-pink/60 tracking-widest block mb-1.5">
+              <span className="font-mono text-[11px] text-pink/80 tracking-widest block mb-1.5 font-medium">
                 {(i + 1).toString().padStart(2, '0')} //
               </span>
             )}
             <p className="font-montserrat text-sm sm:text-base leading-[1.85] text-zinc-300 font-normal tracking-wide normal-case">
               {para.slice(0, count)}
               {isCurrent && (
-                <span className="inline-block w-1.5 h-4 ml-1 bg-pink/80 align-middle animate-pulse" />
+                <>
+                  <span className="electric-char ml-0.5">{glitchChar}</span>
+                  <span className="electric-cursor" />
+                </>
               )}
             </p>
           </div>
@@ -278,7 +311,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-about-mother"
-          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           {/* Subtle Corner Markers */}
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -318,11 +351,11 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
         </div>
 
         {/* =====================================================================
-            CARD 2: PROFESSIONAL ROOTS (Info Card With Typewriter Text)
+            CARD 2: PROFESSIONAL ROOTS (Info Card With Electric Typewriter)
             ===================================================================== */}
         <div
           id="card-professional-roots"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -340,7 +373,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
-              <TypewriterBlock
+              <ElectricTypewriterBlock
                 paragraphs={COPY.professionalRoots.paragraphs}
                 isVisible={visibleCards['card-professional-roots']}
               />
@@ -349,16 +382,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
             <span>SHILLONG → GUWAHATI → MUMBAI</span>
-            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
           </div>
         </div>
 
         {/* =====================================================================
-            CARD 3: HOW VAGANZA WAS BORN (Info Card With Typewriter Text)
+            CARD 3: HOW VAGANZA WAS BORN (Info Card With Electric Typewriter)
             ===================================================================== */}
         <div
           id="card-how-born"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -376,7 +409,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
-              <TypewriterBlock
+              <ElectricTypewriterBlock
                 paragraphs={COPY.howBorn.paragraphs}
                 isVisible={visibleCards['card-how-born']}
               />
@@ -385,16 +418,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
             <span>DARK ALTERNATIVE // INDUSTRIAL ATTITUDE</span>
-            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
           </div>
         </div>
 
         {/* =====================================================================
-            CARD 4: SUSTAINABILITY CORE (Info Card With Typewriter Text)
+            CARD 4: SUSTAINABILITY CORE (Info Card With Electric Typewriter)
             ===================================================================== */}
         <div
           id="card-sustainability"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -412,7 +445,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
-              <TypewriterBlock
+              <ElectricTypewriterBlock
                 paragraphs={COPY.sustainability.paragraphs}
                 isVisible={visibleCards['card-sustainability']}
               />
@@ -421,16 +454,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
             <span>DISCARDED HARDWARE // RAW TRANSFORMATION</span>
-            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
           </div>
         </div>
 
         {/* =====================================================================
-            CARD 5: AESTHETIC INSPIRATION (Info Card With Typewriter Text)
+            CARD 5: AESTHETIC INSPIRATION (Info Card With Electric Typewriter)
             ===================================================================== */}
         <div
           id="card-aesthetic"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -448,7 +481,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
-              <TypewriterBlock
+              <ElectricTypewriterBlock
                 paragraphs={COPY.aesthetic.paragraphs}
                 isVisible={visibleCards['card-aesthetic']}
               />
@@ -457,7 +490,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
             <span>THE FREQUENCY // UNDERGROUND HIGH FASHION</span>
-            <span className="text-zinc-600">[ TAP CARD TO REVEAL ]</span>
+            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
           </div>
         </div>
       </div>

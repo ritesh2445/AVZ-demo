@@ -7,7 +7,9 @@ import {
   Volume2,
   VolumeX,
   Heart,
-  Package
+  Package,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { ASSET_MANIFEST, CURRENCIES } from '../data/brandData';
 import { playSound, toggleSound } from '../utils/audio';
@@ -22,7 +24,9 @@ export default function Navbar({
   onOpenSearch,
   wishlistCount = 0,
   onOpenWishlist,
-  onOpenTrackingModal
+  onOpenTrackingModal,
+  theme = 'dark',
+  onToggleTheme
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
@@ -201,6 +205,22 @@ export default function Navbar({
               {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-zinc-600" />}
             </button>
 
+            {/* Architectural Light / Dark Mode Toggle */}
+            <button
+              onClick={() => {
+                onToggleTheme?.();
+              }}
+              aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            >
+              {theme === 'light' ? (
+                <Moon className="w-3.5 h-3.5 text-zinc-800 hover:text-black" />
+              ) : (
+                <Sun className="w-3.5 h-3.5 hover:text-pink-300" />
+              )}
+            </button>
+
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => {
@@ -244,6 +264,16 @@ export default function Navbar({
               >
                 {soundOn ? <Volume2 className="w-3.5 h-3.5 text-pink-300" /> : <VolumeX className="w-3.5 h-3.5" />}
                 <span>{soundOn ? 'Sound On' : 'Muted'}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  onToggleTheme?.();
+                }}
+                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px]"
+              >
+                {theme === 'light' ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-pink-300" />}
+                <span>{theme === 'light' ? 'Dark' : 'Light'}</span>
               </button>
             </div>
             {onOpenTrackingModal && (

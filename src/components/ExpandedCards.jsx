@@ -42,7 +42,7 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
               onClick={() => handleCardInteraction(idx)}
               className={`relative overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer select-none transform-gpu touch-pan-y ${
                 isExpanded
-                  ? 'flex-[5] min-w-0 border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
+                  ? 'flex-[5] min-w-0 border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] mobile-grunge-card'
                   : 'flex-[1] min-w-[34px] sm:min-w-[48px] md:flex-[1.2] border-white/10 hover:border-white/20 filter grayscale hover:grayscale-0'
               }`}
             >

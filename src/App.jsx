@@ -62,6 +62,34 @@ export default function App() {
   // 8. Shopping bag state with 1-of-1 inventory restrictions
   const [cartItems, setCartItems] = useState([]);
 
+  // 9. Architectural Light / Dark Mode state with persistence
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem('avz_theme');
+      return saved === 'light' ? 'light' : 'dark';
+    } catch (e) {
+      return 'dark';
+    }
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+      document.documentElement.removeAttribute('data-theme');
+    }
+    try {
+      localStorage.setItem('avz_theme', theme);
+    } catch (e) {}
+  }, [theme]);
+
+  const toggleTheme = () => {
+    playSound('snap');
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   // Scroll to section handler
   const scrollToSection = (id) => {
     setActiveSection(id);
@@ -205,6 +233,8 @@ export default function App() {
         onOpenWishlist={() => setWishlistOpen(true)}
         onOpenSquadModal={() => handleOpenSquadModal()}
         onOpenTrackingModal={() => setTrackingModalOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Single Continuous Page Scroll Pipeline */}

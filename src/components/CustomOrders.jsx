@@ -81,7 +81,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
         {/* Left: Pricing Tiers & Direct Contact Cards (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-6 text-left">
           {/* Timeline & Craft Note */}
-          <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left">
+          <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left mobile-grunge-card">
             <div className="flex items-center gap-3 text-pink-300 font-mono text-xs uppercase tracking-wider mb-3 text-left">
               <Clock className="w-4 h-4 text-pink-400" />
               <span>THE TIMELINE: 2 TO 3 WEEKS</span>
@@ -92,7 +92,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
           </div>
 
           {/* Pricing Tiers Accordion Card */}
-          <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left">
+          <div className="p-8 rounded-3xl bg-[#0d020f]/80 backdrop-blur-xl border border-white/10 text-left mobile-grunge-card">
             <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-pink-300 uppercase mb-4 text-left">
               <Tag className="w-4 h-4 text-pink-400" />
               <span>OFFICIAL CLIENT PRICING TIERS</span>
@@ -117,7 +117,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
           </div>
 
           {/* Direct WhatsApp Contact CTA */}
-          <div className="p-8 rounded-3xl bg-[#1c041f]/75 backdrop-blur-xl border border-[#be185d]/40 text-left shadow-[0_15px_40px_rgba(20,2,24,0.6)]">
+          <div className="p-8 rounded-3xl bg-[#1c041f]/75 backdrop-blur-xl border border-[#be185d]/40 text-left shadow-[0_15px_40px_rgba(20,2,24,0.6)] mobile-grunge-card">
             <div className="flex items-center gap-2 text-pink-300 font-mono text-xs uppercase tracking-wider mb-2 text-left">
               <MessageCircle className="w-4 h-4 text-pink-400" />
               <span>PREFER DIRECT WHATSAPP CONVERSATION?</span>
@@ -140,7 +140,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
         </div>
 
         {/* Right: Interactive Commission Brief Builder (7 cols) */}
-        <div className="lg:col-span-7 p-8 md:p-12 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/15">
+        <div className="lg:col-span-7 p-8 md:p-12 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/15 mobile-grunge-card">
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
             <div>
               <span className="text-[11px] font-mono tracking-widest text-pink uppercase block mb-1">

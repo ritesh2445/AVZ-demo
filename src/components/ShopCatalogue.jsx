@@ -194,7 +194,7 @@ export default function ShopCatalogue({
                   playSound('metal');
                   onSelectProduct(item);
                 }}
-                className="group relative flex flex-col justify-between rounded-2xl border border-white/10 hover:border-white/30 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden"
+                className="group relative flex flex-col justify-between rounded-2xl border border-white/10 hover:border-white/30 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden mobile-grunge-card"
               >
                 <div className="w-full h-full flex flex-col justify-between">
                   {/* Image Frame */}
@@ -435,7 +435,7 @@ export default function ShopCatalogue({
                   playSound('metal');
                   onSelectProduct(product);
                 }}
-                className="group relative flex flex-col justify-between bg-[#0d0d12] border border-white/10 hover:border-white/30 rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl"
+                className="group relative flex flex-col justify-between bg-[#0d0d12] border border-white/10 hover:border-white/30 rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl mobile-grunge-card"
               >
                 {/* Product Image Frame */}
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">

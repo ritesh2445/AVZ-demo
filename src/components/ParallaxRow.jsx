@@ -267,7 +267,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               >
                 {/* Pure Editorial Noir Card (Zero light shadows, zero neon glow rims) */}
                 <div
-                  className={`w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] ${
+                  className={`w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
                     isCenter ? 'border border-white/20' : 'border border-white/10'
                   }`}
                 >

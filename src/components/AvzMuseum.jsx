@@ -561,7 +561,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
           </div>
 
           {/* Curatorial Archival Plaque (Right Panel - Solid, Refined) */}
-          <div className="w-full lg:w-[420px] bg-[#0d0d11] p-6 sm:p-8 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/10">
+          <div className="w-full lg:w-[420px] bg-[#0d0d11] p-6 sm:p-8 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/10 mobile-grunge-card">
             <div>
               {/* Top Meta Badges */}
               <div className="flex items-center justify-between mb-4">
@@ -661,7 +661,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 selectPedestal(idx);
                 setViewMode('3d');
               }}
-              className="group bg-[#0d0d12] border border-white/12 hover:border-white/30 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1"
+              className="group bg-[#0d0d12] border border-white/12 hover:border-white/30 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-1 mobile-grunge-card"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/60 p-3 pb-0">
                 <div className="w-full h-full rounded-2xl overflow-hidden relative">
