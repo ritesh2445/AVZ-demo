@@ -18,15 +18,7 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
-
-  // Distinct Video Reel for Mobile vs Desktop
-  const videoSource = isMobileDevice
-    ? ASSET_MANIFEST.heroRunwayVideoVertical
-    : ASSET_MANIFEST.heroRunwayVideo;
-
-  const audioSource = ASSET_MANIFEST.heroRunwayAudio;
 
   // Responsive device listener for mobile video switching
   useEffect(() => {
@@ -40,31 +32,30 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Autoplay handler
+  // Distinct Video Reel for Mobile vs Desktop
+  const videoSource = isMobileDevice
+    ? (ASSET_MANIFEST.videos?.heroMobile || ASSET_MANIFEST.heroRunwayVideoVertical || '/assets/hero_reel_mobile.mp4')
+    : (ASSET_MANIFEST.videos?.heroDesktop || ASSET_MANIFEST.heroRunwayVideo || '/assets/hero_reel_desktop.mp4');
+
+  const audioSource = isMobileDevice
+    ? (ASSET_MANIFEST.audio?.heroMobile || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_mobile.mp4')
+    : (ASSET_MANIFEST.audio?.heroDesktop || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_desktop.mp4');
+
+  const vimeoId = isMobileDevice ? '1239586843' : '1239586933';
+  const vimeoBackgroundUrl = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1`;
+
+  // Autoplay handler for native video reel
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const markLoaded = () => setVideoLoaded(true);
-    video.addEventListener('loadeddata', markLoaded);
-    video.addEventListener('canplay', markLoaded);
-    video.addEventListener('playing', markLoaded);
-
     const playPromise = video.play();
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => markLoaded())
-        .catch(() => {
-          video.muted = true;
-          video.play().then(markLoaded).catch(() => {});
-        });
+      playPromise.catch(() => {
+        video.muted = true;
+        video.play().catch(() => {});
+      });
     }
-
-    return () => {
-      video.removeEventListener('loadeddata', markLoaded);
-      video.removeEventListener('canplay', markLoaded);
-      video.removeEventListener('playing', markLoaded);
-    };
   }, [videoSource]);
 
   // Synchronized Master Video & Audio Controls
@@ -145,14 +136,31 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         preload="auto"
       />
 
-      {/* 1. Native Master Video Reel: Full-bleed, unobstructed, high-fashion cinema */}
+      {/* 1. Vimeo Master Cloud Video Stream (Continuous Full-Bleed Stream) */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-[1]">
+        <iframe
+          src={vimeoBackgroundUrl}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          style={{
+            width: isMobileDevice ? '100vw' : '177.78vh',
+            height: isMobileDevice ? '177.78vw' : '100vh',
+            minWidth: '100%',
+            minHeight: '100%',
+            border: 'none'
+          }}
+          allow="autoplay; fullscreen; picture-in-picture"
+          title="AVZ Vimeo Hero Video"
+        />
+      </div>
+
+      {/* 2. Native Master Video Reel: Full-bleed, high-definition direct playback */}
       <video
         ref={videoRef}
         key={videoSource}
         src={videoSource}
         autoPlay
         loop
-        muted
+        muted={isMuted}
         playsInline
         webkit-playsinline="true"
         x5-playsinline="true"
@@ -162,25 +170,20 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         disableRemotePlayback
         controlsList="nodownload nofullscreen noremoteplayback"
         onTimeUpdate={handleVideoTimeUpdate}
-        onLoadedData={() => setVideoLoaded(true)}
-        onCanPlay={() => setVideoLoaded(true)}
-        onPlay={() => setVideoLoaded(true)}
-        onPlaying={() => setVideoLoaded(true)}
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-100 transition-opacity duration-300 ease-out"
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-100"
         style={{
           filter: 'contrast(105%) brightness(102%) saturate(104%)',
           objectPosition: 'center center',
           WebkitBackfaceVisibility: 'hidden',
           backfaceVisibility: 'hidden',
           transform: 'translate3d(0, 0, 0)',
-          willChange: 'transform',
-          imageRendering: '-webkit-optimize-contrast'
+          willChange: 'transform'
         }}
       >
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. Video & Audio Controls HUD (Bottom-Left) */}
+      {/* 3. Video & Audio Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
         <button
           onClick={handleTogglePlay}
@@ -224,16 +227,16 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         </button>
       </div>
 
-      {/* 3. Minimalist Scroll Guide (Bottom-Center) */}
+      {/* 4. Minimalist Scroll Guide (Bottom-Center) */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
 
-      {/* 4. Dedicated Cinema Reel Modal */}
+      {/* 5. Dedicated Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}
-        videoSource={videoSource}
+        isMobile={isMobileDevice}
       />
     </section>
   );

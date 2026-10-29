@@ -87,6 +87,9 @@ export const ASSET_MANIFEST = {
     spikeBodice: "/assets/look_spike_bodice.jpg",
     motherboardCuff: "/assets/prod_motherboard_cuff.jpg"
   },
+  heroRunwayVideo: "/assets/hero_reel_desktop.mp4",
+  heroRunwayVideoVertical: "/assets/hero_reel_mobile.mp4",
+  heroRunwayAudio: "/assets/hero_audio_desktop.mp4",
   videos: {
     heroDesktop: "/assets/hero_reel_desktop.mp4",
     heroMobile: "/assets/hero_reel_mobile.mp4",

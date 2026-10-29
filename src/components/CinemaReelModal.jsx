@@ -1,22 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { X, Play, Pause, Volume2, VolumeX, Maximize2, ExternalLink, Sparkles } from 'lucide-react';
+import { X, Play, Pause, Volume2, VolumeX, Maximize2, ExternalLink, Sparkles, Film } from 'lucide-react';
 import { ASSET_MANIFEST, BRAND_INFO } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
 export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
   const videoRef = useRef(null);
+  const [viewMode, setViewMode] = useState('vimeo'); // 'vimeo' or 'native'
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState('0:00');
   const [duration, setDuration] = useState('0:00');
 
+  const activeVideoSrc = isMobile
+    ? (ASSET_MANIFEST.videos?.heroMobile || ASSET_MANIFEST.heroRunwayVideoVertical || '/assets/hero_reel_mobile.mp4')
+    : (ASSET_MANIFEST.videos?.heroDesktop || ASSET_MANIFEST.heroRunwayVideo || '/assets/hero_reel_desktop.mp4');
+
+  const vimeoId = isMobile ? '1239586843' : '1239586933';
+  const activeVimeoUrl = isMobile
+    ? (ASSET_MANIFEST.videos?.vimeoMobile || `https://vimeo.com/${vimeoId}`)
+    : (ASSET_MANIFEST.videos?.vimeoDesktop || `https://vimeo.com/${vimeoId}`);
+
+  const vimeoEmbedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&title=0&byline=0&portrait=0`;
+
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
-      if (e.code === 'Space') {
+      if (e.code === 'Space' && viewMode === 'native') {
         e.preventDefault();
         togglePlay();
       }
@@ -24,21 +36,20 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isPlaying]);
+  }, [isOpen, isPlaying, viewMode]);
 
   useEffect(() => {
-    if (isOpen && videoRef.current) {
+    if (isOpen && viewMode === 'native' && videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {
-        // Autoplay with audio was blocked by browser policy, fallback to muted
         setIsMuted(true);
         if (videoRef.current) {
           videoRef.current.muted = true;
-          videoRef.current.play();
+          videoRef.current.play().catch(() => {});
         }
       });
     }
-  }, [isOpen]);
+  }, [isOpen, viewMode]);
 
   if (!isOpen) return null;
 
@@ -86,9 +97,6 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
     videoRef.current.currentTime = pos * (videoRef.current.duration || 1);
   };
 
-  const activeVideoSrc = isMobile ? ASSET_MANIFEST.videos.heroMobile : ASSET_MANIFEST.videos.heroDesktop;
-  const activeVimeoUrl = isMobile ? ASSET_MANIFEST.videos.vimeoMobile : ASSET_MANIFEST.videos.vimeoDesktop;
-
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-3xl animate-in fade-in duration-300 p-2 sm:p-6">
       {/* Background Ambience */}
@@ -104,9 +112,36 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
               <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pink animate-ping inline-block" />
               <span>EDITORIAL CINEMA</span>
             </div>
-            <span className="text-silver/80 text-xs hidden md:inline font-montserrat truncate">
-              {isMobile ? 'Mobile Vertical Edit' : 'Desktop 16:9 Master Reel'}
-            </span>
+            
+            {/* View Mode Switcher */}
+            <div className="inline-flex items-center gap-1 bg-white/5 border border-white/10 p-1 rounded-full">
+              <button
+                onClick={() => {
+                  playSound('pip');
+                  setViewMode('vimeo');
+                }}
+                className={`px-3 py-0.5 rounded-full text-[10px] font-mono transition-all cursor-pointer ${
+                  viewMode === 'vimeo'
+                    ? 'bg-pink text-black font-semibold shadow-sm'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                VIMEO CLOUD
+              </button>
+              <button
+                onClick={() => {
+                  playSound('pip');
+                  setViewMode('native');
+                }}
+                className={`px-3 py-0.5 rounded-full text-[10px] font-mono transition-all cursor-pointer ${
+                  viewMode === 'native'
+                    ? 'bg-white text-black font-semibold shadow-sm'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                NATIVE REEL
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
@@ -115,9 +150,9 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-xs text-silver font-mono hover:text-pink transition-all"
-              title="Open on Vimeo"
+              title="Open directly on Vimeo"
             >
-              <span className="hidden sm:inline">Vimeo Master</span>
+              <span className="hidden sm:inline">Open on Vimeo</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
@@ -136,73 +171,92 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
 
         {/* Video Canvas Layer */}
         <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden bg-black">
-          <video
-            ref={videoRef}
-            src={activeVideoSrc}
-            playsInline
-            autoPlay
-            loop
-            muted={isMuted}
-            onTimeUpdate={handleTimeUpdate}
-            onClick={togglePlay}
-            className="w-full h-full object-contain cursor-pointer"
-          />
+          {viewMode === 'vimeo' ? (
+            <iframe
+              src={vimeoEmbedUrl}
+              className="w-full h-full border-none"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              title="AVZ Cinema Vimeo Master"
+            />
+          ) : (
+            <>
+              <video
+                ref={videoRef}
+                src={activeVideoSrc}
+                playsInline
+                autoPlay
+                loop
+                muted={isMuted}
+                onTimeUpdate={handleTimeUpdate}
+                onClick={togglePlay}
+                className="w-full h-full object-contain cursor-pointer"
+              />
 
-          {/* Central Play/Pause Watermark on Pause */}
-          {!isPlaying && (
-            <button
-              onClick={togglePlay}
-              className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-all cursor-pointer"
-            >
-              <div className="w-20 h-20 rounded-full bg-pink/20 border border-pink/60 flex items-center justify-center text-pink shadow-[0_0_30px_rgba(244,194,194,0.5)] transform hover:scale-110 transition-transform">
-                <Play className="w-8 h-8 fill-pink translate-x-0.5" />
-              </div>
-            </button>
+              {/* Central Play/Pause Watermark on Pause */}
+              {!isPlaying && (
+                <button
+                  onClick={togglePlay}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-all cursor-pointer"
+                >
+                  <div className="w-20 h-20 rounded-full bg-pink/20 border border-pink/60 flex items-center justify-center text-pink shadow-[0_0_30px_rgba(244,194,194,0.5)] transform hover:scale-110 transition-transform">
+                    <Play className="w-8 h-8 fill-pink translate-x-0.5" />
+                  </div>
+                </button>
+              )}
+            </>
           )}
         </div>
 
-        {/* Bottom Cinema Controls */}
-        <div className="relative z-20 p-4 sm:p-6 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col gap-3">
-          {/* Timeline Bar */}
-          <div
-            onClick={handleSeek}
-            className="w-full h-1.5 bg-white/15 hover:h-2.5 rounded-full cursor-pointer relative overflow-hidden transition-all group"
-          >
+        {/* Bottom Cinema Controls (Shown for Native mode) */}
+        {viewMode === 'native' ? (
+          <div className="relative z-20 p-4 sm:p-6 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col gap-3">
+            {/* Timeline Bar */}
             <div
-              className="h-full bg-gradient-to-r from-pink via-lavender to-pink rounded-full transition-all duration-100"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-
-          {/* Controls Bar */}
-          <div className="flex items-center justify-between text-xs font-mono text-silver">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={togglePlay}
-                className="hover:text-pink transition-colors cursor-pointer flex items-center gap-1.5"
-              >
-                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
-                <span className="hidden sm:inline">{isPlaying ? 'PAUSE' : 'PLAY'}</span>
-              </button>
-
-              <button
-                onClick={toggleMute}
-                className="hover:text-pink transition-colors cursor-pointer flex items-center gap-1.5"
-              >
-                {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-pink" />}
-                <span className="hidden sm:inline">{isMuted ? 'UNMUTE' : 'MUTE'}</span>
-              </button>
-
-              <span className="text-[11px] text-silver/60">
-                {currentTime} / {duration}
-              </span>
+              onClick={handleSeek}
+              className="w-full h-1.5 bg-white/15 hover:h-2.5 rounded-full cursor-pointer relative overflow-hidden transition-all group"
+            >
+              <div
+                className="h-full bg-gradient-to-r from-pink via-lavender to-pink rounded-full transition-all duration-100"
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
-            <div className="text-[11px] text-pink tracking-widest uppercase">
-              100% UNCOMPRESSED NATIVE MASTER
+            {/* Controls Bar */}
+            <div className="flex items-center justify-between text-xs font-mono text-silver">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={togglePlay}
+                  className="hover:text-pink transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
+                  <span className="hidden sm:inline">{isPlaying ? 'PAUSE' : 'PLAY'}</span>
+                </button>
+
+                <button
+                  onClick={toggleMute}
+                  className="hover:text-pink transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-pink" />}
+                  <span className="hidden sm:inline">{isMuted ? 'UNMUTE' : 'MUTE'}</span>
+                </button>
+
+                <span className="text-[11px] text-silver/60">
+                  {currentTime} / {duration}
+                </span>
+              </div>
+
+              <div className="text-[11px] text-pink tracking-widest uppercase">
+                UNCOMPRESSED NATIVE MASTER
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative z-20 px-6 py-3 bg-gradient-to-t from-black via-black/80 to-transparent flex items-center justify-between text-[11px] font-mono text-zinc-400">
+            <span>STREAMING VIA VIMEO CLOUD</span>
+            <span className="text-pink">1080P MASTER STREAM</span>
+          </div>
+        )}
       </div>
     </div>
   );
