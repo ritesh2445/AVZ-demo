@@ -148,8 +148,8 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       {/* Header Bar */}
       <div className="w-full px-4 sm:px-8 lg:px-12 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
         <div className="text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
             <span>LOOKBOOK ARCHIVE • SPATIAL RUNWAY</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
@@ -162,7 +162,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
         {/* Clean Swipeable Navigation Controls */}
         <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-zinc-400">
+          <div className="section-badge-pill hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-mono text-zinc-400">
             <span>NAVIGATE RUNWAY</span>
           </div>
 

@@ -525,8 +525,8 @@ export default function ShopCatalogue({
       {/* Editorial Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-10 pb-5 border-b border-white/10 relative z-10 text-left">
         <div className="text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-silver/80 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+          <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-silver/80 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
             <span>COLLECTION 01 • ARCHIVAL SILHOUETTES</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight">

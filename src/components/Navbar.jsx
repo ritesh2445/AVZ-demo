@@ -308,19 +308,31 @@ export default function Navbar({
               {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-zinc-600" />}
             </button>
 
-            {/* Architectural Light / Dark Mode Toggle */}
+            {/* Dedicated High-Visibility Dark / Light Mode Button */}
             <button
+              type="button"
               onClick={() => {
+                playSound('snap');
                 onToggleTheme?.();
               }}
               aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              className="nav-theme-toggle-btn flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full border transition-all text-[10px] font-mono tracking-wider cursor-pointer active:scale-95 shadow-sm"
             >
               {theme === 'light' ? (
-                <Moon className="w-3.5 h-3.5 text-zinc-800 hover:text-black" />
+                <>
+                  <Moon className="w-3.5 h-3.5 text-purple-700 shrink-0" />
+                  <span className="font-bold text-[9px] sm:text-[10px] uppercase text-purple-900 tracking-wider">
+                    DARK<span className="hidden sm:inline"> MODE</span>
+                  </span>
+                </>
               ) : (
-                <Sun className="w-3.5 h-3.5 hover:text-pink-300" />
+                <>
+                  <Sun className="w-3.5 h-3.5 text-pink-300 shrink-0" />
+                  <span className="font-semibold text-[9px] sm:text-[10px] uppercase text-zinc-300 hover:text-white tracking-wider">
+                    LIGHT<span className="hidden sm:inline"> MODE</span>
+                  </span>
+                </>
               )}
             </button>
 
@@ -447,12 +459,13 @@ export default function Navbar({
 
               <button
                 onClick={() => {
+                  playSound('snap');
                   onToggleTheme?.();
                 }}
-                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px]"
+                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-semibold text-pink hover:text-white transition-colors"
               >
-                {theme === 'light' ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-pink-300" />}
-                <span>{theme === 'light' ? 'Dark' : 'Light'}</span>
+                {theme === 'light' ? <Moon className="w-3.5 h-3.5 text-purple-400" /> : <Sun className="w-3.5 h-3.5 text-pink-300" />}
+                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
               </button>
             </div>
             {onOpenTrackingModal && (

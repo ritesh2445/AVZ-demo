@@ -708,16 +708,16 @@ html.light-theme [class*="bg-[#0b030f]"] {
 }
 
 /* Nested Sub-Cards (Pricing Tiers, Craft Boxes, Specs, Feature Blocks) */
-html.light-theme [class*="bg-black/60"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
-html.light-theme [class*="bg-black/70"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
-html.light-theme [class*="bg-black/80"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select) {
+html.light-theme [class*="bg-black/60"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
+html.light-theme [class*="bg-black/70"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
+html.light-theme [class*="bg-black/80"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select) {
   background-color: #f7f3fc !important;
   color: #18181b !important;
   border-color: rgba(168, 85, 247, 0.18) !important;
 }
 
-html.light-theme [class*="bg-white/5"]:not(button):not([class*="aspect-"] *):not(#lookbook *):not(#vault *),
-html.light-theme [class*="bg-white/10"]:not(button):not([class*="aspect-"] *):not(#lookbook *):not(#vault *) {
+html.light-theme [class*="bg-white/5"]:not(button):not([class*="aspect-"] *):not(#lookbook .tunnel-card *):not(#vault .mobile-grunge-card *),
+html.light-theme [class*="bg-white/10"]:not(button):not([class*="aspect-"] *):not(#lookbook .tunnel-card *):not(#vault .mobile-grunge-card *) {
   background-color: rgba(168, 85, 247, 0.05) !important;
   border-color: rgba(168, 85, 247, 0.16) !important;
 }
@@ -730,7 +730,7 @@ html.light-theme [class*="bg-white/10"]:not(button):not([class*="aspect-"] *):no
    ========================================================================= */
 html.light-theme h1,
 html.light-theme h2,
-html.light-theme h3:not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme h3:not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *),
 html.light-theme h4,
 html.light-theme h5,
 html.light-theme h6 {
@@ -747,25 +747,25 @@ html.light-theme h3 span.text-zinc-500 {
 }
 
 /* Standard body text overrides (outside photo overlays) */
-html.light-theme .text-white:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *) {
+html.light-theme .text-white:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *):not(.contact-action-btn-primary *) {
   color: #09090b !important;
 }
 
-html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *),
-html.light-theme .text-zinc-100:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
-html.light-theme .text-zinc-200:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
-html.light-theme .text-zinc-300:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
+html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *),
+html.light-theme .text-zinc-100:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *),
+html.light-theme .text-zinc-200:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *),
+html.light-theme .text-zinc-300:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *),
 html.light-theme [id^="card-"] p,
 html.light-theme .mobile-grunge-card p:not([class*="aspect-"] *) {
   color: #27272a !important;
 }
 
 /* All Grey, Silver and Zinc Texts in Light Mode: Bolder, Sharper, and Darker */
-html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
-html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
-html.light-theme .text-zinc-400:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
-html.light-theme .text-zinc-500:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
-html.light-theme .text-zinc-600:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *),
+html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *),
+html.light-theme .text-zinc-400:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *),
+html.light-theme .text-zinc-500:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *),
+html.light-theme .text-zinc-600:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *),
 html.light-theme p.text-zinc-400,
 html.light-theme p.text-zinc-500,
 html.light-theme span.text-zinc-400,
@@ -1802,3 +1802,101 @@ html.light-theme #card-about-mother .relative.my-4 .text-pink-100\/90 {
 html.light-theme #card-about-mother .relative.my-4 .text-zinc-300 {
   color: #d4d4d8 !important;
 }
+
+/* =========================================================================
+   SECTION BADGE PILLS & RUNWAY ARCHIVE HUD (Dark & Light Mode High Visibility)
+   ========================================================================= */
+.section-badge-pill {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.light-theme .section-badge-pill,
+html.light-theme .inline-flex.rounded-full[class*="bg-black/"],
+html.light-theme [class*="rounded-full"][class*="bg-black/80"]:not(.tunnel-card *),
+html.light-theme [class*="rounded-full"][class*="bg-black/60"]:not(.tunnel-card *),
+html.light-theme #lookbook .section-badge-pill,
+html.light-theme #lookbook [class*="bg-black/80"]:not(.tunnel-card *),
+html.light-theme #lookbook [class*="bg-black/60"]:not(.tunnel-card *),
+html.light-theme #vault .section-badge-pill,
+html.light-theme #vault [class*="bg-black/80"]:not(.mobile-grunge-card *) {
+  background-color: #f5edf9 !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.08) !important;
+}
+
+html.light-theme .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme .inline-flex.rounded-full[class*="bg-black/"] span:not([class*="bg-pink"]),
+html.light-theme [class*="rounded-full"][class*="bg-black/80"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
+html.light-theme [class*="rounded-full"][class*="bg-black/60"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
+html.light-theme #lookbook .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme #lookbook [class*="bg-black/80"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
+html.light-theme #lookbook [class*="bg-black/60"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
+html.light-theme #vault .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme #vault [class*="bg-black/80"]:not(.mobile-grunge-card *) span:not([class*="bg-pink"]) {
+  color: #7e22ce !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+}
+
+html.light-theme .section-badge-pill span[class*="bg-pink"],
+html.light-theme .inline-flex.rounded-full span[class*="bg-pink"],
+html.light-theme #lookbook span[class*="bg-pink-400"],
+html.light-theme #vault span[class*="bg-pink-400"] {
+  background-color: #db2777 !important;
+  box-shadow: 0 0 8px rgba(219, 39, 119, 0.6) !important;
+}
+
+/* Lookbook & Vault Section Headers in Light Mode */
+html.light-theme #lookbook h2,
+html.light-theme #vault h2 {
+  color: #09090b !important;
+}
+
+html.light-theme #lookbook h2 span,
+html.light-theme #vault h2 span {
+  color: #7e22ce !important;
+  font-weight: 600 !important;
+}
+
+html.light-theme #lookbook p,
+html.light-theme #vault p {
+  color: #27272a !important;
+  font-weight: 500 !important;
+}
+
+html.light-theme #lookbook button[aria-label*="look"],
+html.light-theme #lookbook button[aria-label*="look"] svg {
+  color: #18181b !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+
+html.light-theme #lookbook button[aria-label*="look"]:hover {
+  border-color: #be185d !important;
+  color: #be185d !important;
+}
+
+/* Navbar Dedicated Dark Mode Button */
+.nav-theme-toggle-btn {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.light-theme .nav-theme-toggle-btn {
+  background-color: #ede9fe !important;
+  border: 1.5px solid rgba(147, 51, 234, 0.45) !important;
+  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.18) !important;
+}
+
+html.light-theme .nav-theme-toggle-btn span {
+  color: #581c87 !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .nav-theme-toggle-btn svg {
+  color: #6b21a8 !important;
+}
+
+html.light-theme .nav-theme-toggle-btn:hover {
+  background-color: #ddd6fe !important;
+  border-color: #9333ea !important;
+}
+
