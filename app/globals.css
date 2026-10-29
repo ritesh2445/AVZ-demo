@@ -778,9 +778,9 @@ html.light-theme div.text-zinc-500 {
 }
 
 /* Secondary Meta, Spec, and Sub-Labels in Light Mode */
-html.light-theme [class*="text-\[9px\]"],
-html.light-theme [class*="text-\[10px\]"],
-html.light-theme [class*="text-\[11px\]"],
+html.light-theme [class*="text-\[9px\]"]:not(.section-badge-pill):not(.section-badge-pill *):not([class*="section-badge-pill"] *),
+html.light-theme [class*="text-\[10px\]"]:not(.section-badge-pill):not(.section-badge-pill *):not([class*="section-badge-pill"] *),
+html.light-theme [class*="text-\[11px\]"]:not(.section-badge-pill):not(.section-badge-pill *):not([class*="section-badge-pill"] *),
 html.light-theme span.font-mono.text-zinc-400,
 html.light-theme span.font-mono.text-zinc-500 {
   color: #27272a !important;
@@ -1810,54 +1810,83 @@ html.light-theme #card-about-mother .relative.my-4 .text-zinc-300 {
 /* =========================================================================
    SECTION BADGE PILLS - BULLETPROOF DUAL THEME VISIBILITY
    ========================================================================= */
-.section-badge-pill {
-  background: rgba(0, 0, 0, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+.section-badge-pill,
+[class*="section-badge-pill"] {
+  background: rgba(18, 4, 23, 0.9) !important;
+  background-color: rgba(18, 4, 23, 0.9) !important;
+  border: 1px solid rgba(244, 114, 182, 0.35) !important;
   color: #f472b6 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.section-badge-pill span {
+.section-badge-pill *,
+.section-badge-pill span,
+[class*="section-badge-pill"] span {
   color: #f472b6 !important;
   font-weight: 700 !important;
 }
 
 .section-badge-pill span.bg-pink,
-.section-badge-pill span[class*="bg-pink"] {
+.section-badge-pill span[class*="bg-pink"],
+[class*="section-badge-pill"] span[class*="bg-pink"] {
   background-color: #f472b6 !important;
   box-shadow: 0 0 8px rgba(244, 114, 182, 0.8) !important;
 }
 
 html.light-theme .section-badge-pill,
+html[data-theme="light"] .section-badge-pill,
+[data-theme="light"] .section-badge-pill,
 html.light-theme [class*="section-badge-pill"],
+html[data-theme="light"] [class*="section-badge-pill"],
+[data-theme="light"] [class*="section-badge-pill"],
 html.light-theme #lookbook .section-badge-pill,
-html.light-theme #vault .section-badge-pill {
-  background: #f3e8ff !important;
-  background-color: #f3e8ff !important;
-  border: 1.5px solid rgba(168, 85, 247, 0.45) !important;
-  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.15) !important;
-  color: #7e22ce !important;
+html[data-theme="light"] #lookbook .section-badge-pill,
+html.light-theme #vault .section-badge-pill,
+html[data-theme="light"] #vault .section-badge-pill {
+  background: #f5edfc !important;
+  background-color: #f5edfc !important;
+  border: 1.5px solid rgba(147, 51, 234, 0.45) !important;
+  box-shadow: 0 2px 12px rgba(147, 51, 234, 0.16) !important;
+  color: #6b21a8 !important;
 }
 
-html.light-theme .section-badge-pill span,
-html.light-theme [class*="section-badge-pill"] span,
+html.light-theme .section-badge-pill *,
+html.light-theme .section-badge-pill span:not([class*="bg-pink"]),
+html[data-theme="light"] .section-badge-pill *,
+html[data-theme="light"] .section-badge-pill span:not([class*="bg-pink"]),
+[data-theme="light"] .section-badge-pill *,
+[data-theme="light"] .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme [class*="section-badge-pill"] *,
+html.light-theme [class*="section-badge-pill"] span:not([class*="bg-pink"]),
+html[data-theme="light"] [class*="section-badge-pill"] *,
+html[data-theme="light"] [class*="section-badge-pill"] span:not([class*="bg-pink"]),
+[data-theme="light"] [class*="section-badge-pill"] *,
+[data-theme="light"] [class*="section-badge-pill"] span:not([class*="bg-pink"]),
 html.light-theme #lookbook .section-badge-pill span:not([class*="bg-pink"]),
-html.light-theme #vault .section-badge-pill span:not([class*="bg-pink"]) {
-  color: #7e22ce !important;
+html[data-theme="light"] #lookbook .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme #vault .section-badge-pill span:not([class*="bg-pink"]),
+html[data-theme="light"] #vault .section-badge-pill span:not([class*="bg-pink"]) {
+  color: #6b21a8 !important;
   font-weight: 800 !important;
   letter-spacing: 0.12em !important;
 }
 
 html.light-theme .section-badge-pill span.bg-pink,
 html.light-theme .section-badge-pill span[class*="bg-pink"],
+html[data-theme="light"] .section-badge-pill span.bg-pink,
+html[data-theme="light"] .section-badge-pill span[class*="bg-pink"],
+[data-theme="light"] .section-badge-pill span.bg-pink,
+[data-theme="light"] .section-badge-pill span[class*="bg-pink"],
 html.light-theme [class*="section-badge-pill"] span[class*="bg-pink"],
-html.light-theme #lookbook span[class*="bg-pink-400"],
-html.light-theme #vault span[class*="bg-pink-400"] {
+html[data-theme="light"] [class*="section-badge-pill"] span[class*="bg-pink"],
+html.light-theme #lookbook span[class*="bg-pink"],
+html[data-theme="light"] #lookbook span[class*="bg-pink"],
+html.light-theme #vault span[class*="bg-pink"],
+html[data-theme="light"] #vault span[class*="bg-pink"] {
   background-color: #be185d !important;
   box-shadow: 0 0 10px rgba(190, 24, 93, 0.7) !important;
 }
-
 
 /* =========================================================================
    3D MOVIE ALBUM SHUFFLE CAROUSEL (Desktop & Mobile Optimized)

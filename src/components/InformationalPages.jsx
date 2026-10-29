@@ -196,7 +196,7 @@ export function ContactSection() {
         </div>
 
         {/* Card 3: Direct VIP Client Concierge WhatsApp */}
-        <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-b from-[#18041d] to-[#0c0c12] border border-pink/30 flex flex-col justify-between text-left mobile-grunge-card shadow-2xl">
+        <div className="p-5 sm:p-7 md:p-8 rounded-3xl bg-gradient-to-b from-[#18041d] to-[#0c0c12] border border-pink/30 flex flex-col justify-between text-left mobile-grunge-card shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
@@ -213,29 +213,29 @@ export function ContactSection() {
               Direct connection to Dhrisni and our studio team. Ideal for event deadlines, measurement help, or quick order questions.
             </p>
 
-            <div className="flex flex-col gap-3 mb-4">
+            <div className="flex flex-col gap-2.5 sm:gap-3 mb-4">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn-primary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg active:scale-98 transition-all cursor-pointer group flex-nowrap"
+                className="contact-action-btn-primary w-full p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-lg active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-3 min-w-0 flex-nowrap">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
                   <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm">
                     <Phone className="w-4 h-4 text-white stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold whitespace-nowrap">
-                      DIRECT WHATSAPP CONCIERGE
+                      PRIMARY CONCIERGE
                     </span>
-                    <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
                       {BRAND_INFO.whatsappPrimary}
                     </span>
                   </div>
                 </div>
 
-                <div className="px-3.5 py-1.5 rounded-xl bg-white/20 border border-white/30 text-white text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/30 transition-all whitespace-nowrap">
+                <div className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white/20 border border-white/30 text-white text-[9px] sm:text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/30 transition-all whitespace-nowrap">
                   <span>CHAT</span>
                   <span className="text-xs">↗</span>
                 </div>
@@ -246,23 +246,23 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn-secondary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
+                className="contact-action-btn-secondary w-full p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-3 min-w-0 flex-nowrap">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
                   <div className="w-8 h-8 rounded-xl bg-pink/15 border border-pink/30 flex items-center justify-center text-pink shrink-0">
                     <Phone className="w-4 h-4 text-pink stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
-                      STUDIO CARE & SUPPORT
+                      STUDIO SUPPORT
                     </span>
-                    <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
                       {BRAND_INFO.whatsappSecondary}
                     </span>
                   </div>
                 </div>
 
-                <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-pink text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:border-pink/40 transition-all whitespace-nowrap">
+                <div className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white/5 border border-white/10 text-pink text-[9px] sm:text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:border-pink/40 transition-all whitespace-nowrap">
                   <span>CHAT</span>
                   <span className="text-xs">↗</span>
                 </div>
