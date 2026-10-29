@@ -832,29 +832,29 @@ html.light-theme #vault [class*="absolute inset-0"] button {
   border-color: rgba(255, 255, 255, 0.35) !important;
 }
 
-/* 3. Lookbook Spatial Drift Stage (#lookbook) */
-html.light-theme #lookbook [class*="rounded-3xl"] .text-white,
-html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-100,
-html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-200,
-html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-300,
-html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-400,
-html.light-theme #lookbook [class*="rounded-3xl"] .text-silver,
-html.light-theme #lookbook [class*="rounded-3xl"] [class*="text-silver/"],
-html.light-theme #lookbook [class*="rounded-3xl"] span,
-html.light-theme #lookbook [class*="rounded-3xl"] h3,
-html.light-theme #lookbook [class*="rounded-3xl"] p,
-html.light-theme #lookbook [class*="rounded-3xl"] button,
-html.light-theme #lookbook [class*="rounded-3xl"] svg {
+/* 3. Lookbook Spatial Drift Stage (#lookbook 3D Runway Cards) */
+html.light-theme #lookbook .tunnel-card .text-white,
+html.light-theme #lookbook .tunnel-card .text-zinc-100,
+html.light-theme #lookbook .tunnel-card .text-zinc-200,
+html.light-theme #lookbook .tunnel-card .text-zinc-300,
+html.light-theme #lookbook .tunnel-card .text-zinc-400,
+html.light-theme #lookbook .tunnel-card .text-silver,
+html.light-theme #lookbook .tunnel-card [class*="text-silver/"],
+html.light-theme #lookbook .tunnel-card span,
+html.light-theme #lookbook .tunnel-card h3,
+html.light-theme #lookbook .tunnel-card p,
+html.light-theme #lookbook .tunnel-card button,
+html.light-theme #lookbook .tunnel-card svg {
   color: #ffffff !important;
 }
 
-html.light-theme #lookbook [class*="rounded-3xl"] [class*="bg-black/"] {
+html.light-theme #lookbook .tunnel-card [class*="bg-black/"] {
   background-color: rgba(0, 0, 0, 0.85) !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
 }
 
-html.light-theme #lookbook [class*="rounded-3xl"] button.bg-white\/10 {
+html.light-theme #lookbook .tunnel-card button.bg-white\/10 {
   background-color: rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
   border-color: rgba(255, 255, 255, 0.35) !important;
@@ -973,23 +973,98 @@ html.light-theme .fixed.inset-0 > div[class*="bg-[#"] {
 html.light-theme [class*="bg-[#0c0c10]"] h2,
 html.light-theme [class*="bg-[#0c0c10]"] h3,
 html.light-theme [class*="bg-[#0c0c10]"] h4,
-html.light-theme [class*="bg-[#0c0c10]"] .text-white {
+html.light-theme [class*="bg-[#0c0c10]"] .text-white,
+html.light-theme [class*="bg-[#0d020f]"] h2,
+html.light-theme [class*="bg-[#0d020f]"] h3,
+html.light-theme [class*="bg-[#0d020f]"] h4,
+html.light-theme [class*="bg-[#0d020f]"] .text-white,
+html.light-theme .lookbook-modal-card h2,
+html.light-theme .lookbook-modal-card h3,
+html.light-theme .lookbook-modal-card h4,
+html.light-theme .lookbook-modal-card .lookbook-title {
   color: #09090b !important;
 }
 
 html.light-theme [class*="bg-[#0c0c10]"] p,
 html.light-theme [class*="bg-[#0c0c10]"] .text-silver,
 html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-200,
-html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-300 {
+html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-300,
+html.light-theme [class*="bg-[#0d020f]"] p,
+html.light-theme [class*="bg-[#0d020f]"] .text-silver,
+html.light-theme [class*="bg-[#0d020f]"] [class*="text-silver/"],
+html.light-theme .lookbook-modal-card p,
+html.light-theme .lookbook-modal-card .lookbook-story {
   color: #27272a !important;
 }
 
 html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-400,
-html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-500 {
+html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-500,
+html.light-theme [class*="bg-[#0d020f]"] .text-zinc-400,
+html.light-theme [class*="bg-[#0d020f]"] .text-zinc-500,
+html.light-theme .lookbook-modal-card .lookbook-caption {
   color: #52525b !important;
 }
 
-html.light-theme [class*="bg-[#0c0c10]"] [class*="border-white/"] {
+/* Lookbook Lightbox Modal Badges & Accents in Light Mode */
+html.light-theme .lookbook-modal-card .lookbook-code,
+html.light-theme .lookbook-modal-card .lookbook-code span,
+html.light-theme .lookbook-modal-card [class*="text-pink-300"],
+html.light-theme .lookbook-modal-card [class*="text-pink-300"] span {
+  color: #be185d !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-subtitle,
+html.light-theme .lookbook-modal-card .text-lavender {
+  color: #9d174d !important;
+  font-style: italic !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs,
+html.light-theme .lookbook-modal-card [class*="bg-[#19041b]"] {
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.22) !important;
+  color: #18181b !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs strong,
+html.light-theme .lookbook-modal-card [class*="bg-[#19041b]"] strong {
+  color: #be185d !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs div,
+html.light-theme .lookbook-modal-card [class*="bg-[#19041b]"] div {
+  color: #27272a !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-btn,
+html.light-theme .lookbook-modal-card .btn-glass {
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  color: #18181b !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-btn:hover,
+html.light-theme .lookbook-modal-card .btn-glass:hover {
+  background-color: #ede6f5 !important;
+  color: #000000 !important;
+}
+
+html.light-theme .lookbook-close-x {
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  color: #18181b !important;
+}
+
+html.light-theme .lookbook-close-x:hover {
+  background-color: #ede6f5 !important;
+  color: #be185d !important;
+}
+
+html.light-theme [class*="bg-[#0c0c10]"] [class*="border-white/"],
+html.light-theme [class*="bg-[#0d020f]"] [class*="border-white/"] {
   border-color: rgba(168, 85, 247, 0.18) !important;
 }
 

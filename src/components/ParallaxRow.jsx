@@ -267,7 +267,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               >
                 {/* Pure Editorial Noir Card (Zero light shadows, zero neon glow rims) */}
                 <div
-                  className={`w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
+                  className={`tunnel-card w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
                     isCenter ? 'border border-white/20' : 'border border-white/10'
                   }`}
                 >
@@ -393,27 +393,27 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
           {/* Modal Content Card */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl max-h-[92vh] bg-[#0d020f]/95 border border-[#f472b6]/40 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-[0_20px_70px_rgba(244,114,182,0.3)] flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto"
+            className="lookbook-modal-card relative w-full max-w-5xl max-h-[92vh] bg-[#0d020f]/95 border border-[#f472b6]/40 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 shadow-[0_20px_70px_rgba(244,114,182,0.3)] flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto"
           >
             {/* Desktop Close Button — Elevated and Padded */}
             <button
               onClick={closeLightbox}
               aria-label="Close modal"
-              className="hidden md:flex absolute top-5 right-5 z-50 w-9 h-9 rounded-full border border-white/20 bg-black/80 items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer shadow-lg active:scale-95"
+              className="lookbook-close-x hidden md:flex absolute top-5 right-5 z-50 w-9 h-9 rounded-full border border-white/20 bg-black/80 items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all cursor-pointer shadow-lg active:scale-95"
             >
               <X className="w-4 h-4" />
             </button>
 
             {/* Mobile Header Bar — Safe Non-Overlapping Header */}
             <div className="w-full flex md:hidden items-center justify-between border-b border-white/10 pb-3 shrink-0">
-              <div className="text-xs font-mono tracking-widest text-pink-300 uppercase flex items-center gap-2">
+              <div className="lookbook-code text-xs font-mono tracking-widest text-pink-300 uppercase flex items-center gap-2 font-bold">
                 <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
                 <span>{activeLook.code} • {currentSlide + 1} OF {entries.length}</span>
               </div>
               <button
                 onClick={closeLightbox}
                 aria-label="Close modal"
-                className="w-8 h-8 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer active:scale-95"
+                className="lookbook-close-x w-8 h-8 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer active:scale-95"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -431,28 +431,28 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             {/* Information & Action */}
             <div className="w-full md:w-1/2 flex flex-col justify-between text-left md:pr-10">
               <div>
-                <div className="hidden md:flex items-center gap-2 mb-2 text-xs font-mono tracking-widest text-pink-300 uppercase font-bold">
+                <div className="lookbook-code hidden md:flex items-center gap-2 mb-2 text-xs font-mono tracking-widest text-pink-300 uppercase font-bold">
                   <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
                   <span>{activeLook.code} • {currentSlide + 1} OF {entries.length}</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-mono font-medium uppercase text-white mb-2 leading-tight text-left">
+                <h3 className="lookbook-title text-2xl sm:text-3xl font-mono font-medium uppercase text-white mb-2 leading-tight text-left">
                   {activeLook.title}
                 </h3>
-                <div className="text-sm font-display text-lavender mb-4 italic text-left">
+                <div className="lookbook-subtitle text-sm font-display text-lavender mb-4 italic text-left">
                   "{activeLook.subtitle}"
                 </div>
 
-                <p className="text-silver/85 text-xs sm:text-sm font-montserrat leading-relaxed mb-6 text-left">
+                <p className="lookbook-story text-silver/85 text-xs sm:text-sm font-montserrat leading-relaxed mb-6 text-left">
                   {activeLook.story}
                 </p>
 
                 {/* Details Badges */}
-                <div className="p-4 rounded-2xl bg-[#19041b]/70 border border-[#f472b6]/25 text-xs font-mono text-silver/90 mb-6 space-y-1.5 text-left shadow-inner">
+                <div className="lookbook-specs p-4 rounded-2xl bg-[#19041b]/70 border border-[#f472b6]/25 text-xs font-mono text-silver/90 mb-6 space-y-1.5 text-left shadow-inner">
                   <div><strong className="text-[#f472b6]">Materials:</strong> {activeLook.materials || 'Reclaimed electronics, spikes, upcycled denim, steel'}</div>
                   <div><strong className="text-[#f472b6]">Craftsmanship:</strong> 100% Handcrafted by Dhrisni in Guwahati</div>
                   <div><strong className="text-[#f472b6]">Vibe:</strong> {activeLook.vibe || 'Haute Wearable Art'}</div>
                   {activeLook.caption && (
-                    <div className="text-silver/60 pt-1 text-[11px]">{activeLook.caption}</div>
+                    <div className="lookbook-caption text-silver/60 pt-1 text-[11px]">{activeLook.caption}</div>
                   )}
                 </div>
               </div>
@@ -470,12 +470,12 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   className="btn-glass-pink py-3.5 px-6 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(244,114,182,0.3)]"
                 >
                   <Scissors className="w-4 h-4" />
-                  <span>COMMISSION IN THIS SILHOUETTE ↗</span>
+                  <span>REQUEST THIS SILHOUETTE ↗</span>
                 </button>
 
                 <button
                   onClick={closeLightbox}
-                  className="btn-glass py-3.5 px-5 text-xs font-spartan font-bold tracking-widest uppercase text-silver hover:text-white cursor-pointer"
+                  className="lookbook-close-btn btn-glass py-3.5 px-5 text-xs font-spartan font-bold tracking-widest uppercase text-silver hover:text-white cursor-pointer"
                 >
                   CLOSE
                 </button>
