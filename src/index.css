@@ -1616,3 +1616,159 @@ html.light-theme .section-scroll-reveal.is-visible::after {
   }
 }
 
+/* =========================================================================
+   CONTACT & CONCIERGE BUTTONS - RESPONSIVE & HIGH CONTRAST (DARK & LIGHT)
+   ========================================================================= */
+.contact-action-btn-primary {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #7e22ce 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -4px rgba(236, 72, 153, 0.4) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.contact-action-btn-primary:hover {
+  background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #9333ea 100%) !important;
+  box-shadow: 0 12px 30px -3px rgba(236, 72, 153, 0.55) !important;
+  transform: translateY(-1.5px);
+}
+
+.contact-action-btn-primary,
+.contact-action-btn-primary *,
+.contact-action-btn-primary span,
+.contact-action-btn-primary div,
+.contact-action-btn-primary svg {
+  color: #ffffff !important;
+}
+
+.contact-action-btn-secondary {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.contact-action-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.09) !important;
+  border-color: rgba(244, 194, 194, 0.45) !important;
+  transform: translateY(-1.5px);
+}
+
+/* Light Mode Overrides for Contact Buttons */
+html.light-theme .contact-action-btn-primary {
+  background: linear-gradient(135deg, #be185d 0%, #9333ea 50%, #7e22ce 100%) !important;
+  border: 1px solid rgba(190, 24, 93, 0.35) !important;
+  box-shadow: 0 8px 24px -4px rgba(190, 24, 93, 0.32) !important;
+}
+
+html.light-theme .contact-action-btn-primary,
+html.light-theme .contact-action-btn-primary *,
+html.light-theme .contact-action-btn-primary span,
+html.light-theme .contact-action-btn-primary div,
+html.light-theme .contact-action-btn-primary svg {
+  color: #ffffff !important;
+}
+
+html.light-theme .contact-action-btn-secondary {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.32) !important;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.1) !important;
+}
+
+html.light-theme .contact-action-btn-secondary:hover {
+  background: #faf5ff !important;
+  border-color: #be185d !important;
+}
+
+html.light-theme .contact-action-btn-secondary span.font-bold,
+html.light-theme .contact-action-btn-secondary span.text-white {
+  color: #18181b !important;
+}
+
+html.light-theme .contact-action-btn-secondary span.text-zinc-400 {
+  color: #71717a !important;
+}
+
+html.light-theme .contact-action-btn-secondary svg,
+html.light-theme .contact-action-btn-secondary .text-pink {
+  color: #be185d !important;
+}
+
+/* =========================================================================
+   FOOTER AVZ VAGANZA THICK & BOXY CHANGING GRADIENT
+   ========================================================================= */
+.avz-vaganza-changing-gradient {
+  font-family: var(--font-spartan, 'League Spartan', -apple-system, sans-serif);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-block;
+  background-image: linear-gradient(
+    90deg,
+    #a855f7 0%,   /* purple */
+    #ec4899 18%,  /* pink */
+    #3b82f6 36%,  /* blue */
+    #e9d5ff 54%,  /* lavender */
+    #8b5cf6 70%,  /* violet */
+    #18181b 84%,  /* black */
+    #ec4899 92%,  /* pink */
+    #a855f7 100%  /* purple */
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: avzFontGradientShift 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(236, 72, 153, 0.35));
+}
+
+html.light-theme .avz-vaganza-changing-gradient {
+  background-image: linear-gradient(
+    90deg,
+    #7e22ce 0%,   /* deep purple */
+    #db2777 18%,  /* vivid pink */
+    #2563eb 36%,  /* vibrant blue */
+    #9333ea 52%,  /* violet */
+    #09090b 70%,  /* rich black */
+    #c084fc 86%,  /* lavender */
+    #7e22ce 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: avzFontGradientShift 8s ease-in-out infinite;
+  filter: drop-shadow(0 2px 10px rgba(126, 34, 206, 0.22));
+}
+
+@keyframes avzFontGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Keep text inside Founder Card 1 photo overlay white/pink in light mode */
+html.light-theme #card-about-mother .relative.my-4,
+html.light-theme #card-about-mother .relative.my-4 span,
+html.light-theme #card-about-mother .relative.my-4 p {
+  color: #ffffff !important;
+}
+
+html.light-theme #card-about-mother .relative.my-4 .text-pink,
+html.light-theme #card-about-mother .relative.my-4 .text-pink-100\/90 {
+  color: #f4c2c2 !important;
+}
+
+html.light-theme #card-about-mother .relative.my-4 .text-zinc-300 {
+  color: #d4d4d8 !important;
+}
+
+

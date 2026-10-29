@@ -213,19 +213,32 @@ export function ContactSection() {
               Direct connection to Dhrisni and our studio team. Ideal for event deadlines, measurement help, or quick order questions.
             </p>
 
-            <div className="space-y-3 mb-4">
+            <div className="flex flex-col gap-3 mb-4">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="btn-glass-pink w-full flex items-center justify-between py-3.5 px-4 text-xs font-mono font-bold tracking-wider uppercase shadow-lg active:scale-95"
+                className="contact-action-btn-primary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg active:scale-98 transition-all cursor-pointer group"
               >
-                <div className="flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>PRIMARY: {BRAND_INFO.whatsappPrimary}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col text-left min-w-0">
+                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold">
+                      DIRECT WHATSAPP CONCIERGE
+                    </span>
+                    <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                      {BRAND_INFO.whatsappPrimary}
+                    </span>
+                  </div>
                 </div>
-                <span>CHAT ↗</span>
+
+                <div className="px-3 py-1.5 rounded-xl bg-white/20 border border-white/30 text-white text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/30 transition-all">
+                  <span>CHAT</span>
+                  <span className="text-xs">↗</span>
+                </div>
               </a>
 
               <a
@@ -233,13 +246,26 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="w-full py-3.5 px-4 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white flex items-center justify-between text-xs font-mono font-bold tracking-wider uppercase transition-all active:scale-95"
+                className="contact-action-btn-secondary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group"
               >
-                <div className="flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5 text-pink" />
-                  <span>SUPPORT: {BRAND_INFO.whatsappSecondary}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-8 h-8 rounded-xl bg-pink/15 border border-pink/30 flex items-center justify-center text-pink shrink-0">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <div className="flex flex-col text-left min-w-0">
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">
+                      STUDIO CARE & SUPPORT
+                    </span>
+                    <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                      {BRAND_INFO.whatsappSecondary}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-pink">CHAT ↗</span>
+
+                <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-pink text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:border-pink/40 transition-all">
+                  <span>CHAT</span>
+                  <span className="text-xs">↗</span>
+                </div>
               </a>
             </div>
 

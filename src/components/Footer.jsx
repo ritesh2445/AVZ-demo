@@ -15,8 +15,15 @@ export default function Footer({ onScrollToSection }) {
   };
 
   return (
-    <footer className="w-full bg-black border-t border-white/10 pt-12 sm:pt-20 pb-10 sm:pb-14 select-none text-silver">
-      <div className="w-full px-4 sm:px-12 lg:px-20">
+    <footer className="relative w-full bg-black border-t border-white/10 pt-16 sm:pt-24 pb-12 sm:pb-16 select-none text-silver overflow-hidden">
+      {/* Ambient Multi-Stop Gradient Atmospheric Lighting */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-gradient-to-br from-pink-500/20 via-purple-600/25 to-blue-600/15 rounded-full blur-[90px] animate-pulse-slow" />
+        <div className="absolute -top-24 right-1/4 w-[500px] h-[300px] bg-gradient-to-bl from-violet-600/20 via-lavender/15 to-pink-600/20 rounded-full blur-[80px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-pink/40 via-purple-400/50 via-blue-400/30 to-transparent" />
+      </div>
+
+      <div className="relative z-10 w-full px-4 sm:px-12 lg:px-20">
         {/* Top Brand & Manifesto */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-12 sm:pb-16 border-b border-white/10">
           <div className="md:col-span-5 flex flex-col items-start gap-4">
@@ -27,9 +34,9 @@ export default function Footer({ onScrollToSection }) {
               <img
                 src={ASSET_MANIFEST.logo}
                 alt="AVZ Emblem"
-                className="w-11 h-11 object-contain avz-logo-highest-brightness group-hover:rotate-12 transition-transform duration-300"
+                className="w-12 h-12 object-contain avz-logo-highest-brightness group-hover:rotate-12 transition-transform duration-300 shrink-0"
               />
-              <span className="font-mono font-medium text-lg text-white tracking-[0.2em] uppercase group-hover:text-pink transition-colors">
+              <span className="avz-vaganza-changing-gradient text-2xl sm:text-3xl md:text-4xl leading-none">
                 AVZ VAGANZA
               </span>
             </div>

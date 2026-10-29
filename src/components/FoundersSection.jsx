@@ -6,7 +6,8 @@ import { playSound } from '../utils/audio';
 // MODERN PROFESSIONAL EDITORIAL COPY
 const COPY = {
   aboutMother: {
-    heading: 'ABOUT MOTHER'
+    heading: 'DHRISNI (DHRISTROYER)',
+    subheading: 'FOUNDER & CREATIVE DIRECTOR • THE MOTHER OF AVZ'
   },
   professionalRoots: {
     heading: 'PROFESSIONAL ROOTS',
@@ -43,7 +44,7 @@ const COPY = {
 };
 
 const CARDS = [
-  { id: 'card-about-mother', label: 'ABOUT MOTHER', tag: '01' },
+  { id: 'card-about-mother', label: 'DHRISNI (DHRISTROYER)', tag: '01' },
   { id: 'card-professional-roots', label: 'PROFESSIONAL ROOTS', tag: '02' },
   { id: 'card-how-born', label: 'HOW VAGANZA WAS BORN', tag: '03' },
   { id: 'card-sustainability', label: 'SUSTAINABILITY CORE', tag: '04' },
@@ -235,15 +236,18 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(190,24,93,0.14),transparent_70%)]" />
 
       {/* TOP HEADER & HORIZONTAL NAVIGATION HUD */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-white/10 pb-4">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-white/10 pb-4">
         <div>
           <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase mb-2">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-            <span>FOUNDER STORY • THE AVZ DIMENSION</span>
+            <span>✦ FOUNDER ARCHIVE • GUWAHATI ATELIER</span>
           </div>
-          <h2 className="font-mono text-xl sm:text-2xl font-medium tracking-[0.2em] text-white uppercase">
-            ABOUT MOTHER & THE AVZ DIMENSION
+          <h2 className="font-spartan font-black text-2xl sm:text-3xl lg:text-4xl tracking-[0.08em] text-white uppercase">
+            MEET DHRISNI (DHRISTROYER)
           </h2>
+          <p className="font-mono text-xs text-zinc-400 tracking-wider uppercase mt-1">
+            FOUNDER & COUTURE SCULPTOR • THE AVZ DIMENSION
+          </p>
         </div>
 
         {/* Controls & Quick Selector */}
@@ -282,7 +286,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
       </div>
 
       {/* QUICK CARD SELECTOR TABS */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mb-6">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
           {CARDS.map((card, idx) => {
             const isActive = activeCardIndex === idx;
@@ -290,9 +294,9 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
               <button
                 key={card.id}
                 onClick={() => scrollToCard(idx)}
-                className={`px-3 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider whitespace-nowrap transition-all duration-300 cursor-pointer border ${
+                className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider whitespace-nowrap transition-all duration-300 cursor-pointer border ${
                   isActive
-                    ? 'bg-pink text-black font-semibold border-pink shadow-[0_0_12px_rgba(244,194,194,0.3)]'
+                    ? 'bg-pink text-black font-bold border-pink shadow-[0_0_14px_rgba(244,194,194,0.35)]'
                     : 'bg-black/60 text-zinc-400 border-white/10 hover:border-pink/40 hover:text-white'
                 }`}
               >
@@ -309,7 +313,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           ========================================================================= */}
       <div
         ref={scrollContainerRef}
-        className="relative z-10 w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-16 py-4 flex items-stretch gap-6 sm:gap-8 scroll-smooth no-scrollbar"
+        className="relative z-10 max-w-7xl mx-auto w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-12 py-6 flex items-stretch gap-8 sm:gap-10 scroll-smooth no-scrollbar"
         style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}
       >
         {/* =====================================================================
@@ -317,7 +321,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-about-mother"
-          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[88vw] sm:w-[500px] lg:w-[540px] h-[600px] sm:h-[640px] rounded-3xl border border-white/20 bg-gradient-to-b from-[#18041d]/95 via-[#0d0111]/95 to-black p-7 sm:p-9 flex flex-col justify-between shadow-[0_24px_60px_rgba(24,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           {/* Subtle Corner Markers */}
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -326,33 +330,52 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">1. VISUAL INTRODUCTION</span>
-              <span>STUDIO ORIGIN</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-2.5">
+              <span className="text-pink font-bold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
+                1. THE FOUNDER
+              </span>
+              <span className="font-mono text-zinc-400">GUWAHATI • MUMBAI</span>
             </div>
 
-            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white">
-              {COPY.aboutMother.heading}
+            <h3 className="font-spartan font-black text-2xl sm:text-3xl tracking-[0.1em] uppercase text-white leading-tight">
+              DHRISNI
             </h3>
+            <p className="font-mono text-xs sm:text-[13px] text-pink tracking-[0.18em] uppercase font-bold mt-1">
+              (DHRISTROYER) • MOTHER OF AVZ
+            </p>
           </div>
 
           {/* Founder's Single Authentic Photograph */}
-          <div className="relative my-4 flex-1 w-full rounded-2xl overflow-hidden border border-white/10 bg-black group-hover:border-pink/40 transition-colors duration-500">
+          <div className="relative my-4 flex-1 w-full rounded-2xl overflow-hidden border border-white/15 bg-black/80 group-hover:border-pink/50 transition-colors duration-500 shadow-inner">
             <img
               src={ASSET_MANIFEST.editorialHero}
-              alt="Dhrisni - Founder visual introduction"
-              className="w-full h-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+              alt="Dhrisni (Dhristroyer) - Founder of AVZ Vaganza"
+              className="w-full h-full object-cover object-center filter brightness-100 contrast-105 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20 pointer-events-none" />
-            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-white font-medium">
-              <span className="tracking-widest">DHRISNI (DHRISTROYER)</span>
-              <span className="text-pink font-semibold">GUWAHATI</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
+
+            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-pink/30 text-[10px] font-mono text-pink font-semibold">
+              COUTURE SCULPTOR
+            </div>
+
+            <div className="absolute bottom-3 left-4 right-4">
+              <p className="font-serif italic text-xs sm:text-sm text-pink-100/90 leading-relaxed drop-shadow-sm mb-1.5">
+                "Wearable art is armor for the autonomous spirit."
+              </p>
+              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 font-medium">
+                <span className="tracking-widest font-bold text-white">DHRISNI (DHRISTROYER)</span>
+                <span className="text-pink font-semibold tracking-wider">FOUNDER & VISIONARY</span>
+              </div>
             </div>
           </div>
 
-          <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-mono text-zinc-400">
-            <span className="font-semibold text-white">FOUNDER & MASTER ARTISAN</span>
-            <span className="text-pink font-bold">AVZ VAGANZA</span>
+          <div className="pt-3 border-t border-white/15 flex items-center justify-between text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
+              <span className="font-bold text-white tracking-wider">FOUNDER & MASTER ARTISAN</span>
+            </div>
+            <span className="text-pink font-bold tracking-widest">AVZ VAGANZA</span>
           </div>
         </div>
 

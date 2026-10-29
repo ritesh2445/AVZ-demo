@@ -195,26 +195,43 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
               Prefer to chat directly? Send photos, sketches, or event dates to our team on WhatsApp.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-2.5">
+            <div className="flex flex-col sm:flex-row gap-3">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="btn-glass-pink flex-1 flex items-center justify-center gap-2 py-3 px-4 text-xs font-mono font-bold tracking-wider uppercase shadow-md active:scale-95"
+                className="contact-action-btn-primary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-lg active:scale-98 transition-all cursor-pointer group"
               >
-                <Phone className="w-3.5 h-3.5" />
-                <span>PRIMARY: +91 73042 64901</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-sm">
+                    <Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col text-left min-w-0">
+                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold">PRIMARY CONCIERGE</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-white shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
+
               <a
                 href={BRAND_INFO.whatsappLinkSecondary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="py-3 px-4 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white flex items-center justify-center gap-2 text-xs font-mono font-bold tracking-wider uppercase transition-all active:scale-95"
+                className="contact-action-btn-secondary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group"
               >
-                <span>ALT: +91 82910 13848</span>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-xl bg-pink/15 border border-pink/30 flex items-center justify-center text-pink shrink-0">
+                    <Phone className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="flex flex-col text-left min-w-0">
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">STUDIO SUPPORT</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 82910 13848</span>
+                  </div>
+                </div>
+                <ArrowUpRight className="w-4 h-4 text-pink shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
