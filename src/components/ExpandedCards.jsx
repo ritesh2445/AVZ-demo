@@ -17,8 +17,8 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
     <section id="vault" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none relative">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4 sm:gap-6 relative z-10 text-left">
         <div className="text-left">
-          <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
+          <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
             <span>FEATURED VAULT • EXPANDED VIEW</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
@@ -40,7 +40,7 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
               key={item.id || idx}
               onMouseEnter={() => handleCardInteraction(idx)}
               onClick={() => handleCardInteraction(idx)}
-              className={`relative overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer select-none transform-gpu touch-pan-y ${
+              className={`relative overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer select-none transform-gpu touch-manipulation ${
                 isExpanded
                   ? 'flex-[5] min-w-0 border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] mobile-grunge-card'
                   : 'flex-[1] min-w-[34px] sm:min-w-[48px] md:flex-[1.2] border-white/10 hover:border-white/20 filter grayscale hover:grayscale-0'

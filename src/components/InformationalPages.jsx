@@ -18,8 +18,8 @@ export function FAQSection() {
 
       {/* Centered Editorial Header */}
       <div className="max-w-3xl mx-auto text-center mb-14 pb-8 border-b border-white/10 relative z-10 flex flex-col items-center">
-        <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
+        <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>HELP & ANSWERS • CUSTOMER CARE</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-center">
@@ -219,14 +219,14 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn-primary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg active:scale-98 transition-all cursor-pointer group"
+                className="contact-action-btn-primary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3 min-w-0 flex-nowrap">
                   <div className="w-8 h-8 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-white shrink-0 shadow-sm">
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-4 h-4 text-white stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold">
+                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold whitespace-nowrap">
                       DIRECT WHATSAPP CONCIERGE
                     </span>
                     <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
@@ -235,7 +235,7 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="px-3 py-1.5 rounded-xl bg-white/20 border border-white/30 text-white text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/30 transition-all">
+                <div className="px-3.5 py-1.5 rounded-xl bg-white/20 border border-white/30 text-white text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/30 transition-all whitespace-nowrap">
                   <span>CHAT</span>
                   <span className="text-xs">↗</span>
                 </div>
@@ -246,14 +246,14 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn-secondary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group"
+                className="contact-action-btn-secondary w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center gap-3 min-w-0 flex-nowrap">
                   <div className="w-8 h-8 rounded-xl bg-pink/15 border border-pink/30 flex items-center justify-center text-pink shrink-0">
-                    <Phone className="w-4 h-4" />
+                    <Phone className="w-4 h-4 text-pink stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
                       STUDIO CARE & SUPPORT
                     </span>
                     <span className="text-xs sm:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
@@ -262,7 +262,7 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-pink text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:border-pink/40 transition-all">
+                <div className="px-3.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-pink text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:border-pink/40 transition-all whitespace-nowrap">
                   <span>CHAT</span>
                   <span className="text-xs">↗</span>
                 </div>
@@ -289,8 +289,8 @@ export function ShippingPackagingReturns() {
   return (
     <section id="specs" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
       <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 text-left">
-        <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
+        <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>SHIPPING & PACKAGING • GLOBAL COURIER</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase mb-3 leading-tight">

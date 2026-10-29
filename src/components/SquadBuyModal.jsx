@@ -99,8 +99,8 @@ export default function SquadBuyModal({
 
         {/* Modal Header */}
         <div className="mb-6 pr-10 sm:pr-12">
-          <div className="section-badge-pill inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2 max-w-full shadow-sm">
-            <Users className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+          <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest uppercase mb-2 max-w-full shadow-sm">
+            <Users className="w-3.5 h-3.5 text-pink shrink-0" />
             <span className="truncate">GROUP ORDERS • SPECIAL DISCOUNTS</span>
           </div>
 

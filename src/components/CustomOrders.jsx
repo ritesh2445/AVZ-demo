@@ -110,8 +110,8 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
     <section id="custom" className="w-full py-12 sm:py-20 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
       {/* Editorial Header */}
       <div className="max-w-6xl mx-auto mb-10 pb-6 border-b border-white/10 text-left">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
-          <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
+        <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>CUSTOM ORDERS • HANDCRAFTED IN GUWAHATI</span>
         </div>
 
@@ -201,14 +201,14 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="contact-action-btn-primary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-lg active:scale-98 transition-all cursor-pointer group"
+                className="contact-action-btn-primary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-lg active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
                   <div className="w-7 h-7 rounded-xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-sm">
-                    <Phone className="w-3.5 h-3.5" />
+                    <Phone className="w-3.5 h-3.5 text-white stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold">PRIMARY CONCIERGE</span>
+                    <span className="text-[9px] font-mono tracking-widest text-pink-200 uppercase font-semibold whitespace-nowrap">PRIMARY CONCIERGE</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
                   </div>
                 </div>
@@ -220,14 +220,14 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="contact-action-btn-secondary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group"
+                className="contact-action-btn-secondary flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
-                <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
                   <div className="w-7 h-7 rounded-xl bg-pink/15 border border-pink/30 flex items-center justify-center text-pink shrink-0">
-                    <Phone className="w-3.5 h-3.5" />
+                    <Phone className="w-3.5 h-3.5 text-pink stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">STUDIO SUPPORT</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">STUDIO SUPPORT</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 82910 13848</span>
                   </div>
                 </div>

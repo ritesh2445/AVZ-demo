@@ -71,9 +71,9 @@ body {
   min-height: 100dvh;
   position: relative;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
   /* Prevent iOS rubber-band scroll from breaking layouts */
-  overscroll-behavior-y: contain;
+  /* Allow native rubber-band and frictionless mobile scroll */
 }
 
 /* Hardware-accelerated fixed ambient gradient layer - zero repaint on scroll (true deep dark purple) */
@@ -1671,6 +1671,7 @@ html.light-theme .section-scroll-reveal.is-visible::after {
 .contact-action-btn-primary div,
 .contact-action-btn-primary svg {
   color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 .contact-action-btn-secondary {
@@ -1690,8 +1691,8 @@ html.light-theme .section-scroll-reveal.is-visible::after {
 /* Light Mode Overrides for Contact Buttons */
 html.light-theme .contact-action-btn-primary {
   background: linear-gradient(135deg, #be185d 0%, #9333ea 50%, #7e22ce 100%) !important;
-  border: 1px solid rgba(190, 24, 93, 0.35) !important;
-  box-shadow: 0 8px 24px -4px rgba(190, 24, 93, 0.32) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 8px 24px -4px rgba(190, 24, 93, 0.4) !important;
 }
 
 html.light-theme .contact-action-btn-primary,
@@ -1700,11 +1701,12 @@ html.light-theme .contact-action-btn-primary span,
 html.light-theme .contact-action-btn-primary div,
 html.light-theme .contact-action-btn-primary svg {
   color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 html.light-theme .contact-action-btn-secondary {
   background: #ffffff !important;
-  border: 1.5px solid rgba(168, 85, 247, 0.32) !important;
+  border: 1.5px solid rgba(190, 24, 93, 0.35) !important;
   box-shadow: 0 4px 16px rgba(168, 85, 247, 0.1) !important;
 }
 
@@ -1719,13 +1721,15 @@ html.light-theme .contact-action-btn-secondary span.text-white {
 }
 
 html.light-theme .contact-action-btn-secondary span.text-zinc-400 {
-  color: #71717a !important;
+  color: #52525b !important;
 }
 
 html.light-theme .contact-action-btn-secondary svg,
 html.light-theme .contact-action-btn-secondary .text-pink {
   color: #be185d !important;
+  stroke: #be185d !important;
 }
+
 
 /* =========================================================================
    FOOTER AVZ VAGANZA THICK & BOXY CHANGING GRADIENT
@@ -1804,109 +1808,280 @@ html.light-theme #card-about-mother .relative.my-4 .text-zinc-300 {
 }
 
 /* =========================================================================
-   SECTION BADGE PILLS & RUNWAY ARCHIVE HUD (Dark & Light Mode High Visibility)
+   SECTION BADGE PILLS - BULLETPROOF DUAL THEME VISIBILITY
    ========================================================================= */
 .section-badge-pill {
+  background: rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f472b6 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html.light-theme .section-badge-pill,
-html.light-theme .inline-flex.rounded-full[class*="bg-black/"],
-html.light-theme [class*="rounded-full"][class*="bg-black/80"]:not(.tunnel-card *),
-html.light-theme [class*="rounded-full"][class*="bg-black/60"]:not(.tunnel-card *),
-html.light-theme #lookbook .section-badge-pill,
-html.light-theme #lookbook [class*="bg-black/80"]:not(.tunnel-card *),
-html.light-theme #lookbook [class*="bg-black/60"]:not(.tunnel-card *),
-html.light-theme #vault .section-badge-pill,
-html.light-theme #vault [class*="bg-black/80"]:not(.mobile-grunge-card *) {
-  background-color: #f5edf9 !important;
-  border: 1px solid rgba(168, 85, 247, 0.35) !important;
-  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.08) !important;
-}
-
-html.light-theme .section-badge-pill span:not([class*="bg-pink"]),
-html.light-theme .inline-flex.rounded-full[class*="bg-black/"] span:not([class*="bg-pink"]),
-html.light-theme [class*="rounded-full"][class*="bg-black/80"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
-html.light-theme [class*="rounded-full"][class*="bg-black/60"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
-html.light-theme #lookbook .section-badge-pill span:not([class*="bg-pink"]),
-html.light-theme #lookbook [class*="bg-black/80"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
-html.light-theme #lookbook [class*="bg-black/60"]:not(.tunnel-card *) span:not([class*="bg-pink"]),
-html.light-theme #vault .section-badge-pill span:not([class*="bg-pink"]),
-html.light-theme #vault [class*="bg-black/80"]:not(.mobile-grunge-card *) span:not([class*="bg-pink"]) {
-  color: #7e22ce !important;
+.section-badge-pill span {
+  color: #f472b6 !important;
   font-weight: 700 !important;
-  letter-spacing: 0.1em !important;
 }
 
+.section-badge-pill span.bg-pink,
+.section-badge-pill span[class*="bg-pink"] {
+  background-color: #f472b6 !important;
+  box-shadow: 0 0 8px rgba(244, 114, 182, 0.8) !important;
+}
+
+html.light-theme .section-badge-pill,
+html.light-theme [class*="section-badge-pill"],
+html.light-theme #lookbook .section-badge-pill,
+html.light-theme #vault .section-badge-pill {
+  background: #f3e8ff !important;
+  background-color: #f3e8ff !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.45) !important;
+  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.15) !important;
+  color: #7e22ce !important;
+}
+
+html.light-theme .section-badge-pill span,
+html.light-theme [class*="section-badge-pill"] span,
+html.light-theme #lookbook .section-badge-pill span:not([class*="bg-pink"]),
+html.light-theme #vault .section-badge-pill span:not([class*="bg-pink"]) {
+  color: #7e22ce !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
+}
+
+html.light-theme .section-badge-pill span.bg-pink,
 html.light-theme .section-badge-pill span[class*="bg-pink"],
-html.light-theme .inline-flex.rounded-full span[class*="bg-pink"],
+html.light-theme [class*="section-badge-pill"] span[class*="bg-pink"],
 html.light-theme #lookbook span[class*="bg-pink-400"],
 html.light-theme #vault span[class*="bg-pink-400"] {
-  background-color: #db2777 !important;
-  box-shadow: 0 0 8px rgba(219, 39, 119, 0.6) !important;
+  background-color: #be185d !important;
+  box-shadow: 0 0 10px rgba(190, 24, 93, 0.7) !important;
 }
 
-/* Lookbook & Vault Section Headers in Light Mode */
-html.light-theme #lookbook h2,
-html.light-theme #vault h2 {
+
+/* =========================================================================
+   3D MOVIE ALBUM SHUFFLE CAROUSEL (Desktop & Mobile Optimized)
+   ========================================================================= */
+.movie-album-stage {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  touch-action: pan-x pan-y !important;
+}
+
+.movie-album-card {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+html.light-theme #museum {
+  background-color: #faf7fc !important;
+}
+
+html.light-theme #museum .movie-album-card {
+  background: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  box-shadow: 0 20px 45px -5px rgba(147, 51, 234, 0.15) !important;
+}
+
+html.light-theme #museum .movie-album-card h3,
+html.light-theme #museum .movie-album-card h4 {
   color: #09090b !important;
 }
 
-html.light-theme #lookbook h2 span,
-html.light-theme #vault h2 span {
-  color: #7e22ce !important;
-  font-weight: 600 !important;
-}
-
-html.light-theme #lookbook p,
-html.light-theme #vault p {
+html.light-theme #museum .movie-album-card p {
   color: #27272a !important;
-  font-weight: 500 !important;
 }
 
-html.light-theme #lookbook button[aria-label*="look"],
-html.light-theme #lookbook button[aria-label*="look"] svg {
-  color: #18181b !important;
-  border-color: rgba(168, 85, 247, 0.3) !important;
+html.light-theme #museum .movie-album-card [class*="bg-black/60"] {
+  background-color: #f5edf9 !important;
+  border-color: rgba(168, 85, 247, 0.22) !important;
+  color: #27272a !important;
 }
 
-html.light-theme #lookbook button[aria-label*="look"]:hover {
-  border-color: #be185d !important;
+html.light-theme #museum .movie-album-card [class*="bg-black/60"] span.text-pink {
   color: #be185d !important;
 }
 
-/* Navbar Dedicated Dark Mode Button */
-.nav-theme-toggle-btn,
-.theme-toggle-icon-btn {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+html.light-theme #museum .movie-album-card button.bg-white {
+  background-color: #09090b !important;
+  color: #ffffff !important;
 }
 
-html.light-theme .theme-toggle-icon-btn svg,
-html.light-theme header .theme-toggle-icon-btn svg {
-  color: #7e22ce !important;
+html.light-theme #museum .movie-album-card button.bg-white svg {
+  color: #ffffff !important;
 }
 
-html.light-theme header .theme-toggle-icon-btn:hover svg {
-  color: #581c87 !important;
+html.light-theme #museum .movie-album-card button.bg-white:hover {
+  background-color: #27272a !important;
 }
 
-html.light-theme .nav-theme-toggle-btn {
-  background-color: #ede9fe !important;
-  border: 1.5px solid rgba(147, 51, 234, 0.45) !important;
-  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.18) !important;
+
+/* =========================================================================
+   LOOKBOOK LIGHTBOX MODAL - IMMACULATE DUAL THEME VISIBILITY
+   ========================================================================= */
+.lookbook-modal-card {
+  background: rgba(13, 2, 15, 0.98) !important;
+  border: 1.5px solid rgba(244, 114, 182, 0.4) !important;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(244, 114, 182, 0.25) !important;
+  color: #ffffff !important;
 }
 
-html.light-theme .nav-theme-toggle-btn span {
-  color: #581c87 !important;
+.lookbook-modal-card .lookbook-code {
+  color: #f472b6 !important;
   font-weight: 700 !important;
 }
 
-html.light-theme .nav-theme-toggle-btn svg {
-  color: #6b21a8 !important;
+.lookbook-modal-card .lookbook-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
-html.light-theme .nav-theme-toggle-btn:hover {
-  background-color: #ddd6fe !important;
-  border-color: #9333ea !important;
+.lookbook-modal-card .lookbook-subtitle {
+  color: #e9d5ff !important;
+  font-style: italic !important;
 }
 
+.lookbook-modal-card .lookbook-story {
+  color: #e4e4e7 !important;
+  line-height: 1.6 !important;
+}
+
+.lookbook-modal-card .lookbook-specs {
+  background: rgba(25, 4, 27, 0.85) !important;
+  border: 1px solid rgba(244, 114, 182, 0.3) !important;
+  color: #f4f4f5 !important;
+}
+
+.lookbook-modal-card .lookbook-specs strong {
+  color: #f472b6 !important;
+}
+
+.lookbook-modal-card .lookbook-specs div {
+  color: #f4f4f5 !important;
+}
+
+.lookbook-modal-card .lookbook-caption {
+  color: #a1a1aa !important;
+}
+
+.lookbook-modal-card .btn-commission-cta {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #7e22ce 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -4px rgba(236, 72, 153, 0.5) !important;
+}
+
+.lookbook-modal-card .btn-commission-cta * {
+  color: #ffffff !important;
+}
+
+.lookbook-modal-card .lookbook-close-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.lookbook-modal-card .lookbook-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+}
+
+.lookbook-modal-card .lookbook-close-x {
+  background: rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* --- LIGHT MODE OVERRIDES FOR LOOKBOOK MODAL --- */
+html.light-theme .lookbook-modal-card {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(190, 24, 93, 0.35) !important;
+  box-shadow: 0 25px 80px rgba(190, 24, 93, 0.18), 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  color: #09090b !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-code {
+  color: #be185d !important;
+  font-weight: 800 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-code span {
+  color: #be185d !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-title {
+  color: #09090b !important;
+  font-weight: 800 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-subtitle {
+  color: #7e22ce !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-story {
+  color: #18181b !important;
+  font-weight: 500 !important;
+  line-height: 1.65 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs {
+  background: #fdf2f8 !important;
+  border: 1.5px solid rgba(190, 24, 93, 0.25) !important;
+  color: #09090b !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs strong {
+  color: #9d174d !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-specs div {
+  color: #18181b !important;
+  font-weight: 500 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-caption {
+  color: #3f3f46 !important;
+  font-weight: 500 !important;
+}
+
+html.light-theme .lookbook-modal-card .btn-commission-cta {
+  background: linear-gradient(135deg, #be185d 0%, #9333ea 50%, #7e22ce 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -4px rgba(190, 24, 93, 0.4) !important;
+}
+
+html.light-theme .lookbook-modal-card .btn-commission-cta * {
+  color: #ffffff !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-btn {
+  background: #f3e8ff !important;
+  border: 2px solid rgba(168, 85, 247, 0.45) !important;
+  color: #18181b !important;
+  font-weight: 800 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-btn:hover {
+  background: #ede9fe !important;
+  border-color: #be185d !important;
+  color: #000000 !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-x {
+  background: #f3e8ff !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.4) !important;
+  color: #18181b !important;
+}
+
+html.light-theme .lookbook-modal-card .lookbook-close-x:hover {
+  background: #ede9fe !important;
+  color: #be185d !important;
+}

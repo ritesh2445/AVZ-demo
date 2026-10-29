@@ -219,6 +219,26 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
     scrollToCard(next);
   };
 
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
+
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+    if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        scrollNext();
+      } else {
+        scrollPrev();
+      }
+    }
+  };
+
   return (
     <section
       id="about"
@@ -313,8 +333,10 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           ========================================================================= */}
       <div
         ref={scrollContainerRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         className="relative z-10 max-w-7xl mx-auto w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-12 py-6 flex items-stretch gap-8 sm:gap-10 scroll-smooth no-scrollbar"
-        style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-y', overscrollBehaviorX: 'contain' }}
+        style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'auto' }}
       >
         {/* =====================================================================
             CARD 1: ABOUT MOTHER (With just ONE image of her)
