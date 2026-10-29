@@ -205,7 +205,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
     if (!container) return;
     const cardEl = document.getElementById(CARDS[index].id);
     if (cardEl) {
-      cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   };
 
@@ -242,7 +242,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
   return (
     <section
       id="about"
-      className="relative w-full bg-pitch-black text-silver overflow-hidden border-t border-[#be185d]/30 selection:bg-pink selection:text-black py-12 sm:py-16"
+      className="relative w-full bg-pitch-black text-silver overflow-hidden border-t border-[#be185d]/30 selection:bg-pink selection:text-black py-8 sm:py-12"
     >
       {/* Background Architectural Mesh & Subtle Ambient Violet Glow */}
       <div
@@ -262,8 +262,8 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
             <span>✦ FOUNDER ARCHIVE • GUWAHATI ATELIER</span>
           </div>
-          <h2 className="font-spartan font-black text-2xl sm:text-3xl lg:text-4xl tracking-[0.08em] text-white uppercase">
-            MEET DHRISNI (DHRISTROYER)
+          <h2 className="font-mono font-bold text-xl sm:text-2xl lg:text-3xl tracking-[0.14em] text-white uppercase">
+            DHRISNI (DHRISTROYER)
           </h2>
           <p className="font-mono text-xs text-zinc-400 tracking-wider uppercase mt-1">
             FOUNDER & COUTURE SCULPTOR • THE AVZ DIMENSION
@@ -335,7 +335,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
         ref={scrollContainerRef}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative z-10 max-w-7xl mx-auto w-full overflow-x-auto overflow-y-hidden px-4 sm:px-8 lg:px-12 py-6 flex items-stretch gap-8 sm:gap-10 scroll-smooth no-scrollbar"
+        className="relative z-10 w-full overflow-x-auto overflow-y-hidden px-[6vw] sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-6 sm:gap-8 scroll-smooth no-scrollbar"
         style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'auto' }}
       >
         {/* =====================================================================
@@ -343,7 +343,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-about-mother"
-          className="snap-start shrink-0 w-[88vw] sm:w-[500px] lg:w-[540px] h-[600px] sm:h-[640px] rounded-3xl border border-white/20 bg-gradient-to-b from-[#18041d]/95 via-[#0d0111]/95 to-black p-7 sm:p-9 flex flex-col justify-between shadow-[0_24px_60px_rgba(24,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/20 bg-gradient-to-b from-[#18041d]/95 via-[#0d0111]/95 to-black p-7 sm:p-9 flex flex-col justify-between shadow-[0_24px_60px_rgba(24,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           {/* Subtle Corner Markers */}
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -406,7 +406,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-professional-roots"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -442,7 +442,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-how-born"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -478,7 +478,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-sustainability"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -514,7 +514,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-aesthetic"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>

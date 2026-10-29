@@ -144,7 +144,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   }, [activeLook, currentSlide]);
 
   return (
-    <section id="lookbook" className="w-full py-10 sm:py-14 bg-transparent select-none relative overflow-hidden">
+    <section id="lookbook" className="w-full py-8 sm:py-12 bg-transparent select-none relative overflow-hidden">
       {/* Header Bar */}
       <div className="w-full px-4 sm:px-8 lg:px-12 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10">
         <div className="text-left">
@@ -152,8 +152,8 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
             <span>LOOKBOOK ARCHIVE • SPATIAL RUNWAY</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
-            SPATIAL <span className="text-zinc-400 font-light">LOOKBOOK</span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight text-left">
+            LOOKBOOK <span className="text-zinc-500 font-light">ARCHIVE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 leading-relaxed text-left">
             Interactive spatial runway presentation. Navigate horizontally through editorial looks and bespoke studio silhouettes.

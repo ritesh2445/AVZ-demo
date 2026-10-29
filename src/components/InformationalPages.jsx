@@ -12,7 +12,7 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-transparent select-none border-t border-[#be185d]/20 relative">
+    <section id="faq" className="w-full py-8 sm:py-12 px-4 sm:px-12 lg:px-20 bg-transparent select-none border-t border-[#be185d]/20 relative">
       {/* Background Centered Ambient True Dark Purple Plum Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#2d052d]/30 rounded-full blur-[160px] pointer-events-none" />
 
@@ -22,8 +22,8 @@ export function FAQSection() {
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>HELP & ANSWERS • CUSTOMER CARE</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-center">
-          FREQUENTLY ASKED <span className="text-zinc-400 font-light">QUESTIONS</span>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight text-center">
+          CLIENT <span className="text-zinc-500 font-light">QUESTIONS</span>
         </h2>
         <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 text-center leading-relaxed">
           Helpful information on custom orders, sizing, shipping, and garment care.
@@ -75,14 +75,14 @@ export function FAQSection() {
 
 export function ContactSection() {
   return (
-    <section id="contact" className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
+    <section id="contact" className="w-full py-8 sm:py-12 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
       <div className="max-w-6xl mx-auto mb-12 pb-6 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
           <span>CUSTOMER CARE • DIRECT STUDIO CONCIERGE</span>
         </div>
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-[0.16em] text-white uppercase leading-tight text-left">
-          STUDIO <span className="text-zinc-400 font-light">CONTACT & SUPPORT</span>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight text-left">
+          STUDIO <span className="text-zinc-500 font-light">CONCIERGE</span>
         </h2>
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base font-montserrat mt-2 max-w-3xl leading-relaxed">
           Direct communication channels to our Guwahati studio, founder creative direction desk, and customer styling team.
@@ -275,10 +275,7 @@ export function ContactSection() {
             </div>
           </div>
 
-          <div className="pt-4 mt-6 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-400">
-            <span>SUPPORT STATUS:</span>
-            <span className="text-pink font-semibold">DIRECT VERIFIED SUPPORT</span>
-          </div>
+
         </div>
       </div>
     </section>
@@ -287,14 +284,14 @@ export function ContactSection() {
 
 export function ShippingPackagingReturns() {
   return (
-    <section id="specs" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
+    <section id="specs" className="w-full py-8 sm:py-12 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
       <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 text-left">
         <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>SHIPPING & PACKAGING • GLOBAL COURIER</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase mb-3 leading-tight">
-          SHIPPING, PACKAGING & <span className="text-zinc-400 font-light">RETURNS</span>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase mb-2 leading-tight">
+          SHIPPING & <span className="text-zinc-500 font-light">RETURNS</span>
         </h2>
         <p className="text-xs sm:text-sm text-zinc-400 font-montserrat max-w-xl">
           Reliable shipping, custom luxury packaging, and clear return policies.

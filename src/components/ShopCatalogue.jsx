@@ -121,8 +121,8 @@ function KeyArchiveCarousel({
             <Crown className="w-3.5 h-3.5 text-pink" />
             <span>CURATED ARCHIVE • KEY PIECES</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white tracking-[0.15em] leading-tight">
-            KEY <span className="text-zinc-400">ARCHIVE PIECES</span>
+          <h3 className="text-lg sm:text-xl font-mono font-medium uppercase text-white tracking-[0.15em] leading-tight">
+            KEY <span className="text-zinc-500 font-light">PIECES</span>
           </h3>
           <p className="text-zinc-400 text-xs sm:text-sm font-montserrat mt-1 max-w-xl">
             Distinguished wearable art pieces defined by unique design and handmade craftsmanship.
@@ -165,7 +165,7 @@ function KeyArchiveCarousel({
       <div
         ref={trackRef}
         onScroll={updateScrollState}
-        className="flex gap-5 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-2 px-1 touch-pan-x"
+        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-4 px-[6vw] sm:px-[calc(50vw-320px)] lg:px-[calc(50vw-480px)] justify-start lg:justify-center items-stretch"
       >
         {items.map((item) => {
           const isWish = wishlistIds.includes(item.id);
@@ -177,7 +177,7 @@ function KeyArchiveCarousel({
                 playSound('metal');
                 onSelectProduct(item);
               }}
-              className="snap-start shrink-0 w-[270px] sm:w-[310px] lg:w-[330px] rounded-2xl sm:rounded-3xl border border-white/10 hover:border-pink/40 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden flex flex-col justify-between group mobile-grunge-card text-left"
+              className="snap-center shrink-0 w-[260px] sm:w-[290px] lg:w-[310px] rounded-3xl border border-white/10 hover:border-pink/40 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden flex flex-col justify-between group mobile-grunge-card text-left"
             >
               {/* Product Visual */}
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
@@ -189,13 +189,10 @@ function KeyArchiveCarousel({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
-                {/* Rank & Specimen Badges */}
-                <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10">
-                  <span className="px-2.5 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-white/20 text-white text-[9px] font-mono tracking-widest uppercase shadow-md font-semibold">
-                    {item.rank || 'EDITION'}
-                  </span>
-                  <span className="px-2 py-0.5 rounded-full bg-pink/20 backdrop-blur-md border border-pink/40 text-pink text-[8px] font-mono tracking-wider font-bold">
-                    {item.badge || 'SIGNATURE PIECE'}
+                {/* Minimalist Archive Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className="px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white text-[9px] font-mono tracking-widest uppercase font-medium">
+                    {item.tag || 'ARCHIVE'}
                   </span>
                 </div>
 
@@ -214,13 +211,7 @@ function KeyArchiveCarousel({
                   </button>
                 )}
 
-                {/* Provenance Tag on Photo */}
-                <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-[10px] font-mono text-zinc-300">
-                  <span className="bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/15 text-[9px]">
-                    {item.provenance || item.category}
-                  </span>
-                  <span className="text-pink font-semibold">1-OF-1</span>
-                </div>
+
 
                 {/* Quick View Hover Tag */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] pointer-events-none">
@@ -527,8 +518,8 @@ export default function ShopCatalogue({
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
             <span>COLLECTION 01 • ARCHIVAL SILHOUETTES</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight">
-            WEARABLE ART <span className="text-zinc-400 font-light">CATALOGUE</span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight">
+            COLLECTION <span className="text-zinc-500 font-light">ARCHIVE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-1.5 sm:mt-2 leading-relaxed text-left">
             1-of-1 sculptural corsets, motherboard breastplates, and tailored outerwear handcrafted in our Guwahati studio.
@@ -578,7 +569,7 @@ export default function ShopCatalogue({
       {/* Filter and Control Toolbar */}
       <div className="mb-10 space-y-6 relative z-10">
         {/* Horizontal Category Scroller with Icons */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 touch-pan-x">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 ">
           {CATEGORIES.map((cat) => {
             const Icon = CATEGORY_ICONS[cat] || LayoutGrid;
             const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
@@ -685,7 +676,7 @@ export default function ShopCatalogue({
               </div>
 
               {/* Swipable Section Carousel with Smaller Frames */}
-              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
+              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 ">
                 {section.items.map((prod) => (
                   <MobileCompactProductCard
                     key={prod.id}
@@ -711,7 +702,7 @@ export default function ShopCatalogue({
                 SWIPABLE CAROUSEL
               </span>
             </div>
-            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
+            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 ">
               {filteredProducts.map((prod) => (
                 <MobileCompactProductCard
                   key={prod.id}

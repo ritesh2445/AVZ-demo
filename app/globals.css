@@ -2085,3 +2085,22 @@ html.light-theme .lookbook-modal-card .lookbook-close-x:hover {
   background: #ede9fe !important;
   color: #be185d !important;
 }
+
+
+/* =========================================================================
+   GLOBAL UNRESTRICTED TOUCH & SCROLL RESPONSIVENESS
+   Ensures cards, carousels, articles, and horizontal tracks never trap
+   or prevent natural vertical page scrolling on mobile or touchscreens.
+   ========================================================================= */
+article,
+div,
+section,
+.overflow-x-auto,
+[class*="overflow-x-auto"],
+.mobile-grunge-card,
+[class*="snap-"] {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-x: auto !important;
+  overscroll-behavior-y: auto !important;
+}

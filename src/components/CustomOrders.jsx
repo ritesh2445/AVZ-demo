@@ -107,7 +107,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
   };
 
   return (
-    <section id="custom" className="w-full py-12 sm:py-20 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
+    <section id="custom" className="w-full py-8 sm:py-14 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
       {/* Editorial Header */}
       <div className="max-w-6xl mx-auto mb-10 pb-6 border-b border-white/10 text-left">
         <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
@@ -115,8 +115,8 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
           <span>CUSTOM ORDERS • HANDCRAFTED IN GUWAHATI</span>
         </div>
 
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-[0.16em] text-white uppercase mb-3 leading-tight text-left">
-          CUSTOM <span className="text-zinc-400 font-light">ORDERS</span>
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase mb-2 leading-tight text-left">
+          CUSTOM <span className="text-zinc-500 font-light">ORDERS</span>
         </h2>
 
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base leading-relaxed font-montserrat max-w-4xl text-left">
@@ -248,10 +248,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 CUSTOM DESIGN BRIEF
               </h3>
             </div>
-            <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono text-zinc-400 px-3 py-1 rounded-full bg-white/5 border border-white/10">
-              <ShieldCheck className="w-3.5 h-3.5 text-pink" />
-              <span>DIRECT STORE VERIFIED</span>
-            </div>
+
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5 text-left">

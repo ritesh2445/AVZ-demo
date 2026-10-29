@@ -520,7 +520,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
     <section
       id="museum"
       ref={sectionRef}
-      className={`w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 select-none border-t text-left transition-colors duration-300 ${
+      className={`w-full py-8 sm:py-12 px-4 sm:px-8 lg:px-12 select-none border-t text-left transition-colors duration-300 ${
         theme === 'light'
           ? 'bg-white border-purple-200/50 text-zinc-900'
           : 'bg-[#060608] border-white/8 text-silver'
@@ -534,8 +534,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
             <span>PERMANENT ARCHIVE • ONE-OF-A-KIND PIECES</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono uppercase tracking-[0.2em] text-white leading-tight">
-            ARCHIVE <span className="text-zinc-500 font-normal">MUSEUM</span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium uppercase tracking-[0.16em] text-white leading-tight">
+            ARCHIVE <span className="text-zinc-500 font-light">MUSEUM</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm mt-1.5 font-mono tracking-wider max-w-xl leading-relaxed">
             Our permanent archive of one-of-a-kind wearable art and past pieces. Handcrafted pieces available for custom recreation.
