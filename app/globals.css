@@ -1876,8 +1876,18 @@ html.light-theme #lookbook button[aria-label*="look"]:hover {
 }
 
 /* Navbar Dedicated Dark Mode Button */
-.nav-theme-toggle-btn {
+.nav-theme-toggle-btn,
+.theme-toggle-icon-btn {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+html.light-theme .theme-toggle-icon-btn svg,
+html.light-theme header .theme-toggle-icon-btn svg {
+  color: #7e22ce !important;
+}
+
+html.light-theme header .theme-toggle-icon-btn:hover svg {
+  color: #581c87 !important;
 }
 
 html.light-theme .nav-theme-toggle-btn {

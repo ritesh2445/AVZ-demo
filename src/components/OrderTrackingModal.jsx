@@ -100,13 +100,12 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
             <div className="space-y-3 relative pl-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1px] before:bg-white/20">
               {orderStatus.stages.map((stage, i) => (
                 <div key={i} className="relative text-left">
-                  <div className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                    stage.done
-                      ? 'bg-white border-white text-black'
-                      : stage.current
+                  <div className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${stage.done
+                    ? 'bg-white border-white text-black'
+                    : stage.current
                       ? 'bg-zinc-400 border-white animate-pulse'
                       : 'bg-black border-white/30'
-                  }`}>
+                    }`}>
                     {stage.done && <CheckCircle2 className="w-2.5 h-2.5 text-black" />}
                   </div>
 

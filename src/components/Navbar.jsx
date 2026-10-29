@@ -117,24 +117,45 @@ export default function Navbar({
         }`}
       >
         {/* Sleek, Architectural Glass Capsule */}
-        <div className="bg-[#0b030f]/85 backdrop-blur-2xl border border-white/12 rounded-full px-4 sm:px-6 h-11 sm:h-12 flex items-center justify-between gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
-          {/* Brand Mark */}
-          <button
-            onClick={() => handleNavClick('hero')}
-            className="flex items-center gap-2.5 cursor-pointer group shrink-0 focus:outline-none"
-            aria-label="AVZ Home"
-          >
-            <div className="w-6 h-6 flex items-center justify-center">
-              <img
-                src={ASSET_MANIFEST.logo}
-                alt="AVZ"
-                className="w-full h-full object-contain avz-logo-highest-brightness group-hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-            <span className="font-mono text-xs font-semibold tracking-[0.25em] text-white uppercase group-hover:text-pink-300 transition-colors">
-              AVZ
-            </span>
-          </button>
+        <div className="bg-[#0b030f]/85 backdrop-blur-2xl border border-white/12 rounded-full px-3 sm:px-5 h-11 sm:h-12 flex items-center justify-between gap-3 sm:gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+          {/* Left Group: Dark/Light Mode Icon Button on Very Left + Brand Mark */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            {/* Very Left: Dark / Light Mode Toggle Icon */}
+            <button
+              type="button"
+              onClick={() => {
+                playSound('snap');
+                onToggleTheme?.();
+              }}
+              aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+              className="theme-toggle-icon-btn w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0 active:scale-95 hover:bg-white/5"
+            >
+              {theme === 'light' ? (
+                <Moon className="w-3.5 h-3.5 text-purple-700 hover:text-purple-900 transition-colors" />
+              ) : (
+                <Sun className="w-3.5 h-3.5 hover:text-pink-300 transition-colors" />
+              )}
+            </button>
+
+            {/* Brand Mark */}
+            <button
+              onClick={() => handleNavClick('hero')}
+              className="flex items-center gap-2 cursor-pointer group shrink-0 focus:outline-none"
+              aria-label="AVZ Home"
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                <img
+                  src={ASSET_MANIFEST.logo}
+                  alt="AVZ"
+                  className="w-full h-full object-contain avz-logo-highest-brightness group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <span className="font-mono text-xs font-semibold tracking-[0.25em] text-white uppercase group-hover:text-pink-300 transition-colors">
+                AVZ
+              </span>
+            </button>
+          </div>
 
           {/* Desktop Minimalist Nav Links */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-7">
@@ -306,34 +327,6 @@ export default function Navbar({
               className="hidden sm:flex w-7 h-7 rounded-full items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-zinc-600" />}
-            </button>
-
-            {/* Dedicated High-Visibility Dark / Light Mode Button */}
-            <button
-              type="button"
-              onClick={() => {
-                playSound('snap');
-                onToggleTheme?.();
-              }}
-              aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              className="nav-theme-toggle-btn flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full border transition-all text-[10px] font-mono tracking-wider cursor-pointer active:scale-95 shadow-sm"
-            >
-              {theme === 'light' ? (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-purple-700 shrink-0" />
-                  <span className="font-bold text-[9px] sm:text-[10px] uppercase text-purple-900 tracking-wider">
-                    DARK<span className="hidden sm:inline"> MODE</span>
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-pink-300 shrink-0" />
-                  <span className="font-semibold text-[9px] sm:text-[10px] uppercase text-zinc-300 hover:text-white tracking-wider">
-                    LIGHT<span className="hidden sm:inline"> MODE</span>
-                  </span>
-                </>
-              )}
             </button>
 
             {/* Mobile Hamburger Toggle */}

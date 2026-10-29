@@ -139,11 +139,10 @@ function KeyArchiveCarousel({
               onClick={scrollLeft}
               disabled={!canScrollLeft}
               aria-label="Previous Key Piece"
-              className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${
-                canScrollLeft
-                  ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
-                  : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
-              }`}
+              className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${canScrollLeft
+                ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
+                : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                }`}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -151,11 +150,10 @@ function KeyArchiveCarousel({
               onClick={scrollRight}
               disabled={!canScrollRight}
               aria-label="Next Key Piece"
-              className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${
-                canScrollRight
-                  ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
-                  : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
-              }`}
+              className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${canScrollRight
+                ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
+                : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                }`}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -593,11 +591,10 @@ export default function ShopCatalogue({
                   playSound('snap');
                   setSelectedCategory(cat);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono whitespace-nowrap transition-all cursor-pointer border ${
-                  isSelected
-                    ? 'bg-[#be185d]/30 text-white border-[#f472b6] shadow-[0_0_15px_rgba(190,24,93,0.4)] font-bold'
-                    : 'bg-white/5 text-silver/70 border-white/10 hover:border-white/25 hover:text-white'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono whitespace-nowrap transition-all cursor-pointer border ${isSelected
+                  ? 'bg-[#be185d]/30 text-white border-[#f472b6] shadow-[0_0_15px_rgba(190,24,93,0.4)] font-bold'
+                  : 'bg-white/5 text-silver/70 border-white/10 hover:border-white/25 hover:text-white'
+                  }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#f472b6]' : 'text-silver/50'}`} />
                 <span>{cat}</span>
@@ -622,11 +619,10 @@ export default function ShopCatalogue({
                   playSound('snap');
                   setSelectedMaterial(mat);
                 }}
-                className={`px-3 py-1 rounded-full text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer border ${
-                  selectedMaterial === mat
-                    ? 'bg-[#f472b6]/20 text-pink-300 border-[#f472b6] font-bold'
-                    : 'bg-transparent text-silver/60 border-white/10 hover:border-white/20 hover:text-silver'
-                }`}
+                className={`px-3 py-1 rounded-full text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer border ${selectedMaterial === mat
+                  ? 'bg-[#f472b6]/20 text-pink-300 border-[#f472b6] font-bold'
+                  : 'bg-transparent text-silver/60 border-white/10 hover:border-white/20 hover:text-silver'
+                  }`}
               >
                 {mat}
               </button>
