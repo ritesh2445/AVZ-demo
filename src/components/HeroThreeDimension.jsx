@@ -898,20 +898,24 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
         webkit-playsinline="true"
         x5-playsinline="true"
         preload="auto"
+        poster={ASSET_MANIFEST.editorialHero}
         disablePictureInPicture
+        disableRemotePlayback
+        controlsList="nodownload nofullscreen noremoteplayback"
         onTimeUpdate={handleVideoTimeUpdate}
         onLoadedData={() => setVideoLoaded(true)}
         onCanPlay={() => setVideoLoaded(true)}
         onPlay={() => setVideoLoaded(true)}
         onPlaying={() => setVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover z-0 pointer-events-none transition-opacity duration-500 ease-out ${
-          videoLoaded ? 'opacity-100' : 'opacity-90'
-        }`}
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-100 transition-opacity duration-300 ease-out"
         style={{
-          filter: 'none',
-          imageRendering: 'high-quality',
+          filter: 'contrast(105%) brightness(102%) saturate(104%)',
+          objectPosition: 'center center',
           WebkitBackfaceVisibility: 'hidden',
-          transform: 'translate3d(0, 0, 0)'
+          backfaceVisibility: 'hidden',
+          transform: 'translate3d(0, 0, 0)',
+          willChange: 'transform',
+          imageRendering: '-webkit-optimize-contrast'
         }}
       >
         <source src={videoSource} type="video/mp4" />

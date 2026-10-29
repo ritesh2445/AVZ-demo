@@ -760,13 +760,65 @@ html.light-theme .mobile-grunge-card p:not([class*="aspect-"] *) {
   color: #27272a !important;
 }
 
-html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *) {
-  color: #3f3f46 !important;
+/* All Grey, Silver and Zinc Texts in Light Mode: Bolder, Sharper, and Darker */
+html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
+html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
+html.light-theme .text-zinc-400:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme .text-zinc-500:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme .text-zinc-600:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme p.text-zinc-400,
+html.light-theme p.text-zinc-500,
+html.light-theme span.text-zinc-400,
+html.light-theme span.text-zinc-500,
+html.light-theme div.text-zinc-400,
+html.light-theme div.text-zinc-500 {
+  color: #18181b !important;
+  font-weight: 500 !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
-html.light-theme .text-zinc-400:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
-html.light-theme .text-zinc-500:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *) {
-  color: #52525b !important;
+/* Secondary Meta, Spec, and Sub-Labels in Light Mode */
+html.light-theme [class*="text-\[9px\]"],
+html.light-theme [class*="text-\[10px\]"],
+html.light-theme [class*="text-\[11px\]"],
+html.light-theme span.font-mono.text-zinc-400,
+html.light-theme span.font-mono.text-zinc-500 {
+  color: #27272a !important;
+  font-weight: 600 !important;
+}
+
+/* Section Header Grey Accents (<span className="text-zinc-400 font-light">) */
+html.light-theme h2 span.text-zinc-400,
+html.light-theme h2 span.text-zinc-500,
+html.light-theme h3 span.text-zinc-400,
+html.light-theme h3 span.text-zinc-500 {
+  color: #7e22ce !important; /* Deep Electric Royal Purple for section headers */
+  font-weight: 600 !important;
+}
+
+/* Content paragraphs & lists across FAQ, Contact, Specs, About, Museum, Shop in Light Mode */
+html.light-theme #faq p,
+html.light-theme #faq div,
+html.light-theme #faq button,
+html.light-theme #contact p,
+html.light-theme #contact span,
+html.light-theme #contact div,
+html.light-theme #specs p,
+html.light-theme #specs ul,
+html.light-theme #specs li,
+html.light-theme #specs div,
+html.light-theme #about p,
+html.light-theme #about span,
+html.light-theme #custom p,
+html.light-theme #custom label,
+html.light-theme #custom span.text-zinc-300,
+html.light-theme #custom span.text-zinc-400,
+html.light-theme #shop p,
+html.light-theme #shop span.text-zinc-400,
+html.light-theme #museum p,
+html.light-theme #museum span.text-zinc-400 {
+  color: #18181b !important;
+  font-weight: 500 !important;
 }
 
 /* Electric Character & Glitch Effects */
@@ -1086,7 +1138,8 @@ html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-500,
 html.light-theme [class*="bg-[#0d020f]"] .text-zinc-400,
 html.light-theme [class*="bg-[#0d020f]"] .text-zinc-500,
 html.light-theme .lookbook-modal-card .lookbook-caption {
-  color: #52525b !important;
+  color: #18181b !important;
+  font-weight: 500 !important;
 }
 
 /* Lookbook Lightbox Modal Badges & Accents in Light Mode */
@@ -1583,5 +1636,14 @@ html.light-theme .section-scroll-reveal.is-visible::after {
   .section-scroll-reveal::before,
   .section-scroll-reveal::after {
     display: none !important;
+  }
+}
+
+/* Mobile Touch & iOS Form Optimization - Snappy interaction, prevents auto-zoom on focus */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
   }
 }
