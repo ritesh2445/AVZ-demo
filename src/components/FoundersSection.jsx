@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-// EXACT UNCHANGED SOURCE COPY
+// MODERN PROFESSIONAL EDITORIAL COPY
 const COPY = {
   aboutMother: {
     heading: 'ABOUT MOTHER'
@@ -11,27 +11,33 @@ const COPY = {
   professionalRoots: {
     heading: 'PROFESSIONAL ROOTS',
     paragraphs: [
-      'growing up between shillong and guwahati, she was already building her digital footprint on youtube by sixteen before dominating instagram as a creator.',
-      'at eighteen she packed up and moved to mumbai, stepping straight into modeling and working with massive brands while landing roles in commercials, reality tv, and a feature film.',
-      'she has always been entirely about her vision, fiercely protective of her art, and unapologetically ahead of the curve when it comes to fashion, culture, and beauty.'
+      'Growing up between Shillong and Guwahati, Dhrisni began engineering her digital presence at sixteen, establishing an early authority in independent style and visual storytelling across social platforms.',
+      'At eighteen, she relocated to Mumbai, stepping directly into high-fashion modeling and commercial production while securing prominent roles in national television, reality broadcasts, and feature film.',
+      'Throughout her evolution across fashion, acting, and digital media, she has remained fiercely protective of her singular artistic autonomy—consistently innovating ahead of mainstream industry conventions.'
     ]
   },
   howBorn: {
     heading: 'HOW VAGANZA WAS BORN',
     paragraphs: [
-      'it all started because she looked at the boring predictable fashion industry and decided to completely burn the rulebook. avz vaganza was born out of sheer necessity to create something real and uncompromised where dark alternative aesthetics and cyber grunge met actual technical mastery. she wanted a world where garments are heavily constructed with industrial hardware and raw attitude rather than mass produced corporate trends. she poured her entire soul into engineering this universe from scratch making sure every single piece feels alive and dangerous and completely yours'
+      'AVZ Vaganza was founded out of deliberate aesthetic rebellion against the predictable monotony of mass fashion.',
+      'Dhrisni recognized a profound creative void where subcultural attitude, industrial cyberpunk grit, and genuine couture technical mastery could collide. She engineered the label as an uncompromising sanctuary for bespoke wearable art.',
+      'Every garment is painstakingly hand-sculpted in our Guwahati atelier using raw industrial hardware, motherboards, cone spikes, and reclaimed textiles—ensuring every piece possesses an unmistakable soul and physical presence.'
     ]
   },
   sustainability: {
     heading: 'SUSTAINABILITY CORE',
     paragraphs: [
-      'we do not just talk about sustainability like some corporate buzzword to look good on a tag because for us it is the absolute core of how we survive and create. instead of feeding into the endless cycle of fast fashion waste we take things apart and flip them completely breathing raw new life into dead materials and industrial castoffs. every single piece of hardware or discarded textile is rescued and transformed into something aggressively original. we thrive on taking what society throws away and turning it into high end rebellion proving that true luxury does not come from new factory lines but from the art of ruthless upcycling and giving trash a god tier second chance'
+      'At AVZ Vaganza, sustainability is not an afterthought or marketing slogan—it is the operational core of our studio practice.',
+      'Rather than contributing to fast-fashion landfills, we methodically deconstruct industrial castoffs, obsolete electronics, and deadstock textiles, transforming them into wearable high-fashion armor.',
+      'We demonstrate that modern luxury does not stem from automated factory output, but from the deliberate human artistry of ruthless upcycling and second-life material innovation.'
     ]
   },
   aesthetic: {
     heading: 'AESTHETIC INSPIRATION',
     paragraphs: [
-      'avz also known as aveezah is an entire alternative dimension that you do not need a passport or a visa to enter because the aesthetic itself is the destination. it is a dark cyber grunge fantasy where you are already part of the inner circle the moment you tap into the frequency. you do not need permission to exist in this world of high fashion rebellion and unapologetic art. the doors are wide open for anyone who lives for the underground and dresses like they own the night'
+      'AVZ Vaganza represents an autonomous aesthetic realm where subcultural identity and dark cyber-grunge fantasy intersect.',
+      'Drawing visceral inspiration from industrial punk, rave countercultures, Y2K retrofuturism, and avant-garde streetwear, the label creates silhouettes designed to command space and project defensive confidence.',
+      'Our studio doors welcome all who reject cookie-cutter minimalism in favor of bold texture, tactile hardware, and unapologetic self-sovereignty.'
     ]
   }
 };
@@ -124,11 +130,11 @@ function ElectricTypewriterBlock({ paragraphs, isVisible }) {
         return (
           <div key={i} className="relative">
             {paragraphs.length > 1 && (
-              <span className="font-mono text-[11px] text-pink/80 tracking-widest block mb-1.5 font-medium">
-                {(i + 1).toString().padStart(2, '0')} //
+              <span className="font-mono text-xs text-pink tracking-[0.2em] block mb-2 font-bold uppercase">
+                // SECTION {(i + 1).toString().padStart(2, '0')}
               </span>
             )}
-            <p className="font-montserrat text-sm sm:text-base leading-[1.85] text-zinc-300 font-normal tracking-wide normal-case">
+            <p className="font-montserrat text-[15px] sm:text-[17px] leading-[1.8] text-zinc-100 font-semibold tracking-normal normal-case">
               {para.slice(0, count)}
               {isCurrent && (
                 <>
@@ -311,7 +317,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-about-mother"
-          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[86vw] sm:w-[480px] lg:w-[500px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#140217]/95 via-black to-[#0a020d]/95 p-6 sm:p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           {/* Subtle Corner Markers */}
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -320,12 +326,12 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <span className="text-pink/80 font-semibold">01 // VISUAL INTRODUCTION</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
+              <span className="text-pink font-bold">01 // VISUAL INTRODUCTION</span>
               <span>ATELIER PROVENANCE</span>
             </div>
 
-            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100">
+            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white">
               {COPY.aboutMother.heading}
             </h3>
           </div>
@@ -338,15 +344,15 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
               className="w-full h-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20 pointer-events-none" />
-            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-zinc-300">
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-white font-medium">
               <span className="tracking-widest">DHRISNI (DHRISTROYER)</span>
-              <span className="text-pink/70">GUWAHATI</span>
+              <span className="text-pink font-semibold">GUWAHATI</span>
             </div>
           </div>
 
-          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
-            <span>FOUNDER & CREATIVE DIRECTOR</span>
-            <span className="text-pink/80">AVZ VAGANZA</span>
+          <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-mono text-zinc-400">
+            <span className="font-semibold text-white">FOUNDER & MASTER ARTISAN</span>
+            <span className="text-pink font-bold">AVZ VAGANZA</span>
           </div>
         </div>
 
@@ -355,7 +361,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-professional-roots"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -363,16 +369,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <span className="text-pink/80 font-semibold">02 // INFO CARD</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
+              <span className="text-pink font-bold">02 // ATELIER PROFILE</span>
               <span>CHRONOLOGY</span>
             </div>
 
-            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
               {COPY.professionalRoots.heading}
             </h3>
 
-            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
               <ElectricTypewriterBlock
                 paragraphs={COPY.professionalRoots.paragraphs}
                 isVisible={visibleCards['card-professional-roots']}
@@ -380,9 +386,9 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>SHILLONG → GUWAHATI → MUMBAI</span>
-            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
+            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
 
@@ -391,7 +397,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-how-born"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -399,16 +405,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <span className="text-pink/80 font-semibold">03 // INFO CARD</span>
-              <span>GENESIS</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
+              <span className="text-pink font-bold">03 // ATELIER GENESIS</span>
+              <span>ORIGIN STORY</span>
             </div>
 
-            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
               {COPY.howBorn.heading}
             </h3>
 
-            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
               <ElectricTypewriterBlock
                 paragraphs={COPY.howBorn.paragraphs}
                 isVisible={visibleCards['card-how-born']}
@@ -416,9 +422,9 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>DARK ALTERNATIVE // INDUSTRIAL ATTITUDE</span>
-            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
+            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
 
@@ -427,7 +433,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-sustainability"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -435,16 +441,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <span className="text-pink/80 font-semibold">04 // INFO CARD</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
+              <span className="text-pink font-bold">04 // MATERIAL PRACTICE</span>
               <span>RUTHLESS UPCYCLING</span>
             </div>
 
-            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
               {COPY.sustainability.heading}
             </h3>
 
-            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
               <ElectricTypewriterBlock
                 paragraphs={COPY.sustainability.paragraphs}
                 isVisible={visibleCards['card-sustainability']}
@@ -452,9 +458,9 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>DISCARDED HARDWARE // RAW TRANSFORMATION</span>
-            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
+            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
 
@@ -463,7 +469,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             ===================================================================== */}
         <div
           id="card-aesthetic"
-          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[580px] h-[540px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
+          className="snap-start shrink-0 w-[88vw] sm:w-[540px] lg:w-[600px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
         >
           <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
           <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
@@ -471,16 +477,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
 
           <div>
-            <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-3">
-              <span className="text-pink/80 font-semibold">05 // INFO CARD</span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
+              <span className="text-pink font-bold">05 // CREATIVE PHILOSOPHY</span>
               <span>THE DESTINATION</span>
             </div>
 
-            <h3 className="font-mono text-lg sm:text-xl font-medium tracking-[0.2em] uppercase text-zinc-100 mb-6">
+            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
               {COPY.aesthetic.heading}
             </h3>
 
-            <div className="overflow-y-auto max-h-[380px] pr-2 no-scrollbar">
+            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
               <ElectricTypewriterBlock
                 paragraphs={COPY.aesthetic.paragraphs}
                 isVisible={visibleCards['card-aesthetic']}
@@ -488,9 +494,9 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-500">
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>THE FREQUENCY // UNDERGROUND HIGH FASHION</span>
-            <span className="text-pink/60 hover:text-pink text-[10px] font-mono tracking-wider transition-colors">[ ⚡ TAP TO REVEAL ]</span>
+            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
       </div>

@@ -579,12 +579,18 @@ export const FAQS = [
   }
 ];
 
-// CURRENCY CONVERSION (INR Default with clean rates)
+// CURRENCY CONVERSION (INR Default with clean rates for all major global currencies)
 export const CURRENCIES = {
-  INR: { symbol: "₹", rate: 1, label: "INR (₹)" },
-  USD: { symbol: "$", rate: 0.012, label: "USD ($)" },
-  EUR: { symbol: "€", rate: 0.011, label: "EUR (€)" },
-  GBP: { symbol: "£", rate: 0.0095, label: "GBP (£)" }
+  INR: { symbol: "₹", rate: 1, label: "INR (₹)", name: "Indian Rupee", flag: "🇮🇳" },
+  USD: { symbol: "$", rate: 0.012, label: "USD ($)", name: "US Dollar", flag: "🇺🇸" },
+  EUR: { symbol: "€", rate: 0.011, label: "EUR (€)", name: "Euro", flag: "🇪🇺" },
+  GBP: { symbol: "£", rate: 0.0095, label: "GBP (£)", name: "British Pound", flag: "🇬🇧" },
+  CAD: { symbol: "CA$", rate: 0.016, label: "CAD (CA$)", name: "Canadian Dollar", flag: "🇨🇦" },
+  AUD: { symbol: "A$", rate: 0.018, label: "AUD (A$)", name: "Australian Dollar", flag: "🇦🇺" },
+  JPY: { symbol: "¥", rate: 1.80, label: "JPY (¥)", name: "Japanese Yen", flag: "🇯🇵" },
+  AED: { symbol: "AED ", rate: 0.044, label: "AED (AED)", name: "UAE Dirham", flag: "🇦🇪" },
+  SGD: { symbol: "SG$", rate: 0.016, label: "SGD (SG$)", name: "Singapore Dollar", flag: "🇸🇬" },
+  CHF: { symbol: "CHF ", rate: 0.0105, label: "CHF (CHF)", name: "Swiss Franc", flag: "🇨🇭" }
 };
 
 export function formatPrice(priceInInr, currencyKey = 'INR') {

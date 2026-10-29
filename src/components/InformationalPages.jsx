@@ -75,98 +75,183 @@ export function FAQSection() {
 
 export function ContactSection() {
   return (
-    <section id="contact" className="w-full py-16 sm:py-28 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5 text-left">
-      <div className="mb-14 pb-8 border-b border-white/10 text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-          <span>CLIENT RELATIONS // GUWAHATI ATELIER</span>
+    <section id="contact" className="w-full py-16 sm:py-24 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
+      <div className="max-w-6xl mx-auto mb-12 pb-6 border-b border-white/10 text-left">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
+          <span>CLIENT RELATIONS // PRIVATE ATELIER CONCIERGE</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
-          CONTACT & <span className="text-zinc-400 font-light">COMMISSIONS</span>
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-[0.16em] text-white uppercase leading-tight text-left">
+          ATELIER <span className="text-zinc-400 font-light">CONCIERGE & CONTACT</span>
         </h2>
+        <p className="text-zinc-300 text-xs sm:text-sm lg:text-base font-montserrat mt-2 max-w-3xl leading-relaxed">
+          Direct communication channels to our Guwahati studio, founder creative direction desk, and private client stylists.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 text-left">
-        {/* Contact Info Card */}
-        <div className="p-8 md:p-10 rounded-3xl bg-[#0d020f]/80 backdrop-blur-2xl border border-white/10 flex flex-col gap-8 text-left">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left">
+        {/* Card 1: Registered Atelier Studio & Operations */}
+        <div className="p-7 sm:p-8 rounded-3xl bg-[#0c0c12] border border-white/12 flex flex-col justify-between text-left mobile-grunge-card shadow-xl">
           <div>
-            <span className="text-[11px] font-mono uppercase text-silver/60 block mb-2 tracking-widest">REGISTERED ATELIER ADDRESS</span>
-            <div className="flex items-start gap-3 text-white font-montserrat text-sm sm:text-base text-left">
-              <MapPin className="w-5 h-5 text-[#f472b6] mt-0.5 flex-shrink-0" />
-              <span>{BRAND_INFO.registeredAddress}</span>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
+                LOCATION // PROTOCOL 01
+              </span>
+              <MapPin className="w-4 h-4 text-pink" />
+            </div>
+
+            <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white mb-3">
+              ATELIER HEADQUARTERS
+            </h3>
+
+            <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 mb-4">
+              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">REGISTERED DOMICILE</span>
+              <p className="text-xs sm:text-sm text-white font-montserrat leading-relaxed">
+                {BRAND_INFO.registeredAddress}
+              </p>
+            </div>
+
+            <div className="space-y-2 text-xs font-mono text-zinc-300">
+              <div className="flex items-center justify-between py-1 border-b border-white/5">
+                <span className="text-zinc-400 uppercase text-[10px]">STUDIO HOURS:</span>
+                <span className="text-white font-medium">MON – SAT // 10:00 – 19:00 IST</span>
+              </div>
+              <div className="flex items-center justify-between py-1 border-b border-white/5">
+                <span className="text-zinc-400 uppercase text-[10px]">LEAD ARTISAN:</span>
+                <span className="text-pink font-semibold">DHRISNI (DHRISTROYER)</span>
+              </div>
+              <div className="flex items-center justify-between py-1">
+                <span className="text-zinc-400 uppercase text-[10px]">ORIGIN REGION:</span>
+                <span className="text-white">GUWAHATI, ASSAM, INDIA</span>
+              </div>
             </div>
           </div>
 
+          <div className="pt-4 mt-6 border-t border-white/10 text-[10px] font-mono text-zinc-500 uppercase flex items-center justify-between">
+            <span>OFFICIAL LABEL EST. 2024</span>
+            <span className="text-pink">1-OF-1 ATELIER</span>
+          </div>
+        </div>
+
+        {/* Card 2: Dedicated Email Communications Desks */}
+        <div className="p-7 sm:p-8 rounded-3xl bg-[#0c0c12] border border-white/12 flex flex-col justify-between text-left mobile-grunge-card shadow-xl">
           <div>
-            <span className="text-[11px] font-mono uppercase text-silver/60 block mb-2 tracking-widest">ELECTRONIC MAIL</span>
-            <div className="flex flex-col gap-2 text-sm font-mono text-left">
-              <a href={`mailto:${BRAND_INFO.businessEmail}`} className="text-pink-300 hover:text-white hover:underline transition-colors">
-                Business: {BRAND_INFO.businessEmail}
-              </a>
-              <a href={`mailto:${BRAND_INFO.founderEmail}`} className="text-lavender hover:text-white hover:underline transition-colors">
-                Founder: {BRAND_INFO.founderEmail}
-              </a>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
+                COMMUNICATIONS // PROTOCOL 02
+              </span>
+              <Mail className="w-4 h-4 text-pink" />
+            </div>
+
+            <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white mb-3">
+              OFFICIAL DESKS
+            </h3>
+
+            <div className="space-y-3.5 mb-5">
+              <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 transition-colors hover:border-pink/40">
+                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">CLIENT ORDERS & BESPOKE INQUIRIES</span>
+                <a
+                  href={`mailto:${BRAND_INFO.businessEmail}`}
+                  className="text-xs sm:text-sm font-mono text-white hover:text-pink transition-colors font-semibold break-all flex items-center justify-between"
+                >
+                  <span>{BRAND_INFO.businessEmail}</span>
+                  <span className="text-pink text-[10px]">MAIL ↗</span>
+                </a>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 transition-colors hover:border-pink/40">
+                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">CREATIVE DIRECTOR & PRESS DESK</span>
+                <a
+                  href={`mailto:${BRAND_INFO.founderEmail}`}
+                  className="text-xs sm:text-sm font-mono text-white hover:text-pink transition-colors font-semibold break-all flex items-center justify-between"
+                >
+                  <span>{BRAND_INFO.founderEmail}</span>
+                  <span className="text-pink text-[10px]">MAIL ↗</span>
+                </a>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 transition-colors hover:border-pink/40">
+                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">AUTHENTIC SOCIAL BROADCAST</span>
+                <a
+                  href={BRAND_INFO.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playSound('snap')}
+                  className="text-xs sm:text-sm font-mono text-white hover:text-pink transition-colors font-semibold flex items-center justify-between"
+                >
+                  <span className="flex items-center gap-2">
+                    <Instagram className="w-3.5 h-3.5 text-pink" />
+                    <span>{BRAND_INFO.instagram}</span>
+                  </span>
+                  <span className="text-pink text-[10px]">FOLLOW ↗</span>
+                </a>
+              </div>
             </div>
           </div>
 
+          <div className="pt-4 border-t border-white/10 text-[10px] font-mono text-zinc-400 flex items-center justify-between">
+            <span>RESPONSE SLA:</span>
+            <span className="text-white font-medium">UNDER 24 HOURS</span>
+          </div>
+        </div>
+
+        {/* Card 3: Priority VIP Client Concierge WhatsApp */}
+        <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-b from-[#18041d] to-[#0c0c12] border border-pink/30 flex flex-col justify-between text-left mobile-grunge-card shadow-2xl">
           <div>
-            <span className="text-[11px] font-mono uppercase text-silver/60 block mb-3 tracking-widest">WHATSAPP CONCIERGE</span>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
+                PRIORITY // PROTOCOL 03
+              </span>
+              <Phone className="w-4 h-4 text-pink" />
+            </div>
+
+            <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white mb-2">
+              VIP CLIENT HOTLINE
+            </h3>
+
+            <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed mb-5">
+              Direct connection to Dhrisni and senior atelier dispatch. Ideal for rapid event deadlines, measurement assistance, or video verification claims.
+            </p>
+
+            <div className="space-y-3 mb-4">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="btn-glass-pink flex-1 flex items-center justify-between text-xs py-3.5 px-5"
+                className="btn-glass-pink w-full flex items-center justify-between py-3.5 px-4 text-xs font-mono font-bold tracking-wider uppercase shadow-lg active:scale-95"
               >
-                <span>Primary: {BRAND_INFO.whatsappPrimary}</span>
-                <span className="font-bold">Chat ↗</span>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>PRIMARY: {BRAND_INFO.whatsappPrimary}</span>
+                </div>
+                <span>CHAT ↗</span>
               </a>
+
               <a
                 href={BRAND_INFO.whatsappLinkSecondary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="btn-glass flex-1 flex items-center justify-between text-xs py-3.5 px-5 hover:border-[#be185d] hover:text-white"
+                className="w-full py-3.5 px-4 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white flex items-center justify-between text-xs font-mono font-bold tracking-wider uppercase transition-all active:scale-95"
               >
-                <span>Secondary: {BRAND_INFO.whatsappSecondary}</span>
-                <span className="text-pink-300 font-bold">Chat ↗</span>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-pink" />
+                  <span>DISPATCH: {BRAND_INFO.whatsappSecondary}</span>
+                </div>
+                <span className="text-pink">CHAT ↗</span>
               </a>
             </div>
-          </div>
 
-          <div>
-            <span className="text-[11px] font-mono uppercase text-silver/60 block mb-2 tracking-widest">OFFICIAL INSTAGRAM</span>
-            <a
-              href={BRAND_INFO.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => playSound('snap')}
-              className="inline-flex items-center gap-2 text-sm font-mono text-pink-300 hover:text-white hover:underline transition-colors"
-            >
-              <Instagram className="w-4 h-4 text-[#f472b6]" />
-              <span>{BRAND_INFO.instagram}</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Studio Hours & Note */}
-        <div className="p-8 md:p-10 rounded-3xl bg-[#1a0520]/75 backdrop-blur-2xl border border-[#be185d]/30 flex flex-col justify-between text-left shadow-[0_15px_40px_rgba(30,3,32,0.6)]">
-          <div>
-            <h3 className="text-2xl font-spartan font-bold uppercase text-white mb-4 text-left">
-              THE WEARABLE ART ATELIER
-            </h3>
-            <p className="text-sm text-silver/85 font-montserrat leading-relaxed mb-6 text-left">
-              We respond to custom inquiries, fitting questions, and styling requests Monday through Saturday. Because every creation is custom built, messages are reviewed directly by Dhrisni or her design team.
-            </p>
-            <div className="p-6 rounded-2xl bg-black/60 border-l-4 border-l-[#be185d] text-sm font-mono text-silver leading-relaxed text-left">
-              "We aren't a high-volume call center. You are talking to real artists who cut the fabric and weld the wire."
+            <div className="p-3 rounded-xl bg-black/60 border border-white/10 text-[11px] font-montserrat text-zinc-300 leading-relaxed">
+              <strong className="text-pink font-mono block mb-0.5 text-[10px] uppercase">DAMAGE VERIFICATION CLAIMS:</strong>
+              Send uncut unboxing video within 48 hours to WhatsApp for immediate priority replacement.
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3 text-xs font-mono text-silver/60 text-left">
-            <Sparkles className="w-4 h-4 text-[#f472b6]" />
-            <span>DOMAIN: {BRAND_INFO.domain}</span>
+          <div className="pt-4 mt-6 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-400">
+            <span>SECURITY LEVEL:</span>
+            <span className="text-pink font-semibold">DIRECT ATELIER ENCRYPTED</span>
           </div>
         </div>
       </div>

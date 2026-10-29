@@ -582,41 +582,43 @@ article,
 }
 
 /* =========================================================================
-   ARCHITECTURAL HAUTE-COUTURE LIGHT MODE (ALABASTER, CHALK & DEEP INK)
-   Zero Vanished Text, Impeccable WCAG AAA Contrast, Luxury Brand Aesthetics
+   ARCHITECTURAL HAUTE-COUTURE LIGHT MODE (PURPLE, WHITE, BLACK & GRADIENT PINK)
+   Zero Vanished Text, 100% WCAG AAA Contrast, Luxury Runway Brand Aesthetics
    ========================================================================= */
 html.light-theme, [data-theme="light"] {
-  --color-pitch-black: #f8f8fa !important;
+  --color-pitch-black: #faf7fc !important;
   --color-pure-black: #ffffff !important;
-  --color-dark-purple: #f3f3f7 !important;
+  --color-dark-purple: #f5f0fa !important;
   --color-deep-surface: #ffffff !important;
-  --color-mid-purple: #ebebf2 !important;
+  --color-mid-purple: #ede6f5 !important;
   --color-silver: #18181b !important;
   --color-bright-silver: #09090b !important;
   --color-white: #09090b !important;
-  --pitch-black: #f8f8fa !important;
+  --pitch-black: #faf7fc !important;
   --pure-black: #ffffff !important;
-  --dark-purple: #f3f3f7 !important;
+  --dark-purple: #f5f0fa !important;
   --deep-purple-surface: #ffffff !important;
-  --mid-purple: #ebebf2 !important;
+  --mid-purple: #ede6f5 !important;
   --metallic-silver: #27272a !important;
   --bright-silver: #09090b !important;
-  background-color: #f8f8fa !important;
+  background-color: #faf7fc !important;
   color: #18181b !important;
 }
 
 html.light-theme body {
-  background-color: #f8f8fa !important;
+  background-color: #faf7fc !important;
   color: #18181b !important;
 }
 
+/* Luminous, Ethereal Ambient Radial Gradients (Electric Purple & Cyber Pink Glow) */
 html.light-theme body::before {
-  background-color: #f8f8fa !important;
+  background-color: #faf7fc !important;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(190, 24, 93, 0.05) 0%, transparent 60%),
-    radial-gradient(circle at 15% 35%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 85% 65%, rgba(244, 114, 182, 0.05) 0%, transparent 55%),
-    radial-gradient(circle at 50% 95%, rgba(220, 200, 230, 0.08) 0%, transparent 60%) !important;
+    radial-gradient(circle at 18% 12%, rgba(168, 85, 247, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 82% 25%, rgba(244, 114, 182, 0.14) 0%, transparent 48%),
+    radial-gradient(circle at 50% 55%, rgba(217, 70, 239, 0.08) 0%, transparent 55%),
+    radial-gradient(circle at 15% 80%, rgba(147, 51, 234, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 85% 90%, rgba(236, 72, 153, 0.12) 0%, transparent 45%) !important;
 }
 
 /* Sections in Light Mode */
@@ -628,7 +630,7 @@ html.light-theme .bg-pitch-black,
 html.light-theme [class*="bg-[#060608]"],
 html.light-theme [class*="bg-[#08080a]"],
 html.light-theme [class*="bg-[#000000]"] {
-  background-color: #f8f8fa !important;
+  background-color: transparent !important;
 }
 
 html.light-theme [class*="bg-[#09090c]"],
@@ -637,24 +639,24 @@ html.light-theme [class*="bg-[#0d0d12]"],
 html.light-theme [class*="bg-[#101014]"],
 html.light-theme [class*="bg-[#111116]"] {
   background-color: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
 }
 
-/* Light Mode Card Surfaces & Gradients */
+/* Primary Card Surfaces: Pure White with Iridescent Lavender Borders & Soft Glow */
 html.light-theme [id^="card-"],
 html.light-theme .mobile-grunge-card {
   background-image: none !important;
   background: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.09) !important;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(168, 85, 247, 0.22) !important;
+  box-shadow: 0 10px 30px -5px rgba(147, 51, 234, 0.08), 0 0 1px rgba(168, 85, 247, 0.2) !important;
 }
 
 html.light-theme .mobile-grunge-card::after {
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(190, 24, 93, 0.2) 20%, 
-    rgba(168, 85, 247, 0.6) 50%, 
-    rgba(190, 24, 93, 0.2) 80%, 
+    rgba(236, 72, 153, 0.3) 20%, 
+    rgba(168, 85, 247, 0.75) 50%, 
+    rgba(236, 72, 153, 0.3) 80%, 
     transparent 100%
   ) !important;
   background-size: 250% 100% !important;
@@ -669,47 +671,84 @@ html.light-theme [class*="bg-[#1c041f]"],
 html.light-theme [class*="bg-[#0b030f]"] {
   background-color: #ffffff !important;
   background-image: none !important;
-  border-color: rgba(0, 0, 0, 0.09) !important;
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+  box-shadow: 0 10px 30px -4px rgba(147, 51, 234, 0.08) !important;
 }
 
-/* Typography Overrides (Except inside dark photo frames) */
-html.light-theme body *:not([class*="aspect-"] *):not([class*="aspect-"]):not(.image-overlay-text):not(.image-overlay-text *) {
-  /* Inherit clean light mode contrast */
+/* Nested Sub-Cards (Pricing Tiers, Craft Boxes, Specs, Feature Blocks) */
+html.light-theme [class*="bg-black/60"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
+html.light-theme [class*="bg-black/70"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
+html.light-theme [class*="bg-black/80"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select) {
+  background-color: #f7f3fc !important;
+  color: #18181b !important;
+  border-color: rgba(168, 85, 247, 0.18) !important;
 }
 
-html.light-theme .text-white:not([class*="aspect-"] *):not(.image-overlay-text):not(.image-overlay-text *) {
+html.light-theme [class*="bg-white/5"]:not(button):not([class*="aspect-"] *):not(#lookbook *):not(#vault *),
+html.light-theme [class*="bg-white/10"]:not(button):not([class*="aspect-"] *):not(#lookbook *):not(#vault *) {
+  background-color: rgba(168, 85, 247, 0.05) !important;
+  border-color: rgba(168, 85, 247, 0.16) !important;
+}
+
+/* =========================================================================
+   TEXT VISIBILITY & TYPOGRAPHY MANDATE
+   Headings: Crisp Jet Black #09090b
+   Body Copy: Deep Charcoal #18181b / #27272a
+   Category & Subtitles: Vibrant Electric Purple #7e22ce or Magenta #be185d
+   ========================================================================= */
+html.light-theme h1,
+html.light-theme h2,
+html.light-theme h3:not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme h4,
+html.light-theme h5,
+html.light-theme h6 {
   color: #09090b !important;
 }
 
-html.light-theme [id^="card-"] h3,
-html.light-theme [id^="card-"] h4,
-html.light-theme .mobile-grunge-card h3,
-html.light-theme .mobile-grunge-card h4 {
+/* Deep Electric Purple Subtitles in Section Headers */
+html.light-theme h2 span.text-zinc-400,
+html.light-theme h2 span.text-zinc-500,
+html.light-theme h3 span.text-zinc-400,
+html.light-theme h3 span.text-zinc-500 {
+  color: #7e22ce !important;
+  font-weight: 600 !important;
+}
+
+/* Standard body text overrides (outside photo overlays) */
+html.light-theme .text-white:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *) {
   color: #09090b !important;
 }
 
-html.light-theme .text-silver:not([class*="aspect-"] *):not(.image-overlay-text):not(.image-overlay-text *),
-html.light-theme .text-zinc-100:not([class*="aspect-"] *),
-html.light-theme .text-zinc-200:not([class*="aspect-"] *),
-html.light-theme .text-zinc-300:not([class*="aspect-"] *),
+html.light-theme .text-silver:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *),
+html.light-theme .text-zinc-100:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
+html.light-theme .text-zinc-200:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
+html.light-theme .text-zinc-300:not([class*="aspect-"] *):not(#vault *):not(#lookbook *),
 html.light-theme [id^="card-"] p,
-html.light-theme .mobile-grunge-card p {
+html.light-theme .mobile-grunge-card p:not([class*="aspect-"] *) {
   color: #27272a !important;
 }
 
-html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *) {
+html.light-theme [class*="text-silver/"]:not([class*="aspect-"] *):not(#vault *):not(#lookbook *) {
   color: #3f3f46 !important;
 }
 
-html.light-theme .text-zinc-400:not([class*="aspect-"] *),
-html.light-theme .text-zinc-500:not([class*="aspect-"] *),
-html.light-theme [id^="card-"] span.font-mono,
-html.light-theme .mobile-grunge-card span.font-mono:not([class*="aspect-"] *) {
+html.light-theme .text-zinc-400:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *),
+html.light-theme .text-zinc-500:not([class*="aspect-"] *):not(#vault *):not(#lookbook *):not(.museum-dark-canvas *) {
   color: #52525b !important;
 }
 
-/* Deep High-Contrast Accents (Replaces pale, invisible pastels in Light Mode) */
+/* Electric Character & Glitch Effects */
+html.light-theme .electric-char {
+  color: #be185d !important;
+  text-shadow: 0 0 6px rgba(190, 24, 93, 0.3) !important;
+}
+
+html.light-theme .electric-cursor {
+  background: linear-gradient(180deg, #be185d, #a855f7) !important;
+  box-shadow: 0 0 6px rgba(190, 24, 93, 0.5) !important;
+}
+
+/* Deep High-Contrast Pink and Purple Accents */
 html.light-theme .text-pink,
 html.light-theme .text-pink-300,
 html.light-theme .text-pink-400,
@@ -725,48 +764,29 @@ html.light-theme .mobile-grunge-card .text-pink-400 {
   color: #be185d !important;
 }
 
+/* Badges & Pills in Light Mode: Gradient Pink/Purple with Crisp Magenta Text */
 html.light-theme [class*="bg-pink/15"],
 html.light-theme [class*="bg-pink/20"],
-html.light-theme [class*="bg-[#be185d]/30"] {
-  background-color: rgba(190, 24, 93, 0.1) !important;
-  border-color: rgba(190, 24, 93, 0.3) !important;
+html.light-theme [class*="bg-[#be185d]/20"],
+html.light-theme [class*="bg-[#be185d]/30"],
+html.light-theme [class*="bg-[#be185d]/40"] {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15)) !important;
+  border-color: rgba(219, 39, 119, 0.4) !important;
   color: #9d174d !important;
-}
-
-html.light-theme .electric-char {
-  color: #be185d !important;
-  text-shadow: 0 0 6px rgba(190, 24, 93, 0.3) !important;
-}
-
-html.light-theme .electric-cursor {
-  background: linear-gradient(180deg, #be185d, #a855f7) !important;
-  box-shadow: 0 0 6px rgba(190, 24, 93, 0.5) !important;
+  font-weight: 700 !important;
 }
 
 /* Hairline Borders in Light Mode */
 html.light-theme [class*="border-white/"] {
-  border-color: rgba(0, 0, 0, 0.09) !important;
-}
-
-/* Sub-panels and inner cards in Light Mode */
-html.light-theme [class*="bg-black/60"],
-html.light-theme [class*="bg-black/70"],
-html.light-theme [class*="bg-black/80"]:not([class*="aspect-"] *):not(input):not(select) {
-  background-color: #f7f7fa !important;
-  color: #18181b !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-
-html.light-theme [class*="bg-white/5"],
-html.light-theme [class*="bg-white/10"]:not(button) {
-  background-color: rgba(0, 0, 0, 0.03) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.18) !important;
 }
 
 /* =========================================================================
-   CRUCIAL FIX: PHOTO FRAMES & IMAGE OVERLAYS
-   Images are naturally dark; any text or badges inside them MUST stay crisp white!
+   CRUCIAL MEDIA & SCRIM OVERLAY PROTECTION
+   Text, badges, buttons, and captions ON TOP OF PHOTOS MUST ALWAYS BE WHITE!
    ========================================================================= */
+
+/* 1. Generic Aspect Ratio Frames */
 html.light-theme [class*="aspect-"] .text-white,
 html.light-theme [class*="aspect-"] .text-zinc-200,
 html.light-theme [class*="aspect-"] .text-zinc-300,
@@ -788,12 +808,13 @@ html.light-theme [class*="aspect-"] .text-pink-400 {
   color: #f472b6 !important;
 }
 
-/* Vault Expanded Cards Rail (Over dark photo gradient) */
+/* 2. Vault Expanded Cards Rail (#vault) */
 html.light-theme #vault [class*="absolute inset-0"] .text-white,
 html.light-theme #vault [class*="absolute inset-0"] .text-zinc-200,
 html.light-theme #vault [class*="absolute inset-0"] .text-zinc-300,
 html.light-theme #vault [class*="absolute inset-0"] .text-zinc-400,
 html.light-theme #vault [class*="absolute inset-0"] span,
+html.light-theme #vault [class*="absolute inset-0"] h3,
 html.light-theme #vault [class*="absolute inset-0"] p,
 html.light-theme #vault [class*="rotate-180"] {
   color: #ffffff !important;
@@ -801,23 +822,51 @@ html.light-theme #vault [class*="rotate-180"] {
 
 html.light-theme #vault [class*="absolute inset-0"] [class*="bg-black/"] {
   background-color: rgba(0, 0, 0, 0.85) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
 }
 
 html.light-theme #vault [class*="absolute inset-0"] button {
-  background-color: rgba(255, 255, 255, 0.15) !important;
+  background-color: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* 3. Lookbook Spatial Drift Stage (#lookbook) */
+html.light-theme #lookbook [class*="rounded-3xl"] .text-white,
+html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-100,
+html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-200,
+html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-300,
+html.light-theme #lookbook [class*="rounded-3xl"] .text-zinc-400,
+html.light-theme #lookbook [class*="rounded-3xl"] .text-silver,
+html.light-theme #lookbook [class*="rounded-3xl"] [class*="text-silver/"],
+html.light-theme #lookbook [class*="rounded-3xl"] span,
+html.light-theme #lookbook [class*="rounded-3xl"] h3,
+html.light-theme #lookbook [class*="rounded-3xl"] p,
+html.light-theme #lookbook [class*="rounded-3xl"] button,
+html.light-theme #lookbook [class*="rounded-3xl"] svg {
+  color: #ffffff !important;
+}
+
+html.light-theme #lookbook [class*="rounded-3xl"] [class*="bg-black/"] {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+html.light-theme #lookbook [class*="rounded-3xl"] button.bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
 }
 
 /* =========================================================================
    AVZ MUSEUM IN LIGHT MODE
-   WebGL 3D Rotunda is a dark architectural vitrine; controls on it stay luminous.
-   The Curatorial Plaque on the right adapts to crisp luxury ivory with sharp contrast.
+   WebGL 3D Rotunda is a dark vitrine; controls on it stay luminous.
+   The Curatorial Plaque on the right adapts to crisp luxury white with sharp contrast.
    ========================================================================= */
 html.light-theme #museum {
-  background-color: #f8f8fa !important;
+  background-color: transparent !important;
 }
 
 html.light-theme #museum h2 {
@@ -825,7 +874,7 @@ html.light-theme #museum h2 {
 }
 
 html.light-theme #museum p.text-zinc-400 {
-  color: #52525b !important;
+  color: #3f3f46 !important;
 }
 
 /* 3D Canvas Box: Dark Vitrine Viewport */
@@ -840,8 +889,8 @@ html.light-theme .museum-dark-canvas .text-zinc-300 {
 }
 
 html.light-theme .museum-dark-canvas [class*="bg-black/"] {
-  background-color: rgba(0, 0, 0, 0.78) !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(0, 0, 0, 0.82) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
@@ -855,7 +904,7 @@ html.light-theme .museum-dark-canvas button.bg-white {
 /* Curatorial Plaque (Right Side) in Light Mode */
 html.light-theme .museum-plaque {
   background-color: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
   color: #09090b !important;
 }
 
@@ -864,8 +913,8 @@ html.light-theme .museum-plaque h3 {
 }
 
 html.light-theme .museum-plaque .story-box {
-  background-color: #f5f5f7 !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
 }
 
 html.light-theme .museum-plaque .story-box p {
@@ -873,8 +922,8 @@ html.light-theme .museum-plaque .story-box p {
 }
 
 html.light-theme .museum-plaque .craft-box {
-  background-color: #f5f5f7 !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
 }
 
 html.light-theme .museum-plaque .craft-box span.text-white {
@@ -899,20 +948,25 @@ html.light-theme .museum-plaque .btn-commission * {
    ========================================================================= */
 html.light-theme .fixed.inset-0.z-50,
 html.light-theme .fixed.inset-0.z-\[100\],
+html.light-theme .fixed.inset-0.z-\[99995\],
+html.light-theme .fixed.inset-0.z-\[99996\],
+html.light-theme .fixed.inset-0.z-\[99997\],
+html.light-theme .fixed.inset-0.z-\[99998\],
 html.light-theme .fixed.inset-0.z-\[99999\] {
-  background-color: rgba(10, 10, 15, 0.55) !important;
-  backdrop-filter: blur(12px) !important;
+  background-color: rgba(15, 5, 25, 0.55) !important;
+  backdrop-filter: blur(14px) !important;
 }
 
 /* Modal Card Surfaces */
 html.light-theme [class*="bg-[#0c0c10]"],
 html.light-theme [class*="bg-[#0d020f]"],
+html.light-theme [class*="bg-[#0e0e14]"],
 html.light-theme .fixed.inset-0 > div[class*="bg-black"],
 html.light-theme .fixed.inset-0 > div[class*="bg-[#"] {
   background-color: #ffffff !important;
   color: #09090b !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.18) !important;
+  border-color: rgba(168, 85, 247, 0.25) !important;
+  box-shadow: 0 25px 80px rgba(147, 51, 234, 0.16) !important;
 }
 
 /* Inside Modals: Headers, Text, and Buttons */
@@ -936,30 +990,37 @@ html.light-theme [class*="bg-[#0c0c10]"] .text-zinc-500 {
 }
 
 html.light-theme [class*="bg-[#0c0c10]"] [class*="border-white/"] {
-  border-color: rgba(0, 0, 0, 0.09) !important;
+  border-color: rgba(168, 85, 247, 0.18) !important;
 }
 
 /* Modal and Drawer Close Buttons */
 html.light-theme button[aria-label*="Close"],
 html.light-theme button[aria-label*="close"] {
-  background-color: #f4f4f7 !important;
-  border-color: rgba(0, 0, 0, 0.15) !important;
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.25) !important;
   color: #18181b !important;
 }
 
 html.light-theme button[aria-label*="Close"]:hover,
 html.light-theme button[aria-label*="close"]:hover {
-  background-color: #e4e4e7 !important;
+  background-color: #ede6f5 !important;
   color: #000000 !important;
 }
 
 /* Form Inputs and Selects in Light Mode */
-html.light-theme input,
+html.light-theme input:not([type="checkbox"]):not([type="radio"]),
 html.light-theme select,
 html.light-theme textarea {
   background-color: #ffffff !important;
-  border-color: rgba(0, 0, 0, 0.16) !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.28) !important;
   color: #09090b !important;
+}
+
+html.light-theme input:focus,
+html.light-theme select:focus,
+html.light-theme textarea:focus {
+  border-color: #be185d !important;
+  box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.15) !important;
 }
 
 html.light-theme input::placeholder,
@@ -972,34 +1033,43 @@ html.light-theme select option {
   color: #09090b !important;
 }
 
-/* Buttons in Light Mode */
-html.light-theme .bg-white.text-black {
+/* Primary Action Buttons in Light Mode: Jet Black or Gradient Pink/Purple */
+html.light-theme .bg-white.text-black,
+html.light-theme button.bg-white.text-black {
   background-color: #09090b !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+}
+
+html.light-theme .bg-white.text-black:hover,
+html.light-theme button.bg-white.text-black:hover {
+  background-color: #27272a !important;
   color: #ffffff !important;
 }
 
-html.light-theme .bg-white.text-black:hover {
-  background-color: #27272a !important;
+html.light-theme .btn-glass-pink {
+  background: linear-gradient(135deg, #be185d 0%, #a21caf 50%, #7e22ce 100%) !important;
+  border-color: rgba(244, 114, 182, 0.5) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 6px 20px rgba(190, 24, 93, 0.25) !important;
 }
 
-html.light-theme .btn-glass-pink {
-  background: linear-gradient(135deg, rgba(190, 24, 93, 0.15), rgba(190, 24, 93, 0.28)) !important;
-  border-color: rgba(190, 24, 93, 0.4) !important;
-  color: #9d174d !important;
-  font-weight: 700 !important;
+html.light-theme .btn-glass-pink * {
+  color: #ffffff !important;
 }
 
 /* =========================================================================
    FOOTER IN LIGHT MODE
    ========================================================================= */
 html.light-theme footer.bg-black {
-  background-color: #f1f1f5 !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
   color: #18181b !important;
 }
 
 html.light-theme footer * {
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.18) !important;
 }
 
 html.light-theme footer .text-white {
@@ -1028,12 +1098,12 @@ html.light-theme footer .text-pink {
 }
 
 /* =========================================================================
-   NAVBAR & DRAWER IN LIGHT MODE
+   NAVBAR & CURRENCY SELECTOR IN LIGHT MODE
    ========================================================================= */
 html.light-theme header > div {
   background-color: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  box-shadow: 0 12px 35px rgba(147, 51, 234, 0.12) !important;
 }
 
 html.light-theme header span {
@@ -1045,7 +1115,7 @@ html.light-theme header nav button {
 }
 
 html.light-theme header nav button:hover {
-  color: #09090b !important;
+  color: #be185d !important;
 }
 
 html.light-theme header button svg {
@@ -1056,8 +1126,38 @@ html.light-theme header button:hover svg {
   color: #09090b !important;
 }
 
+/* Floating Currency Dropdown in Light Mode */
+html.light-theme .currency-dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+  box-shadow: 0 20px 60px rgba(147, 51, 234, 0.18) !important;
+  color: #09090b !important;
+}
+
+html.light-theme .currency-dropdown-menu span {
+  color: #09090b !important;
+}
+
+html.light-theme .currency-dropdown-menu span.text-zinc-400 {
+  color: #71717a !important;
+}
+
+html.light-theme .currency-dropdown-menu span.text-pink {
+  color: #be185d !important;
+}
+
+html.light-theme .currency-dropdown-menu button {
+  color: #18181b !important;
+}
+
+html.light-theme .currency-dropdown-menu button:hover {
+  background-color: rgba(168, 85, 247, 0.08) !important;
+  color: #09090b !important;
+}
+
+/* Mobile Drawer in Light Mode */
 html.light-theme .fixed.inset-0.z-40 {
-  background-color: rgba(248, 248, 250, 0.98) !important;
+  background-color: rgba(253, 251, 255, 0.98) !important;
   color: #09090b !important;
 }
 
@@ -1070,7 +1170,7 @@ html.light-theme .fixed.inset-0.z-40 span.text-zinc-500 {
 }
 
 html.light-theme .fixed.inset-0.z-40 button {
-  border-color: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
 }
 
 html.light-theme .fixed.inset-0.z-40 button svg {

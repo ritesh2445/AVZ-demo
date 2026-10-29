@@ -79,11 +79,11 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     scene.background = new THREE.Color(0x060608);
     scene.fog = new THREE.FogExp2(0x060608, 0.024);
 
-    // Camera calibrated for balanced gallery viewing:
-    // Full plinth rests solidly on the floor grid, collar gleams, and framed piece floats with ample breathing room
+    // Camera calibrated for majestic gallery viewing with enlarged specimen frames:
+    // Plinth rests solidly on floor grid, collar gleams, and grand framed pieces float with ample breathing room
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 1.25, 15.0);
-    camera.lookAt(0, 0.85, 6.8);
+    camera.position.set(0, 1.6, 16.2);
+    camera.lookAt(0, 1.45, 6.8);
 
     let renderer;
     try {
@@ -106,9 +106,9 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     scene.add(ambientLight);
 
     // Warm museum spotlight focused on the front active pedestal
-    const spotlight = new THREE.SpotLight(0xF5EBE6, 28, 35, Math.PI / 4, 0.35, 1.2);
-    spotlight.position.set(0, 9, 11);
-    spotlight.target.position.set(0, 1.2, 6.8);
+    const spotlight = new THREE.SpotLight(0xF5EBE6, 30, 36, Math.PI / 4, 0.35, 1.2);
+    spotlight.position.set(0, 9.5, 12);
+    spotlight.target.position.set(0, 1.45, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
@@ -188,8 +188,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       metalness: 0.85
     });
 
-    const plinthGeom = new THREE.CylinderGeometry(1.2, 1.35, 1.8, 28);
-    const ringGeom = new THREE.TorusGeometry(1.22, 0.035, 12, 32);
+    const plinthGeom = new THREE.CylinderGeometry(1.4, 1.6, 2.0, 32);
+    const ringGeom = new THREE.TorusGeometry(1.42, 0.04, 16, 36);
 
     MUSEUM_ITEMS.forEach((item, idx) => {
       const angle = (idx / total) * Math.PI * 2;
@@ -207,12 +207,12 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       // Metallic Collar Ring
       const ring = new THREE.Mesh(ringGeom, frameTrimMat);
       ring.rotation.x = Math.PI / 2;
-      ring.position.y = 0.9;
+      ring.position.y = 1.0;
       group.add(ring);
 
-      // Tailored Frame and Surface Proportions:
+      // Enlarged Frame and Surface Proportions (~38% larger frame area):
       // Preserves 100% natural aspect ratio of the garment photograph (zero stretching!)
-      const targetHeight = 2.65;
+      const targetHeight = 3.65;
       const itemAspect = item.aspectRatio || (
         idx === 0 ? 220 / 415 :
         idx === 1 ? 360 / 460 :
@@ -222,8 +222,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
       const picW = targetHeight * itemAspect;
       const picH = targetHeight;
-      const frameW = picW + 0.22;
-      const frameH = picH + 0.22;
+      const frameW = picW + 0.24;
+      const frameH = picH + 0.24;
       const frameR = Math.min(0.2, picW * 0.12);
       const picR = Math.min(0.14, picW * 0.09);
 
@@ -252,7 +252,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
       // Artifact Sub-Group floating smoothly above the pedestal collar
       const artifactGroup = new THREE.Group();
-      artifactGroup.position.y = 2.45;
+      artifactGroup.position.y = 2.95;
 
       // Frame Chassis
       const frameMesh = new THREE.Mesh(frameGeom, frameChassisMat);
@@ -555,12 +555,12 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
           </span>
         </div>
 
-        {/* Card Stack Container */}
+        {/* Card Stack Container (Enlarged frame layout for mobile) */}
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative w-full h-[510px] flex items-center justify-center select-none touch-pan-y"
+          className="relative w-full h-[570px] sm:h-[600px] flex items-center justify-center select-none touch-pan-y"
         >
           {MUSEUM_ITEMS.map((item, idx) => {
             // Compute stack position relative to activeIndex
@@ -595,10 +595,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   zIndex: zIndexStyle,
                   transition: isSwiping && isTop ? 'none' : 'transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.35s ease'
                 }}
-                className="absolute inset-x-0 top-0 h-[490px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden mobile-grunge-card"
+                className="absolute inset-x-0 top-0 h-[550px] sm:h-[580px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden mobile-grunge-card"
               >
                 {/* Top Badge Bar */}
-                <div className="flex items-center justify-between shrink-0 mb-3">
+                <div className="flex items-center justify-between shrink-0 mb-2.5">
                   <span className="px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[9px] font-mono tracking-widest text-pink uppercase font-semibold">
                     {item.tag}
                   </span>
@@ -607,8 +607,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   </span>
                 </div>
 
-                {/* Main Specimen Image Frame (Object-contain preserves full garment & head) */}
-                <div className="relative w-full h-[225px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-1">
+                {/* Main Specimen Image Frame (Enlarged ~28% with object-contain to preserve complete garment and head) */}
+                <div className="relative w-full h-[285px] sm:h-[310px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-1.5">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -626,7 +626,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                 </div>
 
                 {/* Details & Curatorial Copy */}
-                <div className="flex flex-col justify-between flex-1 pt-3 pb-1 text-left">
+                <div className="flex flex-col justify-between flex-1 pt-2.5 pb-1 text-left">
                   <div>
                     <h3 className="font-mono text-sm sm:text-base font-semibold uppercase text-white leading-tight line-clamp-1 mb-1.5">
                       {item.name}
@@ -702,8 +702,8 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       <div className="hidden md:block w-full">
         {viewMode === '3d' ? (
           <div className="relative w-full rounded-2xl overflow-hidden border border-white/12 bg-[#09090c] shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-row items-stretch">
-            {/* Three.js 3D Canvas (Left / Main) */}
-            <div className="museum-dark-canvas relative flex-1 h-[540px] lg:h-[580px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
+            {/* Three.js 3D Canvas (Left / Main - Majestic Enlarged Showcase) */}
+            <div className="museum-dark-canvas relative flex-1 h-[590px] lg:h-[660px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
               <div ref={mountRef} className="w-full h-full" />
 
               {/* Hint & Drag Badge */}
@@ -737,7 +737,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
               </div>
 
               {/* Artifact Selector Strip (Framed above floor, never occluding plinth) */}
-              <div className="absolute bottom-4 inset-x-4 z-10 flex items-center justify-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <div className="absolute bottom-3 inset-x-4 z-10 flex items-center justify-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                 {MUSEUM_ITEMS.map((item, idx) => (
                   <button
                     key={item.id}
