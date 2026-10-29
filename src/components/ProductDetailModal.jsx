@@ -55,7 +55,7 @@ export default function ProductDetailModal({
   const handleAdd = () => {
     if (product.stock === 1 && isAlreadyInCart) {
       playSound('glitch');
-      setErrorNotice("Atelier Notice: This unique 1-of-1 piece is already reserved in your shopping bag.");
+      setErrorNotice("Notice: This unique 1-of-1 piece is already reserved in your shopping bag.");
       return;
     }
 
@@ -79,7 +79,7 @@ export default function ProductDetailModal({
     } else if (bust <= 36 && waist <= 30) {
       setRecommendedSize('M (Standard Fit)');
     } else {
-      setRecommendedSize('L / Bespoke Atelier Order');
+      setRecommendedSize('L / Custom Studio Order');
     }
   };
 
@@ -158,13 +158,13 @@ export default function ProductDetailModal({
             </div>
           )}
 
-          {/* Atelier Craftsmanship Provenance Note */}
+          {/* Studio Craftsmanship Note */}
           <div className="mt-4 p-3.5 rounded-xl bg-black/60 border border-white/10 text-left">
             <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">
-              PROVENANCE & CRAFTSMANSHIP
+              ORIGIN & CRAFTSMANSHIP
             </div>
             <p className="text-[11px] font-montserrat text-zinc-300 leading-relaxed">
-              Every garment is individually sculpted by hand at our Guwahati atelier, combining deadstock textiles with reclaimed industrial hardware.
+              Every garment is individually crafted by hand at our Guwahati studio, combining deadstock textiles with reclaimed industrial hardware.
             </p>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function ProductDetailModal({
           <div className="pr-12 md:pr-14">
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 uppercase mb-2">
               <span className="text-white font-medium tracking-wider">{product.category}</span>
-              <span className="tracking-widest text-zinc-500 hidden sm:inline">GUWAHATI ATELIER</span>
+              <span className="tracking-widest text-zinc-500 hidden sm:inline">GUWAHATI STUDIO</span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
@@ -314,12 +314,12 @@ export default function ProductDetailModal({
                 className="hover:text-white underline flex items-center gap-1 cursor-pointer transition-colors"
               >
                 <RefreshCw className="w-3 h-3 text-zinc-400" />
-                <span>Commission Bespoke Variant</span>
+                <span>Request Custom Variant</span>
               </button>
 
               <span className="flex items-center gap-1 text-zinc-500">
                 <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" />
-                Guwahati Atelier Certified
+                Guwahati Studio Certified
               </span>
             </div>
           </div>

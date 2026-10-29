@@ -150,7 +150,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-            <span>COLLECTION ARCHIVE // SPATIAL RUNWAY</span>
+            <span>LOOKBOOK ARCHIVE • SPATIAL RUNWAY</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
             SPATIAL <span className="text-zinc-400 font-light">LOOKBOOK</span>
@@ -287,7 +287,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   {/* Top Badges */}
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20">
                     <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase">
-                      <span>{item.code.split('//')[0] || `LOOK 00${idx + 1}`}</span>
+                      <span>{item.code.split('•')[0]?.trim() || item.code.split('//')[0]?.trim() || `LOOK 00${idx + 1}`}</span>
                     </span>
 
                     <button
@@ -408,7 +408,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             <div className="w-full flex md:hidden items-center justify-between border-b border-white/10 pb-3 shrink-0">
               <div className="text-xs font-mono tracking-widest text-pink-300 uppercase flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
-                <span>{activeLook.code} // {currentSlide + 1} OF {entries.length}</span>
+                <span>{activeLook.code} • {currentSlide + 1} OF {entries.length}</span>
               </div>
               <button
                 onClick={closeLightbox}
@@ -433,7 +433,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               <div>
                 <div className="hidden md:flex items-center gap-2 mb-2 text-xs font-mono tracking-widest text-pink-300 uppercase font-bold">
                   <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-pulse" />
-                  <span>{activeLook.code} // {currentSlide + 1} OF {entries.length}</span>
+                  <span>{activeLook.code} • {currentSlide + 1} OF {entries.length}</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-mono font-medium uppercase text-white mb-2 leading-tight text-left">
                   {activeLook.title}

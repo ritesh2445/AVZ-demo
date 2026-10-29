@@ -193,7 +193,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
     const satelliteConfig = [
       {
         url: ASSET_MANIFEST.products.divaTop,
-        title: "DIVA CORSET // ARCHIVE 01",
+        title: "DIVA CORSET • ARCHIVE 01",
         baseX: isMobile ? -1.7 : -4.5,
         baseY: isMobile ? 3.3 : 1.2,
         baseZ: isMobile ? 0.6 : 1.8,
@@ -206,7 +206,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       },
       {
         url: ASSET_MANIFEST.editorialHero,
-        title: "EDITORIAL HERO // ARCHIVE 02",
+        title: "EDITORIAL HERO • ARCHIVE 02",
         baseX: isMobile ? 1.7 : 4.6,
         baseY: isMobile ? -2.8 : -0.8,
         baseZ: isMobile ? 0.8 : 2.2,
@@ -219,7 +219,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       },
       {
         url: ASSET_MANIFEST.products.spikeBra,
-        title: "SPIKE BRA // ARCHIVE 03",
+        title: "SPIKE BRA • ARCHIVE 03",
         baseX: isMobile ? -1.6 : -3.6,
         baseY: isMobile ? -3.2 : -2.6,
         baseZ: isMobile ? 0.4 : 0.8,
@@ -232,7 +232,7 @@ export default function HeroThreeDimension({ onNavigate, onOpenTunnel, isReady =
       },
       {
         url: ASSET_MANIFEST.products.coordSet,
-        title: "CO-ORD ARMOR // ARCHIVE 04",
+        title: "CO-ORD ARMOR • ARCHIVE 04",
         baseX: isMobile ? 1.6 : 3.8,
         baseY: isMobile ? 3.5 : 2.4,
         baseZ: isMobile ? -0.2 : -0.5,

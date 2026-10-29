@@ -68,7 +68,7 @@ export default function CartDrawer({
 
   if (squadDiscount && squadDiscount.discountPercent) {
     discountInr = Math.round((subtotalInr * squadDiscount.discountPercent) / 100);
-    activeDiscountLabel = `SQUAD BUY (${squadDiscount.discountPercent}% OFF // ${squadDiscount.squadCode})`;
+    activeDiscountLabel = `SQUAD BUY (${squadDiscount.discountPercent}% OFF • ${squadDiscount.squadCode})`;
   } else if (appliedPromo) {
     discountInr = appliedPromo.offInr || Math.round((subtotalInr * appliedPromo.percent) / 100);
     activeDiscountLabel = `PROMO [${appliedPromo.code}]`;
@@ -122,7 +122,7 @@ export default function CartDrawer({
   const handleWhatsAppCheckout = () => {
     playSound('warp');
     const itemsList = items.map((i) => `• ${i.name} (${i.selectedSize}) - ₹${i.price}`).join('%0A');
-    const msg = `Hello AVZ Atelier, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A%0APlease share UPI / payment details to confirm reservation.`;
+    const msg = `Hello AVZ Team, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A%0APlease share UPI / payment details to confirm reservation.`;
     window.open(`https://wa.me/917304264901?text=${msg}`, '_blank');
   };
 
@@ -157,7 +157,7 @@ export default function CartDrawer({
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
             <ShoppingBag className="w-4 h-4 text-white shrink-0" />
             <h2 className="text-xs sm:text-sm md:text-base font-mono font-medium uppercase text-white tracking-wider truncate">
-              {isCheckingOut ? 'ATELIER CHECKOUT' : 'SHOPPING BAG'}
+              {isCheckingOut ? 'CHECKOUT' : 'SHOPPING BAG'}
             </h2>
             <span className="text-xs font-mono text-zinc-500 shrink-0">({items.length})</span>
           </div>
@@ -218,16 +218,16 @@ export default function CartDrawer({
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-xl font-mono font-medium uppercase text-white tracking-wider">
-                ORDER RESERVED // ATELIER NOTIFIED
+                ORDER RESERVED • OUR TEAM NOTIFIED
               </h3>
               <p className="text-xs text-zinc-400 font-montserrat max-w-sm leading-relaxed">
-                Your order is confirmed. Dhrisni and our Guwahati studio artisans are preparing your custom matte-black presentation box and certificate.
+                Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.
               </p>
               <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center">
                 <span className="text-white block font-medium mb-1">
                   ORDER IDENTIFIER: {`AVZ-${Math.floor(100000 + Math.random() * 900000)}`}
                 </span>
-                PRODUCTION TIMELINE: 1–2 WEEKS (HANDCRAFTED)
+                PRODUCTION TIMELINE: 1–2 WEEKS (HANDMADE)
               </div>
               <button
                 onClick={() => {
@@ -246,7 +246,7 @@ export default function CartDrawer({
             <form onSubmit={handleCheckoutSubmit} className="flex flex-col gap-3.5 text-left">
               <div className="flex items-center gap-2 text-xs font-mono text-pink uppercase">
                 <Lock className="w-3.5 h-3.5" />
-                <span>DIRECT ATELIER CHECKOUT // 100% SECURE</span>
+                <span>DIRECT CHECKOUT • 100% SECURE</span>
               </div>
 
               <div>

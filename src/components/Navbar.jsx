@@ -90,12 +90,12 @@ export default function Navbar({
   };
 
   const navItems = [
-    { id: 'shop', label: 'Collection' },
-    { id: 'vault', label: 'Vault' },
+    { id: 'shop', label: 'Shop' },
+    { id: 'vault', label: 'Featured' },
     { id: 'lookbook', label: 'Lookbook' },
     { id: 'museum', label: 'Archive' },
-    { id: 'custom', label: 'Bespoke' },
-    { id: 'about', label: 'Atelier' }
+    { id: 'custom', label: 'Custom' },
+    { id: 'about', label: 'About' }
   ];
 
   const handleNavClick = (id) => {
@@ -119,7 +119,7 @@ export default function Navbar({
           <button
             onClick={() => handleNavClick('hero')}
             className="flex items-center gap-2.5 cursor-pointer group shrink-0 focus:outline-none"
-            aria-label="AVZ Atelier Home"
+            aria-label="AVZ Home"
           >
             <div className="w-5 h-5 flex items-center justify-center">
               <img

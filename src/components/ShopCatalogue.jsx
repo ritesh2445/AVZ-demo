@@ -119,13 +119,13 @@ function KeyArchiveCarousel({
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink/15 border border-pink/30 text-pink text-[10px] font-mono tracking-widest uppercase mb-2 font-semibold">
             <Crown className="w-3.5 h-3.5 text-pink" />
-            <span>CURATED ATELIER ARCHIVE // KEY EDITIONS</span>
+            <span>CURATED ARCHIVE • KEY PIECES</span>
           </div>
           <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white tracking-[0.15em] leading-tight">
             KEY <span className="text-zinc-400">ARCHIVE PIECES</span>
           </h3>
           <p className="text-zinc-400 text-xs sm:text-sm font-montserrat mt-1 max-w-xl">
-            Distinguished wearable art specimens defined by unique provenance and hand-forged materiality.
+            Distinguished wearable art pieces defined by unique design and handmade craftsmanship.
           </p>
         </div>
 
@@ -197,7 +197,7 @@ function KeyArchiveCarousel({
                     {item.rank || 'EDITION'}
                   </span>
                   <span className="px-2 py-0.5 rounded-full bg-pink/20 backdrop-blur-md border border-pink/40 text-pink text-[8px] font-mono tracking-wider font-bold">
-                    {item.badge || 'ATELIER PIECE'}
+                    {item.badge || 'SIGNATURE PIECE'}
                   </span>
                 </div>
 
@@ -227,7 +227,7 @@ function KeyArchiveCarousel({
                 {/* Quick View Hover Tag */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] pointer-events-none">
                   <span className="px-4 py-2 rounded-full bg-black/85 border border-white/25 text-white text-xs font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                    VIEW SPECIMEN ↗
+                    VIEW DETAILS ↗
                   </span>
                 </div>
               </div>
@@ -447,7 +447,7 @@ export default function ShopCatalogue({
       {
         id: 'avz-002',
         rank: 'EDITION 02',
-        badge: 'ATELIER PROTOTYPE',
+        badge: 'STUDIO PROTOTYPE',
         provenance: 'Cold-Forged Raw Alloy',
         socialTag: 'RECLAIMED ALLOY'
       },
@@ -463,7 +463,7 @@ export default function ShopCatalogue({
         rank: 'EDITION 04',
         badge: 'BESPOKE RUNWAY',
         provenance: 'Hand-Distressed Outerwear',
-        socialTag: '18 HRS ATELIER FINISH'
+        socialTag: '18 HRS HANDMADE FINISH'
       },
       {
         id: 'avz-005',
@@ -493,25 +493,25 @@ export default function ShopCatalogue({
       {
         id: 'corsets-tops',
         title: 'CORSETRY & SCULPTURAL BODICES',
-        badge: '01 // SIGNATURE',
+        badge: '01 • SIGNATURE',
         items: PRODUCTS.filter((p) => ['corsets', 'bralettes', 'tops'].includes(p.category.toLowerCase()))
       },
       {
         id: 'outerwear-jackets',
         title: 'ARMOR & REWORKED JACKETS',
-        badge: '02 // HEAVY ART',
+        badge: '02 • HEAVY ART',
         items: PRODUCTS.filter((p) => ['jackets'].includes(p.category.toLowerCase()))
       },
       {
         id: 'jewelry-hardware',
         title: 'HARDWARE JEWELRY & RECLAIMED ACCENTS',
-        badge: '03 // ARTIFACTS',
+        badge: '03 • ARTIFACTS',
         items: PRODUCTS.filter((p) => ['earrings', 'neckpieces', 'arm cuffs', 'belts', 'body chainmail'].includes(p.category.toLowerCase()))
       },
       {
         id: 'lower-sets',
         title: 'RUNWAY SILHOUETTES & CO-ORD SETS',
-        badge: '04 // STRUCTURE',
+        badge: '04 • STRUCTURE',
         items: PRODUCTS.filter((p) => ['pants', 'skirts', 'co-ord sets', 'bags'].includes(p.category.toLowerCase()))
       }
     ].filter((sec) => sec.items.length > 0);
@@ -527,13 +527,13 @@ export default function ShopCatalogue({
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-silver/80 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-            <span>COLLECTION 01 // ARCHIVAL SILHOUETTES</span>
+            <span>COLLECTION 01 • ARCHIVAL SILHOUETTES</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight">
             WEARABLE ART <span className="text-zinc-400 font-light">CATALOGUE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-1.5 sm:mt-2 leading-relaxed text-left">
-            1-of-1 sculptural corsets, motherboard breastplates, and tailored outerwear handcrafted in our Guwahati atelier.
+            1-of-1 sculptural corsets, motherboard breastplates, and tailored outerwear handcrafted in our Guwahati studio.
           </p>
         </div>
 
@@ -573,7 +573,7 @@ export default function ShopCatalogue({
         </div>
         <div className="flex items-center gap-2">
           <MessageCircle className="w-3.5 h-3.5 text-pink shrink-0" />
-          <span>Direct Atelier Concierge</span>
+          <span>Direct Studio Support</span>
         </div>
       </div>
 
@@ -735,7 +735,7 @@ export default function ShopCatalogue({
         <div className="pt-6 border-t border-white/15">
           <div className="flex items-center justify-between mb-4 px-1">
             <span className="text-xs font-mono tracking-widest text-white uppercase font-bold">
-              COMPLETE ATELIER ARCHIVE (ALL PIECES)
+              ALL AVAILABLE DESIGNS ({PRODUCTS.length})
             </span>
             <span className="text-[10px] font-mono text-zinc-400">
               {PRODUCTS.length} TOTAL
@@ -834,7 +834,7 @@ export default function ShopCatalogue({
                     {/* Quick View Hover State */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
                       <span className="px-4 py-2 rounded-full bg-black/85 border border-white/25 text-white text-xs font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        VIEW SPECIMEN ↗
+                        VIEW DETAILS ↗
                       </span>
                     </div>
                   </div>

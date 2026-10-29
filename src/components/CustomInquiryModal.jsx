@@ -53,21 +53,21 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
         </div>
 
         <div className="px-6 text-[10px] font-mono tracking-widest text-zinc-400 uppercase mb-2">
-          INQUIRY BRIEF LOGGED // GUWAHATI ATELIER
+          CUSTOM ORDER LOGGED • GUWAHATI STUDIO
         </div>
 
         <h2 className="px-4 text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
-          COMMISSION BRIEF READY
+          CUSTOM REQUEST READY
         </h2>
 
         <p className="text-xs sm:text-sm text-zinc-400 font-montserrat leading-relaxed mb-6">
-          Thank you, <strong className="text-white">{inquiryData.name}</strong>. Your custom specifications have been validated. For real-time consultation on hardware allocation and scheduling, forward this brief directly to Dhrisni.
+          Thank you, <strong className="text-white">{inquiryData.name}</strong>. Your custom specifications have been validated. For real-time consultation on hardware allocation and scheduling, forward this request directly to Dhrisni.
         </p>
 
         {/* Inquiry Brief Summary */}
         <div className="p-4 bg-black/60 border border-white/10 rounded-xl text-left text-xs font-mono text-zinc-300 mb-6 space-y-1.5">
           <div><strong className="text-white">Category:</strong> {inquiryData.category}</div>
-          <div><strong className="text-white">Reference:</strong> {inquiryData.referencePiece || 'Bespoke Concept'}</div>
+          <div><strong className="text-white">Reference:</strong> {inquiryData.referencePiece || 'Custom Concept'}</div>
           <div><strong className="text-white">Price Tier:</strong> {inquiryData.budgetTier}</div>
           <div><strong className="text-white">Measurements:</strong> {inquiryData.measurements}</div>
         </div>
@@ -81,14 +81,14 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
           className="w-full py-3.5 px-6 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-mono font-semibold tracking-widest uppercase flex items-center justify-center gap-2 mb-3 cursor-pointer no-underline transition-all active:scale-[0.99]"
         >
           <MessageCircle className="w-4 h-4" />
-          <span>FORWARD BRIEF TO ATELIER ↗</span>
+          <span>CHAT ON WHATSAPP WITH OUR TEAM ↗</span>
         </a>
 
         <button
           onClick={onClose}
           className="text-xs font-mono text-zinc-500 hover:text-white cursor-pointer bg-transparent border-none transition-colors"
         >
-          Close & return to archive
+          Close & return to shop
         </button>
       </div>
     </div>

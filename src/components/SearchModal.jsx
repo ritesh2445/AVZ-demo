@@ -28,14 +28,14 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
         p.category.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
         (p.materials && p.materials.some((m) => m.toLowerCase().includes(q)))
-    ).map((p) => ({ ...p, type: 'Archive Specimen' }));
+    ).map((p) => ({ ...p, type: 'Shop Piece' }));
 
     const museumMatches = MUSEUM_ITEMS.filter(
       (m) =>
         m.name.toLowerCase().includes(q) ||
         m.materials.toLowerCase().includes(q) ||
         m.story.toLowerCase().includes(q)
-    ).map((m) => ({ ...m, type: 'Museum Piece' }));
+    ).map((m) => ({ ...m, type: 'Archive Piece' }));
 
     return [...productMatches, ...museumMatches];
   }, [query]);
@@ -79,7 +79,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
             </div>
           ) : results.length === 0 ? (
             <div className="text-center py-10 text-zinc-500 font-mono text-xs">
-              No matching specimens found for "{query}".
+              No matching items found for "{query}".
             </div>
           ) : (
             results.map((item) => (
@@ -100,7 +100,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
                   />
                   <div className="text-left">
                     <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block text-left">
-                      {item.type} // {item.category || item.commissionTier}
+                      {item.type} • {item.category || item.commissionTier}
                     </span>
                     <h4 className="text-xs sm:text-sm font-mono font-medium text-white group-hover:text-zinc-200 transition-colors uppercase text-left">
                       {item.name}

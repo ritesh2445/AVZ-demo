@@ -22,11 +22,11 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
       courier: 'Blue Dart Air Express (AWB: BLUEDART-984129)',
       currentStage: 3,
       stages: [
-        { title: 'Order Confirmed', desc: 'Craft ticket generated at atelier.', done: true },
+        { title: 'Order Confirmed', desc: 'Craft ticket generated at studio.', done: true },
         { title: 'Raw Materials Sourced', desc: 'Circuits, hardware, and reclaimed textiles allocated.', done: true },
-        { title: 'Hand-Sculpted by Artisans', desc: 'Under Dhrisni’s direct studio supervision in Guwahati.', done: true, current: true },
+        { title: 'Handmade by Artisans', desc: 'Under Dhrisni’s direct studio supervision in Guwahati.', done: true, current: true },
         { title: 'Tension & Fit Calibration', desc: 'Structural strength and hardware fit verified.', done: false },
-        { title: 'Packaging & Provenance Certificate', desc: 'Sealed in matte-black box with authentication card.', done: false },
+        { title: 'Packaging & Authenticity Certificate', desc: 'Sealed in matte-black box with authentication card.', done: false },
         { title: 'Dispatched via Air Courier', desc: 'In transit with real-time SMS delivery tracking.', done: false }
       ]
     });
@@ -53,11 +53,11 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
         <div className="mb-6 pr-10 sm:pr-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2 max-w-full">
             <Package className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-            <span className="truncate">LIVE ATELIER TRACKING // CLIENT LOGISTICS</span>
+            <span className="truncate">LIVE ORDER TRACKING • COURIER LOGISTICS</span>
           </div>
 
           <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white leading-tight">
-            TRACK ATELIER <span className="text-zinc-400 font-light">DISPATCH</span>
+            TRACK YOUR <span className="text-zinc-400 font-light">ORDER</span>
           </h3>
           <p className="text-xs text-zinc-400 font-montserrat mt-1">
             Enter your AVZ Order Identifier (e.g. AVZ-781920) or phone number for production and courier updates.
@@ -129,7 +129,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
                 className="text-zinc-300 hover:text-white flex items-center gap-1 text-[11px] transition-colors"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
-                <span>Atelier Concierge Line</span>
+                <span>Studio Support Line</span>
               </a>
             </div>
           </div>

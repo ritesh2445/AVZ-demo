@@ -47,7 +47,7 @@ export default function SquadBuyModal({
   const handleShareWhatsApp = () => {
     playSound('snap');
     const msg = encodeURIComponent(
-      `Join my AVZ Vaganza collective order to unlock tiered atelier privileges on 1-of-1 archival pieces: ${squadLink}`
+      `Join my AVZ Vaganza group order to unlock special collective discounts: ${squadLink}`
     );
     window.open(`https://wa.me/?text=${msg}`, '_blank');
   };
@@ -101,15 +101,15 @@ export default function SquadBuyModal({
         <div className="mb-6 pr-10 sm:pr-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 text-zinc-400 text-[10px] font-mono tracking-widest uppercase mb-2 max-w-full">
             <Users className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-            <span className="truncate">COLLECTIVE ORDERS // ATELIER PRIVILEGE</span>
+            <span className="truncate">GROUP ORDERS • SPECIAL DISCOUNTS</span>
           </div>
 
           <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white leading-tight">
-            GROUP ACQUISITION, <span className="text-zinc-400 font-light">TIERED PRIVILEGES</span>
+            GROUP ORDERS, <span className="text-zinc-400 font-light">SPECIAL DISCOUNTS</span>
           </h3>
 
           <p className="text-xs sm:text-sm text-zinc-400 font-montserrat mt-1.5 leading-relaxed">
-            Collaborative orders unlock tiered atelier discounts, complimentary archival gifts, and priority express shipping across India.
+            Collaborative orders unlock tiered discounts, complimentary gifts, and priority express shipping across India.
           </p>
         </div>
 

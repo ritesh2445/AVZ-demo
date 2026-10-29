@@ -21,7 +21,7 @@ const COPY = {
     paragraphs: [
       'AVZ Vaganza was founded out of deliberate aesthetic rebellion against the predictable monotony of mass fashion.',
       'Dhrisni recognized a profound creative void where subcultural attitude, industrial cyberpunk grit, and genuine couture technical mastery could collide. She engineered the label as an uncompromising sanctuary for bespoke wearable art.',
-      'Every garment is painstakingly hand-sculpted in our Guwahati atelier using raw industrial hardware, motherboards, cone spikes, and reclaimed textiles—ensuring every piece possesses an unmistakable soul and physical presence.'
+      'Every garment is painstakingly hand-sculpted in our Guwahati studio using raw industrial hardware, motherboards, cone spikes, and reclaimed textiles—ensuring every piece possesses an unmistakable soul and physical presence.'
     ]
   },
   sustainability: {
@@ -131,7 +131,7 @@ function ElectricTypewriterBlock({ paragraphs, isVisible }) {
           <div key={i} className="relative">
             {paragraphs.length > 1 && (
               <span className="font-mono text-xs text-pink tracking-[0.2em] block mb-2 font-bold uppercase">
-                // SECTION {(i + 1).toString().padStart(2, '0')}
+                PART {(i + 1).toString().padStart(2, '0')}
               </span>
             )}
             <p className="font-montserrat text-[15px] sm:text-[17px] leading-[1.8] text-zinc-100 font-semibold tracking-normal normal-case">
@@ -239,7 +239,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
         <div>
           <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase mb-2">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-            <span>FOUNDER MANIFESTO // HORIZONTAL ARCHIVE</span>
+            <span>FOUNDER STORY • THE AVZ DIMENSION</span>
           </div>
           <h2 className="font-mono text-xl sm:text-2xl font-medium tracking-[0.2em] text-white uppercase">
             ABOUT MOTHER & THE AVZ DIMENSION
@@ -296,7 +296,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
                     : 'bg-black/60 text-zinc-400 border-white/10 hover:border-pink/40 hover:text-white'
                 }`}
               >
-                {card.tag} // {card.label}
+                {card.tag} • {card.label}
               </button>
             );
           })}
@@ -327,8 +327,8 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">01 // VISUAL INTRODUCTION</span>
-              <span>ATELIER PROVENANCE</span>
+              <span className="text-pink font-bold">1. VISUAL INTRODUCTION</span>
+              <span>STUDIO ORIGIN</span>
             </div>
 
             <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white">
@@ -370,7 +370,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">02 // ATELIER PROFILE</span>
+              <span className="text-pink font-bold">2. BACKGROUND & ROOTS</span>
               <span>CHRONOLOGY</span>
             </div>
 
@@ -406,7 +406,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">03 // ATELIER GENESIS</span>
+              <span className="text-pink font-bold">3. HOW VAGANZA WAS BORN</span>
               <span>ORIGIN STORY</span>
             </div>
 
@@ -423,7 +423,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>DARK ALTERNATIVE // INDUSTRIAL ATTITUDE</span>
+            <span>DARK ALTERNATIVE • INDUSTRIAL ATTITUDE</span>
             <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
@@ -442,7 +442,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">04 // MATERIAL PRACTICE</span>
+              <span className="text-pink font-bold">4. SUSTAINABLE CRAFT</span>
               <span>RUTHLESS UPCYCLING</span>
             </div>
 
@@ -459,7 +459,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>DISCARDED HARDWARE // RAW TRANSFORMATION</span>
+            <span>DISCARDED HARDWARE • RAW TRANSFORMATION</span>
             <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>
@@ -478,7 +478,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
 
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">05 // CREATIVE PHILOSOPHY</span>
+              <span className="text-pink font-bold">5. DESIGN VISION</span>
               <span>THE DESTINATION</span>
             </div>
 
@@ -495,7 +495,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>THE FREQUENCY // UNDERGROUND HIGH FASHION</span>
+            <span>BOLD STYLE • UNDERGROUND FASHION</span>
             <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
           </div>
         </div>

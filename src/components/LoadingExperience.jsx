@@ -175,7 +175,7 @@ export default function LoadingExperience({ onComplete }) {
           // Dynamic phase subtitles
           if (phaseRef.current) {
             if (currentCount < 20) {
-              phaseRef.current.textContent = "INITIALIZING ATELIER FREQUENCY";
+              phaseRef.current.textContent = "INITIALIZING WEARABLE ART UNIVERSE";
             } else if (currentCount < 45) {
               phaseRef.current.textContent = "SCULPTING ONE-OF-ONE WEARABLE ART";
             } else if (currentCount < 70) {
@@ -185,7 +185,7 @@ export default function LoadingExperience({ onComplete }) {
             } else if (currentCount < 100) {
               phaseRef.current.textContent = "CALIBRATING HAUTE-COUTURE RUNWAY";
             } else {
-              phaseRef.current.textContent = "AVZ ATELIER DIMENSION INITIALIZED";
+              phaseRef.current.textContent = "AVZ FASHION DIMENSION READY";
             }
           }
         }
@@ -315,7 +315,7 @@ export default function LoadingExperience({ onComplete }) {
         <div className="relative z-10 w-full flex items-center justify-between text-xs font-mono tracking-widest uppercase">
           <div className="flex items-center gap-3 text-silver/80">
             <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-ping" />
-            <span>AVZ VAGANZA // GUWAHATI ATELIER</span>
+            <span>AVZ VAGANZA • GUWAHATI STUDIO</span>
           </div>
           <div className="text-silver/50 hidden sm:block">
             DHRISTROYER WEARABLE ART ARCHIVE

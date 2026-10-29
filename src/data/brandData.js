@@ -27,7 +27,7 @@ export const BRAND_INFO = {
       { title: "Maximalism Over Minimalism", text: "We fiercely reject cookie-cutter minimalism. Raw textures, metallic spikes, motherboard circuit boards, and industrial hardware collide." },
       { title: "Human Hands Over Machine Sameness", text: "In a world drowning in fast fashion and AI generation, things built by real human hands are the ultimate luxury." },
       { title: "Upcycling & Reclaimed Textiles", text: "Tired of stuffed closets and landfill waste, we transform discarded garments and unconventional hardware into one-of-a-kind armor." },
-      { title: "Empowering Women Artisans", text: "We hire and train women directly under Dhrisni's close personal supervision in our Guwahati atelier." }
+      { title: "Empowering Women Artisans", text: "We hire and train women directly under Dhrisni's close personal supervision in our Guwahati studio." }
     ]
   },
   pricingTiers: [
@@ -232,7 +232,7 @@ export const PRODUCTS = [
       "Over 18 hours of direct artisanal distressing",
       "Reconstructed multi-tonal patchwork sleeves",
       "Oversized boxy avant-garde silhouette",
-      "Interior hand-signed provenance label"
+      "Interior hand-signed authenticity label"
     ],
     care: "Dry clean only by an alternative garment specialist.",
     sizes: ["Free Size / Oversized (Chest 42-46\")"],
@@ -449,7 +449,7 @@ export const MUSEUM_ITEMS = [
 export const LOOKBOOK_ENTRIES = [
   {
     id: "look-01",
-    code: "LOOK 001 // THE SEVERED CIRCUIT",
+    code: "LOOK 001 • THE SEVERED CIRCUIT",
     title: "The Severed Circuit",
     subtitle: "Silicon Corsetry at the Intersection of Tech & Haute Rebellion",
     image: ASSET_MANIFEST.editorialHero,
@@ -465,9 +465,9 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     id: "look-02",
-    code: "LOOK 002 // NO FACTORY MINDSET",
+    code: "LOOK 002 • NO FACTORY MINDSET",
     title: "Raw Hands, Pure Grit",
-    subtitle: "Atelier Documentaries from Guwahati",
+    subtitle: "Studio Stories from Guwahati",
     image: ASSET_MANIFEST.products.divaTop,
     altImages: [
       ASSET_MANIFEST.editorialHero,
@@ -481,7 +481,7 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     id: "look-03",
-    code: "LOOK 003 // SOFT ARMOUR AFTER HOURS",
+    code: "LOOK 003 • SOFT ARMOUR AFTER HOURS",
     title: "Soft Armour After Hours",
     subtitle: "Nightlife, Subculture, and Archival Armor",
     image: ASSET_MANIFEST.editorialLookbook,
@@ -497,7 +497,7 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     id: "look-04",
-    code: "LOOK 004 // REWORKED ROMANCE",
+    code: "LOOK 004 • REWORKED ROMANCE",
     title: "Reworked Romance",
     subtitle: "Tenderness Clashing With Cold Metal",
     image: ASSET_MANIFEST.products.coordSet,
@@ -513,7 +513,7 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     id: "look-05",
-    code: "LOOK 005 // TACTILE CYBER CHAINMAIL",
+    code: "LOOK 005 • TACTILE CYBER CHAINMAIL",
     title: "Liquid Steel Exoskeleton",
     subtitle: "Over 1,200 Hand-Linked Stainless Steel Rings",
     image: ASSET_MANIFEST.products.chainmailArmor,
@@ -528,7 +528,7 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     id: "look-06",
-    code: "LOOK 006 // GLITCH HARNESS MATRIX",
+    code: "LOOK 006 • GLITCH HARNESS MATRIX",
     title: "Subcultural Bodice Spikes",
     subtitle: "Aggressive Geometry & Architectural Curves",
     image: ASSET_MANIFEST.products.spikeBodice,

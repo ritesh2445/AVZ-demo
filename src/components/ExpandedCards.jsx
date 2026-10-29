@@ -19,14 +19,14 @@ export default function ExpandedCards({ items, onSelectProduct, currency = 'INR'
         <div className="text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-            <span>ARCHIVE COLLECTION // EXPANDED RAIL</span>
+            <span>FEATURED VAULT • EXPANDED VIEW</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-left">
             EXPLORE THE <span className="text-zinc-400 font-light">VAULT PIECES</span>
           </h2>
         </div>
         <p className="text-zinc-400 text-xs sm:text-sm max-w-md font-montserrat text-left md:text-right leading-relaxed">
-          Select any specimen to view dimensional construction, raw reclaimed materials, and individual atelier provenance.
+          Select any piece to view dimensional construction, raw reclaimed materials, and handmade craft details.
         </p>
       </div>
 

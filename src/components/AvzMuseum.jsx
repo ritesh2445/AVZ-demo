@@ -497,14 +497,14 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-2 text-zinc-400 text-[10px] font-mono tracking-[0.25em] uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-            <span>PERMANENT ARCHIVE // ONE-OF-ONE SPECIMENS</span>
+            <span>PERMANENT ARCHIVE • ONE-OF-A-KIND PIECES</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono uppercase tracking-[0.2em] text-white leading-tight">
             ARCHIVE <span className="text-zinc-500 font-normal">MUSEUM</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm mt-1.5 font-mono tracking-wider max-w-xl leading-relaxed">
-            Permanent vault of bespoke wearable art and sold-out atelier artifacts. Hand-sculpted specimens available for archival commission.
+            Our permanent archive of one-of-a-kind wearable art and past pieces. Handcrafted pieces available for custom recreation.
           </p>
         </div>
 
@@ -548,10 +548,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         <div className="flex items-center justify-between mb-4 px-1">
           <span className="text-[10px] font-mono tracking-widest text-pink uppercase font-semibold flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-ping inline-block" />
-            <span>SPECIMEN [ 0{activeIndex + 1} / 0{MUSEUM_ITEMS.length} ]</span>
+            <span>PIECE [ 0{activeIndex + 1} / 0{MUSEUM_ITEMS.length} ]</span>
           </span>
-          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
-            [ ⚡ SWIPE OR TAP TO CYCLE ]
+          <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
+            [ SWIPE OR TAP TO BROWSE ]
           </span>
         </div>
 
@@ -648,7 +648,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                     className="w-full py-3 px-4 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.18em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Scissors className="w-3.5 h-3.5" />
-                    <span>COMMISSION RECREATION ↗</span>
+                    <span>REQUEST CUSTOM ORDER ↗</span>
                   </button>
                 </div>
               </div>
@@ -709,7 +709,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
               {/* Hint & Drag Badge */}
               <div className="absolute top-4 left-4 z-10 pointer-events-none flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono text-zinc-300 tracking-wider uppercase">
                 <RotateCcw className="w-3 h-3 text-pink" />
-                <span>DRAG TO ROTATE // CLICK TO CYCLE</span>
+                <span>DRAG TO ROTATE • CLICK TO BROWSE</span>
               </div>
 
               {/* Pedestal Navigation Arrows */}
@@ -751,7 +751,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                         : 'bg-black/80 text-zinc-300 border-white/15 hover:border-pink hover:text-white backdrop-blur-md'
                     }`}
                   >
-                    [0{idx + 1}] {item.shortName || item.name.slice(0, 20)}
+                    0{idx + 1} • {item.shortName || item.name.slice(0, 20)}
                   </button>
                 ))}
               </div>
@@ -766,7 +766,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                     {activeItem.tag}
                   </span>
                   <span className="text-[10px] font-mono text-zinc-400">
-                    EST. {activeItem.year} // 0{activeIndex + 1} OF 0{MUSEUM_ITEMS.length}
+                    EST. {activeItem.year} • 0{activeIndex + 1} OF 0{MUSEUM_ITEMS.length}
                   </span>
                 </div>
 
@@ -803,7 +803,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
                   <div className="flex items-center justify-between px-1">
                     <span className="text-zinc-400 uppercase text-[9px] tracking-[0.2em]">
-                      PROVENANCE
+                      ORIGINAL STATUS
                     </span>
                     <span className="text-zinc-200 text-xs font-medium">
                       {activeItem.originalOwner}
@@ -812,7 +812,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
                   <div className="px-1">
                     <span className="text-zinc-400 block uppercase text-[9px] tracking-[0.2em] mb-1">
-                      ARCHIVAL RECREATION NOTE
+                      CUSTOM ORDER NOTE
                     </span>
                     <p className="text-zinc-300 text-[11px] leading-relaxed">
                       {activeItem.recreationNote}
@@ -828,10 +828,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   className="btn-commission w-full py-3.5 px-5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.2em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer group"
                 >
                   <Scissors className="w-3.5 h-3.5 group-hover:rotate-45 transition-transform" />
-                  <span>COMMISSION RECREATION ↗</span>
+                  <span>REQUEST CUSTOM ORDER ↗</span>
                 </button>
-                <p className="text-[9px] font-mono text-zinc-400 text-center mt-2 uppercase tracking-wider">
-                  Hand-sculpted in Guwahati Atelier • 2 to 3 weeks
+                <p className="text-[10px] font-mono text-zinc-400 text-center mt-2 uppercase tracking-wider">
+                  Handmade in our Guwahati studio • 2 to 3 weeks
                 </p>
               </div>
             </div>
@@ -867,7 +867,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
                   </p>
                 </div>
                 <div className="pt-3 border-t border-white/10 mt-3 flex items-center justify-between text-[10px] font-mono text-zinc-400 group-hover:text-pink transition-colors">
-                  <span>SPECIMEN 0{idx + 1}</span>
+                  <span>PIECE 0{idx + 1}</span>
                   <span>VIEW IN 3D ↗</span>
                 </div>
               </div>

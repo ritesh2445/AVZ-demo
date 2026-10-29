@@ -57,7 +57,7 @@ export default function DhristroyerAnimatedHeading() {
             MEET THE MOTHER
           </span>
           <span className="text-silver/40 font-mono text-[10px] tracking-widest hidden sm:inline-block">
-            // ATELIER ARCHITECT
+            • STUDIO FOUNDER
           </span>
           <span className="w-8 h-[1px] bg-gradient-to-r from-[#be185d]/80 to-transparent" />
         </div>
@@ -92,11 +92,11 @@ export default function DhristroyerAnimatedHeading() {
           </div>
           <span className="text-white/20">•</span>
           <div className="text-[#f472b6]">
-            <span>GUWAHATI ATELIER</span>
+            <span>GUWAHATI STUDIO</span>
           </div>
           <span className="text-white/20 hidden sm:inline">•</span>
           <div className="text-silver/50 hidden sm:inline">
-            <span>UPCYCLED HARDWARE // AVANT-GARDE ARMOR</span>
+            <span>UPCYCLED HARDWARE • AVANT-GARDE DESIGNS</span>
           </div>
 
           {/* Replay Transition */}

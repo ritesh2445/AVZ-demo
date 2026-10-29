@@ -23,24 +23,24 @@ const COMMISSION_PHASES = [
     step: "01",
     title: "CONSULTATION",
     subtitle: "Brief & Silhouette",
-    desc: "Review of aesthetic reference, silhouette specs, and body measurements."
+    desc: "Review of style reference, silhouette specs, and body measurements."
   },
   {
     step: "02",
     title: "SOURCING",
     subtitle: "Hardware Allocation",
-    desc: "Harvesting decommissioned motherboards, cones, rings, and deadstock denim."
+    desc: "Selecting motherboards, cones, rings, and deadstock denim foundations."
   },
   {
     step: "03",
-    title: "FABRICATION",
-    subtitle: "Atelier Handcraft",
-    desc: "Precision hand-sculpted by Dhrisni & women artisans in Guwahati."
+    title: "CRAFTING",
+    subtitle: "Studio Handcraft",
+    desc: "Handcrafted with precision by Dhrisni & women artisans in Guwahati."
   },
   {
     step: "04",
     title: "DELIVERY",
-    subtitle: "Authentication & Dispatch",
+    subtitle: "Verification & Dispatch",
     desc: "Final structural calibration, video sign-off, and insured express delivery."
   }
 ];
@@ -112,23 +112,23 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
       <div className="max-w-6xl mx-auto mb-10 pb-6 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-          <span>BESPOKE WEARABLE ART // DIRECT ATELIER COMMISSION</span>
+          <span>CUSTOM ORDERS • HANDCRAFTED IN GUWAHATI</span>
         </div>
 
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-[0.16em] text-white uppercase mb-3 leading-tight text-left">
-          ATELIER <span className="text-zinc-400 font-light">COMMISSIONS</span>
+          CUSTOM <span className="text-zinc-400 font-light">ORDERS</span>
         </h2>
 
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base leading-relaxed font-montserrat max-w-4xl text-left">
-          Every custom AVZ creation is individually engineered and built by hand by Dhrisni and her Guwahati atelier team. We do not mass-reproduce: each commission is an original evolution tailored to your measurements, hardware preferences, and creative sovereignty.
+          Every custom AVZ piece is individually designed and handcrafted by Dhrisni and our Guwahati studio team. We never mass-produce: each piece is tailored to your measurements, hardware preferences, and unique style.
         </p>
 
-        {/* 4-Phase Commission Protocol */}
+        {/* 4-Step Order Process */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 mt-8 pt-6 border-t border-white/10">
           {COMMISSION_PHASES.map((p) => (
             <div key={p.step} className="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 text-left">
               <div className="flex items-center justify-between mb-1">
-                <span className="font-mono text-xs font-bold text-pink tracking-widest">{p.step} //</span>
+                <span className="font-mono text-xs font-bold text-pink tracking-widest">STEP {p.step}</span>
                 <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">{p.title}</span>
               </div>
               <h4 className="font-mono text-xs sm:text-sm font-bold uppercase text-white mb-1">
@@ -143,16 +143,16 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 text-left items-start">
-        {/* Left Column: Official Pricing Tiers & Concierge Dispatch (5 cols) */}
+        {/* Left Column: Pricing Tiers & Direct Support (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-6 text-left">
-          {/* Atelier Production Timeline */}
+          {/* Production Timeline */}
           <div className="p-6 sm:p-7 rounded-3xl bg-[#0c0c12] border border-white/12 text-left mobile-grunge-card shadow-lg">
             <div className="flex items-center gap-2.5 text-pink font-mono text-xs uppercase tracking-widest mb-2.5 font-bold">
               <Clock className="w-4 h-4 text-pink" />
               <span>TIMELINE: 2 TO 3 WEEKS PER BUILD</span>
             </div>
             <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed text-left">
-              Because raw motherboards must be hand-cut, edged, and reinforced, and chain links individually woven, bespoke pieces require 14 to 21 working days for assembly, curing, and structural verification.
+              Because raw motherboards must be hand-cut, edged, and reinforced, and chain links individually linked, made-to-order pieces take 14 to 21 working days for assembly and testing.
             </p>
           </div>
 
@@ -161,7 +161,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
             <div className="flex items-center justify-between text-xs font-mono tracking-widest text-pink uppercase mb-4 font-bold">
               <span className="flex items-center gap-2">
                 <Tag className="w-4 h-4 text-pink" />
-                <span>OFFICIAL ATELIER PRICING TIERS</span>
+                <span>PRICING TIERS & BUDGET GUIDE</span>
               </span>
               <span className="text-[10px] text-zinc-500">2026 RATES</span>
             </div>
@@ -185,14 +185,14 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
             </div>
           </div>
 
-          {/* Direct VIP WhatsApp Atelier Hotline */}
+          {/* Direct WhatsApp Support */}
           <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#18041d] to-[#0c0c12] border border-pink/30 text-left shadow-xl mobile-grunge-card">
             <div className="flex items-center gap-2 text-pink font-mono text-xs uppercase tracking-widest mb-2 font-bold">
               <MessageCircle className="w-4 h-4 text-pink" />
-              <span>DIRECT ATELIER CONCIERGE HOTLINE</span>
+              <span>DIRECT WHATSAPP & PHONE SUPPORT</span>
             </div>
             <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed mb-5 text-left">
-              Prefer an immediate voice or WhatsApp consultation? Send photos, sketches, or event dates directly to Dhrisni's dispatch desk.
+              Prefer to chat directly? Send photos, sketches, or event dates to our team on WhatsApp.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-2.5">
@@ -220,20 +220,20 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
           </div>
         </div>
 
-        {/* Right Column: High-Precision Bespoke Commission Brief Builder (7 cols) */}
+        {/* Right Column: Custom Order Request Form (7 cols) */}
         <div className="lg:col-span-7 p-6 sm:p-8 md:p-10 rounded-3xl bg-[#0c0c12] border border-white/15 mobile-grunge-card shadow-2xl">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
             <div>
               <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase block mb-1 font-bold">
-                COMMISSION DISPATCH // FORM 04
+                MADE-TO-ORDER REQUEST
               </span>
               <h3 className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-[0.14em] text-white">
-                BESPOKE SPECIFICATION BRIEF
+                CUSTOM DESIGN BRIEF
               </h3>
             </div>
             <div className="hidden sm:flex items-center gap-2 text-[10px] font-mono text-zinc-400 px-3 py-1 rounded-full bg-white/5 border border-white/10">
               <ShieldCheck className="w-3.5 h-3.5 text-pink" />
-              <span>ATELIER VERIFIED</span>
+              <span>DIRECT STORE VERIFIED</span>
             </div>
           </div>
 
@@ -241,12 +241,12 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
             {/* Section 1: Client Contact Profile */}
             <div className="space-y-3">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 font-bold block">
-                01 // CLIENT IDENTIFICATION & CONTACT
+                1. YOUR CONTACT DETAILS
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                    Client Name / Alias *
+                    Your Name / Alias *
                   </label>
                   <input
                     type="text"
@@ -283,13 +283,13 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
             {/* Section 2: Piece Architecture & Tier */}
             <div className="space-y-3 pt-3 border-t border-white/10">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 font-bold block">
-                02 // PIECE ARCHITECTURE & INVESTMENT TIER
+                2. ITEM TYPE & BUDGET TIER
               </span>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                    Garment / Specimen Type
+                    Item Type
                   </label>
                   <select
                     name="category"
@@ -310,7 +310,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
                 <div>
                   <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                    Investment Tier
+                    Budget Tier
                   </label>
                   <select
                     name="budgetTier"
@@ -327,7 +327,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
               <div>
                 <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                  Archival Reference or Inspiration Piece (Optional)
+                  Reference Piece or Inspiration (Optional)
                 </label>
                 <input
                   type="text"
@@ -340,14 +340,14 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
               </div>
             </div>
 
-            {/* Section 3: Anatomical Fit Profile */}
+            {/* Section 3: Sizing & Measurements */}
             <div className="space-y-3 pt-3 border-t border-white/10">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 font-bold block">
-                03 // ANATOMICAL FIT PROFILE
+                3. SIZING & MEASUREMENTS
               </span>
               <div>
                 <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                  Body Dimensions (Bust / Underbust / Waist / Hips) *
+                  Your Body Measurements (Bust / Underbust / Waist / Hips) *
                 </label>
                 <input
                   type="text"
@@ -363,21 +363,21 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
               </div>
             </div>
 
-            {/* Section 4: Creative Direction & Material Brief */}
+            {/* Section 4: Your Ideas & Style Notes */}
             <div className="space-y-3 pt-3 border-t border-white/10">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 font-bold block">
-                04 // CREATIVE BRIEF & RAW MATERIALITY
+                4. YOUR IDEAS & STYLE NOTES
               </span>
               <div>
                 <label className="block text-[11px] font-mono uppercase text-zinc-300 font-semibold mb-1.5">
-                  Creative Vision, Preferred Hardware & Event Context *
+                  Design Notes, Preferred Colors & Event Date *
                 </label>
                 <textarea
                   name="designNotes"
                   rows={4}
                   value={formData.designNotes}
                   onChange={handleChange}
-                  placeholder="Detail your bespoke concept: circuit board colors (green/black), cone spike density, chainmail fluid drape, festival vs editorial context, or deadline dates."
+                  placeholder="Describe what you want: circuit board colors (green/black), spike accents, chain drape, fit preferences, or any specific deadline date."
                   className={`w-full bg-black/80 border ${
                     errors.designNotes ? 'border-red-500' : 'border-white/15'
                   } p-4 rounded-xl text-xs text-white font-mono outline-none focus:border-pink resize-none transition-colors`}
@@ -394,12 +394,12 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 className="btn-glass-pink w-full py-4 rounded-full text-xs font-mono font-bold tracking-[0.2em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-xl active:scale-95 transition-all"
               >
                 <Send className="w-4 h-4" />
-                <span>{submitting ? 'TRANSMITTING BRIEF TO ATELIER DISPATCH...' : 'TRANSMIT BESPOKE COMMISSION BRIEF ↗'}</span>
+                <span>{submitting ? 'SENDING REQUEST TO OUR TEAM...' : 'SUBMIT CUSTOM ORDER REQUEST ↗'}</span>
               </button>
 
               <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 mt-3 px-1">
-                <span>⚡ 24-HOUR ATELIER RESPONSE GUARANTEED</span>
-                <span>HAND-BUILT IN GUWAHATI</span>
+                <span>WE RESPOND WITHIN 24 HOURS</span>
+                <span>HANDMADE IN GUWAHATI</span>
               </div>
             </div>
           </form>

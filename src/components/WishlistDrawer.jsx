@@ -100,7 +100,7 @@ export default function WishlistDrawer({
                     {item.name || item.title}
                   </h4>
                   <div className="text-xs font-mono text-white font-bold mt-1">
-                    {item.price ? formatPrice(item.price, currency) : 'ARCHIVE SPECIMEN'}
+                    {item.price ? formatPrice(item.price, currency) : 'ARCHIVE PIECE'}
                   </div>
                 </div>
 

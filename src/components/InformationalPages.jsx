@@ -20,13 +20,13 @@ export function FAQSection() {
       <div className="max-w-3xl mx-auto text-center mb-14 pb-8 border-b border-white/10 relative z-10 flex flex-col items-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-          <span>CLIENT Q&A // ATELIER KNOWLEDGE BASE</span>
+          <span>HELP & ANSWERS • CUSTOMER CARE</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase leading-tight text-center">
           FREQUENTLY ASKED <span className="text-zinc-400 font-light">QUESTIONS</span>
         </h2>
         <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 text-center leading-relaxed">
-          Information regarding atelier commissions, sizing specifications, and care instructions.
+          Helpful information on custom orders, sizing, shipping, and garment care.
         </p>
       </div>
 
@@ -79,33 +79,33 @@ export function ContactSection() {
       <div className="max-w-6xl mx-auto mb-12 pb-6 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-          <span>CLIENT RELATIONS // PRIVATE ATELIER CONCIERGE</span>
+          <span>CUSTOMER CARE • DIRECT STUDIO CONCIERGE</span>
         </div>
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-[0.16em] text-white uppercase leading-tight text-left">
-          ATELIER <span className="text-zinc-400 font-light">CONCIERGE & CONTACT</span>
+          STUDIO <span className="text-zinc-400 font-light">CONTACT & SUPPORT</span>
         </h2>
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base font-montserrat mt-2 max-w-3xl leading-relaxed">
-          Direct communication channels to our Guwahati studio, founder creative direction desk, and private client stylists.
+          Direct communication channels to our Guwahati studio, founder creative direction desk, and customer styling team.
         </p>
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left">
-        {/* Card 1: Registered Atelier Studio & Operations */}
+        {/* Card 1: Registered Studio & Operations */}
         <div className="p-7 sm:p-8 rounded-3xl bg-[#0c0c12] border border-white/12 flex flex-col justify-between text-left mobile-grunge-card shadow-xl">
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
-                LOCATION // PROTOCOL 01
+                1. STUDIO LOCATION
               </span>
               <MapPin className="w-4 h-4 text-pink" />
             </div>
 
             <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white mb-3">
-              ATELIER HEADQUARTERS
+              STUDIO HEADQUARTERS
             </h3>
 
             <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 mb-4">
-              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">REGISTERED DOMICILE</span>
+              <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">REGISTERED STUDIO ADDRESS</span>
               <p className="text-xs sm:text-sm text-white font-montserrat leading-relaxed">
                 {BRAND_INFO.registeredAddress}
               </p>
@@ -114,10 +114,10 @@ export function ContactSection() {
             <div className="space-y-2 text-xs font-mono text-zinc-300">
               <div className="flex items-center justify-between py-1 border-b border-white/5">
                 <span className="text-zinc-400 uppercase text-[10px]">STUDIO HOURS:</span>
-                <span className="text-white font-medium">MON – SAT // 10:00 – 19:00 IST</span>
+                <span className="text-white font-medium">MON – SAT • 10:00 AM – 7:00 PM IST</span>
               </div>
               <div className="flex items-center justify-between py-1 border-b border-white/5">
-                <span className="text-zinc-400 uppercase text-[10px]">LEAD ARTISAN:</span>
+                <span className="text-zinc-400 uppercase text-[10px]">LEAD DESIGNER:</span>
                 <span className="text-pink font-semibold">DHRISNI (DHRISTROYER)</span>
               </div>
               <div className="flex items-center justify-between py-1">
@@ -129,7 +129,7 @@ export function ContactSection() {
 
           <div className="pt-4 mt-6 border-t border-white/10 text-[10px] font-mono text-zinc-500 uppercase flex items-center justify-between">
             <span>OFFICIAL LABEL EST. 2024</span>
-            <span className="text-pink">1-OF-1 ATELIER</span>
+            <span className="text-pink">1-OF-1 ORIGINAL</span>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ export function ContactSection() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
-                COMMUNICATIONS // PROTOCOL 02
+                2. OFFICIAL EMAIL DESKS
               </span>
               <Mail className="w-4 h-4 text-pink" />
             </div>
@@ -149,7 +149,7 @@ export function ContactSection() {
 
             <div className="space-y-3.5 mb-5">
               <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 transition-colors hover:border-pink/40">
-                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">CLIENT ORDERS & BESPOKE INQUIRIES</span>
+                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">CUSTOMER ORDERS & CUSTOM INQUIRIES</span>
                 <a
                   href={`mailto:${BRAND_INFO.businessEmail}`}
                   className="text-xs sm:text-sm font-mono text-white hover:text-pink transition-colors font-semibold break-all flex items-center justify-between"
@@ -171,7 +171,7 @@ export function ContactSection() {
               </div>
 
               <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 transition-colors hover:border-pink/40">
-                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">AUTHENTIC SOCIAL BROADCAST</span>
+                <span className="text-[10px] font-mono uppercase text-zinc-400 block mb-1">OFFICIAL INSTAGRAM</span>
                 <a
                   href={BRAND_INFO.instagramUrl}
                   target="_blank"
@@ -190,27 +190,27 @@ export function ContactSection() {
           </div>
 
           <div className="pt-4 border-t border-white/10 text-[10px] font-mono text-zinc-400 flex items-center justify-between">
-            <span>RESPONSE SLA:</span>
-            <span className="text-white font-medium">UNDER 24 HOURS</span>
+            <span>RESPONSE TIME:</span>
+            <span className="text-white font-medium">WITHIN 24 HOURS</span>
           </div>
         </div>
 
-        {/* Card 3: Priority VIP Client Concierge WhatsApp */}
+        {/* Card 3: Direct VIP Client Concierge WhatsApp */}
         <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-b from-[#18041d] to-[#0c0c12] border border-pink/30 flex flex-col justify-between text-left mobile-grunge-card shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-bold">
-                PRIORITY // PROTOCOL 03
+                3. DIRECT WHATSAPP HOTLINE
               </span>
               <Phone className="w-4 h-4 text-pink" />
             </div>
 
             <h3 className="font-mono text-lg sm:text-xl font-bold uppercase text-white mb-2">
-              VIP CLIENT HOTLINE
+              DIRECT WHATSAPP HOTLINE
             </h3>
 
             <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed mb-5">
-              Direct connection to Dhrisni and senior atelier dispatch. Ideal for rapid event deadlines, measurement assistance, or video verification claims.
+              Direct connection to Dhrisni and our studio team. Ideal for event deadlines, measurement help, or quick order questions.
             </p>
 
             <div className="space-y-3 mb-4">
@@ -237,7 +237,7 @@ export function ContactSection() {
               >
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-pink" />
-                  <span>DISPATCH: {BRAND_INFO.whatsappSecondary}</span>
+                  <span>SUPPORT: {BRAND_INFO.whatsappSecondary}</span>
                 </div>
                 <span className="text-pink">CHAT ↗</span>
               </a>
@@ -245,13 +245,13 @@ export function ContactSection() {
 
             <div className="p-3 rounded-xl bg-black/60 border border-white/10 text-[11px] font-montserrat text-zinc-300 leading-relaxed">
               <strong className="text-pink font-mono block mb-0.5 text-[10px] uppercase">DAMAGE VERIFICATION CLAIMS:</strong>
-              Send uncut unboxing video within 48 hours to WhatsApp for immediate priority replacement.
+              Send an unboxing video within 48 hours to WhatsApp for prompt assistance.
             </div>
           </div>
 
           <div className="pt-4 mt-6 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-zinc-400">
-            <span>SECURITY LEVEL:</span>
-            <span className="text-pink font-semibold">DIRECT ATELIER ENCRYPTED</span>
+            <span>SUPPORT STATUS:</span>
+            <span className="text-pink font-semibold">DIRECT VERIFIED SUPPORT</span>
           </div>
         </div>
       </div>
@@ -265,13 +265,13 @@ export function ShippingPackagingReturns() {
       <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/15 mb-3 text-zinc-400 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-          <span>CLIENT LOGISTICS // GLOBAL COURIER</span>
+          <span>SHIPPING & PACKAGING • GLOBAL COURIER</span>
         </div>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light font-mono tracking-[0.2em] text-white uppercase mb-3 leading-tight">
           SHIPPING, PACKAGING & <span className="text-zinc-400 font-light">RETURNS</span>
         </h2>
         <p className="text-xs sm:text-sm text-zinc-400 font-montserrat max-w-xl">
-          Standard logistics, bespoke presentation packaging, and damage verification protocols.
+          Reliable shipping, custom luxury packaging, and clear return policies.
         </p>
       </div>
 

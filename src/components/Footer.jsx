@@ -43,7 +43,7 @@ export default function Footer({ onScrollToSection }) {
             </p>
 
             <div className="text-xs font-mono text-silver/50 text-left">
-              Registered Atelier: {BRAND_INFO.registeredAddress}
+              Registered Studio: {BRAND_INFO.registeredAddress}
             </div>
           </div>
 
@@ -63,7 +63,7 @@ export default function Footer({ onScrollToSection }) {
               AVZ Museum & Vault
             </button>
             <button onClick={() => handleNav('custom')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Custom Commissions
+              Custom Orders
             </button>
             <button onClick={() => handleNav('about')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
               About & Dhristroyer
