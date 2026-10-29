@@ -12,7 +12,8 @@ import {
   Moon,
   ChevronDown,
   Check,
-  Globe
+  Globe,
+  User
 } from 'lucide-react';
 import { ASSET_MANIFEST, CURRENCIES } from '../data/brandData';
 import { playSound, toggleSound } from '../utils/audio';
@@ -29,7 +30,9 @@ export default function Navbar({
   onOpenWishlist,
   onOpenTrackingModal,
   theme = 'dark',
-  onToggleTheme
+  onToggleTheme,
+  user,
+  onOpenAuthModal
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
@@ -121,11 +124,11 @@ export default function Navbar({
             className="flex items-center gap-2.5 cursor-pointer group shrink-0 focus:outline-none"
             aria-label="AVZ Home"
           >
-            <div className="w-5 h-5 flex items-center justify-center">
+            <div className="w-6 h-6 flex items-center justify-center">
               <img
                 src={ASSET_MANIFEST.logo}
                 alt="AVZ"
-                className="w-full h-full object-contain filter brightness-110 group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-contain avz-logo-highest-brightness group-hover:scale-110 transition-transform duration-300"
               />
             </div>
             <span className="font-mono text-xs font-semibold tracking-[0.25em] text-white uppercase group-hover:text-pink-300 transition-colors">
@@ -165,6 +168,38 @@ export default function Navbar({
               className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <Search className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Account / Sign In / Guest Pass */}
+            <button
+              onClick={() => {
+                playSound('snap');
+                onOpenAuthModal?.();
+              }}
+              aria-label={
+                user
+                  ? user.isGuest
+                    ? 'Guest Client (Active)'
+                    : `${user.name} Account`
+                  : 'Sign In or Explore as Guest'
+              }
+              title={
+                user
+                  ? user.isGuest
+                    ? 'VIP Guest Pass (Active)'
+                    : `${user.name} (Signed In)`
+                  : 'Sign In / Explore as Guest'
+              }
+              className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
+                user
+                  ? 'text-pink bg-pink/20 border border-pink/40 shadow-[0_0_10px_rgba(244,194,194,0.3)]'
+                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              {user && (
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#be185d] ring-2 ring-black" />
+              )}
             </button>
 
             {/* Wishlist */}
@@ -307,6 +342,51 @@ export default function Navbar({
       {/* Mobile Editorial Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 pt-20 md:hidden animate-fade-in select-none overflow-y-auto">
+          {/* Mobile VIP Guest / Account Status Bar */}
+          <div className="mb-4 pb-3 border-b border-white/10 text-left">
+            <button
+              type="button"
+              onClick={() => {
+                playSound('snap');
+                setMobileMenuOpen(false);
+                onOpenAuthModal?.();
+              }}
+              className="w-full flex items-center justify-between p-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/12 transition-all cursor-pointer text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                    user
+                      ? 'bg-pink/20 text-pink border border-pink/40'
+                      : 'bg-white/10 text-zinc-300'
+                  }`}
+                >
+                  <User className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs font-bold text-white uppercase">
+                      {user ? (user.isGuest ? 'Guest Client' : user.name) : 'Client Access'}
+                    </span>
+                    {user && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    )}
+                  </div>
+                  <span className="font-mono text-[9px] text-pink tracking-wider uppercase block">
+                    {user
+                      ? user.isGuest
+                        ? 'VIP Guest Pass Active'
+                        : 'Signed In Member'
+                      : 'Sign In / Explore as Guest'}
+                  </span>
+                </div>
+              </div>
+              <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest border border-white/15 px-2.5 py-1 rounded-lg">
+                {user ? 'Manage' : 'Open'}
+              </span>
+            </button>
+          </div>
+
           <nav className="flex flex-col gap-5 text-left">
             {navItems.map((item, idx) => (
               <button

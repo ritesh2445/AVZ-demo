@@ -17,6 +17,7 @@ import SearchModal from './components/SearchModal';
 import SquadBuyModal from './components/SquadBuyModal';
 import WishlistDrawer from './components/WishlistDrawer';
 import OrderTrackingModal from './components/OrderTrackingModal';
+import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
 import { playSound } from './utils/audio';
@@ -71,6 +72,31 @@ export default function App() {
       return 'dark';
     }
   });
+
+  // 10. Client Auth & Guest Explorer state with persistence
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('avz_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const handleLogin = (userData) => {
+    setCurrentUser(userData);
+    try {
+      localStorage.setItem('avz_user', JSON.stringify(userData));
+    } catch (e) {}
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('avz_user');
+    } catch (e) {}
+  };
 
   useEffect(() => {
     if (theme === 'light') {
@@ -235,6 +261,8 @@ export default function App() {
         onOpenTrackingModal={() => setTrackingModalOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
+        user={currentUser}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
       />
 
       {/* Single Continuous Page Scroll Pipeline */}
@@ -336,6 +364,7 @@ export default function App() {
         }}
         squadDiscount={squadDiscount}
         onOpenSquadModal={handleOpenSquadModal}
+        currentUser={currentUser}
       />
 
       <WishlistDrawer
@@ -371,6 +400,14 @@ export default function App() {
           }
         }}
         currency={currency}
+      />
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        user={currentUser}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
       />
 
       <ImageTunnel

@@ -28,7 +28,8 @@ export default function CartDrawer({
   currency = 'INR',
   onCheckoutComplete,
   squadDiscount = null, // { squadCode, discountPercent, memberCount }
-  onOpenSquadModal
+  onOpenSquadModal,
+  currentUser = null
 }) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -48,6 +49,18 @@ export default function CartDrawer({
     paymentMethod: 'UPI / Instant QR Code'
   });
   const [orderComplete, setOrderComplete] = useState(false);
+
+  // Auto-prefill if user is logged in
+  useEffect(() => {
+    if (currentUser && isOpen) {
+      setCheckoutData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || (currentUser.isGuest ? '' : currentUser.name || ''),
+        email: prev.email || (currentUser.isGuest ? '' : currentUser.email || ''),
+        phone: prev.phone || currentUser.phone || ''
+      }));
+    }
+  }, [currentUser, isOpen]);
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e) => {

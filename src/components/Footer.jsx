@@ -27,7 +27,7 @@ export default function Footer({ onScrollToSection }) {
               <img
                 src={ASSET_MANIFEST.logo}
                 alt="AVZ Emblem"
-                className="w-10 h-10 object-contain group-hover:rotate-12 transition-transform"
+                className="w-11 h-11 object-contain avz-logo-highest-brightness group-hover:rotate-12 transition-transform duration-300"
               />
               <span className="font-mono font-medium text-lg text-white tracking-[0.2em] uppercase group-hover:text-pink transition-colors">
                 AVZ VAGANZA
