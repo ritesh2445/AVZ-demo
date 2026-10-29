@@ -2072,3 +2072,72 @@ section,
   overscroll-behavior-x: auto !important;
   overscroll-behavior-y: auto !important;
 }
+
+
+/* =========================================================================
+   ARCHIVE MUSEUM EXHIBITION PAVILION (Light Mode Styling)
+   ========================================================================= */
+html.light-theme #museum {
+  background-color: #faf8fd !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+}
+
+html.light-theme #museum [class*="from-[#120317]"],
+html.light-theme #museum [class*="from-[#110216]"] {
+  background: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.28) !important;
+  box-shadow: 0 20px 45px -5px rgba(168, 85, 247, 0.12) !important;
+}
+
+html.light-theme #museum h2,
+html.light-theme #museum h3 {
+  color: #09090b !important;
+  font-weight: 800 !important;
+}
+
+html.light-theme #museum h2 span,
+html.light-theme #museum h3 span {
+  color: #7e22ce !important;
+}
+
+html.light-theme #museum p {
+  color: #27272a !important;
+}
+
+html.light-theme #museum [class*="bg-black/"] {
+  background-color: #f7f3fb !important;
+  border-color: rgba(168, 85, 247, 0.22) !important;
+  color: #18181b !important;
+}
+
+html.light-theme #museum [class*="bg-black/"] span.text-white {
+  color: #09090b !important;
+}
+
+html.light-theme #museum [class*="bg-black/"] span.text-zinc-200,
+html.light-theme #museum [class*="bg-black/"] span.text-zinc-300 {
+  color: #18181b !important;
+}
+
+html.light-theme #museum [class*="bg-black/"] p {
+  color: #18181b !important;
+}
+
+html.light-theme #museum [class*="bg-white/5"] {
+  background-color: #f3e8ff !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+  color: #7e22ce !important;
+}
+
+html.light-theme #museum button.bg-white {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+html.light-theme #museum button.bg-white svg {
+  color: #ffffff !important;
+}
+
+html.light-theme #museum button.bg-white:hover {
+  background-color: #be185d !important;
+}
