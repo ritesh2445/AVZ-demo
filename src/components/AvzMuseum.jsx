@@ -144,7 +144,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
       >
         {/* Left: Dramatic High-Fashion Specimen Frame (7 Cols) */}
         <div className="md:col-span-7 flex justify-center">
-          <div className="relative w-full max-w-[460px] md:max-w-none h-[420px] sm:h-[500px] lg:h-[580px] rounded-3xl overflow-hidden border border-white/15 bg-black/90 shadow-[0_25px_60px_rgba(0,0,0,0.9)] flex items-center justify-center p-4 sm:p-6 group">
+          <div className="relative w-full max-w-[460px] md:max-w-none h-[420px] sm:h-[500px] lg:h-[580px] rounded-3xl overflow-hidden border border-white/15 bg-black/90 shadow-[0_25px_60px_rgba(0,0,0,0.9)] flex items-center justify-center p-4 sm:p-6 group image-overlay-text">
             {/* Specimen Photograph */}
             <img
               key={activeExhibit.id}
@@ -164,7 +164,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
 
             {/* Subtle Specimen Number */}
             <div className="absolute bottom-4 left-5 font-mono text-xs text-pink/80 tracking-widest uppercase font-semibold pointer-events-none">
-              PIECE // {activeExhibit.num}
+              PIECE {activeExhibit.num}
             </div>
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
               onClick={handleCommissionClick}
               className="w-full py-3.5 px-6 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.18em] uppercase transition-all shadow-xl active:scale-98 flex items-center justify-center gap-2 cursor-pointer group"
             >
-              <span>COMMISSION RECREATION</span>
+              <span>COMMISSION A RECREATION</span>
               <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
             <p className="text-[10px] font-mono text-zinc-400 text-center mt-2.5 uppercase tracking-wider">

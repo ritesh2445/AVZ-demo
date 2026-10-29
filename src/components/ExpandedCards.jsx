@@ -83,14 +83,14 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
 
               {/* Expanded State: Clean Minimalist Details */}
               <div
-                className={`absolute inset-0 p-6 lg:p-8 flex flex-col justify-between transition-opacity duration-500 ${
+                className={`absolute inset-0 p-6 lg:p-8 flex flex-col justify-between transition-opacity duration-500 image-overlay-text ${
                   isExpanded ? 'opacity-100 pointer-events-auto delay-100' : 'opacity-0 pointer-events-none'
                 }`}
               >
                 {/* Top: Understated Specimen Index & Price */}
                 <div className="flex items-center justify-between text-left">
                   <span className="text-[10px] font-mono tracking-[0.25em] text-pink font-semibold uppercase">
-                    SPECIMEN 0{idx + 1}
+                    ARCHIVE 0{idx + 1}
                   </span>
                   <span className="text-xs lg:text-sm font-mono font-bold text-white tracking-wider px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15">
                     {item.price ? formatPrice(item.price, currency) : item.year || 'BESPOKE'}
@@ -114,7 +114,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
                     }}
                     className="px-5 py-2.5 rounded-full border border-white/20 bg-white/10 hover:bg-white text-white hover:text-black text-xs font-mono tracking-widest uppercase transition-all flex items-center gap-2 cursor-pointer shadow-lg active:scale-95"
                   >
-                    <span>EXPLORE SPECIMEN</span>
+                    <span>VIEW ARCHIVE PIECE</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -150,7 +150,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
             {/* Top Bar */}
             <div className="relative z-10 flex items-center justify-between text-left">
               <span className="text-[10px] font-mono tracking-[0.2em] text-pink font-semibold uppercase">
-                SPECIMEN 0{idx + 1}
+                ARCHIVE 0{idx + 1}
               </span>
               <span className="text-xs font-mono font-bold text-white tracking-wider px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15">
                 {item.price ? formatPrice(item.price, currency) : item.year || 'BESPOKE'}
@@ -158,7 +158,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
             </div>
 
             {/* Bottom Content */}
-            <div className="relative z-10 text-left">
+            <div className="relative z-10 text-left image-overlay-text">
               <h3 className="text-base font-mono font-bold uppercase text-white mb-1.5 leading-snug line-clamp-1">
                 {item.name}
               </h3>
@@ -174,7 +174,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
                 }}
                 className="w-full py-2.5 px-4 rounded-full border border-white/20 bg-white/15 hover:bg-white text-white hover:text-black text-[11px] font-mono tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95"
               >
-                <span>EXPLORE SPECIMEN</span>
+                <span>VIEW ARCHIVE PIECE</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -190,7 +190,7 @@ function KeyArchiveCarousel({
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
                 {/* Minimalist Archive Badge */}
-                <div className="absolute top-3 left-3 z-10">
+                <div className="absolute top-3 left-3 z-10 image-overlay-text">
                   <span className="px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white text-[9px] font-mono tracking-widest uppercase font-medium">
                     {item.tag || 'ARCHIVE'}
                   </span>
@@ -322,7 +322,7 @@ function MobileCompactProductCard({
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
 
         {/* Provenance Badge */}
-        <div className="absolute top-2 left-2 flex flex-col gap-0.5 items-start">
+        <div className="absolute top-2 left-2 flex flex-col gap-0.5 items-start image-overlay-text">
           <span className="px-2 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-white/15 text-white text-[8px] font-mono tracking-wider uppercase font-semibold">
             {product.tag || '1 OF 1'}
           </span>
@@ -792,7 +792,7 @@ export default function ShopCatalogue({
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
                     {/* Provenance Tag Badges */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10">
+                    <div className="absolute top-3 left-3 flex flex-col gap-1 items-start z-10 image-overlay-text">
                       <span className="px-2.5 py-0.5 rounded-full bg-black/85 backdrop-blur-md border border-white/15 text-white text-[9px] font-mono tracking-widest uppercase shadow-md font-semibold">
                         {product.tag}
                       </span>
@@ -819,7 +819,7 @@ export default function ShopCatalogue({
                     )}
 
                     {/* Quick View Hover State */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] image-overlay-text">
                       <span className="px-4 py-2 rounded-full bg-black/85 border border-white/25 text-white text-xs font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         VIEW DETAILS ↗
                       </span>

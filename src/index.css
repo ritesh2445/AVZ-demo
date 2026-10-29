@@ -2170,3 +2170,108 @@ html.light-theme #museum button.bg-white svg {
 html.light-theme #museum button.bg-white:hover {
   background-color: #be185d !important;
 }
+
+
+/* =========================================================================
+   PROTECTED DARK IMAGE OVERLAYS & PHOTO CAPTIONS (DUAL THEME MANDATE)
+   Any text or badge that sits on top of photographs or dark specimen frames
+   MUST ALWAYS BE CRISP WHITE (#ffffff) OR LIGHT (#f4f4f5), NEVER BLACK!
+   ========================================================================= */
+html.light-theme [class*="aspect-"] span,
+html.light-theme [class*="aspect-"] p,
+html.light-theme [class*="aspect-"] div,
+html.light-theme [class*="aspect-"] h3,
+html.light-theme [class*="aspect-"] h4,
+html.light-theme #vault article span,
+html.light-theme #vault article h3,
+html.light-theme #vault article p,
+html.light-theme #lookbook .tunnel-card h3,
+html.light-theme #lookbook .tunnel-card p,
+html.light-theme #lookbook .tunnel-card span,
+html.light-theme #card-about-mother .relative.my-4 *,
+html.light-theme #museum [class*="max-w-[460px]"] *,
+html.light-theme #museum [class*="h-[420px]"] *,
+html.light-theme [class*="bg-black/85"] *,
+html.light-theme [class*="bg-black/80"] *,
+html.light-theme [class*="bg-black/75"] *,
+html.light-theme [class*="bg-black/70"] *,
+html.light-theme [class*="bg-black/60"] span.text-white,
+html.light-theme .image-overlay-text,
+html.light-theme .image-overlay-text *,
+html[data-theme="light"] [class*="aspect-"] span,
+html[data-theme="light"] [class*="aspect-"] p,
+html[data-theme="light"] [class*="aspect-"] div,
+html[data-theme="light"] [class*="aspect-"] h3,
+html[data-theme="light"] [class*="aspect-"] h4,
+html[data-theme="light"] #vault article span,
+html[data-theme="light"] #vault article h3,
+html[data-theme="light"] #vault article p,
+html[data-theme="light"] #lookbook .tunnel-card h3,
+html[data-theme="light"] #lookbook .tunnel-card p,
+html[data-theme="light"] #lookbook .tunnel-card span,
+html[data-theme="light"] #card-about-mother .relative.my-4 *,
+html[data-theme="light"] #museum [class*="max-w-[460px]"] *,
+html[data-theme="light"] #museum [class*="h-[420px]"] *,
+html[data-theme="light"] [class*="bg-black/85"] *,
+html[data-theme="light"] [class*="bg-black/80"] *,
+html[data-theme="light"] [class*="bg-black/75"] *,
+html[data-theme="light"] [class*="bg-black/70"] *,
+html[data-theme="light"] [class*="bg-black/60"] span.text-white,
+html[data-theme="light"] .image-overlay-text,
+html[data-theme="light"] .image-overlay-text * {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75) !important;
+}
+
+html.light-theme [class*="aspect-"] .text-pink,
+html.light-theme [class*="aspect-"] [class*="text-pink/"],
+html.light-theme #vault .text-pink,
+html.light-theme #lookbook .tunnel-card .text-pink,
+html.light-theme #card-about-mother .relative.my-4 .text-pink,
+html.light-theme #museum [class*="h-[420px]"] .text-pink,
+html.light-theme #museum [class*="h-[420px]"] [class*="text-pink/"],
+html[data-theme="light"] [class*="aspect-"] .text-pink,
+html[data-theme="light"] [class*="aspect-"] [class*="text-pink/"],
+html[data-theme="light"] #vault .text-pink,
+html[data-theme="light"] #lookbook .tunnel-card .text-pink,
+html[data-theme="light"] #card-about-mother .relative.my-4 .text-pink,
+html[data-theme="light"] #museum [class*="h-[420px]"] .text-pink,
+html[data-theme="light"] #museum [class*="h-[420px]"] [class*="text-pink/"] {
+  color: #f472b6 !important;
+}
+
+html.light-theme [class*="aspect-"] .text-zinc-300,
+html.light-theme [class*="aspect-"] .text-zinc-400,
+html.light-theme #vault .text-zinc-300,
+html.light-theme #vault .text-zinc-400,
+html.light-theme #lookbook .tunnel-card p,
+html.light-theme #lookbook .tunnel-card .text-silver,
+html.light-theme #lookbook .tunnel-card [class*="text-silver/"],
+html.light-theme #card-about-mother .relative.my-4 p,
+html.light-theme #card-about-mother .relative.my-4 .text-zinc-300,
+html.light-theme #museum [class*="h-[420px]"] .text-zinc-400,
+html[data-theme="light"] [class*="aspect-"] .text-zinc-300,
+html[data-theme="light"] [class*="aspect-"] .text-zinc-400,
+html[data-theme="light"] #vault .text-zinc-300,
+html[data-theme="light"] #vault .text-zinc-400,
+html[data-theme="light"] #lookbook .tunnel-card p,
+html[data-theme="light"] #lookbook .tunnel-card .text-silver,
+html[data-theme="light"] #lookbook .tunnel-card [class*="text-silver/"],
+html[data-theme="light"] #card-about-mother .relative.my-4 p,
+html[data-theme="light"] #card-about-mother .relative.my-4 .text-zinc-300,
+html[data-theme="light"] #museum [class*="h-[420px]"] .text-zinc-400 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.light-theme #vault button,
+html[data-theme="light"] #vault button {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+html.light-theme #vault button:hover,
+html[data-theme="light"] #vault button:hover {
+  background-color: #ffffff !important;
+  color: #09090b !important;
+}

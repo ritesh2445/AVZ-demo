@@ -3,42 +3,42 @@ import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-// MODERN PROFESSIONAL EDITORIAL COPY
+// HUMAN, GROUNDED EDITORIAL COPY
 const COPY = {
   aboutMother: {
     heading: 'DHRISNI (DHRISTROYER)',
     subheading: 'FOUNDER & CREATIVE DIRECTOR • THE MOTHER OF AVZ'
   },
   professionalRoots: {
-    heading: 'PROFESSIONAL ROOTS',
+    heading: 'ORIGINS & ROOTS',
     paragraphs: [
-      'Growing up between Shillong and Guwahati, Dhrisni began engineering her digital presence at sixteen, establishing an early authority in independent style and visual storytelling across social platforms.',
-      'At eighteen, she relocated to Mumbai, stepping directly into high-fashion modeling and commercial production while securing prominent roles in national television, reality broadcasts, and feature film.',
-      'Throughout her evolution across fashion, acting, and digital media, she has remained fiercely protective of her singular artistic autonomy—consistently innovating ahead of mainstream industry conventions.'
+      'Growing up between Shillong and Guwahati, Dhrisni started sharing her style online at sixteen, building an authentic following through raw, unfiltered fashion experiments.',
+      'At eighteen, she moved to Mumbai, working as a model and actor across television, reality shows, and films, while continuously honing her hands-on design craft.',
+      'Through all of it, she refused to follow mass-market trends. Her focus stayed true: building tangible, wearable art with real texture and human feeling.'
     ]
   },
   howBorn: {
     heading: 'HOW VAGANZA WAS BORN',
     paragraphs: [
-      'AVZ Vaganza was founded out of deliberate aesthetic rebellion against the predictable monotony of mass fashion.',
-      'Dhrisni recognized a profound creative void where subcultural attitude, industrial cyberpunk grit, and genuine couture technical mastery could collide. She engineered the label as an uncompromising sanctuary for bespoke wearable art.',
-      'Every garment is painstakingly hand-sculpted in our Guwahati studio using raw industrial hardware, motherboards, cone spikes, and reclaimed textiles—ensuring every piece possesses an unmistakable soul and physical presence.'
+      'AVZ Vaganza started out of pure personal freedom. Growing up in a household with strict rules on clothing, Dhrisni found her voice by taking scissors to her own clothes and rebuilding them.',
+      'What began as DIY tailoring quickly turned into a movement. She wanted clothes with weight, texture, and attitude—pieces you cannot find on a standard clothing rack.',
+      'Today, every piece is sculpted by hand in our Guwahati studio. We cut, wire, and assemble each garment individually from salvaged electronics, raw hardware, and reclaimed fabrics.'
     ]
   },
   sustainability: {
-    heading: 'SUSTAINABILITY CORE',
+    heading: 'TRUE SUSTAINABILITY',
     paragraphs: [
-      'At AVZ Vaganza, sustainability is not an afterthought or marketing slogan—it is the operational core of our studio practice.',
-      'Rather than contributing to fast-fashion landfills, we methodically deconstruct industrial castoffs, obsolete electronics, and deadstock textiles, transforming them into wearable high-fashion armor.',
-      'We demonstrate that modern luxury does not stem from automated factory output, but from the deliberate human artistry of ruthless upcycling and second-life material innovation.'
+      'We do not treat sustainability as a marketing catchphrase. It is simply the way we work every single day.',
+      'Instead of consuming new factory textiles, we gather obsolete computer motherboards, mechanical keyboard keys, deadstock denim, and industrial hardware, giving them a bold second life.',
+      'To us, modern luxury is not an automated assembly line. It is the time, intention, and human hands behind every stitch and welded ring.'
     ]
   },
   aesthetic: {
-    heading: 'AESTHETIC INSPIRATION',
+    heading: 'THE AESTHETIC',
     paragraphs: [
-      'AVZ Vaganza represents an autonomous aesthetic realm where subcultural identity and dark cyber-grunge fantasy intersect.',
-      'Drawing visceral inspiration from industrial punk, rave countercultures, Y2K retrofuturism, and avant-garde streetwear, the label creates silhouettes designed to command space and project defensive confidence.',
-      'Our studio doors welcome all who reject cookie-cutter minimalism in favor of bold texture, tactile hardware, and unapologetic self-sovereignty.'
+      'AVZ Vaganza is rooted in cyber-grunge, Y2K energy, industrial punk, and avant-garde streetwear.',
+      'We reject cookie-cutter minimalism. We love tactile hardware, fluid chainmail, sharp spikes, and silhouettes that make you feel instantly confident and protected.',
+      'Our studio is for anyone who values original craftsmanship, real human effort, and the thrill of wearing something one-of-a-kind.'
     ]
   }
 };
@@ -377,11 +377,11 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
 
-            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-pink/30 text-[10px] font-mono text-pink font-semibold">
+            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-pink/30 text-[10px] font-mono text-pink font-semibold image-overlay-text">
               COUTURE SCULPTOR
             </div>
 
-            <div className="absolute bottom-3 left-4 right-4">
+            <div className="absolute bottom-3 left-4 right-4 image-overlay-text">
               <p className="font-serif italic text-xs sm:text-sm text-pink-100/90 leading-relaxed drop-shadow-sm mb-1.5">
                 "Wearable art is armor for the autonomous spirit."
               </p>

@@ -150,20 +150,20 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         <div className="text-left">
           <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
-            <span>LOOKBOOK ARCHIVE • SPATIAL RUNWAY</span>
+            <span>LOOKBOOK ARCHIVE • EDITORIAL CAMPAIGNS</span>
           </div>
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight text-left">
             LOOKBOOK <span className="text-zinc-500 font-light">ARCHIVE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-2 sm:mt-3 leading-relaxed text-left">
-            Interactive spatial runway presentation. Navigate horizontally through editorial looks and bespoke studio silhouettes.
+            Editorial campaigns and handcrafted archival silhouettes, styled and directed by Dhrisni.
           </p>
         </div>
 
         {/* Clean Swipeable Navigation Controls */}
         <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
           <div className="section-badge-pill hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-mono">
-            <span>NAVIGATE RUNWAY</span>
+            <span>EXPLORE LOOKS</span>
           </div>
 
           <button
@@ -285,9 +285,9 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85" />
 
                   {/* Top Badges */}
-                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20">
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20 image-overlay-text">
                     <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase">
-                      <span>{item.code.split('•')[0]?.trim() || item.code.split('//')[0]?.trim() || `LOOK 00${idx + 1}`}</span>
+                      <span>{item.code.split('•')[0]?.trim() || `LOOK 00${idx + 1}`}</span>
                     </span>
 
                     <button
@@ -303,7 +303,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   </div>
 
                   {/* Bottom Editorial Caption */}
-                  <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20">
+                  <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20 image-overlay-text">
                     <span className="text-[10px] font-mono text-silver/80 font-bold tracking-widest uppercase mb-1 flex items-center gap-1">
                       <Flame className="w-3 h-3 text-silver/80" />
                       <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
