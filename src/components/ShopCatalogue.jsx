@@ -93,6 +93,9 @@ function KeyArchiveCarousel({
   };
 
   useEffect(() => {
+    if (trackRef.current) {
+      trackRef.current.scrollLeft = 0;
+    }
     updateScrollState();
     window.addEventListener('resize', updateScrollState);
     return () => window.removeEventListener('resize', updateScrollState);
@@ -165,7 +168,7 @@ function KeyArchiveCarousel({
       <div
         ref={trackRef}
         onScroll={updateScrollState}
-        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-4 px-[6vw] sm:px-[calc(50vw-320px)] lg:px-[calc(50vw-480px)] justify-start lg:justify-center items-stretch"
+        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-4 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
       >
         {items.map((item) => {
           const isWish = wishlistIds.includes(item.id);
@@ -177,7 +180,7 @@ function KeyArchiveCarousel({
                 playSound('metal');
                 onSelectProduct(item);
               }}
-              className="snap-center shrink-0 w-[260px] sm:w-[290px] lg:w-[310px] rounded-3xl border border-white/10 hover:border-pink/40 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden flex flex-col justify-between group mobile-grunge-card text-left"
+              className="snap-start shrink-0 w-[260px] sm:w-[290px] lg:w-[310px] rounded-3xl border border-white/10 hover:border-pink/40 bg-[#0d0d12] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl overflow-hidden flex flex-col justify-between group mobile-grunge-card text-left"
             >
               {/* Product Visual */}
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">

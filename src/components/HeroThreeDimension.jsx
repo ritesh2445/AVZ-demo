@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import {
   Play,
   Pause,
@@ -12,7 +11,6 @@ import CinemaReelModal from './CinemaReelModal';
 import { playSound } from '../utils/audio';
 
 export default function HeroThreeDimension({ onExploreCatalogue }) {
-  const mountRef = useRef(null);
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
@@ -35,231 +33,11 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
     const checkMobile = () => {
       const isMob = window.innerWidth < 768;
       setIsMobileDevice(isMob);
-      if (isMob) setIsMuted(true); // Default to muted on mobile to satisfy strict browser autoplay policies
+      if (isMob) setIsMuted(true); // Muted by default on mobile for autoplay
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // WebGL 3D Scene Initialization
-  useEffect(() => {
-    const container = mountRef.current;
-    if (!container) return;
-
-    let width = container.clientWidth || window.innerWidth;
-    let height = container.clientHeight || window.innerHeight;
-    const isMobile = width < 768;
-
-    // 1. Scene, Camera, WebGL Renderer (Ultra-optimized for mobile 60-120fps)
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.z = isMobile ? 16 : 13;
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: !isMobile,
-      powerPreference: 'high-performance',
-      precision: isMobile ? 'mediump' : 'highp'
-    });
-
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.5));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
-
-    while (container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-    container.appendChild(renderer.domElement);
-
-    // 2. Dynamic 3D Lights
-    const ambientLight = new THREE.AmbientLight(0x301934, 0.95);
-    scene.add(ambientLight);
-
-    const spotlight = new THREE.SpotLight(0xF4C2C2, 28, 40, Math.PI / 4, 0.35, 1.2);
-    spotlight.position.set(0, 2, 10);
-    scene.add(spotlight);
-
-    const lavenderPoint = new THREE.PointLight(0x9d4edd, 10, 25);
-    lavenderPoint.position.set(-6, -4, 4);
-    scene.add(lavenderPoint);
-
-    const deepViolet = new THREE.PointLight(0x7654b5, 14, 30);
-    deepViolet.position.set(6, 5, 2);
-    scene.add(deepViolet);
-
-    // 3. Central Kinetic Sculpture
-    const emblemGroup = new THREE.Group();
-    scene.add(emblemGroup);
-
-    const allMaterials = [];
-
-    const chromeMat = new THREE.MeshPhysicalMaterial({
-      color: 0xC0C0C0,
-      emissive: 0x240e2b,
-      metalness: 0.95,
-      roughness: 0.1,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.06,
-      reflectivity: 1.0,
-      transparent: true,
-      opacity: 1.0
-    });
-    allMaterials.push(chromeMat);
-
-    // Outer Gyro Ring
-    const ringGeom = new THREE.TorusGeometry(3.6, 0.08, 16, isMobile ? 24 : 64);
-    const ringMesh = new THREE.Mesh(ringGeom, chromeMat);
-    ringMesh.rotation.x = Math.PI / 3;
-    emblemGroup.add(ringMesh);
-
-    // Inner Gyro Ring
-    const innerRingGeom = new THREE.TorusGeometry(2.5, 0.05, 16, isMobile ? 20 : 48);
-    const innerRingMesh = new THREE.Mesh(innerRingGeom, chromeMat);
-    innerRingMesh.rotation.y = Math.PI / 4;
-    emblemGroup.add(innerRingMesh);
-
-    // Third Gyro Ring
-    const thirdRingGeom = new THREE.TorusGeometry(4.4, 0.04, 16, isMobile ? 24 : 64);
-    const thirdRingMesh = new THREE.Mesh(thirdRingGeom, chromeMat);
-    thirdRingMesh.rotation.z = Math.PI / 6;
-    emblemGroup.add(thirdRingMesh);
-
-    // Core Crystal Specimen
-    const coreGeom = new THREE.OctahedronGeometry(1.2, 0);
-    const coreMat = new THREE.MeshPhysicalMaterial({
-      color: 0xF4C2C2,
-      emissive: 0x301934,
-      metalness: 0.9,
-      roughness: 0.15,
-      clearcoat: 1.0,
-      transparent: true,
-      opacity: 1.0
-    });
-    allMaterials.push(coreMat);
-
-    const coreMesh = new THREE.Mesh(coreGeom, coreMat);
-    emblemGroup.add(coreMesh);
-
-    // Wireframe Exo-Sphere
-    const wireGeom = new THREE.IcosahedronGeometry(1.8, 1);
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0xc084fc,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.25
-    });
-    allMaterials.push(wireMat);
-
-    const wireMesh = new THREE.Mesh(wireGeom, wireMat);
-    emblemGroup.add(wireMesh);
-
-    let targetMouseX = 0;
-    let targetMouseY = 0;
-    let currentMouseX = 0;
-    let currentMouseY = 0;
-
-    const handlePointerMove = (e) => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const x = (e.clientX / w) * 2 - 1;
-      const y = -((e.clientY / h) * 2 - 1);
-      targetMouseX = Math.max(-1, Math.min(1, x));
-      targetMouseY = Math.max(-1, Math.min(1, y));
-    };
-
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-
-    // Render loop
-    let animId = null;
-    let isVisible = true;
-    const clock = new THREE.Clock();
-
-    const animate = () => {
-      if (!isVisible) return;
-      animId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
-
-      // Smooth pointer interpolation
-      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
-
-      spotlight.position.x = currentMouseX * 8;
-      spotlight.position.y = currentMouseY * 6;
-      spotlight.target.position.set(currentMouseX * 3, currentMouseY * 2, 0);
-      spotlight.target.updateMatrixWorld();
-
-      camera.position.x = currentMouseX * 1.2;
-      camera.position.y = currentMouseY * 0.9;
-      camera.lookAt(0, 0, 0);
-
-      // Emblem kinetic animation
-      ringMesh.rotation.z = elapsedTime * 0.12;
-      ringMesh.rotation.y = elapsedTime * 0.08;
-      innerRingMesh.rotation.x = -elapsedTime * 0.15;
-      innerRingMesh.rotation.z = elapsedTime * 0.09;
-      thirdRingMesh.rotation.y = -elapsedTime * 0.06;
-      coreMesh.rotation.y = elapsedTime * 0.2;
-      coreMesh.rotation.x = elapsedTime * 0.14;
-      wireMesh.rotation.x = -elapsedTime * 0.1;
-      wireMesh.rotation.y = -elapsedTime * 0.12;
-
-      renderer.render(scene, camera);
-    };
-
-    // IntersectionObserver to pause rendering when scrolled past hero
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const wasVisible = isVisible;
-        isVisible = entry.isIntersecting;
-        if (isVisible && !wasVisible) {
-          clock.start();
-          if (!animId) animId = requestAnimationFrame(animate);
-        } else if (!isVisible && animId) {
-          cancelAnimationFrame(animId);
-          animId = null;
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    const handleResize = () => {
-      if (!container) return;
-      const newW = container.clientWidth || window.innerWidth;
-      const newH = container.clientHeight || window.innerHeight;
-      const isMob = newW < 768;
-      camera.aspect = newW / newH;
-      camera.position.z = isMob ? 16 : 13;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newW, newH);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMob ? 1.0 : 1.5));
-    };
-
-    window.addEventListener('resize', handleResize);
-    animId = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      window.removeEventListener('resize', handleResize);
-      if (observer) observer.disconnect();
-      if (animId) cancelAnimationFrame(animId);
-
-      allMaterials.forEach((m) => m.dispose());
-      ringGeom.dispose();
-      innerRingGeom.dispose();
-      thirdRingGeom.dispose();
-      coreGeom.dispose();
-      wireGeom.dispose();
-      renderer.dispose();
-      if (renderer.domElement && renderer.domElement.parentNode) {
-        renderer.domElement.parentNode.removeChild(renderer.domElement);
-      }
-    };
   }, []);
 
   // Autoplay handler
@@ -367,7 +145,7 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         preload="auto"
       />
 
-      {/* 1. Native Master Video Reel */}
+      {/* 1. Native Master Video Reel: Full-bleed, unobstructed, high-fashion cinema */}
       <video
         ref={videoRef}
         key={videoSource}
@@ -402,13 +180,7 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         <source src={videoSource} type="video/mp4" />
       </video>
 
-      {/* 2. 3D WebGL Three.js Kinetic Emblem Layer */}
-      <div
-        ref={mountRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-[2]"
-      />
-
-      {/* 3. Video & Audio Controls HUD (Bottom-Left) */}
+      {/* 2. Video & Audio Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
         <button
           onClick={handleTogglePlay}
@@ -452,12 +224,12 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         </button>
       </div>
 
-      {/* 4. Minimalist Scroll Guide (Bottom-Center) */}
+      {/* 3. Minimalist Scroll Guide (Bottom-Center) */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
 
-      {/* 5. Dedicated Cinema Reel Modal */}
+      {/* 4. Dedicated Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}
