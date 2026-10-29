@@ -115,40 +115,46 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         />
       </div>
 
-      {/* 2. Video & Audio Controls HUD (Bottom-Left) */}
+      {/* 2. Video & Audio Controls HUD (Bottom-Left - Crisp Pure White Icons & Typography) */}
       <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
         {/* Play/Pause Button */}
         <button
           onClick={handleTogglePlay}
-          className="p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-zinc-300 hover:text-white"
+          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderColor: 'rgba(255, 255, 255, 0.2)'
+            borderColor: 'rgba(255, 255, 255, 0.4)',
+            color: '#ffffff'
           }}
           title={isPlaying ? 'Pause Audio' : 'Play Audio'}
         >
-          {isPlaying ? <Pause className="w-3.5 h-3.5 text-white" /> : <Play className="w-3.5 h-3.5 fill-current text-white" />}
+          {isPlaying ? (
+            <Pause className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+          ) : (
+            <Play className="w-3.5 h-3.5 fill-white" style={{ color: '#ffffff', fill: '#ffffff' }} />
+          )}
         </button>
 
-        {/* Sound Toggle Button (Always Bold and Visible in all states and themes) */}
+        {/* Sound Toggle Button (Crisp Pure White in all states and themes) */}
         <button
           onClick={handleToggleMute}
-          className="p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md flex items-center gap-1.5"
+          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md flex items-center gap-1.5"
           style={{
-            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.75)' : 'rgba(0, 0, 0, 0.88)',
-            borderColor: isMuted ? 'rgba(255, 255, 255, 0.25)' : '#ec4899',
-            boxShadow: isMuted ? 'none' : '0 0 16px rgba(236, 72, 153, 0.45)'
+            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.18)',
+            borderColor: isMuted ? 'rgba(255, 255, 255, 0.4)' : '#ffffff',
+            boxShadow: isMuted ? 'none' : '0 0 16px rgba(255, 255, 255, 0.5)',
+            color: '#ffffff'
           }}
           title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
         >
           {isMuted ? (
-            <VolumeX className="w-3.5 h-3.5 text-zinc-400" style={{ color: '#a1a1aa' }} />
+            <VolumeX className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
           ) : (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#ec4899' }} />
+              <Volume2 className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
               <span
                 className="text-[10px] font-mono tracking-wider font-bold hidden sm:inline"
-                style={{ color: '#ec4899' }}
+                style={{ color: '#ffffff' }}
               >
                 SOUND ON
               </span>
@@ -163,16 +169,17 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
             playSound('pip');
             setIsCinemaOpen(true);
           }}
-          className="inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-zinc-300 hover:text-white text-[10px] sm:text-xs font-mono"
+          className="hero-hud-btn inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-[10px] sm:text-xs font-mono"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderColor: 'rgba(255, 255, 255, 0.2)'
+            borderColor: 'rgba(255, 255, 255, 0.4)',
+            color: '#ffffff'
           }}
           title="Open Cinema Master Reel Modal"
         >
-          <Film className="w-3.5 h-3.5 text-zinc-400" />
-          <span className="hidden sm:inline">FULL CINEMA REEL</span>
-          <span className="sm:hidden">CINEMA</span>
+          <Film className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+          <span className="hidden sm:inline" style={{ color: '#ffffff' }}>FULL CINEMA REEL</span>
+          <span className="sm:hidden" style={{ color: '#ffffff' }}>CINEMA</span>
         </button>
       </div>
 

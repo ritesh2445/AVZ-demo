@@ -2286,3 +2286,12 @@ html.light-theme section#hero,
   background-color: #000000 !important;
   background: #000000 !important;
 }
+
+/* Hero media controls HUD: Always pure crisp white text, icons, and borders in all themes */
+#hero .hero-hud-btn,
+#hero .hero-hud-btn *,
+html.light-theme #hero .hero-hud-btn,
+html.light-theme #hero .hero-hud-btn * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
