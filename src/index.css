@@ -715,7 +715,7 @@ html.light-theme h3 span.text-zinc-500 {
 }
 
 /* Standard body text overrides (outside photo overlays) */
-html.light-theme .text-white:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *):not(.contact-action-btn-primary *) {
+html.light-theme .text-white:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *):not(.contact-action-btn-primary *):not(#hero *) {
   color: #09090b !important;
 }
 
@@ -2289,9 +2289,35 @@ html.light-theme section#hero,
 
 /* Hero media controls HUD: Always pure crisp white text, icons, and borders in all themes */
 #hero .hero-hud-btn,
+section#hero .hero-hud-btn {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
+}
+
+#hero .hero-hud-btn:hover,
+section#hero .hero-hud-btn:hover {
+  border-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.4) !important;
+}
+
+#hero .hero-hud-btn,
 #hero .hero-hud-btn *,
+#hero .hero-hud-btn svg,
+#hero .hero-hud-btn svg path,
+#hero .hero-hud-btn span,
+section#hero .hero-hud-btn,
+section#hero .hero-hud-btn *,
 html.light-theme #hero .hero-hud-btn,
-html.light-theme #hero .hero-hud-btn * {
+html.light-theme #hero .hero-hud-btn *,
+html.light-theme #hero .hero-hud-btn svg,
+html.light-theme #hero .hero-hud-btn svg path,
+html.light-theme #hero .hero-hud-btn span,
+html[data-theme="light"] #hero .hero-hud-btn,
+html[data-theme="light"] #hero .hero-hud-btn *,
+html[data-theme="light"] #hero .hero-hud-btn svg,
+html[data-theme="light"] #hero .hero-hud-btn svg path,
+html[data-theme="light"] #hero .hero-hud-btn span {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
