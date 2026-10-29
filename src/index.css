@@ -861,12 +861,13 @@ html.light-theme #lookbook .tunnel-card button.bg-white\/10 {
 }
 
 /* =========================================================================
-   AVZ MUSEUM IN LIGHT MODE
-   WebGL 3D Rotunda is a dark vitrine; controls on it stay luminous.
-   The Curatorial Plaque on the right adapts to crisp luxury white with sharp contrast.
+   AVZ MUSEUM IN LIGHT MODE - PRISTINE WHITE CONTEMPORARY GALLERY
    ========================================================================= */
-html.light-theme #museum {
-  background-color: transparent !important;
+html.light-theme #museum,
+html.light-theme section#museum {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #09090b !important;
 }
 
 html.light-theme #museum h2 {
@@ -877,28 +878,78 @@ html.light-theme #museum p.text-zinc-400 {
   color: #3f3f46 !important;
 }
 
-/* 3D Canvas Box: Dark Vitrine Viewport */
-html.light-theme .museum-dark-canvas .text-white,
-html.light-theme .museum-dark-canvas span,
+/* 3D Canvas Box: Pristine White Gallery Viewport */
+html.light-theme .museum-dark-canvas {
+  background-color: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.25) !important;
+  box-shadow: 0 20px 60px rgba(147, 51, 234, 0.12) !important;
+}
+
+html.light-theme .museum-dark-canvas .text-white {
+  color: #09090b !important;
+}
+
+html.light-theme .museum-dark-canvas span {
+  color: #09090b !important;
+}
+
+html.light-theme .museum-dark-canvas span.text-pink {
+  color: #be185d !important;
+}
+
 html.light-theme .museum-dark-canvas svg {
-  color: #ffffff !important;
+  color: #27272a !important;
 }
 
 html.light-theme .museum-dark-canvas .text-zinc-300 {
-  color: #d4d4d8 !important;
+  color: #52525b !important;
 }
 
 html.light-theme .museum-dark-canvas [class*="bg-black/"] {
-  background-color: rgba(0, 0, 0, 0.82) !important;
-  border-color: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(168, 85, 247, 0.3) !important;
+  color: #09090b !important;
+  box-shadow: 0 4px 20px rgba(147, 51, 234, 0.12) !important;
 }
 
 html.light-theme .museum-dark-canvas button.bg-white {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  border-color: #ffffff !important;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4) !important;
+  background-color: #be185d !important;
+  color: #ffffff !important;
+  border-color: #be185d !important;
+  box-shadow: 0 0 20px rgba(190, 24, 93, 0.35) !important;
+}
+
+html.light-theme .museum-dark-canvas button.bg-white * {
+  color: #ffffff !important;
+}
+
+/* Mobile cards in museum */
+html.light-theme #museum .mobile-grunge-card {
+  background: #ffffff !important;
+  border-color: rgba(168, 85, 247, 0.25) !important;
+  box-shadow: 0 20px 50px rgba(147, 51, 234, 0.14) !important;
+  color: #09090b !important;
+}
+
+html.light-theme #museum .mobile-grunge-card h3,
+html.light-theme #museum .mobile-grunge-card h4,
+html.light-theme #museum .mobile-grunge-card span {
+  color: #09090b !important;
+}
+
+html.light-theme #museum .mobile-grunge-card span.text-pink {
+  color: #be185d !important;
+}
+
+html.light-theme #museum .mobile-grunge-card span.text-zinc-400,
+html.light-theme #museum .mobile-grunge-card p.text-zinc-400 {
+  color: #52525b !important;
+}
+
+html.light-theme #museum .mobile-grunge-card [class*="bg-black/"] {
+  background-color: #f7f3fc !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+  color: #09090b !important;
 }
 
 /* Curatorial Plaque (Right Side) in Light Mode */
@@ -906,6 +957,7 @@ html.light-theme .museum-plaque {
   background-color: #ffffff !important;
   border-color: rgba(168, 85, 247, 0.2) !important;
   color: #09090b !important;
+  box-shadow: 0 20px 60px rgba(147, 51, 234, 0.1) !important;
 }
 
 html.light-theme .museum-plaque h3 {
@@ -931,12 +983,12 @@ html.light-theme .museum-plaque .craft-box span.text-white {
 }
 
 html.light-theme .museum-plaque .btn-commission {
-  background-color: #09090b !important;
+  background-color: #be185d !important;
   color: #ffffff !important;
 }
 
 html.light-theme .museum-plaque .btn-commission:hover {
-  background-color: #27272a !important;
+  background-color: #9d174d !important;
 }
 
 html.light-theme .museum-plaque .btn-commission * {
@@ -1379,5 +1431,126 @@ html.light-theme .auth-modal-card .bg-white\/5 {
 html.light-theme .auth-modal-card .bg-gradient-to-br {
   background: linear-gradient(135deg, rgba(247, 243, 252, 0.98), rgba(253, 230, 245, 0.8)) !important;
   border-color: rgba(190, 24, 93, 0.35) !important;
+}
+
+/* =========================================================================
+   LOADING EXPERIENCE NUMBER - ALWAYS PURE WHITE IN BOTH DARK & LIGHT MODES
+   ========================================================================= */
+#loading-experience .loading-counter-number,
+#loading-experience span[class*="font-spartan"],
+html.light-theme #loading-experience .loading-counter-number,
+html.light-theme #loading-experience span[class*="font-spartan"],
+html.light-theme .fixed.inset-0.z-\[99999\] .loading-counter-number,
+html.light-theme .fixed.inset-0.z-\[99999\] span[class*="font-spartan"] {
+  color: #ffffff !important;
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.85), 0 0 50px rgba(244, 114, 182, 0.5) !important;
+}
+
+/* Ensure curtains and background in loader stay deep cinematic black in light mode */
+html.light-theme #loading-experience > div[class*="bg-black"],
+html.light-theme .fixed.inset-0.z-\[99999\] > div[class*="bg-black"] {
+  background-color: #000000 !important;
+}
+
+/* =========================================================================
+   DIMENSIONAL APERTURE SECTION TRANSITIONS & ANIMATIONS
+   "Cool, non-boring" futuristic high-fashion scroll appearance
+   ========================================================================= */
+
+.section-scroll-reveal {
+  position: relative;
+  opacity: 0;
+  transform: perspective(1200px) rotateX(2deg) translateY(44px) scale(0.985);
+  filter: blur(8px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+  overflow: visible;
+}
+
+/* Hero and revealed sections */
+#hero.section-scroll-reveal,
+.section-scroll-reveal.is-visible {
+  opacity: 1;
+  transform: perspective(1200px) rotateX(0deg) translateY(0) scale(1);
+  filter: blur(0px);
+}
+
+/* Luminous Laser Scanline Beam across the top boundary of each revealed section */
+.section-scroll-reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, transparent, #f472b6, #c084fc, #ffffff, #f472b6, transparent);
+  box-shadow: 0 0 12px #f472b6, 0 0 25px rgba(192, 132, 252, 0.7);
+  opacity: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.section-scroll-reveal.is-visible::before {
+  animation: sectionLaserSweep 1.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes sectionLaserSweep {
+  0% {
+    left: 0%;
+    width: 0%;
+    opacity: 0;
+  }
+  20% {
+    width: 35%;
+    opacity: 1;
+  }
+  60% {
+    width: 55%;
+    opacity: 0.9;
+  }
+  100% {
+    left: 100%;
+    width: 0%;
+    opacity: 0;
+  }
+}
+
+/* Subtle atmospheric runway glow pulse when section appears */
+.section-scroll-reveal.is-visible::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 65%;
+  height: 120px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(244, 114, 182, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  animation: sectionAmbientPulse 4s ease-in-out infinite alternate;
+}
+
+html.light-theme .section-scroll-reveal.is-visible::after {
+  background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+}
+
+@keyframes sectionAmbientPulse {
+  0% { opacity: 0.25; transform: translateX(-50%) scale(0.95); }
+  100% { opacity: 0.8; transform: translateX(-50%) scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .section-scroll-reveal::before,
+  .section-scroll-reveal::after {
+    display: none !important;
+  }
 }
 

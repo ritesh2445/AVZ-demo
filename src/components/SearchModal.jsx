@@ -192,11 +192,10 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
                   playSound('pip');
                   setSelectedCategory(cat.id);
                 }}
-                className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase transition-all shrink-0 cursor-pointer ${
-                  isActive
+                className={`px-3 py-1 rounded-full text-[11px] font-mono tracking-wider uppercase transition-all shrink-0 cursor-pointer ${isActive
                     ? 'bg-pink text-black font-bold shadow-sm'
                     : 'bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/8'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>

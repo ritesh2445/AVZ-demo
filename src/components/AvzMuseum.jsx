@@ -25,7 +25,7 @@ function createRoundedRectShape(width, height, radius) {
   return shape;
 }
 
-export default function AvzMuseum({ onRequestCustomCommission }) {
+export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' }) {
   const mountRef = useRef(null);
   const sectionRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,11 +73,13 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
     const width = container.clientWidth || 800;
     const height = container.clientHeight || 560;
+    const isLight = theme === 'light';
+    const bgColor = isLight ? 0xffffff : 0x060608;
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x060608);
-    scene.fog = new THREE.FogExp2(0x060608, 0.024);
+    scene.background = new THREE.Color(bgColor);
+    scene.fog = new THREE.FogExp2(bgColor, isLight ? 0.012 : 0.024);
 
     // Camera calibrated for majestic gallery viewing with enlarged frames:
     // Plinth rests solidly on floor grid, collar gleams, and grand framed pieces float with ample breathing room
@@ -94,7 +96,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.3;
+      renderer.toneMappingExposure = isLight ? 1.15 : 1.3;
       container.appendChild(renderer.domElement);
     } catch (e) {
       console.warn("Museum WebGL not available", e);
@@ -102,38 +104,43 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     }
 
     // 2. Curatorial Gallery Lighting
-    const ambientLight = new THREE.AmbientLight(0x252535, 1.4);
+    const ambientLight = new THREE.AmbientLight(isLight ? 0xffffff : 0x252535, isLight ? 2.2 : 1.4);
     scene.add(ambientLight);
 
     // Warm museum spotlight focused on the front active pedestal
-    const spotlight = new THREE.SpotLight(0xF5EBE6, 32, 40, Math.PI / 4, 0.4, 1.2);
+    const spotlight = new THREE.SpotLight(isLight ? 0xfff0f5 : 0xF5EBE6, isLight ? 34 : 32, 40, Math.PI / 4, 0.4, 1.2);
     spotlight.position.set(0, 11, 12);
     spotlight.target.position.set(0, 2.35, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
     // Architectural rim lights for edge glow
-    const rimLeft = new THREE.PointLight(0xa06cd5, 5, 22);
+    const rimLeft = new THREE.PointLight(isLight ? 0x9333ea : 0xa06cd5, isLight ? 6 : 5, 22);
     rimLeft.position.set(-8, 3.5, 4);
     scene.add(rimLeft);
 
-    const rimRight = new THREE.PointLight(0xd4afb9, 5, 22);
+    const rimRight = new THREE.PointLight(isLight ? 0xdb2777 : 0xd4afb9, isLight ? 6 : 5, 22);
     rimRight.position.set(8, 3.5, 4);
     scene.add(rimRight);
 
-    // 3. Reflective Obsidian Floor Grid
+    // 3. Reflective Floor Grid
     const floorGeom = new THREE.PlaneGeometry(60, 60);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x08080a,
-      roughness: 0.35,
-      metalness: 0.8
+      color: isLight ? 0xf8f6fc : 0x08080a,
+      roughness: isLight ? 0.25 : 0.35,
+      metalness: isLight ? 0.3 : 0.8
     });
     const floor = new THREE.Mesh(floorGeom, floorMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -1.55;
     scene.add(floor);
 
-    const gridHelper = new THREE.GridHelper(50, 40, 0x33333f, 0x14141a);
+    const gridHelper = new THREE.GridHelper(
+      50,
+      40,
+      isLight ? 0xd8b4fe : 0x33333f,
+      isLight ? 0xf3e8ff : 0x14141a
+    );
     gridHelper.position.y = -1.54;
     scene.add(gridHelper);
 
@@ -148,10 +155,10 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     }
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
-      color: 0xDCDCDC,
+      color: isLight ? 0x9333ea : 0xDCDCDC,
       size: 0.04,
       transparent: true,
-      opacity: 0.35
+      opacity: isLight ? 0.45 : 0.35
     });
     const dust = new THREE.Points(dustGeom, dustMat);
     scene.add(dust);
@@ -168,17 +175,17 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
     // Shared materials
     const plinthMat = new THREE.MeshStandardMaterial({
-      color: 0x111116,
-      roughness: 0.4,
-      metalness: 0.8
+      color: isLight ? 0xede4f7 : 0x111116,
+      roughness: 0.35,
+      metalness: isLight ? 0.5 : 0.8
     });
     const frameChassisMat = new THREE.MeshStandardMaterial({
-      color: 0x16161b,
+      color: isLight ? 0x27272a : 0x16161b,
       metalness: 0.9,
       roughness: 0.22
     });
     const frameTrimMat = new THREE.MeshStandardMaterial({
-      color: 0xC5A880,
+      color: isLight ? 0xbe185d : 0xC5A880,
       metalness: 0.95,
       roughness: 0.15
     });
@@ -438,7 +445,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         renderer.dispose();
       }
     };
-  }, [viewMode]);
+  }, [viewMode, theme]);
 
   // Rotunda Navigation Handlers
   const selectPedestal = (index) => {
@@ -513,7 +520,11 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     <section
       id="museum"
       ref={sectionRef}
-      className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-[#060608] select-none border-t border-white/8 text-left transition-colors duration-300"
+      className={`w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 select-none border-t text-left transition-colors duration-300 ${
+        theme === 'light'
+          ? 'bg-white border-purple-200/50 text-zinc-900'
+          : 'bg-[#060608] border-white/8 text-silver'
+      }`}
     >
       {/* Museum Editorial Header */}
       <div className="mb-6 sm:mb-8 pb-4 border-b border-white/8 flex flex-col md:flex-row md:items-end justify-between gap-4">

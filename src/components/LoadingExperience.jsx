@@ -268,7 +268,7 @@ export default function LoadingExperience({ onComplete }) {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
+    <div id="loading-experience" className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
       {/* ========================================================
           CINEMATIC APERTURE / LETTERBOX SHUTTER SYSTEM
           Top and bottom cinema curtains split vertically on exit
@@ -332,13 +332,17 @@ export default function LoadingExperience({ onComplete }) {
           <div className="flex items-baseline justify-center">
             <span
               ref={pctRef}
-              className={`text-8xl sm:text-9xl md:text-[11rem] font-spartan font-black text-white leading-none tracking-tighter transition-all duration-300 ${
+              style={{ color: '#ffffff' }}
+              className={`loading-counter-number text-8xl sm:text-9xl md:text-[11rem] font-spartan font-black text-white leading-none tracking-tighter transition-all duration-300 ${
                 isCompleted100 ? 'text-white drop-shadow-[0_0_40px_rgba(244,114,182,0.95)]' : ''
               }`}
             >
               00
             </span>
-            <span className="text-3xl sm:text-4xl md:text-5xl font-mono text-[#f472b6] ml-2 font-bold">
+            <span
+              style={{ color: '#f472b6' }}
+              className="text-3xl sm:text-4xl md:text-5xl font-mono text-[#f472b6] ml-2 font-bold"
+            >
               %
             </span>
           </div>

@@ -154,6 +154,45 @@ export default function App() {
     return () => observer.disconnect();
   }, [isLoading]);
 
+  // Futuristic Section Appearance Transitions & Reveal Observer
+  useEffect(() => {
+    if (isLoading) return;
+
+    const sections = ['hero', 'vault', 'lookbook', 'shop', 'museum', 'custom', 'about', 'specs', 'faq', 'contact'];
+
+    // Make hero immediately visible without transition delay
+    const heroEl = document.getElementById('hero');
+    if (heroEl) {
+      heroEl.classList.add('section-scroll-reveal', 'is-visible');
+    }
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      {
+        rootMargin: '0px 0px -6% 0px',
+        threshold: 0.05
+      }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('section-scroll-reveal');
+        if (id !== 'hero') {
+          revealObserver.observe(el);
+        }
+      }
+    });
+
+    return () => revealObserver.disconnect();
+  }, [isLoading]);
+
   // Wishlist toggle handler
   const handleToggleWishlist = (product) => {
     setWishlistItems((prev) => {
@@ -306,7 +345,10 @@ export default function App() {
         </section>
 
         {/* Section 6: AVZ Museum Archive Vault */}
-        <AvzMuseum onRequestCustomCommission={handleRequestCustom} />
+        <AvzMuseum
+          onRequestCustomCommission={handleRequestCustom}
+          theme={theme}
+        />
 
         {/* Section 7: Custom Atelier Bespoke Orders */}
         <CustomOrders
