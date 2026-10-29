@@ -24,7 +24,7 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
     const checkMobile = () => {
       const isMob = window.innerWidth < 768;
       setIsMobileDevice(isMob);
-      if (isMob) setIsMuted(true); // Muted by default on mobile for autoplay policy
+      if (isMob) setIsMuted(true); // Muted by default on mobile for strict autoplay policies
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -79,7 +79,12 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
   return (
     <section
       ref={sectionRef}
+      id="hero"
       className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center overflow-hidden bg-black select-none cursor-default"
+      style={{
+        backgroundColor: '#000000',
+        background: '#000000'
+      }}
     >
       {/* 0. Synchronized Master Audio Soundtrack */}
       <audio
@@ -90,16 +95,19 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         preload="auto"
       />
 
-      {/* 1. Vimeo Master Cloud Video Stream (Single Full-Bleed Video) */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
+      {/* 1. Vimeo Master Video Stream (Cover Viewport Completely, Zero White Bars) */}
+      <div
+        className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
+        style={{ backgroundColor: '#000000' }}
+      >
         <iframe
           src={vimeoBackgroundUrl}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none scale-105"
           style={{
-            width: isMobileDevice ? '100vw' : '177.78vh',
-            height: isMobileDevice ? '177.78vw' : '100vh',
-            minWidth: '100%',
-            minHeight: '100%',
+            width: isMobileDevice ? '100vw' : 'max(100vw, 177.78vh)',
+            height: isMobileDevice ? 'max(100vh, 177.78vw)' : 'max(100vh, 56.25vw)',
+            minWidth: '100vw',
+            minHeight: '100vh',
             border: 'none'
           }}
           allow="autoplay; fullscreen; picture-in-picture"
@@ -109,40 +117,57 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
 
       {/* 2. Video & Audio Controls HUD (Bottom-Left) */}
       <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
+        {/* Play/Pause Button */}
         <button
           onClick={handleTogglePlay}
-          className="p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-white/10 border border-white/15 hover:border-white/30 text-zinc-300 hover:text-white transition-all backdrop-blur-md cursor-pointer shadow-md"
+          className="p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-zinc-300 hover:text-white"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            borderColor: 'rgba(255, 255, 255, 0.2)'
+          }}
           title={isPlaying ? 'Pause Audio' : 'Play Audio'}
         >
-          {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+          {isPlaying ? <Pause className="w-3.5 h-3.5 text-white" /> : <Play className="w-3.5 h-3.5 fill-current text-white" />}
         </button>
 
+        {/* Sound Toggle Button (Always Bold and Visible in all states and themes) */}
         <button
           onClick={handleToggleMute}
-          className={`p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md flex items-center gap-1.5 ${
-            isMuted
-              ? 'bg-black/60 border-white/15 hover:border-white/30 text-zinc-400 hover:text-white'
-              : 'bg-white/10 border-white/40 text-white'
-          }`}
+          className="p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md flex items-center gap-1.5"
+          style={{
+            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.75)' : 'rgba(0, 0, 0, 0.88)',
+            borderColor: isMuted ? 'rgba(255, 255, 255, 0.25)' : '#ec4899',
+            boxShadow: isMuted ? 'none' : '0 0 16px rgba(236, 72, 153, 0.45)'
+          }}
           title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
         >
           {isMuted ? (
-            <VolumeX className="w-3.5 h-3.5 text-zinc-400" />
+            <VolumeX className="w-3.5 h-3.5 text-zinc-400" style={{ color: '#a1a1aa' }} />
           ) : (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-white" />
-              <span className="text-[10px] font-mono tracking-wider text-white hidden sm:inline">SOUND ON</span>
+              <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#ec4899' }} />
+              <span
+                className="text-[10px] font-mono tracking-wider font-bold hidden sm:inline"
+                style={{ color: '#ec4899' }}
+              >
+                SOUND ON
+              </span>
             </>
           )}
         </button>
 
+        {/* Full Cinema Reel Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             playSound('pip');
             setIsCinemaOpen(true);
           }}
-          className="inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full bg-black/60 hover:bg-white/10 border border-white/15 hover:border-white/30 text-zinc-300 hover:text-white text-[10px] sm:text-xs font-mono transition-all backdrop-blur-md cursor-pointer shadow-md"
+          className="inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-zinc-300 hover:text-white text-[10px] sm:text-xs font-mono"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            borderColor: 'rgba(255, 255, 255, 0.2)'
+          }}
           title="Open Cinema Master Reel Modal"
         >
           <Film className="w-3.5 h-3.5 text-zinc-400" />

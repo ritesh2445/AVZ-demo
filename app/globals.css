@@ -655,7 +655,7 @@ html.light-theme body::before {
 }
 
 /* Sections in Light Mode */
-html.light-theme section {
+html.light-theme section:not(#hero) {
   background-color: transparent !important;
 }
 
@@ -2306,4 +2306,15 @@ html.light-theme #vault button:hover,
 html[data-theme="light"] #vault button:hover {
   background-color: #ffffff !important;
   color: #09090b !important;
+}
+
+/* Hero Section: Always pure pitch-black in all themes to eliminate white pillarbox bars */
+#hero,
+section#hero,
+html.light-theme #hero,
+html.light-theme section#hero,
+[data-theme="light"] #hero,
+[data-theme="light"] section#hero {
+  background-color: #000000 !important;
+  background: #000000 !important;
 }
