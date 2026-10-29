@@ -79,11 +79,11 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     scene.background = new THREE.Color(0x060608);
     scene.fog = new THREE.FogExp2(0x060608, 0.024);
 
-    // Camera calibrated for majestic gallery viewing with enlarged specimen frames:
+    // Camera calibrated for majestic gallery viewing with enlarged frames:
     // Plinth rests solidly on floor grid, collar gleams, and grand framed pieces float with ample breathing room
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(0, 1.6, 16.2);
-    camera.lookAt(0, 1.45, 6.8);
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+    camera.position.set(0, 2.35, 15.6);
+    camera.lookAt(0, 2.25, 6.8);
 
     let renderer;
     try {
@@ -106,9 +106,9 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
     scene.add(ambientLight);
 
     // Warm museum spotlight focused on the front active pedestal
-    const spotlight = new THREE.SpotLight(0xF5EBE6, 30, 36, Math.PI / 4, 0.35, 1.2);
-    spotlight.position.set(0, 9.5, 12);
-    spotlight.target.position.set(0, 1.45, 6.8);
+    const spotlight = new THREE.SpotLight(0xF5EBE6, 32, 40, Math.PI / 4, 0.4, 1.2);
+    spotlight.position.set(0, 11, 12);
+    spotlight.target.position.set(0, 2.35, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
@@ -188,8 +188,13 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       metalness: 0.85
     });
 
-    const plinthGeom = new THREE.CylinderGeometry(1.4, 1.6, 2.0, 32);
-    const ringGeom = new THREE.TorusGeometry(1.42, 0.04, 16, 36);
+    const plinthHeight = 1.15;
+    const plinthTopRadius = 1.25;
+    const plinthBottomRadius = 1.45;
+    const plinthGeom = new THREE.CylinderGeometry(plinthTopRadius, plinthBottomRadius, plinthHeight, 36);
+    const ringGeom = new THREE.TorusGeometry(plinthTopRadius + 0.02, 0.035, 16, 48);
+    const capGeom = new THREE.CircleGeometry(plinthTopRadius, 36);
+    const riserGeom = new THREE.CylinderGeometry(0.2, 0.28, 0.24, 24);
 
     MUSEUM_ITEMS.forEach((item, idx) => {
       const angle = (idx / total) * Math.PI * 2;
@@ -197,22 +202,35 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       const z = Math.cos(angle) * radius;
 
       const group = new THREE.Group();
-      group.position.set(x, -0.6, z);
+      // Floor grid is at world y = -1.55; setting group y = -1.55 aligns group y=0 directly with the reflective floor
+      group.position.set(x, -1.55, z);
       group.rotation.y = angle;
 
-      // Solid Circular Plinth Base
+      // Solid Circular Plinth Base (rests on floor y=0 up to y=plinthHeight)
       const plinth = new THREE.Mesh(plinthGeom, plinthMat);
+      plinth.position.y = plinthHeight / 2;
       group.add(plinth);
+
+      // Plinth Top Cap Surface
+      const cap = new THREE.Mesh(capGeom, plinthMat);
+      cap.rotation.x = -Math.PI / 2;
+      cap.position.y = plinthHeight + 0.001;
+      group.add(cap);
 
       // Metallic Collar Ring
       const ring = new THREE.Mesh(ringGeom, frameTrimMat);
       ring.rotation.x = Math.PI / 2;
-      ring.position.y = 1.0;
+      ring.position.y = plinthHeight;
       group.add(ring);
 
-      // Enlarged Frame and Surface Proportions (~38% larger frame area):
+      // Architectural Gallery Mount / Easel Riser (bridges plinth collar to artwork frame)
+      const riser = new THREE.Mesh(riserGeom, frameTrimMat);
+      riser.position.y = plinthHeight + 0.12;
+      group.add(riser);
+
+      // Frame and Surface Proportions - ENLARGED to 4.85 (~33% taller/wider, ~77% more surface area)
       // Preserves 100% natural aspect ratio of the garment photograph (zero stretching!)
-      const targetHeight = 3.65;
+      const targetHeight = 4.85;
       const itemAspect = item.aspectRatio || (
         idx === 0 ? 220 / 415 :
         idx === 1 ? 360 / 460 :
@@ -222,14 +240,14 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
 
       const picW = targetHeight * itemAspect;
       const picH = targetHeight;
-      const frameW = picW + 0.24;
-      const frameH = picH + 0.24;
-      const frameR = Math.min(0.2, picW * 0.12);
-      const picR = Math.min(0.14, picW * 0.09);
+      const frameW = picW + 0.26;
+      const frameH = picH + 0.26;
+      const frameR = Math.min(0.22, picW * 0.12);
+      const picR = Math.min(0.16, picW * 0.09);
 
       const frameShape = createRoundedRectShape(frameW, frameH, frameR);
       const frameGeom = new THREE.ExtrudeGeometry(frameShape, {
-        depth: 0.06,
+        depth: 0.07,
         bevelEnabled: true,
         bevelSegments: 3,
         bevelSize: 0.02,
@@ -250,18 +268,23 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       }
       picGeom.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
 
+      // Calculate exact baseY so frame bottom rests cleanly above the pedestal:
+      // plinthHeight (1.15) + riser (0.24) + clearance (0.05) = 1.44
+      const frameBottomY = plinthHeight + 0.29;
+      const baseY = frameBottomY + (frameH / 2);
+
       // Artifact Sub-Group floating smoothly above the pedestal collar
       const artifactGroup = new THREE.Group();
-      artifactGroup.position.y = 2.95;
+      artifactGroup.position.y = baseY;
 
       // Frame Chassis
       const frameMesh = new THREE.Mesh(frameGeom, frameChassisMat);
-      frameMesh.position.z = -0.06;
+      frameMesh.position.z = -0.07;
       artifactGroup.add(frameMesh);
 
       // Solid Back
       const backMesh = new THREE.Mesh(picGeom, backMat);
-      backMesh.position.z = -0.061;
+      backMesh.position.z = -0.071;
       backMesh.rotation.y = Math.PI;
       artifactGroup.add(backMesh);
 
@@ -291,13 +314,13 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
       });
 
       const picMesh = new THREE.Mesh(picGeom, picMat);
-      picMesh.position.z = 0.028;
+      picMesh.position.z = 0.03;
       picMesh.renderOrder = 2;
       artifactGroup.add(picMesh);
 
       group.add(artifactGroup);
       carouselGroup.add(group);
-      pedestals.push({ group, artifactGroup, angle, frameGeom, picGeom, picMat, texture });
+      pedestals.push({ group, artifactGroup, angle, baseY, frameGeom, picGeom, picMat, texture });
     });
 
     pedestalsRef.current = pedestals;
@@ -359,14 +382,14 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         orbitAngleRef.current *= 0.94;
       }
 
-      // Subtly animate active front piece levitation
+      // Subtly animate active front piece levitation (rests cleanly above pedestal)
       const currentIdx = activeIndexRef.current;
       pedestalsRef.current.forEach((ped, idx) => {
         if (idx === currentIdx) {
-          ped.artifactGroup.position.y = 2.45 + Math.sin(elapsedTime * 1.5) * 0.03;
+          ped.artifactGroup.position.y = ped.baseY + Math.sin(elapsedTime * 1.5) * 0.025;
           ped.artifactGroup.rotation.y = orbitAngleRef.current;
         } else {
-          ped.artifactGroup.position.y = 2.45;
+          ped.artifactGroup.position.y = ped.baseY;
           ped.artifactGroup.rotation.y = 0;
         }
       });
@@ -703,7 +726,7 @@ export default function AvzMuseum({ onRequestCustomCommission }) {
         {viewMode === '3d' ? (
           <div className="relative w-full rounded-2xl overflow-hidden border border-white/12 bg-[#09090c] shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-row items-stretch">
             {/* Three.js 3D Canvas (Left / Main - Majestic Enlarged Showcase) */}
-            <div className="museum-dark-canvas relative flex-1 h-[590px] lg:h-[660px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
+            <div className="museum-dark-canvas relative flex-1 h-[640px] lg:h-[720px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
               <div ref={mountRef} className="w-full h-full" />
 
               {/* Hint & Drag Badge */}
