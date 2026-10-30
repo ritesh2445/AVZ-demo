@@ -156,7 +156,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
                 inputRef.current?.focus();
               }}
               aria-label="Clear query"
-              className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-zinc-400 hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
+              className="p-1.5 text-zinc-400 hover:text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -172,7 +172,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
               onClose?.();
             }}
             aria-label="Close search"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/15 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer shrink-0 transition-all active:scale-95"
+            className="p-1.5 flex items-center justify-center text-zinc-400 hover:text-white hover:rotate-90 cursor-pointer shrink-0 transition-all active:scale-95"
           >
             <X className="w-4 h-4" />
           </button>

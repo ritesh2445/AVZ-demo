@@ -161,7 +161,7 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
                 playSound('modal_close');
                 onClose();
               }}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/80 hover:bg-pink/20 border border-white/20 hover:border-pink text-white flex items-center justify-center transition-all cursor-pointer shrink-0 active:scale-95"
+              className="p-2 text-zinc-400 hover:text-white hover:rotate-90 flex items-center justify-center transition-all cursor-pointer shrink-0 active:scale-95"
               aria-label="Close Cinema Mode"
             >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />

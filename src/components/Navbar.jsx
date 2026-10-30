@@ -214,11 +214,7 @@ export default function Navbar({
                     : `${user.name} (Signed In)`
                   : 'Sign In / Explore as Guest'
               }
-              className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                user
-                  ? 'text-pink bg-pink/20 border border-pink/40 shadow-[0_0_10px_rgba(244,194,194,0.3)]'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent'
-              }`}
+              className="relative p-1.5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               {user && (

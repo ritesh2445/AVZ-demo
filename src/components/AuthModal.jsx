@@ -179,7 +179,7 @@ export default function AuthModal({
               onClose?.();
             }}
             aria-label="Close modal"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/15 text-zinc-400 hover:text-white flex items-center justify-center cursor-pointer transition-all active:scale-95"
+            className="p-1.5 text-zinc-400 hover:text-white hover:rotate-90 flex items-center justify-center cursor-pointer transition-all active:scale-95"
           >
             <X className="w-4 h-4" />
           </button>

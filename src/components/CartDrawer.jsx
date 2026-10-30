@@ -315,7 +315,7 @@ export default function CartDrawer({
               onClose();
             }}
             aria-label="Close bag"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer shrink-0 active:scale-95"
+            className="p-1.5 flex items-center justify-center text-zinc-400 hover:text-white hover:rotate-90 transition-all cursor-pointer shrink-0 active:scale-95"
           >
             <X className="w-4 h-4" />
           </button>

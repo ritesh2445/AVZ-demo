@@ -99,7 +99,7 @@ export default function ProductDetailModal({
             onClose();
           }}
           aria-label="Close product modal"
-          className="absolute top-3 right-3 sm:top-5 sm:right-5 z-50 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/20 bg-black/90 backdrop-blur-xl flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/40 transition-all cursor-pointer shadow-xl active:scale-95"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 p-2 flex items-center justify-center text-zinc-400 hover:text-white hover:rotate-90 transition-all cursor-pointer active:scale-95 drop-shadow-md"
         >
           <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
@@ -129,7 +129,7 @@ export default function ProductDetailModal({
                   onToggleWishlist(product);
                 }}
                 aria-label="Save to Curated Wishlist"
-                className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-black/85 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer shadow-lg z-20 active:scale-95"
+                className="absolute bottom-4 right-4 p-2 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer z-20 active:scale-125 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
               >
                 <Heart className={`w-4 h-4 ${isWishlisted ? 'text-pink-400 fill-pink-400' : ''}`} />
               </button>

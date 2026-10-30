@@ -182,7 +182,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         {/* Sound Toggle Button (Crisp Pure White in all states and themes) */}
         <button
           onClick={handleToggleMute}
-          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md flex items-center gap-1.5"
+          className="p-2 flex items-center justify-center text-white/80 hover:text-white transition-all cursor-pointer drop-shadow-md hover:scale-110 active:scale-95"
           style={{
             backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.18)',
             borderColor: isMuted ? 'rgba(255, 255, 255, 0.4)' : '#ffffff',
@@ -213,7 +213,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
             playSound('pip');
             setIsCinemaOpen(true);
           }}
-          className="hero-hud-btn inline-flex items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md text-[10px] sm:text-xs font-mono"
+          className="p-2 inline-flex items-center gap-1.5 text-white/80 hover:text-white transition-all cursor-pointer drop-shadow-md hover:scale-105 active:scale-95 text-[10px] sm:text-xs font-mono tracking-wider uppercase"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.75)',
             borderColor: 'rgba(255, 255, 255, 0.4)',

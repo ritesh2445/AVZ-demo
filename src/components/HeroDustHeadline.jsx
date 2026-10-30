@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 /**
- * Ultra-realistic Canvas Particle Dust Materialization (Haute Couture Dust Assembly)
- * Instead of vanishing, the headline starts as dispersed cosmic dust / glowing particles
- * that swirl, stream, and coalesce into the exact razor-sharp letterforms.
- * Once assembled, it blooms into the moving royal pink/rose-gold gradient and remains
- * permanently visible.
+ * Ultra-Fast, 60fps-Smooth Stardust Materialization Headline
+ * Fast, crisp cosmic dust grains rush in and assemble into the sharp letterforms
+ * within ~0.6s. Zero lag, zero blur, subpixel-crisp vector typography handoff.
  */
 export default function HeroDustHeadline({
   headline1 = 'WEARABLE ART.',
@@ -22,10 +20,10 @@ export default function HeroDustHeadline({
   const animFrameRef = useRef(null);
 
   useEffect(() => {
-    // Initial brief 300ms pause after hero mount before cosmic dust streams in
+    // Snappy 120ms start for immediate visual feedback without awkward lag
     const timer = setTimeout(() => {
       triggerDustAssembly();
-    }, 300);
+    }, 120);
 
     return () => {
       clearTimeout(timer);
@@ -39,12 +37,11 @@ export default function HeroDustHeadline({
     const l1 = line1Ref.current;
     if (!container || !canvas || !l1) return;
 
-    // Ensure all web fonts (Cinzel) are completely rendered before rasterizing
     if (document.fonts && document.fonts.ready) {
       try {
         await document.fonts.ready;
       } catch (e) {
-        // Fallback gracefully if document.fonts throws
+        // Continue gracefully
       }
     }
 
@@ -55,38 +52,35 @@ export default function HeroDustHeadline({
     const r2 = line2Ref.current ? line2Ref.current.getBoundingClientRect() : null;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    // Expand canvas margins to allow swirling dust particles from outside the text area
-    const marginX = 160;
-    const marginY = 140;
+    const marginX = 100;
+    const marginY = 80;
     const totalW = containerRect.width + marginX * 2;
     const totalH = containerRect.height + marginY * 2;
 
-    canvas.width = totalW * dpr;
-    canvas.height = totalH * dpr;
+    canvas.width = Math.round(totalW * dpr);
+    canvas.height = Math.round(totalH * dpr);
     canvas.style.width = `${totalW}px`;
     canvas.style.height = `${totalH}px`;
     canvas.style.left = `${-marginX}px`;
     canvas.style.top = `${-marginY}px`;
 
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     ctx.scale(dpr, dpr);
 
-    // Compute exact computed font styling from line 1
     const computed = window.getComputedStyle(l1);
     const fontSize = parseFloat(computed.fontSize) || 48;
     const fontFamily = computed.fontFamily || "'Cinzel', serif";
     const fontWeight = computed.fontWeight || '700';
 
-    // Create an offscreen buffer canvas to draw the target typography with royal pinkish gradient
+    // Offscreen canvas for sampling target letter coordinates
     const offCanvas = document.createElement('canvas');
-    offCanvas.width = totalW * dpr;
-    offCanvas.height = totalH * dpr;
+    offCanvas.width = Math.round(totalW);
+    offCanvas.height = Math.round(totalH);
     const offCtx = offCanvas.getContext('2d');
     if (!offCtx) return;
 
-    offCtx.scale(dpr, dpr);
     offCtx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
     if ('letterSpacing' in offCtx) {
       offCtx.letterSpacing = computed.letterSpacing !== 'normal' ? computed.letterSpacing : '0.05em';
@@ -94,137 +88,132 @@ export default function HeroDustHeadline({
     offCtx.textAlign = 'center';
     offCtx.textBaseline = 'middle';
 
-    // Luxury Royal Pinkish Gradient matching the moving shimmer palette
+    // Luxury Royal Gradient
     const textGrad = offCtx.createLinearGradient(marginX, 0, totalW - marginX, totalH);
     textGrad.addColorStop(0.0, '#ffffff');
-    textGrad.addColorStop(0.12, '#fce7f3');
-    textGrad.addColorStop(0.3, '#f472b6');
-    textGrad.addColorStop(0.5, '#ec4899');
-    textGrad.addColorStop(0.7, '#be185d');
-    textGrad.addColorStop(0.88, '#f472b6');
+    textGrad.addColorStop(0.15, '#fce7f3');
+    textGrad.addColorStop(0.35, '#f472b6');
+    textGrad.addColorStop(0.55, '#ec4899');
+    textGrad.addColorStop(0.75, '#be185d');
+    textGrad.addColorStop(0.9, '#f472b6');
     textGrad.addColorStop(1.0, '#ffffff');
 
     offCtx.fillStyle = textGrad;
 
-    // Subpixel-accurate target positioning matching the DOM lines exactly
-    const x1 = r1.left + r1.width / 2 - containerRect.left + marginX;
-    const y1 = r1.top + r1.height / 2 - containerRect.top + marginY;
+    const x1 = Math.round(r1.left + r1.width / 2 - containerRect.left + marginX);
+    const y1 = Math.round(r1.top + r1.height / 2 - containerRect.top + marginY);
     offCtx.fillText(headline1, x1, y1);
 
     if (r2 && headline2) {
-      const x2 = r2.left + r2.width / 2 - containerRect.left + marginX;
-      const y2 = r2.top + r2.height / 2 - containerRect.top + marginY;
+      const x2 = Math.round(r2.left + r2.width / 2 - containerRect.left + marginX);
+      const y2 = Math.round(r2.top + r2.height / 2 - containerRect.top + marginY);
       offCtx.fillText(headline2, x2, y2);
     }
 
-    // Sample the rendered pixels to generate micro-dust particles
     const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
     const pixels = imgData.data;
-    const particles = [];
 
-    // Particle sampling step: 2px on desktop, 3px on mobile for optimal 60fps performance
-    const isMobile = window.innerWidth < 768;
-    const step = isMobile ? 3 : 2;
+    // Collect solid candidate pixels
+    const candidates = [];
+    const step = 3; // Optimal 3px step ensures sharp letter definition with zero frame lag
 
     for (let y = 0; y < offCanvas.height; y += step) {
       for (let x = 0; x < offCanvas.width; x += step) {
-        const index = (y * offCanvas.width + x) * 4;
-        const alpha = pixels[index + 3];
-
-        if (alpha > 35) {
-          const r = pixels[index];
-          const g = pixels[index + 1];
-          const b = pixels[index + 2];
-
-          const targetX = x / dpr;
-          const targetY = y / dpr;
-
-          // Disperse initial starting coordinates in a swirling cosmic dust cloud
-          const angle = Math.atan2(targetY - totalH / 2, targetX - totalW / 2) + (Math.random() - 0.5) * 1.5;
-          const dist = 140 + Math.random() * 260;
-          const startX = targetX + Math.cos(angle) * dist + (Math.random() - 0.5) * 80;
-          // Sweep slightly from upward/left like an elegant atmospheric wind
-          const startY = targetY + Math.sin(angle) * dist - (40 + Math.random() * 100);
-
-          const progressRatio = targetX / totalW;
-          // Stagger entry: particles stream across from left to right organically
-          const staggerDelay = progressRatio * 35 + Math.random() * 25;
-          const duration = 48 + Math.random() * 26; // frames to travel into letterform
-
-          particles.push({
-            targetX,
-            targetY,
-            startX,
-            startY,
-            r,
-            g,
-            b,
-            baseAlpha: alpha / 255,
-            targetSize: Math.random() * 1.2 + 0.9, // settled grain size: 0.9px - 2.1px
-            staggerDelay,
-            duration,
-            phase: Math.random() * Math.PI * 2,
-            turbSpeed: Math.random() * 0.08 + 0.04,
-            turbAmp: Math.random() * 28 + 12
+        const idx = (y * offCanvas.width + x) * 4;
+        const alpha = pixels[idx + 3];
+        if (alpha > 70) {
+          candidates.push({
+            x,
+            y,
+            r: pixels[idx],
+            g: pixels[idx + 1],
+            b: pixels[idx + 2],
+            a: alpha / 255
           });
         }
       }
     }
 
-    let frameCount = 0;
-    // Calculate total frames when all particles have converged
-    const maxFrames = Math.max(...particles.map((p) => p.staggerDelay + p.duration));
+    // Limit to max 1,100 particles for locked 60fps/120fps performance
+    const maxParticles = 1100;
+    const stride = Math.max(1, Math.floor(candidates.length / maxParticles));
+    const particles = [];
+
+    for (let i = 0; i < candidates.length; i += stride) {
+      const c = candidates[i];
+      // Scattered starting cloud from perimeter
+      const angle = Math.atan2(c.y - totalH / 2, c.x - totalW / 2) + (Math.random() - 0.5) * 1.4;
+      const dist = 90 + Math.random() * 180;
+      const startX = c.x + Math.cos(angle) * dist + (Math.random() - 0.5) * 60;
+      const startY = c.y + Math.sin(angle) * dist - (30 + Math.random() * 70);
+
+      // Pre-compute trajectory and colors once to eliminate in-loop math
+      const targetX = c.x;
+      const targetY = c.y;
+      const deltaX = targetX - startX;
+      const deltaY = targetY - startY;
+
+      // Stagger by horizontal position: left letters assemble first, sweeping rapidly to right
+      const xProgress = targetX / totalW;
+      const delay = Math.round(xProgress * 14 + (i % 8) * 1.2);
+      const duration = Math.round(20 + (i % 12)); // Fast 20-32 frame flight (~0.4s)
+
+      particles.push({
+        targetX,
+        targetY,
+        startX,
+        startY,
+        deltaX,
+        deltaY,
+        delay,
+        duration,
+        curveOffset: (Math.random() - 0.5) * 35,
+        colorMid: `rgba(${c.r}, ${c.g}, ${c.b}, 0.85)`,
+        colorFinal: `rgba(${c.r}, ${c.g}, ${c.b}, 1)`
+      });
+    }
+
+    let frame = 0;
+    const totalFrames = 38; // Whole animation executes in ~0.6 seconds
 
     const render = () => {
-      frameCount++;
+      frame++;
       ctx.clearRect(0, 0, totalW, totalH);
 
-      let allArrived = true;
-
-      for (let i = 0; i < particles.length; i++) {
+      const len = particles.length;
+      for (let i = 0; i < len; i++) {
         const p = particles[i];
+        const elapsed = frame - p.delay;
 
-        if (frameCount < p.staggerDelay) {
-          allArrived = false;
+        if (elapsed <= 0) continue;
+
+        if (elapsed >= p.duration) {
+          // Locked into position with crisp 1.5px stardust pixel
+          ctx.fillStyle = p.colorFinal;
+          ctx.fillRect(p.targetX, p.targetY, 1.5, 1.5);
           continue;
         }
 
-        const elapsed = frameCount - p.staggerDelay;
-        const t = Math.min(1, elapsed / p.duration);
+        const t = elapsed / p.duration;
+        // Cubic ease-out: rapid acceleration then snappy settling
+        const ease = 1 - (1 - t) * (1 - t) * (1 - t);
+        const damp = (1 - ease);
 
-        if (t < 1) {
-          allArrived = false;
-        }
+        // Integer coordinates eliminate blurry subpixel anti-aliasing
+        const curX = (p.startX + p.deltaX * ease + damp * p.curveOffset) | 0;
+        const curY = (p.startY + p.deltaY * ease - damp * p.curveOffset * 0.4) | 0;
 
-        // Cubic ease-out: particles rush in fast then gracefully decelerate into exact letterform
-        const ease = 1 - Math.pow(1 - t, 3);
-
-        // Harmonic turbulence decays to zero as particle locks into letter pixel
-        const damp = 1 - ease;
-        const turbX = Math.sin(p.phase + frameCount * p.turbSpeed) * p.turbAmp * damp;
-        const turbY = Math.cos(p.phase + frameCount * p.turbSpeed * 0.9) * (p.turbAmp * 0.7) * damp;
-
-        const curX = p.startX + (p.targetX - p.startX) * ease + turbX;
-        const curY = p.startY + (p.targetY - p.startY) * ease + turbY;
-
-        // Sparkle alpha: micro-twinkle during transit, solidifying into full letter color
-        const sparkle = 0.85 + 0.15 * Math.sin(frameCount * 0.25 + p.phase);
-        const curAlpha = Math.min(p.baseAlpha, t * 1.6 * p.baseAlpha) * sparkle;
-
-        // Particle size starts slightly larger and blooms into fine dust grain
-        const curSize = p.targetSize + (1 - ease) * 1.1;
-
-        ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${curAlpha})`;
-        ctx.fillRect(curX, curY, curSize, curSize);
+        ctx.fillStyle = p.colorMid;
+        ctx.fillRect(curX, curY, 2, 2);
       }
 
-      // Smooth handoff: around 80% assembly, fade in the live DOM gradient text
-      if (frameCount >= maxFrames * 0.82) {
+      // Smooth handoff: reveal razor-sharp vector text right as particles settle
+      if (frame >= 26) {
         setShowDomText(true);
       }
 
-      // Complete assembly: cleanly terminate canvas RAF loop and hand off to permanent DOM text
-      if (allArrived && frameCount >= maxFrames + 12) {
+      // Complete assembly: cleanly dismiss canvas and stop RAF
+      if (frame >= totalFrames) {
         ctx.clearRect(0, 0, totalW, totalH);
         setIsAssembled(true);
         setIsDusting(false);
@@ -239,9 +228,9 @@ export default function HeroDustHeadline({
 
   return (
     <div ref={containerRef} className="relative w-full flex flex-col items-center justify-center select-none">
-      {/* 1. Permanent Shimmering Royal Headline (Materializes via particle assembly and stays visible) */}
+      {/* 1. Permanent Shimmering Royal Headline (100% Crisp Vector Live Typography) */}
       <h1
-        className={`text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-700 ease-out flex flex-col items-center justify-center ${
+        className={`text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-300 ease-out flex flex-col items-center justify-center ${
           showDomText || isAssembled ? 'opacity-100' : 'opacity-0'
         }`}
       >
@@ -255,11 +244,11 @@ export default function HeroDustHeadline({
         )}
       </h1>
 
-      {/* 2. Micro-Particle Canvas Overlay (Assembles dust grains into the letterforms) */}
+      {/* 2. Ultra-Fast Stardust Micro-Canvas Overlay */}
       {!isAssembled && (
         <canvas
           ref={canvasRef}
-          className="absolute pointer-events-none z-10 will-change-transform"
+          className="absolute pointer-events-none z-10"
           style={{
             display: isDusting ? 'block' : 'none'
           }}

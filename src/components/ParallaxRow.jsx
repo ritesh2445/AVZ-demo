@@ -246,7 +246,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     openLightbox(item, idx);
                   }}
                   aria-label="Inspect Full Look"
-                  className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:border-white/50 transition-all cursor-pointer"
+                  className="p-2 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all cursor-pointer drop-shadow-md"
                 >
                   <Maximize2 className="w-4 h-4" />
                 </button>
@@ -395,7 +395,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                         openLightbox(item, idx);
                       }}
                       aria-label="Inspect Full Look"
-                      className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:border-white/50 transition-all cursor-pointer"
+                      className="p-2 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all cursor-pointer drop-shadow-md"
                     >
                       <Maximize2 className="w-4 h-4" />
                     </button>
@@ -471,7 +471,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               prevSlide();
             }}
             aria-label="Previous look"
-            className="hidden sm:flex absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
+            className="hidden sm:flex absolute left-4 md:left-6 top-1/2 -translate-y-1/2 p-2.5 items-center justify-center text-white/70 hover:text-white hover:scale-125 transition-all z-50 cursor-pointer drop-shadow-lg"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -483,7 +483,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               nextSlide();
             }}
             aria-label="Next look"
-            className="hidden sm:flex absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
+            className="hidden sm:flex absolute right-4 md:right-6 top-1/2 -translate-y-1/2 p-2.5 items-center justify-center text-white/70 hover:text-white hover:scale-125 transition-all z-50 cursor-pointer drop-shadow-lg"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -497,7 +497,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             <button
               onClick={closeLightbox}
               aria-label="Close modal"
-              className="lookbook-close-x hidden md:flex absolute top-5 right-5 z-50 w-9 h-9 rounded-full items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all"
+              className="lookbook-close-x hidden md:flex absolute top-5 right-5 z-50 p-2 items-center justify-center cursor-pointer active:scale-95 transition-all text-zinc-400 hover:text-white hover:rotate-90"
             >
               <X className="w-4 h-4" />
             </button>
@@ -511,7 +511,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               <button
                 onClick={closeLightbox}
                 aria-label="Close modal"
-                className="lookbook-close-x w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                className="lookbook-close-x p-1.5 flex items-center justify-center cursor-pointer active:scale-95 transition-all text-zinc-400 hover:text-white hover:rotate-90"
               >
                 <X className="w-4 h-4" />
               </button>

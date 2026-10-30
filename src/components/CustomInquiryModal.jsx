@@ -43,7 +43,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
         <button
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 flex items-center justify-center text-zinc-400 hover:text-white cursor-pointer transition-all z-30 shadow-md active:scale-95"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 flex items-center justify-center text-zinc-400 hover:text-white hover:rotate-90 cursor-pointer transition-all z-30 active:scale-95"
         >
           <X className="w-4 h-4" />
         </button>

@@ -112,10 +112,11 @@ export default function WishlistDrawer({
                       onAddToCart(item);
                       onRemoveFromWishlist(item.id);
                     }}
-                    className="px-3 py-1.5 rounded-full bg-white text-black hover:bg-zinc-200 text-[10px] font-mono font-semibold tracking-wider uppercase flex items-center gap-1 cursor-pointer transition-all"
+                    title="Move to Bag"
+                    aria-label="Move to Bag"
+                    className="p-1.5 flex items-center justify-center text-white/80 hover:text-pink transition-all cursor-pointer active:scale-125"
                   >
-                    <ShoppingBag className="w-3 h-3" />
-                    <span>ADD TO BAG</span>
+                    <ShoppingBag className="w-4 h-4 text-white hover:text-pink transition-colors stroke-[2]" />
                   </button>
 
                   <button

@@ -223,9 +223,9 @@ function KeyArchiveCarousel({
                       onToggleWishlist(item);
                     }}
                     aria-label="Wishlist"
-                    className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/75 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer active:scale-95"
+                    className="absolute top-3 right-3 z-20 p-2 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer active:scale-125 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                   >
-                    <Heart className={`w-3.5 h-3.5 ${isWish ? 'text-pink-400 fill-pink-400' : ''}`} />
+                    <Heart className={`w-4 h-4 transition-all duration-200 ${isWish ? 'text-pink-400 fill-pink-400 scale-110' : 'text-white/90 hover:scale-110'}`} />
                   </button>
                 )}
 
@@ -279,10 +279,11 @@ function KeyArchiveCarousel({
                             selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
                           });
                         }}
-                        className="btn-add-bag px-3.5 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-[10px] tracking-wider uppercase flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md"
+                        title="Add to Bag"
+                        aria-label="Add to Bag"
+                        className="p-1.5 flex items-center justify-center text-white/80 hover:text-pink transition-all cursor-pointer active:scale-125 group/bag"
                       >
-                        <ShoppingBag className="w-3.5 h-3.5" />
-                        <span>BAG +</span>
+                        <ShoppingBag className="w-4 h-4 text-white group-hover/bag:text-pink transition-colors stroke-[2]" />
                       </button>
                     )}
 
@@ -355,9 +356,9 @@ function MobileCompactProductCard({
               onToggleWishlist(product);
             }}
             aria-label="Wishlist"
-            className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center justify-center text-white cursor-pointer active:scale-95"
+            className="absolute top-2 right-2 z-10 p-1 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer active:scale-125 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
           >
-            <Heart className={`w-3 h-3 ${isWishlisted ? 'text-pink-400 fill-pink-400' : ''}`} />
+            <Heart className={`w-3.5 h-3.5 transition-all duration-200 ${isWishlisted ? 'text-pink-400 fill-pink-400 scale-110' : 'text-white/90 hover:scale-110'}`} />
           </button>
         )}
       </div>
@@ -832,9 +833,9 @@ export default function ShopCatalogue({
                           onToggleWishlist(product);
                         }}
                         aria-label="Wishlist"
-                        className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 hover:border-white/50 flex items-center justify-center text-white hover:text-pink-300 transition-all cursor-pointer active:scale-95"
+                        className="absolute top-3 right-3 z-20 p-2 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer active:scale-125 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
                       >
-                        <Heart className={`w-3.5 h-3.5 ${isWish ? 'text-pink-400 fill-pink-400' : ''}`} />
+                        <Heart className={`w-4 h-4 transition-all duration-200 ${isWish ? 'text-pink-400 fill-pink-400 scale-110' : 'text-white/90 hover:scale-110'}`} />
                       </button>
                     )}
 
@@ -893,11 +894,11 @@ export default function ShopCatalogue({
                                 selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
                               });
                             }}
-                            title="Quick Add to Bag"
-                            className="btn-add-bag px-3 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-[10px] tracking-wider uppercase flex items-center gap-1 cursor-pointer active:scale-95 transition-all shadow-md"
+                            title="Add to Bag"
+                            aria-label="Add to Bag"
+                            className="p-1.5 flex items-center justify-center text-white/80 hover:text-pink transition-all cursor-pointer active:scale-125 group/bag"
                           >
-                            <ShoppingBag className="w-3 h-3" />
-                            <span>BAG +</span>
+                            <ShoppingBag className="w-4 h-4 text-white group-hover/bag:text-pink transition-colors stroke-[2]" />
                           </button>
                         )}
 
