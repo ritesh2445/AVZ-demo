@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import CinemaReelModal from './CinemaReelModal';
+import HeroDustHeadline from './HeroDustHeadline';
 import { playSound } from '../utils/audio';
 
 export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpenTunnel, cmsHero }) {
@@ -130,16 +131,10 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
 
       {/* 2. Hero Editorial Typography & Actions */}
       <div className="relative z-[5] max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center space-y-4 sm:space-y-6 pt-10 sm:pt-0 pointer-events-auto">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)]">
-          <span className="royal-gradient-shimmer block">
-            {cmsHero?.headline_line1 || 'WEARABLE ART.'}
-          </span>
-          {cmsHero?.headline_line2 && (
-            <span className="royal-gradient-shimmer block mt-1 sm:mt-2">
-              {cmsHero.headline_line2}
-            </span>
-          )}
-        </h1>
+        <HeroDustHeadline
+          headline1={cmsHero?.headline_line1 || 'WEARABLE ART.'}
+          headline2={cmsHero?.headline_line2 || 'NOT MADE TO REPEAT.'}
+        />
 
         {cmsHero?.subheadline && (
           <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]">
