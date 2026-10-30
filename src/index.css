@@ -96,6 +96,27 @@ body::before {
   color: #FFFFFF;
 }
 
+
+/* Prevent browser image dragging, context menu, or selection from locking touch scroll */
+img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Ensure all cards and picture frames permit natural vertical page scrolling */
+.mobile-grunge-card,
+article,
+[class*="aspect-"] {
+  touch-action: pan-y;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -1586,7 +1607,7 @@ html.light-theme .fixed.inset-0.z-\[99999\] > div[class*="bg-black"] {
   background: radial-gradient(ellipse at 50% 0%, rgba(244, 114, 182, 0.07) 0%, transparent 70%);
   pointer-events: none;
   z-index: 1;
-  animation: sectionAmbientPulse 4s ease-in-out infinite alternate;
+  /* sectionAmbientPulse disabled for 120fps performance */
 }
 
 html.light-theme .section-scroll-reveal.is-visible::after {
@@ -2100,15 +2121,22 @@ main {
   overscroll-behavior-y: auto;
 }
 
+/* Horizontal scroll containers permit horizontal gestures and pass vertical gestures to the window */
 .overflow-x-auto,
 [class*="overflow-x-auto"],
 .snap-x,
-[class*="snap-x"],
-.mobile-grunge-card {
+[class*="snap-x"] {
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
+  overscroll-behavior-x: auto;
   overscroll-behavior-y: auto;
+}
+
+/* Cards and picture frames never isolate or trap vertical scroll */
+.mobile-grunge-card,
+article,
+[class*="aspect-"] {
+  touch-action: pan-y;
 }
 
 
@@ -2344,7 +2372,7 @@ html[data-theme="light"] #hero .hero-hud-btn span {
 .touch-scroll-x {
   touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
+  overscroll-behavior-x: auto;
   overscroll-behavior-y: auto;
 }
 

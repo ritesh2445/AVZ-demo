@@ -58,6 +58,13 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
     playSound('whoosh');
     const safeIdx = (index + entries.length) % entries.length;
     setCurrentSlide(safeIdx);
+
+    const el = mobileTrackRef.current;
+    if (el) {
+      const card = el.querySelector('article');
+      const cardWidth = card ? card.clientWidth + 16 : 300;
+      el.scrollTo({ left: safeIdx * cardWidth, behavior: 'smooth' });
+    }
   };
 
   const nextSlide = (e) => {
@@ -70,29 +77,30 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
     goToSlide(currentSlide - 1);
   };
 
-  // Touch Swipe Handlers for mobile swipeability
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
+  const mobileTrackRef = useRef(null);
+
+  const handleMobileScroll = () => {
+    const el = mobileTrackRef.current;
+    if (!el) return;
+    const card = el.querySelector('article');
+    const cardWidth = card ? card.clientWidth + 16 : 300;
+    const idx = Math.min(Math.round(el.scrollLeft / cardWidth), entries.length - 1);
+    if (idx >= 0 && idx !== currentSlide) {
+      setCurrentSlide(idx);
+    }
   };
 
-  const handleTouchEnd = (e) => {
-    if (touchStartXRef.current === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchEndX - touchStartXRef.current;
-    const deltaY = touchEndY - touchStartYRef.current;
+  const scrollToLook = (index) => {
+    playSound('whoosh');
+    const safeIdx = Math.max(0, Math.min(index, entries.length - 1));
+    setCurrentSlide(safeIdx);
 
-    // Trigger swipe if horizontal motion exceeds vertical and passes 40px threshold
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-      if (deltaX < 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
+    const el = mobileTrackRef.current;
+    if (el) {
+      const card = el.querySelector('article');
+      const cardWidth = card ? card.clientWidth + 16 : 300;
+      el.scrollTo({ left: safeIdx * cardWidth, behavior: 'smooth' });
     }
-    touchStartXRef.current = null;
-    touchStartYRef.current = null;
   };
 
   // Pointer drag support for desktop swipeability
@@ -160,11 +168,11 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
           </p>
         </div>
 
-        {/* Clean Swipeable Navigation Controls */}
+        {/* Clean Swipeable Navigation Controls & Counter */}
         <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
-          <div className="section-badge-pill hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-mono">
-            <span>EXPLORE LOOKS</span>
-          </div>
+          <span className="text-xs font-mono text-zinc-400 tracking-wider">
+            [ 0{currentSlide + 1} / 0{entries.length} ]
+          </span>
 
           <button
             onClick={prevSlide}
@@ -184,18 +192,109 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       </div>
 
       {/* ========================================================
-          SWIPABLE 3D SPATIAL CATWALK STAGE
+          MOBILE VIEW: FLUID HORIZONTAL SWIPEABLE LOOKBOOK RAIL
+          1:1 native finger tracking, zero lag, zero 3D perspective distortion
+          ======================================================== */}
+      <div className="block md:hidden w-full px-2 mb-4">
+        {/* Quick Look Selector Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 mb-3">
+          {entries.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToLook(i)}
+              className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all cursor-pointer border ${
+                currentSlide === i
+                  ? 'bg-pink text-black font-bold border-pink shadow-md'
+                  : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
+              }`}
+            >
+              LOOK 0{i + 1}
+            </button>
+          ))}
+        </div>
+
+        {/* Fluid Horizontal Track */}
+        <div
+          ref={mobileTrackRef}
+          onScroll={handleMobileScroll}
+          className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-pan-x"
+        >
+          {entries.map((item, idx) => (
+            <article
+              key={item.id || idx}
+              onClick={() => openLightbox(item, idx)}
+              className="snap-center shrink-0 w-[86vw] max-w-[350px] h-[520px] rounded-3xl overflow-hidden relative flex flex-col justify-between p-5 bg-[#0d0212] border border-white/15 mobile-grunge-card shadow-2xl cursor-pointer select-none"
+            >
+              {/* Image Frame with pointer-events-none */}
+              <img
+                src={item.image}
+                alt={item.title}
+                draggable={false}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none filter brightness-95"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+
+              {/* Top Badge Bar */}
+              <div className="relative z-10 flex items-center justify-between text-left image-overlay-text">
+                <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase">
+                  {item.code.split('•')[0]?.trim() || `LOOK 00${idx + 1}`}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openLightbox(item, idx);
+                  }}
+                  aria-label="Inspect Full Look"
+                  className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:border-white/50 transition-all cursor-pointer"
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Bottom Editorial Content */}
+              <div className="relative z-10 flex flex-col text-left image-overlay-text">
+                <span className="text-[10px] font-mono text-pink font-semibold tracking-widest uppercase mb-1 flex items-center gap-1">
+                  <Flame className="w-3 h-3 text-pink" />
+                  <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
+                </span>
+
+                <h3 className="text-xl sm:text-2xl font-mono font-bold uppercase text-white leading-tight mb-1.5">
+                  {item.title}
+                </h3>
+
+                <p className="text-xs text-zinc-300 font-montserrat line-clamp-2 leading-relaxed mb-3">
+                  {item.subtitle || item.story}
+                </p>
+
+                <div className="flex items-center justify-between pt-2.5 border-t border-white/15 text-xs font-mono">
+                  <span className="py-1 px-3 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 bg-white/15 border border-white/20 text-white">
+                    <Eye className="w-3.5 h-3.5 text-white" />
+                    <span>SEE FULL LOOK ↗</span>
+                  </span>
+
+                  <span className="text-[11px] font-mono text-zinc-400">
+                    0{idx + 1} / 0{entries.length}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      {/* ========================================================
+          DESKTOP VIEW: 3D SPATIAL CATWALK STAGE (MD+ SCREENS)
+          Hardware-accelerated perspective runway with buttery smooth transitions
           ======================================================== */}
       <div
         ref={stageRef}
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-full max-w-7xl mx-auto px-4 sm:px-12 pt-6 pb-12 flex flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none perspective-[1400px] cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
+        className="hidden md:flex relative w-full max-w-7xl mx-auto px-4 sm:px-12 pt-6 pb-12 flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none perspective-[1400px] cursor-grab active:cursor-grabbing overflow-visible"
         style={{ perspective: '1400px' }}
       >
         {/* Perspective 3D Runway Grid Floor */}
@@ -236,12 +335,11 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
             if (!isVisible) return null;
 
-            let translateX = diff * (typeof window !== 'undefined' && window.innerWidth < 640 ? 160 : 330);
+            let translateX = diff * 330;
             let translateZ = isCenter ? 120 : -90 * Math.abs(diff);
             let rotateY = diff * -25;
-            let scale = isCenter ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 1.02 : 1.06) : 0.82;
+            let scale = isCenter ? 1.06 : 0.82;
             let opacity = isCenter ? 1 : Math.max(0.25, 1 - Math.abs(diff) * 0.45);
-            let blur = isCenter ? 0 : Math.abs(diff) * 3;
 
             const tiltX = isCenter ? -mousePos.y * 12 : 0;
             const tiltY = isCenter ? mousePos.x * 14 : 0;
@@ -256,7 +354,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     goToSlide(idx);
                   }
                 }}
-                className={`absolute top-0 w-[270px] sm:w-[340px] md:w-[380px] h-[470px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
+                className={`absolute top-0 w-[340px] md:w-[380px] h-[500px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-500 ease-out transform-gpu ${
                   isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
                 }`}
                 style={{
@@ -265,24 +363,25 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   transformStyle: 'preserve-3d'
                 }}
               >
-                {/* Pure Editorial Noir Card (Zero light shadows, zero neon glow rims) */}
+                {/* Pure Editorial Noir Card */}
                 <div
                   className={`tunnel-card w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
                     isCenter ? 'border border-white/20' : 'border border-white/10'
                   }`}
                 >
-                  {/* Image Layer */}
+                  {/* Image Layer with pointer-events-none */}
                   <img
                     src={item.image}
                     alt={item.title}
+                    draggable={false}
                     loading={isCenter ? 'eager' : 'lazy'}
-                    className={`w-full h-full object-cover transition-transform duration-700 ${
+                    className={`w-full h-full object-cover transition-transform duration-700 pointer-events-none ${
                       isCenter ? 'scale-105 brightness-100' : 'scale-100 brightness-85'
                     }`}
                   />
 
                   {/* Scrim Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85 pointer-events-none" />
 
                   {/* Top Badges */}
                   <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20 image-overlay-text">
@@ -304,8 +403,8 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
                   {/* Bottom Editorial Caption */}
                   <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20 image-overlay-text">
-                    <span className="text-[10px] font-mono text-silver/80 font-bold tracking-widest uppercase mb-1 flex items-center gap-1">
-                      <Flame className="w-3 h-3 text-silver/80" />
+                    <span className="text-[10px] font-mono text-pink font-semibold tracking-widest uppercase mb-1 flex items-center gap-1">
+                      <Flame className="w-3 h-3 text-pink" />
                       <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
                     </span>
 
@@ -313,11 +412,10 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                       {item.title}
                     </h3>
 
-                    <p className="text-xs text-silver/80 font-montserrat line-clamp-2 leading-relaxed mb-3">
+                    <p className="text-xs text-zinc-300 font-montserrat line-clamp-2 leading-relaxed mb-3">
                       {item.subtitle || item.story}
                     </p>
 
-                    {/* Small 'See Full Look' button on every card */}
                     <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
                       <button
                         onClick={(e) => {
@@ -330,7 +428,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                         <span>SEE FULL LOOK ↗</span>
                       </button>
 
-                      <span className="text-[11px] font-mono text-silver/60">
+                      <span className="text-[11px] font-mono text-zinc-400">
                         {idx + 1} / {entries.length}
                       </span>
                     </div>

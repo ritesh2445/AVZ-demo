@@ -31,13 +31,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   const [activeIndex, setActiveIndex] = useState(0);
   const [viewMode, setViewMode] = useState('3d'); // '3d' or 'grid'
 
-  // Mobile Spatial Card Gesture State
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isSwiping, setIsSwiping] = useState(false);
-  const touchStartXRef = useRef(0);
-  const touchStartYRef = useRef(0);
-  const gestureDirectionRef = useRef(null);
-  const dragRafRef = useRef(null);
+  // Mobile Lookbook Archive Gallery State
+  const mobileTrackRef = useRef(null);
 
   const activeIndexRef = useRef(0);
   const activeItem = MUSEUM_ITEMS[activeIndex] || MUSEUM_ITEMS[0];
@@ -473,55 +468,31 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     selectPedestal(prevIdx);
   };
 
-  // Mobile Touch Gestures with Direction Locking (Guarantees zero-lag vertical scrolling)
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
-    gestureDirectionRef.current = null;
-    setIsSwiping(false);
+  const selectMobileItem = (idx) => {
+    const total = MUSEUM_ITEMS.length;
+    const targetIdx = Math.max(0, Math.min(idx, total - 1));
+    playSound('pip');
+    setActiveIndex(targetIdx);
+    selectPedestal(targetIdx);
+
+    const el = mobileTrackRef.current;
+    if (el) {
+      const card = el.querySelector('article');
+      const cardWidth = card ? card.clientWidth + 16 : 320;
+      el.scrollTo({ left: targetIdx * cardWidth, behavior: 'smooth' });
+    }
   };
 
-  const handleTouchMove = (e) => {
-    const clientX = e.touches[0].clientX;
-    const clientY = e.touches[0].clientY;
-    const deltaX = clientX - touchStartXRef.current;
-    const deltaY = clientY - touchStartYRef.current;
-
-    if (!gestureDirectionRef.current) {
-      if (Math.abs(deltaX) < 7 && Math.abs(deltaY) < 7) return;
-      if (Math.abs(deltaY) >= Math.abs(deltaX)) {
-        gestureDirectionRef.current = 'vertical';
-        return; // Allow unhindered native page scrolling
-      } else {
-        gestureDirectionRef.current = 'horizontal';
-        setIsSwiping(true);
-      }
+  const handleMobileTrackScroll = () => {
+    const el = mobileTrackRef.current;
+    if (!el) return;
+    const card = el.querySelector('article');
+    const cardWidth = card ? card.clientWidth + 16 : 320;
+    const idx = Math.min(Math.round(el.scrollLeft / cardWidth), MUSEUM_ITEMS.length - 1);
+    if (idx >= 0 && idx !== activeIndex) {
+      setActiveIndex(idx);
+      selectPedestal(idx);
     }
-
-    if (gestureDirectionRef.current === 'vertical') return;
-
-    if (dragRafRef.current) return;
-    dragRafRef.current = requestAnimationFrame(() => {
-      dragRafRef.current = null;
-      setDragOffset(deltaX);
-    });
-  };
-
-  const handleTouchEnd = () => {
-    if (dragRafRef.current) {
-      cancelAnimationFrame(dragRafRef.current);
-      dragRafRef.current = null;
-    }
-    if (gestureDirectionRef.current === 'horizontal') {
-      if (dragOffset < -40) {
-        nextArtifact();
-      } else if (dragOffset > 40) {
-        prevArtifact();
-      }
-    }
-    setIsSwiping(false);
-    setDragOffset(0);
-    gestureDirectionRef.current = null;
   };
 
   const handleCommissionClick = (item) => {
@@ -597,171 +568,149 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       </div>
 
       {/* =========================================================================
-          MOBILE VIEW: LOOKBOOK ARCHIVE SPATIAL RUNWAY (ZERO LAG, UNBLOCKED SCROLL)
+          MOBILE VIEW: LOOKBOOK ARCHIVE EXHIBITION (FLUID HORIZONTAL GALLERY)
+          Native touch swiping, centered cards, zero Tinder stacks, zero scroll trap
           ========================================================================= */}
       <div className="block md:hidden w-full">
-        {/* Progress HUD */}
-        <div className="flex items-center justify-between mb-4 px-1">
-          <span className="text-[10px] font-mono tracking-widest text-pink uppercase font-semibold flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-ping inline-block" />
-            <span>PIECE [ 0{activeIndex + 1} / 0{MUSEUM_ITEMS.length} ]</span>
-          </span>
-          <span className="text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
-            [ SWIPE OR TAP TO BROWSE ]
-          </span>
-        </div>
-
-        {/* Spatial Card Stack Container (touch-pan-y ensures vertical scrolling remains 100% fluid) */}
-        <div
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          className="relative w-full h-[580px] sm:h-[610px] flex items-center justify-center select-none touch-pan-y"
-        >
-          {MUSEUM_ITEMS.map((item, idx) => {
-            const total = MUSEUM_ITEMS.length;
-            const diff = (idx - activeIndex + total) % total;
-
-            // Only render top 3 cards in the deck
-            if (diff > 2 && diff < total - 1) return null;
-
-            const isTop = diff === 0;
-            const isSecond = diff === 1;
-            const isThird = diff === 2;
-
-            const transformStyle = isTop
-              ? `translate3d(${dragOffset}px, 0, 0) rotate(${dragOffset * 0.05}deg)`
-              : isSecond
-              ? 'translate3d(0, 14px, 0) scale(0.95)'
-              : isThird
-              ? 'translate3d(0, 28px, 0) scale(0.90)'
-              : 'translate3d(0, 0, 0) scale(0.85)';
-
-            const opacityStyle = isTop ? 1 : isSecond ? 0.7 : isThird ? 0.4 : 0;
-            const zIndexStyle = isTop ? 30 : isSecond ? 20 : isThird ? 10 : 0;
-
-            return (
-              <div
-                key={item.id}
-                style={{
-                  transform: transformStyle,
-                  opacity: opacityStyle,
-                  zIndex: zIndexStyle,
-                  transition: isSwiping && isTop ? 'none' : 'transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.35s ease'
-                }}
-                className={`absolute inset-x-0 top-0 h-[560px] sm:h-[590px] rounded-3xl border p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] overflow-hidden mobile-grunge-card ${
-                  isLight
-                    ? 'border-zinc-300 bg-white text-zinc-900'
-                    : 'border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] text-white'
-                }`}
-              >
-                {/* Top Badge Bar */}
-                <div className="flex items-center justify-between shrink-0 mb-2.5">
-                  <span className="px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[9px] font-mono tracking-widest text-pink uppercase font-semibold">
-                    {item.tag}
-                  </span>
-                  <span className="text-[10px] font-mono text-zinc-400 tracking-wider">
-                    EST. {item.year}
-                  </span>
-                </div>
-
-                {/* Main Specimen Image Frame */}
-                <div className="relative w-full h-[290px] sm:h-[315px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-2">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full h-full object-contain filter brightness-95"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-
-                  {/* Corner Badge */}
-                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-white">
-                    <span className="bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 uppercase tracking-widest text-[9px]">
-                      {item.originalOwner}
-                    </span>
-                    <span className="text-pink text-[9px] font-bold">1-OF-1 ARCHIVE</span>
-                  </div>
-                </div>
-
-                {/* Details & Curatorial Copy */}
-                <div className="flex flex-col justify-between flex-1 pt-2.5 pb-1 text-left">
-                  <div>
-                    <h3 className={`font-mono text-sm sm:text-base font-semibold uppercase leading-tight line-clamp-1 mb-1.5 ${
-                      isLight ? 'text-zinc-900' : 'text-white'
-                    }`}>
-                      {item.name}
-                    </h3>
-                    <p className={`text-[11px] font-montserrat italic line-clamp-2 leading-relaxed mb-2 ${
-                      isLight ? 'text-zinc-700' : 'text-zinc-300'
-                    }`}>
-                      "{item.story}"
-                    </p>
-                  </div>
-
-                  {/* Materials Pill */}
-                  <div className={`py-1 px-2.5 rounded-lg border text-[10px] font-mono line-clamp-1 mb-2.5 ${
-                    isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-800' : 'bg-black/60 border-white/10 text-zinc-300'
-                  }`}>
-                    <span className="text-pink font-semibold">CRAFT: </span>
-                    {item.materials}
-                  </div>
-
-                  {/* Recreation Action Button */}
-                  <button
-                    onClick={() => handleCommissionClick(item)}
-                    className="w-full py-3 px-4 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.18em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <Scissors className="w-3.5 h-3.5" />
-                    <span>REQUEST CUSTOM ORDER ↗</span>
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Interactive Controls Strip */}
-        <div className="flex items-center justify-between mt-2 px-2">
-          {/* Previous / Next Arrow Controls */}
+        {/* Progress & Navigation Controls HUD */}
+        <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono tracking-widest text-pink uppercase font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse inline-block" />
+              <span>SPECIMEN [ 0{activeIndex + 1} / 0{MUSEUM_ITEMS.length} ]</span>
+            </span>
+          </div>
+
+          {/* Previous / Next Arrow Controls */}
+          <div className="flex items-center gap-1.5">
             <button
-              onClick={prevArtifact}
+              onClick={() => selectMobileItem(activeIndex - 1)}
+              disabled={activeIndex === 0}
               aria-label="Previous Artifact"
-              className={`p-3 rounded-full border transition-all active:scale-95 cursor-pointer shadow-md ${
-                isLight ? 'bg-zinc-100 hover:bg-zinc-200 border-zinc-300 text-zinc-800' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
+              className={`p-2.5 rounded-full border transition-all active:scale-95 cursor-pointer shadow-md ${
+                activeIndex === 0
+                  ? 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                  : isLight
+                  ? 'bg-zinc-100 hover:bg-zinc-200 border-zinc-300 text-zinc-800'
+                  : 'bg-black/80 hover:bg-white/15 border-white/20 text-white'
               }`}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={nextArtifact}
+              onClick={() => selectMobileItem(activeIndex + 1)}
+              disabled={activeIndex === MUSEUM_ITEMS.length - 1}
               aria-label="Next Artifact"
-              className={`p-3 rounded-full border transition-all active:scale-95 cursor-pointer shadow-md ${
-                isLight ? 'bg-zinc-100 hover:bg-zinc-200 border-zinc-300 text-zinc-800' : 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
+              className={`p-2.5 rounded-full border transition-all active:scale-95 cursor-pointer shadow-md ${
+                activeIndex === MUSEUM_ITEMS.length - 1
+                  ? 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                  : isLight
+                  ? 'bg-zinc-100 hover:bg-zinc-200 border-zinc-300 text-zinc-800'
+                  : 'bg-black/80 hover:bg-white/15 border-white/20 text-white'
               }`}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+        </div>
 
-          {/* Direct Specimen Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-            {MUSEUM_ITEMS.map((item, idx) => (
-              <button
-                key={item.id}
-                onClick={() => selectPedestal(idx)}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all cursor-pointer border ${
-                  activeIndex === idx
-                    ? 'bg-pink text-black font-bold border-pink shadow-md'
-                    : isLight
-                    ? 'bg-zinc-100 text-zinc-600 border-zinc-300 hover:border-pink'
-                    : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
-                }`}
-              >
-                0{idx + 1}
-              </button>
-            ))}
-          </div>
+        {/* Quick Specimen Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 mb-4">
+          {MUSEUM_ITEMS.map((item, idx) => (
+            <button
+              key={item.id}
+              onClick={() => selectMobileItem(idx)}
+              className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all cursor-pointer border ${
+                activeIndex === idx
+                  ? 'bg-pink text-black font-bold border-pink shadow-md'
+                  : isLight
+                  ? 'bg-zinc-100 text-zinc-600 border-zinc-300 hover:border-pink'
+                  : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
+              }`}
+            >
+              0{idx + 1}
+            </button>
+          ))}
+        </div>
+
+        {/* Fluid Horizontal Native Carousel (Zero touch interception, zero vertical lock) */}
+        <div
+          ref={mobileTrackRef}
+          onScroll={handleMobileTrackScroll}
+          className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-pan-x"
+        >
+          {MUSEUM_ITEMS.map((item, idx) => (
+            <article
+              key={item.id}
+              className={`snap-center shrink-0 w-[86vw] max-w-[360px] h-[550px] sm:h-[580px] rounded-3xl border p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] overflow-hidden mobile-grunge-card select-none ${
+                isLight
+                  ? 'border-zinc-300 bg-white text-zinc-900'
+                  : 'border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] text-white'
+              }`}
+            >
+              {/* Top Badge Bar */}
+              <div className="flex items-center justify-between shrink-0 mb-2.5">
+                <span className="px-3 py-1 rounded-full bg-pink/15 border border-pink/40 text-[9px] font-mono tracking-widest text-pink uppercase font-semibold">
+                  {item.tag}
+                </span>
+                <span className="text-[10px] font-mono text-zinc-400 tracking-wider">
+                  EST. {item.year}
+                </span>
+              </div>
+
+              {/* Main Specimen Image Frame with pointer-events-none */}
+              <div className="relative w-full h-[280px] sm:h-[305px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-2">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  draggable={false}
+                  className="w-full h-full object-contain filter brightness-95 pointer-events-none"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+
+                {/* Corner Badge */}
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono text-white pointer-events-none">
+                  <span className="bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20 uppercase tracking-widest text-[9px]">
+                    {item.originalOwner}
+                  </span>
+                  <span className="text-pink text-[9px] font-bold">1-OF-1 ARCHIVE</span>
+                </div>
+              </div>
+
+              {/* Details & Curatorial Copy */}
+              <div className="flex flex-col justify-between flex-1 pt-2.5 pb-1 text-left">
+                <div>
+                  <h3 className={`font-mono text-sm sm:text-base font-semibold uppercase leading-tight line-clamp-1 mb-1.5 ${
+                    isLight ? 'text-zinc-900' : 'text-white'
+                  }`}>
+                    {item.name}
+                  </h3>
+                  <p className={`text-[11px] font-montserrat italic line-clamp-2 leading-relaxed mb-2 ${
+                    isLight ? 'text-zinc-700' : 'text-zinc-300'
+                  }`}>
+                    "{item.story}"
+                  </p>
+                </div>
+
+                {/* Materials Pill */}
+                <div className={`py-1 px-2.5 rounded-lg border text-[10px] font-mono line-clamp-1 mb-2.5 ${
+                  isLight ? 'bg-zinc-100 border-zinc-200 text-zinc-800' : 'bg-black/60 border-white/10 text-zinc-300'
+                }`}>
+                  <span className="text-pink font-semibold">CRAFT: </span>
+                  {item.materials}
+                </div>
+
+                {/* Recreation Action Button */}
+                <button
+                  onClick={() => handleCommissionClick(item)}
+                  className="w-full py-3 px-4 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.18em] uppercase transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Scissors className="w-3.5 h-3.5" />
+                  <span>REQUEST CUSTOM ORDER ↗</span>
+                </button>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
 

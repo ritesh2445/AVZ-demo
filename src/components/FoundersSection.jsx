@@ -234,7 +234,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           ========================================================================= */}
       <div
         ref={scrollContainerRef}
-        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-scroll-x"
+        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-pan-x"
         style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
       >
         {/* =====================================================================
@@ -272,7 +272,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             <img
               src={cmsFounders?.portrait_image || ASSET_MANIFEST.editorialHero}
               alt="Dhrisni (Dhristroyer) - Founder of AVZ Vaganza"
-              className="w-full h-full object-cover object-center filter brightness-100 contrast-105 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+              draggable={false} className="w-full h-full object-cover object-center filter brightness-100 contrast-105 group-hover:scale-[1.03] transition-transform duration-700 ease-out pointer-events-none"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
 

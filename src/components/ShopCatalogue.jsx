@@ -183,7 +183,7 @@ function KeyArchiveCarousel({
       <div
         ref={trackRef}
         onScroll={handleTrackScroll}
-        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory touch-scroll-x py-4 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
+        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory touch-pan-x py-4 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
       >
         {items.map((item) => {
           const isWish = wishlistIds.includes(item.id);
@@ -203,7 +203,7 @@ function KeyArchiveCarousel({
                   src={item.images ? item.images[0] : item.image}
                   alt={item.name}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105"
+                  draggable={false} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
@@ -335,7 +335,7 @@ function MobileCompactProductCard({
           src={product.images ? product.images[0] : product.image}
           alt={product.name}
           loading="lazy"
-          className="w-full h-full object-cover filter brightness-95"
+          draggable={false} className="w-full h-full object-cover filter brightness-95 pointer-events-none"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
 
@@ -696,7 +696,7 @@ export default function ShopCatalogue({
               </div>
 
               {/* Swipable Section Carousel with Smaller Frames */}
-              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-scroll-x">
+              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
                 {section.items.map((prod) => (
                   <MobileCompactProductCard
                     key={prod.id}
@@ -722,7 +722,7 @@ export default function ShopCatalogue({
                 SWIPABLE CAROUSEL
               </span>
             </div>
-            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-scroll-x">
+            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
               {filteredProducts.map((prod) => (
                 <MobileCompactProductCard
                   key={prod.id}
@@ -805,7 +805,7 @@ export default function ShopCatalogue({
                       src={product.images ? product.images[0] : product.image}
                       alt={product.name}
                       loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105"
+                      draggable={false} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
                     />
 
                     {/* Dark Vignette Scrim */}

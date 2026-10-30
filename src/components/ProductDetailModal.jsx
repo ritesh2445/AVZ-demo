@@ -111,7 +111,7 @@ export default function ProductDetailModal({
             <img
               src={product.images ? product.images[activeImageIndex] : product.image}
               alt={product.name}
-              className="w-full h-full object-cover transition-all duration-500 rounded-2xl"
+              draggable={false} className="w-full h-full object-cover transition-all duration-500 rounded-2xl pointer-events-none"
             />
 
             {/* Provenance Badge */}
@@ -152,7 +152,7 @@ export default function ProductDetailModal({
                       : 'border-white/15 opacity-60 hover:opacity-100 hover:border-white/40'
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover rounded-xl" />
+                  <img src={img} alt={`Thumbnail ${idx}`} draggable={false} className="w-full h-full object-cover rounded-xl pointer-events-none" />
                 </button>
               ))}
             </div>
