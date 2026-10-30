@@ -24,7 +24,7 @@ export default function AdminDashboardPage() {
   // Global Storefront Controls state
   const [storefrontSettings, setStorefrontSettings] = useState<any>({
     maintenance_mode: { enabled: false, title: 'ATELIER CALIBRATION IN PROGRESS', message: 'Dimensional maintenance underway.' },
-    announcement: { enabled: true, text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000', link: '#shop' },
+    announcement: { enabled: false, text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000', link: '#shop' },
     purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for runway commissions.' }
   });
   const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);

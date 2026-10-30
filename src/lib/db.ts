@@ -524,7 +524,7 @@ async function performDatabaseInitialization(): Promise<void> {
     {
       key: 'announcement',
       value: JSON.stringify({
-        enabled: true,
+        enabled: false,
         text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000 | 1-OF-1 BESPOKE ATELIER RELEASES',
         link: '#shop',
         link_text: 'EXPLORE VAULT',
