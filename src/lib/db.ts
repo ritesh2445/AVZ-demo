@@ -582,7 +582,7 @@ async function performDatabaseInitialization(): Promise<void> {
         video_mobile: '/assets/hero_reel_mobile.mp4',
         primary_cta_text: 'EXPLORE VAULT',
         primary_cta_link: '#shop',
-        secondary_cta_text: 'ATELIER COMMISSIONS',
+        secondary_cta_text: 'CUSTOM ORDERS',
         secondary_cta_link: '#custom',
         badge_text: ''
       })

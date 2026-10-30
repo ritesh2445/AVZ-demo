@@ -147,7 +147,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
             href={cmsHero?.secondary_cta_link || '#custom'}
             className="px-6 py-2.5 rounded-full border border-white/20 hover:border-white/40 bg-black/40 hover:bg-white/10 backdrop-blur-md text-white font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
           >
-            {cmsHero?.secondary_cta_text || 'ATELIER COMMISSIONS'}
+            {cmsHero?.secondary_cta_text || 'CUSTOM ORDERS'}
           </a>
         </div>
       </div>
