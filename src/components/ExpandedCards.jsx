@@ -219,7 +219,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
       <div
         ref={mobileTrackRef}
         onScroll={handleMobileScroll}
-        className="flex md:hidden gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-pan-x"
+        className="flex md:hidden gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-scroll-x"
       >
         {items.map((item, idx) => (
           <article

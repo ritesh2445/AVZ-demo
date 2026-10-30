@@ -72,7 +72,7 @@ export default function RootLayout({
           media="(max-width: 767px)"
         />
       </head>
-      <body className="bg-black text-silver antialiased selection:bg-pink selection:text-black overflow-x-hidden">
+      <body className="bg-black text-silver antialiased selection:bg-pink selection:text-black overflow-x-clip">
         {children}
       </body>
     </html>

@@ -183,7 +183,7 @@ function KeyArchiveCarousel({
       <div
         ref={trackRef}
         onScroll={handleTrackScroll}
-        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory touch-pan-x py-4 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
+        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory touch-scroll-x py-4 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
       >
         {items.map((item) => {
           const isWish = wishlistIds.includes(item.id);
@@ -696,7 +696,7 @@ export default function ShopCatalogue({
               </div>
 
               {/* Swipable Section Carousel with Smaller Frames */}
-              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
+              <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-scroll-x">
                 {section.items.map((prod) => (
                   <MobileCompactProductCard
                     key={prod.id}
@@ -722,7 +722,7 @@ export default function ShopCatalogue({
                 SWIPABLE CAROUSEL
               </span>
             </div>
-            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-pan-x">
+            <div className="flex items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory py-1 touch-scroll-x">
               {filteredProducts.map((prod) => (
                 <MobileCompactProductCard
                   key={prod.id}

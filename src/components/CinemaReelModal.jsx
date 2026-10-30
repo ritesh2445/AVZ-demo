@@ -173,6 +173,7 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
         <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden bg-black">
           {viewMode === 'vimeo' ? (
             <iframe
+              key={vimeoId}
               src={vimeoEmbedUrl}
               className="w-full h-full border-none"
               allow="autoplay; fullscreen; picture-in-picture"

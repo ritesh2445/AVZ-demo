@@ -234,7 +234,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           ========================================================================= */}
       <div
         ref={scrollContainerRef}
-        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-pan-x"
+        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-scroll-x"
         style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
       >
         {/* =====================================================================

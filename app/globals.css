@@ -61,12 +61,14 @@ html {
   color: #C0C0C0;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  touch-action: pan-x pan-y;
 }
 
 body {
   background-color: #000000;
   color: #C0C0C0;
-  overflow-x: hidden;
+  overflow-x: clip;
   min-height: 100vh;
   min-height: 100dvh;
   position: relative;
@@ -116,7 +118,9 @@ img {
 .mobile-grunge-card,
 article,
 [class*="aspect-"] {
-  touch-action: pan-y;
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
 }
 
 /* Custom Scrollbar */
@@ -431,16 +435,7 @@ article,
   }
 }
 
-/* Offscreen content rendering optimization for mobile */
-#museum,
-#custom,
-#about,
-#specs,
-#faq,
-#contact {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 600px;
-}
+/* Offscreen content rendering optimized natively */
 
 /* Smooth hardware accelerated cards */
 article,
@@ -2141,7 +2136,7 @@ html.light-theme .lookbook-modal-card .lookbook-close-x:hover {
 html,
 body,
 main {
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
   overscroll-behavior-y: auto;
 }
 
@@ -2150,17 +2145,19 @@ main {
 [class*="overflow-x-auto"],
 .snap-x,
 [class*="snap-x"] {
-  touch-action: pan-x pan-y;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: auto;
-  overscroll-behavior-y: auto;
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-x: auto !important;
+  overscroll-behavior-y: auto !important;
 }
 
 /* Cards and picture frames never isolate or trap vertical scroll */
 .mobile-grunge-card,
 article,
 [class*="aspect-"] {
-  touch-action: pan-y;
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
 }
 
 
@@ -2394,10 +2391,10 @@ html[data-theme="light"] #hero .hero-hud-btn span {
 }
 
 .touch-scroll-x {
-  touch-action: pan-x pan-y;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: auto;
-  overscroll-behavior-y: auto;
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-x: auto !important;
+  overscroll-behavior-y: auto !important;
 }
 
 .touch-scroll-y {

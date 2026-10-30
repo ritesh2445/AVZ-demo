@@ -14,7 +14,12 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
   const sectionRef = useRef(null);
   const audioRef = useRef(null);
 
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  const [isMobileDevice, setIsMobileDevice] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+    return false;
+  });
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
@@ -22,13 +27,17 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
   // Responsive device listener for mobile video switching
   useEffect(() => {
     const checkMobile = () => {
-      const isMob = window.innerWidth < 768;
+      const isMob = window.innerWidth < 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       setIsMobileDevice(isMob);
       if (isMob) setIsMuted(true); // Muted by default on mobile for strict autoplay policies
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener('orientationchange', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('orientationchange', checkMobile);
+    };
   }, []);
 
   const audioSource = isMobileDevice
@@ -101,6 +110,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         style={{ backgroundColor: '#000000' }}
       >
         <iframe
+          key={vimeoId}
           src={vimeoBackgroundUrl}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none scale-105"
           style={{

@@ -652,7 +652,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         <div
           ref={mobileTrackRef}
           onScroll={handleMobileTrackScroll}
-          className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-pan-x"
+          className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-scroll-x"
         >
           {MUSEUM_ITEMS.map((item, idx) => (
             <article
