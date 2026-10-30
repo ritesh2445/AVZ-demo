@@ -226,7 +226,7 @@ export function ContactSection() {
                     <Phone className="w-4 h-4 text-white stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-pink-300 uppercase font-semibold whitespace-nowrap">
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
                       PRIMARY CONCIERGE
                     </span>
                     <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">

@@ -208,7 +208,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                     <Phone className="w-3.5 h-3.5 text-white stroke-[2.5]" />
                   </div>
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-pink-300 uppercase font-semibold whitespace-nowrap">PRIMARY CONCIERGE</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">PRIMARY CONCIERGE</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
                   </div>
                 </div>
