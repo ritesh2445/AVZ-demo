@@ -204,9 +204,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 className="contact-action-btn flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
-                  <div className="w-7 h-7 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-                    <Phone className="w-3.5 h-3.5 text-white stroke-[2.5]" />
-                  </div>
+                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">PRIMARY CONCIERGE</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
@@ -223,9 +221,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 className="contact-action-btn flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
                 <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
-                  <div className="w-7 h-7 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-                    <Phone className="w-3.5 h-3.5 text-white stroke-[2.5]" />
-                  </div>
+                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">STUDIO SUPPORT</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 82910 13848</span>

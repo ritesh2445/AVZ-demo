@@ -222,9 +222,7 @@ export function ContactSection() {
                 className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-                    <Phone className="w-4 h-4 text-white stroke-[2.5]" />
-                  </div>
+                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
                       PRIMARY CONCIERGE
@@ -235,10 +233,7 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-[9px] sm:text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/20 transition-all whitespace-nowrap">
-                  <span>CHAT</span>
-                  <span className="text-xs">↗</span>
-                </div>
+                <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
 
               <a
@@ -249,9 +244,7 @@ export function ContactSection() {
                 className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shrink-0">
-                    <Phone className="w-4 h-4 text-white stroke-[2.5]" />
-                  </div>
+                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
                       STUDIO SUPPORT
@@ -262,10 +255,7 @@ export function ContactSection() {
                   </div>
                 </div>
 
-                <div className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-[9px] sm:text-[10px] font-mono font-bold tracking-widest uppercase shrink-0 flex items-center gap-1 group-hover:bg-white/20 transition-all whitespace-nowrap">
-                  <span>CHAT</span>
-                  <span className="text-xs">↗</span>
-                </div>
+                <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
 

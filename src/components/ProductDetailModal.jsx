@@ -293,7 +293,7 @@ export default function ProductDetailModal({
               className={`w-full py-3.5 px-6 rounded-full text-xs font-mono font-semibold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all ${
                 product.stock === 1 && isAlreadyInCart
                   ? 'opacity-50 cursor-not-allowed bg-zinc-800 text-zinc-500 border border-zinc-700'
-                  : 'bg-white text-black hover:bg-zinc-200 active:scale-[0.99]'
+                  : 'btn-add-bag bg-white text-black hover:bg-zinc-200 active:scale-[0.99] shadow-md'
               }`}
             >
               <ShoppingBag className="w-4 h-4" />

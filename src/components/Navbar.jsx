@@ -132,7 +132,7 @@ export default function Navbar({
               }}
               aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
               title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              className="theme-toggle-icon-btn w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0 active:scale-95 hover:bg-white/5"
+              className="theme-toggle-icon-btn p-1.5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0 active:scale-95"
             >
               {theme === 'light' ? (
                 <Moon className="w-3.5 h-3.5 text-purple-700 hover:text-purple-900 transition-colors" />
@@ -189,7 +189,7 @@ export default function Navbar({
                 onOpenSearch?.();
               }}
               aria-label="Search Collection"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <Search className="w-3.5 h-3.5" />
             </button>
@@ -234,7 +234,7 @@ export default function Navbar({
                   onOpenWishlist();
                 }}
                 aria-label="Wishlist"
-                className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                className="relative p-1.5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
               >
                 <Heart className={`w-3.5 h-3.5 ${wishlistCount > 0 ? 'text-[#be185d] fill-[#be185d]' : ''}`} />
                 {wishlistCount > 0 && (
@@ -252,7 +252,7 @@ export default function Navbar({
                 onOpenCart?.();
               }}
               aria-label="Shopping Bag"
-              className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-zinc-300 hover:text-white transition-colors cursor-pointer border border-white/10 hover:border-white/25 bg-white/5"
+              className="relative p-1.5 flex items-center justify-center text-zinc-300 hover:text-white transition-colors cursor-pointer"
             >
               <ShoppingBag className="w-3.5 h-3.5" />
               {cartCount > 0 && (

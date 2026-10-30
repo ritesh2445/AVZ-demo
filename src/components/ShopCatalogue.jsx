@@ -279,7 +279,7 @@ function KeyArchiveCarousel({
                             selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
                           });
                         }}
-                        className="px-3.5 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-[10px] tracking-wider uppercase flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md"
+                        className="btn-add-bag px-3.5 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-[10px] tracking-wider uppercase flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-md"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                         <span>BAG +</span>
@@ -894,7 +894,7 @@ export default function ShopCatalogue({
                               });
                             }}
                             title="Quick Add to Bag"
-                            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[10px] font-mono tracking-wider uppercase flex items-center gap-1 cursor-pointer active:scale-95 transition-all"
+                            className="btn-add-bag px-3 py-1.5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-[10px] tracking-wider uppercase flex items-center gap-1 cursor-pointer active:scale-95 transition-all shadow-md"
                           >
                             <ShoppingBag className="w-3 h-3" />
                             <span>BAG +</span>

@@ -763,7 +763,7 @@ html.light-theme h3 span.text-zinc-500 {
 }
 
 /* Standard body text overrides (outside photo overlays) */
-html.light-theme .text-white:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *):not(.contact-action-btn-primary *):not(#hero *) {
+html.light-theme .text-white:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.image-overlay-text):not(.image-overlay-text *):not(.btn-glass-pink *):not(.btn-commission *):not(.contact-action-btn-primary *):not(#hero *):not([class*="fixed inset-0"] *):not([class*="z-[999"] *):not([class*="z-[100"] *):not(.btn-add-bag *):not(.contact-action-btn *) {
   color: #09090b !important;
 }
 
@@ -2401,4 +2401,99 @@ html[data-theme="light"] #hero .hero-hud-btn span {
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: auto;
+}
+
+
+/* =========================================================================
+   LIGHT MODE: MODAL, DRAWER & BAG BUTTON HIGH-CONTRAST PROTECTION
+   Guarantees zero invisible text or buttons across modals, drawers & cards
+   ========================================================================= */
+
+/* 1. Modals & Drawers: Keep pristine bright text on dark modal backdrops */
+html.light-theme [class*="fixed inset-0"] h1,
+html.light-theme [class*="fixed inset-0"] h2,
+html.light-theme [class*="fixed inset-0"] h3,
+html.light-theme [class*="fixed inset-0"] h4,
+html.light-theme [class*="fixed inset-0"] .text-white,
+html.light-theme [class*="z-[999"] .text-white,
+html.light-theme [class*="z-[100"] .text-white,
+html.light-theme [role="dialog"] .text-white {
+  color: #ffffff !important;
+}
+
+html.light-theme [class*="fixed inset-0"] p,
+html.light-theme [class*="fixed inset-0"] .text-zinc-300,
+html.light-theme [class*="z-[999"] .text-zinc-300,
+html.light-theme [class*="z-[100"] .text-zinc-300 {
+  color: #d4d4d8 !important;
+}
+
+html.light-theme [class*="fixed inset-0"] .text-zinc-400,
+html.light-theme [class*="fixed inset-0"] .text-zinc-500,
+html.light-theme [class*="z-[999"] .text-zinc-400,
+html.light-theme [class*="z-[100"] .text-zinc-400 {
+  color: #a1a1aa !important;
+}
+
+html.light-theme [class*="fixed inset-0"] .text-silver,
+html.light-theme [class*="z-[999"] .text-silver,
+html.light-theme [class*="z-[100"] .text-silver {
+  color: #e4e4e7 !important;
+}
+
+/* 2. Unified Luxury "BAG +" and Checkout Buttons in Light Mode: Pure Jet-Black with Pure White Text */
+html.light-theme .btn-add-bag,
+html.light-theme button.btn-add-bag {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+  border: 1px solid #09090b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+html.light-theme .btn-add-bag *,
+html.light-theme .btn-add-bag span,
+html.light-theme .btn-add-bag svg,
+html.light-theme button.btn-add-bag *,
+html.light-theme button.btn-add-bag span,
+html.light-theme button.btn-add-bag svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: none !important;
+}
+
+html.light-theme .btn-add-bag:hover,
+html.light-theme button.btn-add-bag:hover {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+  border-color: #27272a !important;
+}
+
+/* 3. Header Action Buttons in Light Mode: High Visibility Dark Noir on Light Navbar */
+html.light-theme header button,
+html.light-theme header button svg {
+  color: #18181b !important;
+  stroke: #18181b !important;
+}
+
+html.light-theme header button:hover,
+html.light-theme header button:hover svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 4. Contact & WhatsApp Support Action Buttons in Light Mode */
+html.light-theme .contact-action-btn {
+  background: #09090b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html.light-theme .contact-action-btn *,
+html.light-theme .contact-action-btn span.text-white,
+html.light-theme .contact-action-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html.light-theme .contact-action-btn span.text-zinc-400 {
+  color: #a1a1aa !important;
 }
