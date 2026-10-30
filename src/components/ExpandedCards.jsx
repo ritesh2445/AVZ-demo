@@ -128,7 +128,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
           MOBILE (< MD): WIDE CINEMATIC HORIZONTAL SCROLL CARDS
           Wide aspect frames, no narrow squished bars, smooth touch scrolling
           ========================================================================= */}
-      <div className="flex md:hidden gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-2 scroll-smooth">
+      <div className="flex md:hidden gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-4 scroll-smooth touch-scroll-x">
         {items.map((item, idx) => (
           <article
             key={item.id || idx}
@@ -136,7 +136,7 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
               playSound('metal');
               onSelectProduct(item);
             }}
-            className="snap-center shrink-0 w-[84vw] max-w-[340px] h-[480px] rounded-3xl border border-white/15 overflow-hidden relative cursor-pointer shadow-xl select-none flex flex-col justify-between p-5 bg-[#0d0d12] mobile-grunge-card"
+            className="snap-center shrink-0 w-[84vw] max-w-[340px] h-[480px] rounded-3xl border border-white/15 overflow-hidden relative cursor-pointer shadow-xl select-none flex flex-col justify-between p-5 bg-[#0d0d12] mobile-grunge-card touch-scroll-x"
           >
             {/* Image Frame */}
             <img

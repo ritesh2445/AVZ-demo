@@ -104,7 +104,7 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
           src={vimeoBackgroundUrl}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none scale-105"
           style={{
-            width: isMobileDevice ? '100vw' : 'max(100vw, 177.78vh)',
+            width: isMobileDevice ? 'max(100vw, 56.25vh)' : 'max(100vw, 177.78vh)',
             height: isMobileDevice ? 'max(100vh, 177.78vw)' : 'max(100vh, 56.25vw)',
             minWidth: '100vw',
             minHeight: '100vh',

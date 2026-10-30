@@ -59,27 +59,30 @@ export default function Navbar({
     };
   }, [currencyOpen]);
 
-  // Auto-hide navbar on scroll down, reveal on scroll up or at top
+  // Auto-hide navbar on scroll down, reveal on scroll up or at top (RAF-throttled for 60fps/120fps)
   useEffect(() => {
     let lastY = typeof window !== 'undefined' ? window.scrollY : 0;
+    let ticking = false;
 
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      // If scrolled past threshold
-      if (currentY > 60) {
-        if (currentY > lastY && currentY - lastY > 8) {
-          // Scrolling DOWN: hide navbar smoothly
-          setVisible(false);
-          setMobileMenuOpen(false);
-        } else if (currentY < lastY && lastY - currentY > 8) {
-          // Scrolling UP: reveal navbar
-          setVisible(true);
-        }
-      } else {
-        // At the very top: always visible
-        setVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentY = window.scrollY;
+          if (currentY > 60) {
+            if (currentY > lastY && currentY - lastY > 12) {
+              setVisible(false);
+              setMobileMenuOpen(false);
+            } else if (currentY < lastY && lastY - currentY > 12) {
+              setVisible(true);
+            }
+          } else {
+            setVisible(true);
+          }
+          lastY = currentY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      lastY = currentY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

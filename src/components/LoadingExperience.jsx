@@ -129,7 +129,7 @@ export default function LoadingExperience({ onComplete }) {
     let animId;
     let currentCount = 0;
     let lastStepTime = performance.now();
-    const stepDuration = 42; // ms per count
+    const stepDuration = 12; // ms per count: brisk, responsive 1.2s load
 
     const triggerFinish = () => {
       if (hasFinishedRef.current) return;
@@ -191,7 +191,7 @@ export default function LoadingExperience({ onComplete }) {
         }
       } else if (!hasFinishedRef.current) {
         // Triumphant hold at 100% for 380ms before triggering cinematic aperture
-        if (time - lastStepTime >= 380) {
+        if (time - lastStepTime >= 180) {
           triggerFinish();
         }
       }

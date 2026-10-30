@@ -1513,12 +1513,9 @@ html.light-theme .fixed.inset-0.z-\[99999\] > div[class*="bg-black"] {
 .section-scroll-reveal {
   position: relative;
   opacity: 0;
-  transform: perspective(1200px) rotateX(2deg) translateY(44px) scale(0.985);
-  filter: blur(8px);
-  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, filter;
+  transform: translateY(16px);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: visible;
 }
 
@@ -1526,8 +1523,15 @@ html.light-theme .fixed.inset-0.z-\[99999\] > div[class*="bg-black"] {
 #hero.section-scroll-reveal,
 .section-scroll-reveal.is-visible {
   opacity: 1;
-  transform: perspective(1200px) rotateX(0deg) translateY(0) scale(1);
-  filter: blur(0px);
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .section-scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* Luminous Laser Scanline Beam across the top boundary of each revealed section */
@@ -2089,17 +2093,22 @@ html.light-theme .lookbook-modal-card .lookbook-close-x:hover {
    Ensures cards, carousels, articles, and horizontal tracks never trap
    or prevent natural vertical page scrolling on mobile or touchscreens.
    ========================================================================= */
-article,
-div,
-section,
+html,
+body,
+main {
+  touch-action: pan-y;
+  overscroll-behavior-y: auto;
+}
+
 .overflow-x-auto,
 [class*="overflow-x-auto"],
-.mobile-grunge-card,
-[class*="snap-"] {
-  touch-action: pan-x pan-y !important;
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior-x: auto !important;
-  overscroll-behavior-y: auto !important;
+.snap-x,
+[class*="snap-x"],
+.mobile-grunge-card {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
 }
 
 
@@ -2320,4 +2329,27 @@ html[data-theme="light"] #hero .hero-hud-btn svg path,
 html[data-theme="light"] #hero .hero-hud-btn span {
   color: #ffffff !important;
   stroke: #ffffff !important;
+}
+
+/* Hardware acceleration and ultra-smooth scrolling utilities */
+.gpu-smooth {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.touch-scroll-x {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+}
+
+.touch-scroll-y {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
 }

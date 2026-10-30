@@ -36,6 +36,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
   const [isSwiping, setIsSwiping] = useState(false);
   const touchStartXRef = useRef(0);
   const touchStartYRef = useRef(0);
+  const gestureDirectionRef = useRef(null);
+  const dragRafRef = useRef(null);
 
   const activeIndexRef = useRef(0);
   const activeItem = MUSEUM_ITEMS[activeIndex] || MUSEUM_ITEMS[0];
@@ -471,37 +473,55 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
     selectPedestal(prevIdx);
   };
 
-  // Mobile Touch Gestures for Lookbook Archive Spatial Deck
+  // Mobile Touch Gestures with Direction Locking (Guarantees zero-lag vertical scrolling)
   const handleTouchStart = (e) => {
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
-    setIsSwiping(true);
+    gestureDirectionRef.current = null;
+    setIsSwiping(false);
   };
 
   const handleTouchMove = (e) => {
-    if (!isSwiping) return;
-    const deltaX = e.touches[0].clientX - touchStartXRef.current;
-    const deltaY = e.touches[0].clientY - touchStartYRef.current;
+    const clientX = e.touches[0].clientX;
+    const clientY = e.touches[0].clientY;
+    const deltaX = clientX - touchStartXRef.current;
+    const deltaY = clientY - touchStartYRef.current;
 
-    // If scrolling mostly vertically, release swipe lock to ensure native page scroll is smooth
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaX) < 15) {
-      return;
+    if (!gestureDirectionRef.current) {
+      if (Math.abs(deltaX) < 7 && Math.abs(deltaY) < 7) return;
+      if (Math.abs(deltaY) >= Math.abs(deltaX)) {
+        gestureDirectionRef.current = 'vertical';
+        return; // Allow unhindered native page scrolling
+      } else {
+        gestureDirectionRef.current = 'horizontal';
+        setIsSwiping(true);
+      }
     }
 
-    setDragOffset(deltaX);
+    if (gestureDirectionRef.current === 'vertical') return;
+
+    if (dragRafRef.current) return;
+    dragRafRef.current = requestAnimationFrame(() => {
+      dragRafRef.current = null;
+      setDragOffset(deltaX);
+    });
   };
 
   const handleTouchEnd = () => {
-    if (!isSwiping) return;
-    setIsSwiping(false);
-
-    if (dragOffset < -45) {
-      nextArtifact();
-    } else if (dragOffset > 45) {
-      prevArtifact();
+    if (dragRafRef.current) {
+      cancelAnimationFrame(dragRafRef.current);
+      dragRafRef.current = null;
     }
-
+    if (gestureDirectionRef.current === 'horizontal') {
+      if (dragOffset < -40) {
+        nextArtifact();
+      } else if (dragOffset > 40) {
+        prevArtifact();
+      }
+    }
+    setIsSwiping(false);
     setDragOffset(0);
+    gestureDirectionRef.current = null;
   };
 
   const handleCommissionClick = (item) => {

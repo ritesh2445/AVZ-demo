@@ -51,102 +51,21 @@ const CARDS = [
   { id: 'card-aesthetic', label: 'AESTHETIC INSPIRATION', tag: '05' }
 ];
 
-const GLYPHS = ['⚡', 'Ξ', 'Ø', 'Δ', 'X', '§', '0', '1', '•', '+', '#', 'F', '9', '⚡'];
-
-/**
- * ElectricTypewriterBlock: Cyberpunk decoding glitch + neon electric spark typing effect.
- * Each character dynamically resolves through electric glitch glyphs before snapping into place.
- * Guaranteed sequential paragraph progression with zero skipped points.
- */
-function ElectricTypewriterBlock({ paragraphs, isVisible }) {
-  const [revealedLengths, setRevealedLengths] = useState(() => paragraphs.map(() => 0));
-  const [activeParaIdx, setActiveParaIdx] = useState(0);
-  const [glitchChar, setGlitchChar] = useState('');
-
-  // Reset if paragraphs change
-  useEffect(() => {
-    setRevealedLengths(paragraphs.map(() => 0));
-    setActiveParaIdx(0);
-    setGlitchChar('');
-  }, [paragraphs]);
-
-  useEffect(() => {
-    if (!isVisible) return;
-    if (activeParaIdx >= paragraphs.length) {
-      setGlitchChar('');
-      return;
-    }
-
-    const currentText = paragraphs[activeParaIdx];
-    let charPos = revealedLengths[activeParaIdx] || 0;
-
-    // If already fully revealed for some reason, advance immediately
-    if (charPos >= currentText.length) {
-      setActiveParaIdx((prev) => prev + 1);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      // Advance by 2 characters per tick for fluid, crisp electric cadence
-      charPos += 2;
-      const randomGlyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-      setGlitchChar(randomGlyph);
-
-      if (charPos >= currentText.length) {
-        clearInterval(interval);
-        setRevealedLengths((prev) => {
-          const updated = [...prev];
-          updated[activeParaIdx] = currentText.length;
-          return updated;
-        });
-        // Pause briefly between paragraphs before decoding the next paragraph
-        setTimeout(() => {
-          setActiveParaIdx((prev) => prev + 1);
-        }, 120);
-      } else {
-        setRevealedLengths((prev) => {
-          const updated = [...prev];
-          updated[activeParaIdx] = charPos;
-          return updated;
-        });
-      }
-    }, 16);
-
-    return () => clearInterval(interval);
-  }, [isVisible, activeParaIdx, paragraphs]);
-
-  // Click card to instantly reveal all text
-  const handleRevealAll = () => {
-    setRevealedLengths(paragraphs.map((p) => p.length));
-    setActiveParaIdx(paragraphs.length);
-    setGlitchChar('');
-  };
-
+function HumanEditorialBlock({ paragraphs }) {
   return (
-    <div onClick={handleRevealAll} className="space-y-6 cursor-pointer select-text">
-      {paragraphs.map((para, i) => {
-        const count = revealedLengths[i] || 0;
-        const isCurrent = i === activeParaIdx && count < para.length && isVisible;
-
-        return (
-          <div key={i} className="relative">
-            {paragraphs.length > 1 && (
-              <span className="font-mono text-xs text-pink tracking-[0.2em] block mb-2 font-bold uppercase">
-                PART {(i + 1).toString().padStart(2, '0')}
-              </span>
-            )}
-            <p className="font-montserrat text-[15px] sm:text-[17px] leading-[1.8] text-zinc-100 font-semibold tracking-normal normal-case">
-              {para.slice(0, count)}
-              {isCurrent && (
-                <>
-                  <span className="electric-char ml-0.5">{glitchChar}</span>
-                  <span className="electric-cursor" />
-                </>
-              )}
-            </p>
-          </div>
-        );
-      })}
+    <div className="space-y-4 sm:space-y-5 select-text">
+      {paragraphs.map((para, i) => (
+        <div key={i} className="relative">
+          {paragraphs.length > 1 && (
+            <span className="font-mono text-[11px] text-pink tracking-[0.2em] block mb-1.5 font-bold uppercase">
+              PART {(i + 1).toString().padStart(2, '0')}
+            </span>
+          )}
+          <p className="font-montserrat text-[14px] sm:text-[15px] lg:text-[16px] leading-[1.75] text-zinc-200 font-normal tracking-normal normal-case">
+            {para}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
@@ -219,25 +138,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
     scrollToCard(next);
   };
 
-  const touchStartXRef = useRef(0);
-  const touchStartYRef = useRef(0);
 
-  const handleTouchStart = (e) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e) => {
-    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
-    if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX < 0) {
-        scrollNext();
-      } else {
-        scrollPrev();
-      }
-    }
-  };
 
   return (
     <section
@@ -333,10 +234,8 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           ========================================================================= */}
       <div
         ref={scrollContainerRef}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="relative z-10 w-full overflow-x-auto overflow-y-hidden px-[6vw] sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-6 sm:gap-8 scroll-smooth no-scrollbar"
-        style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-x pan-y', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'auto' }}
+        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-scroll-x"
+        style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
       >
         {/* =====================================================================
             CARD 1: ABOUT MOTHER (With just ONE image of her)
@@ -424,16 +323,13 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <ElectricTypewriterBlock
-                paragraphs={COPY.professionalRoots.paragraphs}
-                isVisible={visibleCards['card-professional-roots']}
-              />
+              <HumanEditorialBlock paragraphs={COPY.professionalRoots.paragraphs} />
             </div>
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>SHILLONG → GUWAHATI → MUMBAI</span>
-            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
+            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
           </div>
         </div>
 
@@ -460,16 +356,13 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <ElectricTypewriterBlock
-                paragraphs={COPY.howBorn.paragraphs}
-                isVisible={visibleCards['card-how-born']}
-              />
+              <HumanEditorialBlock paragraphs={COPY.howBorn.paragraphs} />
             </div>
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>DARK ALTERNATIVE • INDUSTRIAL ATTITUDE</span>
-            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
+            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
           </div>
         </div>
 
@@ -496,16 +389,13 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <ElectricTypewriterBlock
-                paragraphs={COPY.sustainability.paragraphs}
-                isVisible={visibleCards['card-sustainability']}
-              />
+              <HumanEditorialBlock paragraphs={COPY.sustainability.paragraphs} />
             </div>
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>DISCARDED HARDWARE • RAW TRANSFORMATION</span>
-            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
+            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
           </div>
         </div>
 
@@ -532,16 +422,13 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
             </h3>
 
             <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <ElectricTypewriterBlock
-                paragraphs={COPY.aesthetic.paragraphs}
-                isVisible={visibleCards['card-aesthetic']}
-              />
+              <HumanEditorialBlock paragraphs={COPY.aesthetic.paragraphs} />
             </div>
           </div>
 
           <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
             <span>BOLD STYLE • UNDERGROUND FASHION</span>
-            <span className="text-pink hover:text-pink-300 tracking-wider transition-colors font-bold">[ ⚡ CLICK TO EXPAND ]</span>
+            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
           </div>
         </div>
       </div>
