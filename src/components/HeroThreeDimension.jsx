@@ -120,13 +120,6 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
 
       {/* 2. Hero Editorial Typography & Actions */}
       <div className="relative z-[5] max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center space-y-4 sm:space-y-6 pt-10 sm:pt-0 pointer-events-auto">
-        {cmsHero?.badge_text && (
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-pink/40 bg-black/60 backdrop-blur-md text-[10px] sm:text-xs font-mono tracking-widest text-pink uppercase shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-ping" />
-            {cmsHero.badge_text}
-          </div>
-        )}
-
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold text-white tracking-wider uppercase leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
           {cmsHero?.headline_line1 || 'WEARABLE ART.'}
           {cmsHero?.headline_line2 && (

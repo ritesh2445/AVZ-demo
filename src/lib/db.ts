@@ -584,7 +584,7 @@ async function performDatabaseInitialization(): Promise<void> {
         primary_cta_link: '#shop',
         secondary_cta_text: 'ATELIER COMMISSIONS',
         secondary_cta_link: '#custom',
-        badge_text: 'NEW RUNWAY COLLECTION // 2026'
+        badge_text: ''
       })
     },
     {
