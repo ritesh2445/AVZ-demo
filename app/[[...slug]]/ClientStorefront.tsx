@@ -2,19 +2,14 @@
 
 import dynamic from 'next/dynamic';
 import React, { useState, useEffect } from 'react';
-import { Lock, Sparkles, ExternalLink, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Lock, ShieldCheck } from 'lucide-react';
 
 const LegacyApp = dynamic(() => import('@/src/App'), {
   ssr: false,
-  loading: () => (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-      <div className="w-12 h-12 border-2 border-[#BE185D]/30 border-t-[#F4C2C2] rounded-full animate-spin" />
-    </div>
-  ),
+  loading: () => null,
 });
 
 export default function ClientStorefront() {
-  const [loadingConfig, setLoadingConfig] = useState(true);
   const [storefrontSettings, setStorefrontSettings] = useState<any>(null);
   const [cmsSections, setCmsSections] = useState<any>(null);
   const [storefrontProducts, setStorefrontProducts] = useState<any[]>([]);
@@ -56,20 +51,10 @@ export default function ClientStorefront() {
         }
       } catch (err) {
         console.error('Error fetching storefront config & content:', err);
-      } finally {
-        setLoadingConfig(false);
       }
     };
     init();
   }, []);
-
-  if (loadingConfig) {
-    return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-        <div className="w-12 h-12 border-2 border-[#BE185D]/30 border-t-[#F4C2C2] rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   // 1. Check Maintenance Mode
   const isMaintenance = storefrontSettings?.maintenance_mode?.enabled;
@@ -129,9 +114,6 @@ export default function ClientStorefront() {
     );
   }
 
-  // Announcement Bar config
-  const announcement = storefrontSettings?.announcement;
-
   return (
     <>
       {/* Admin Bypass Notice (shown when maintenance mode is active but admin is logged in) */}
@@ -147,29 +129,6 @@ export default function ClientStorefront() {
           >
             Open Control Center →
           </a>
-        </div>
-      )}
-
-      {/* Dynamic Announcement Bar from Admin Storefront Controls */}
-      {announcement?.enabled && (
-        <div
-          style={{
-            backgroundColor: announcement.bg_color || '#301934',
-            color: announcement.text_color || '#F4C2C2'
-          }}
-          className="text-[11px] sm:text-xs py-2 px-4 text-center font-mono tracking-wider font-semibold border-b border-white/10 z-[99998] relative flex items-center justify-center gap-2"
-        >
-          <Sparkles className="w-3.5 h-3.5 shrink-0 opacity-80" />
-          <span>{announcement.text}</span>
-          {announcement.link && (
-            <a
-              href={announcement.link}
-              className="underline font-bold hover:opacity-80 ml-1 inline-flex items-center gap-1"
-            >
-              {announcement.link_text || 'VIEW'}
-              <ArrowRight className="w-3 h-3" />
-            </a>
-          )}
         </div>
       )}
 

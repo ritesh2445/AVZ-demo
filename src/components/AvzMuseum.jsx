@@ -364,12 +364,26 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
 
+    // Intersection Observer to pause heavy WebGL rendering when offscreen
+    let isMuseumVisible = true;
+    let visibilityObserver;
+    if (typeof IntersectionObserver !== 'undefined') {
+      visibilityObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]) isMuseumVisible = entries[0].isIntersecting;
+        },
+        { threshold: 0.02 }
+      );
+      visibilityObserver.observe(container);
+    }
+
     // Animation Loop
     let animationFrameId;
     let clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isMuseumVisible) return;
       const elapsedTime = clock.getElapsedTime();
 
       // Smoothly interpolate rotunda carousel angle
@@ -415,6 +429,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     window.addEventListener('resize', handleResize);
 
     return () => {
+      if (visibilityObserver) visibilityObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
       domEl.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);

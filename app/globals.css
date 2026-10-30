@@ -56,7 +56,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* native hardware smooth scrolling */
   background-color: #000000;
   color: #C0C0C0;
   font-family: 'Montserrat', sans-serif;
@@ -1674,87 +1674,79 @@ html.light-theme .section-scroll-reveal.is-visible::after {
 }
 
 /* =========================================================================
-   CONTACT & CONCIERGE BUTTONS - RESPONSIVE & HIGH CONTRAST (DARK & LIGHT)
+   CONTACT & CONCIERGE BUTTONS - ARCHITECTURAL NOIR LUXURY GLASS
    ========================================================================= */
-.contact-action-btn-primary {
-  background: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #7e22ce 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  color: #ffffff !important;
-  box-shadow: 0 10px 25px -4px rgba(236, 72, 153, 0.4) !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.contact-action-btn-primary:hover {
-  background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #9333ea 100%) !important;
-  box-shadow: 0 12px 30px -3px rgba(236, 72, 153, 0.55) !important;
-  transform: translateY(-1.5px);
-}
-
+.contact-action-btn,
 .contact-action-btn-primary,
-.contact-action-btn-primary *,
-.contact-action-btn-primary span,
-.contact-action-btn-primary div,
-.contact-action-btn-primary svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
 .contact-action-btn-secondary {
   background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
+.contact-action-btn:hover,
+.contact-action-btn-primary:hover,
 .contact-action-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.09) !important;
-  border-color: rgba(244, 194, 194, 0.45) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(244, 194, 194, 0.5) !important;
+  box-shadow: 0 8px 25px rgba(244, 194, 194, 0.15) !important;
   transform: translateY(-1.5px);
+}
+
+.contact-action-btn span.text-white,
+.contact-action-btn-primary span.text-white,
+.contact-action-btn-secondary span.text-white {
+  color: #ffffff !important;
 }
 
 /* Light Mode Overrides for Contact Buttons */
-html.light-theme .contact-action-btn-primary {
-  background: linear-gradient(135deg, #be185d 0%, #9333ea 50%, #7e22ce 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  box-shadow: 0 8px 24px -4px rgba(190, 24, 93, 0.4) !important;
-}
-
+html.light-theme .contact-action-btn,
 html.light-theme .contact-action-btn-primary,
-html.light-theme .contact-action-btn-primary *,
-html.light-theme .contact-action-btn-primary span,
-html.light-theme .contact-action-btn-primary div,
-html.light-theme .contact-action-btn-primary svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
 html.light-theme .contact-action-btn-secondary {
   background: #ffffff !important;
-  border: 1.5px solid rgba(190, 24, 93, 0.35) !important;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.1) !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
 }
 
+html.light-theme .contact-action-btn:hover,
+html.light-theme .contact-action-btn-primary:hover,
 html.light-theme .contact-action-btn-secondary:hover {
-  background: #faf5ff !important;
-  border-color: #be185d !important;
+  background: #fafafa !important;
+  border-color: rgba(190, 24, 93, 0.5) !important;
+  box-shadow: 0 6px 20px rgba(190, 24, 93, 0.12) !important;
 }
 
+html.light-theme .contact-action-btn span.font-bold,
+html.light-theme .contact-action-btn span.text-white,
+html.light-theme .contact-action-btn-primary span.font-bold,
+html.light-theme .contact-action-btn-primary span.text-white,
 html.light-theme .contact-action-btn-secondary span.font-bold,
 html.light-theme .contact-action-btn-secondary span.text-white {
-  color: #18181b !important;
+  color: #09090b !important;
 }
 
+html.light-theme .contact-action-btn span.text-zinc-400,
+html.light-theme .contact-action-btn-primary span.text-zinc-400,
 html.light-theme .contact-action-btn-secondary span.text-zinc-400 {
-  color: #52525b !important;
+  color: #71717a !important;
 }
 
-html.light-theme .contact-action-btn-secondary svg,
-html.light-theme .contact-action-btn-secondary .text-pink {
+html.light-theme .contact-action-btn span.text-pink-300,
+html.light-theme .contact-action-btn-primary span.text-pink-300,
+html.light-theme .contact-action-btn-secondary span.text-pink-300 {
   color: #be185d !important;
-  stroke: #be185d !important;
 }
 
+html.light-theme .contact-action-btn svg,
+html.light-theme .contact-action-btn-primary svg,
+html.light-theme .contact-action-btn-secondary svg {
+  color: #09090b !important;
+  stroke: #09090b !important;
+}
 
 /* =========================================================================
    FOOTER AVZ VAGANZA THICK & BOXY CHANGING GRADIENT
