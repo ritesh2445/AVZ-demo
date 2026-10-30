@@ -71,7 +71,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const width = container.clientWidth || 800;
     const height = container.clientHeight || 640;
     const isLight = theme === 'light';
-    const bgColor = isLight ? 0xf6f5f9 : 0x060608;
+    const bgColor = isLight ? 0xf6f5f9 : 0x000000;
 
     // 1. Scene, Camera, Renderer
     const scene = new THREE.Scene();
@@ -101,29 +101,29 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     }
 
     // 2. Curatorial Gallery Lighting
-    const ambientLight = new THREE.AmbientLight(isLight ? 0xffffff : 0x252535, isLight ? 2.2 : 1.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, isLight ? 2.2 : 1.3);
     scene.add(ambientLight);
 
     // Warm museum spotlight focused on the front active pedestal
-    const spotlight = new THREE.SpotLight(isLight ? 0xfff0f5 : 0xF5EBE6, isLight ? 34 : 32, 40, Math.PI / 4, 0.4, 1.2);
+    const spotlight = new THREE.SpotLight(0xffffff, isLight ? 34 : 32, 40, Math.PI / 4, 0.4, 1.2);
     spotlight.position.set(0, 11, 12);
     spotlight.target.position.set(0, 2.35, 6.8);
     scene.add(spotlight);
     scene.add(spotlight.target);
 
     // Architectural rim lights for edge glow
-    const rimLeft = new THREE.PointLight(isLight ? 0x9333ea : 0xa06cd5, isLight ? 6 : 5, 22);
+    const rimLeft = new THREE.PointLight(isLight ? 0x9333ea : 0xffffff, isLight ? 6 : 2.5, 22);
     rimLeft.position.set(-8, 3.5, 4);
     scene.add(rimLeft);
 
-    const rimRight = new THREE.PointLight(isLight ? 0xdb2777 : 0xd4afb9, isLight ? 6 : 5, 22);
+    const rimRight = new THREE.PointLight(isLight ? 0xdb2777 : 0xffffff, isLight ? 6 : 2.5, 22);
     rimRight.position.set(8, 3.5, 4);
     scene.add(rimRight);
 
     // 3. Reflective Floor Grid
     const floorGeom = new THREE.PlaneGeometry(60, 60);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: isLight ? 0xeeeaf4 : 0x08080a,
+      color: isLight ? 0xeeeaf4 : 0x000000,
       roughness: isLight ? 0.25 : 0.35,
       metalness: isLight ? 0.3 : 0.8
     });
@@ -135,8 +135,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const gridHelper = new THREE.GridHelper(
       50,
       40,
-      isLight ? 0xd8b4fe : 0x33333f,
-      isLight ? 0xf3e8ff : 0x14141a
+      isLight ? 0xd8b4fe : 0x111116,
+      isLight ? 0xf3e8ff : 0x050508
     );
     gridHelper.position.y = -1.54;
     scene.add(gridHelper);
@@ -152,7 +152,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     }
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
     const dustMat = new THREE.PointsMaterial({
-      color: isLight ? 0x9333ea : 0xDCDCDC,
+      color: isLight ? 0x9333ea : 0xffffff,
       size: 0.04,
       transparent: true,
       opacity: isLight ? 0.45 : 0.35
@@ -172,22 +172,22 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
     // Shared materials
     const plinthMat = new THREE.MeshStandardMaterial({
-      color: isLight ? 0xede4f7 : 0x111116,
+      color: isLight ? 0xede4f7 : 0x000000,
       roughness: 0.35,
-      metalness: isLight ? 0.5 : 0.8
+      metalness: isLight ? 0.5 : 0.9
     });
     const frameChassisMat = new THREE.MeshStandardMaterial({
-      color: isLight ? 0x27272a : 0x16161b,
-      metalness: 0.9,
-      roughness: 0.22
+      color: isLight ? 0x27272a : 0xffffff,
+      metalness: isLight ? 0.9 : 0.15,
+      roughness: isLight ? 0.22 : 0.15
     });
     const frameTrimMat = new THREE.MeshStandardMaterial({
-      color: isLight ? 0xbe185d : 0xC5A880,
+      color: isLight ? 0xbe185d : 0x000000,
       metalness: 0.95,
       roughness: 0.15
     });
     const backMat = new THREE.MeshStandardMaterial({
-      color: 0x101014,
+      color: 0x000000,
       roughness: 0.35,
       metalness: 0.85
     });
@@ -528,7 +528,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       className={`w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 select-none border-t text-left transition-colors duration-300 ${
         isLight
           ? 'bg-[#faf9f6] border-purple-200/50 text-zinc-900'
-          : 'bg-[#060608] border-white/8 text-silver'
+          : 'bg-black border-white/8 text-silver'
       }`}
     >
       {/* Museum Editorial Header */}
@@ -552,7 +552,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         </div>
 
         {/* View Mode Switcher (Desktop only) */}
-        <div className="hidden md:flex items-center gap-1.5 bg-[#101014] p-1.5 rounded-full border border-white/10 shrink-0">
+        <div className="hidden md:flex items-center gap-1.5 bg-black p-1.5 rounded-full border border-white/10 shrink-0">
           <button
             onClick={() => {
               playSound('glitch_click');
@@ -660,7 +660,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
               className={`snap-center shrink-0 w-[86vw] max-w-[360px] h-[550px] sm:h-[580px] rounded-3xl border p-5 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.85)] overflow-hidden mobile-grunge-card select-none ${
                 isLight
                   ? 'border-zinc-300 bg-white text-zinc-900'
-                  : 'border-white/15 bg-gradient-to-b from-[#16031b] via-[#0c0c12] to-[#060609] text-white'
+                  : 'border-white/15 bg-black text-white'
               }`}
             >
               {/* Top Badge Bar */}
@@ -674,7 +674,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
               </div>
 
               {/* Main Specimen Image Frame with pointer-events-none */}
-              <div className="relative w-full h-[280px] sm:h-[305px] rounded-2xl overflow-hidden border border-white/10 bg-black/95 shrink-0 flex items-center justify-center p-2">
+              <div className="relative w-full h-[280px] sm:h-[305px] rounded-2xl overflow-hidden border-2 border-white bg-black shrink-0 flex items-center justify-center p-2">
                 <img
                   src={item.image}
                   alt={item.name}
@@ -736,7 +736,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       <div className="hidden md:block w-full">
         {viewMode === '3d' ? (
           <div className={`relative w-full rounded-2xl overflow-hidden border shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-row items-stretch ${
-            isLight ? 'border-zinc-300 bg-white' : 'border-white/12 bg-[#09090c]'
+            isLight ? 'border-zinc-300 bg-white' : 'border-white/12 bg-black'
           }`}>
             {/* Three.js 3D Canvas (Left / Main Rotunda Showcase) */}
             <div className="museum-dark-canvas relative flex-1 h-[640px] lg:h-[720px] w-full cursor-grab active:cursor-grabbing overflow-hidden">
@@ -798,7 +798,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
             {/* Curatorial Archival Plaque (Right Panel - Clean, spacious editorial layout) */}
             <div className={`museum-plaque w-[390px] lg:w-[440px] p-6 lg:p-7 flex flex-col justify-between border-l shrink-0 text-left ${
-              isLight ? 'bg-zinc-50 border-zinc-200 text-zinc-900' : 'bg-[#0c0c10] border-white/10 text-silver'
+              isLight ? 'bg-zinc-50 border-zinc-200 text-zinc-900' : 'bg-black border-white/10 text-silver'
             }`}>
               <div>
                 {/* Top Meta Badges */}
@@ -829,7 +829,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
                 {/* Provenance Story Box with Left Accent */}
                 <div className={`story-box p-4 rounded-xl border relative overflow-hidden mb-4 ${
-                  isLight ? 'bg-white border-zinc-200 text-zinc-800' : 'bg-black/60 border-white/10 text-zinc-200'
+                  isLight ? 'bg-white border-zinc-200 text-zinc-800' : 'bg-black border-white/10 text-zinc-200'
                 }`}>
                   <div className="absolute top-0 left-0 w-1 h-full bg-pink" />
                   <p className="text-xs font-mono italic leading-relaxed pl-1.5">
@@ -840,7 +840,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
                 {/* Materials & Provenance Specs */}
                 <div className="space-y-3 mb-4 text-xs font-mono">
                   <div className={`craft-box p-3 rounded-lg border ${
-                    isLight ? 'bg-white border-zinc-200 text-zinc-800' : 'bg-black/40 border-white/10'
+                    isLight ? 'bg-white border-zinc-200 text-zinc-800' : 'bg-black border-white/10'
                   }`}>
                     <span className="text-zinc-400 block uppercase text-[9px] tracking-[0.2em] mb-1 font-semibold">
                       CRAFT & MEDIUM
