@@ -2465,3 +2465,78 @@ html.light-theme .contact-action-btn svg {
 html.light-theme .contact-action-btn span.text-zinc-400 {
   color: #a1a1aa !important;
 }
+
+
+/* =========================================================================
+   ROYAL MOVING PINKISH GRADIENT HEADLINE (HAUTE COUTURE SHIMMER)
+   Fluid, continuous luxury moving gradient through headline typography
+   ========================================================================= */
+.royal-gradient-shimmer {
+  background: linear-gradient(
+    120deg,
+    #ffffff 0%,
+    #fce7f3 12%,
+    #f472b6 25%,
+    #ec4899 40%,
+    #be185d 55%,
+    #ec4899 70%,
+    #f472b6 82%,
+    #fce7f3 92%,
+    #ffffff 100%
+  );
+  background-size: 280% 280%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+  animation: royalShimmerFlow 7s ease-in-out infinite alternate;
+  display: inline-block;
+  will-change: background-position;
+  filter: drop-shadow(0 4px 25px rgba(244, 114, 182, 0.35));
+}
+
+@keyframes royalShimmerFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Ensure moving royal gradient & bold white subheadline remain untouched by theme inversions */
+#hero .royal-gradient-shimmer,
+html.light-theme #hero .royal-gradient-shimmer,
+html[data-theme="light"] #hero .royal-gradient-shimmer {
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+#hero p,
+html.light-theme #hero p,
+html[data-theme="light"] #hero p {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Hero Custom Orders Action Button */
+#hero .btn-hero-custom,
+html.light-theme #hero .btn-hero-custom,
+html[data-theme="light"] #hero .btn-hero-custom {
+  border: 2px solid rgba(244, 114, 182, 0.85) !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 25px rgba(244, 114, 182, 0.35) !important;
+}
+
+#hero .btn-hero-custom:hover,
+html.light-theme #hero .btn-hero-custom:hover,
+html[data-theme="light"] #hero .btn-hero-custom:hover {
+  background-color: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: #000000 !important;
+  box-shadow: 0 0 35px rgba(244, 114, 182, 0.7) !important;
+}

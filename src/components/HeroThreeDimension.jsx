@@ -130,17 +130,19 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
 
       {/* 2. Hero Editorial Typography & Actions */}
       <div className="relative z-[5] max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center space-y-4 sm:space-y-6 pt-10 sm:pt-0 pointer-events-auto">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold text-white tracking-wider uppercase leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-          {cmsHero?.headline_line1 || 'WEARABLE ART.'}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)]">
+          <span className="royal-gradient-shimmer block">
+            {cmsHero?.headline_line1 || 'WEARABLE ART.'}
+          </span>
           {cmsHero?.headline_line2 && (
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-silver via-white to-pink">
+            <span className="royal-gradient-shimmer block mt-1 sm:mt-2">
               {cmsHero.headline_line2}
             </span>
           )}
         </h1>
 
         {cmsHero?.subheadline && (
-          <p className="max-w-xl text-xs sm:text-sm font-montserrat text-zinc-300 leading-relaxed drop-shadow-md">
+          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]">
             {cmsHero.subheadline}
           </p>
         )}
@@ -149,13 +151,13 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
           <a
             href={cmsHero?.primary_cta_link || '#shop'}
             onClick={() => onExploreCatalogue?.()}
-            className="px-6 py-2.5 rounded-full bg-pink hover:bg-pink/80 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(244,194,194,0.35)] hover:scale-105 active:scale-95 cursor-pointer"
+            className="px-7 py-3 rounded-full bg-gradient-to-r from-pink via-purple-300 to-pink hover:opacity-90 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(244,114,182,0.45)] hover:scale-105 active:scale-95 cursor-pointer"
           >
             {cmsHero?.primary_cta_text || 'EXPLORE VAULT'}
           </a>
           <a
             href={cmsHero?.secondary_cta_link || '#custom'}
-            className="px-6 py-2.5 rounded-full border border-white/20 hover:border-white/40 bg-black/40 hover:bg-white/10 backdrop-blur-md text-white font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            className="btn-hero-custom px-7 py-3 rounded-full border-2 border-pink/80 bg-black/75 hover:bg-pink text-white hover:text-black font-mono font-bold text-xs tracking-widest uppercase transition-all backdrop-blur-xl shadow-[0_0_25px_rgba(244,114,182,0.35)] hover:shadow-[0_0_35px_rgba(244,114,182,0.65)] hover:scale-105 active:scale-95 cursor-pointer"
           >
             {cmsHero?.secondary_cta_text || 'CUSTOM ORDERS'}
           </a>
