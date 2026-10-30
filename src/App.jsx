@@ -28,7 +28,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   const catalogProducts = Array.isArray(liveProducts) && liveProducts.length > 0 ? liveProducts : PRODUCTS;
 
   // 1. Loading sequence state
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 2. Active section for dynamic navbar tracking
   const [activeSection, setActiveSection] = useState('hero');
