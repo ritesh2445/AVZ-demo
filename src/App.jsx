@@ -23,7 +23,10 @@ import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
 import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
 
-export default function App() {
+export default function App({ storefrontConfig, cmsContent, products: liveProducts }) {
+  // Live catalog products from database with fallback to brand data
+  const catalogProducts = Array.isArray(liveProducts) && liveProducts.length > 0 ? liveProducts : PRODUCTS;
+
   // 1. Loading sequence state
   const [isLoading, setIsLoading] = useState(true);
 
@@ -311,13 +314,14 @@ export default function App() {
           <HeroThreeDimension
             isReady={!isLoading}
             onOpenTunnel={() => setTunnelOpen(true)}
+            cmsHero={cmsContent?.hero}
           />
         </section>
 
         {/* Section 2: Vault Piece Rail */}
         <section id="vault" className="w-full">
           <ExpandedCards
-            items={PRODUCTS.slice(0, 5)}
+            items={catalogProducts.slice(0, 5)}
             onSelectProduct={setActiveProduct}
             currency={currency}
           />
@@ -334,6 +338,7 @@ export default function App() {
         {/* Section 4: Full Shop Catalogue */}
         <section id="shop" className="w-full">
           <ShopCatalogue
+            products={catalogProducts}
             onSelectProduct={setActiveProduct}
             onAddToCart={handleAddToCart}
             currency={currency}
@@ -348,12 +353,14 @@ export default function App() {
         <AvzMuseum
           onRequestCustomCommission={handleRequestCustom}
           theme={theme}
+          cmsMuseum={cmsContent?.museum}
         />
 
         {/* Section 7: Custom Atelier Bespoke Orders */}
         <CustomOrders
           initialReference={customOrderPrefill}
           onInquirySubmitted={handleInquirySubmitted}
+          cmsCustomOrders={cmsContent?.custom_orders}
         />
 
         {/* Section 8: Founder's World & Atelier Parallax Journey (Fixed Horizontal Scroll Lock) */}
@@ -361,6 +368,7 @@ export default function App() {
           <AboutSection
             onScrollToSection={scrollToSection}
             onOpenSquadModal={handleOpenSquadModal}
+            cmsFounders={cmsContent?.founders}
           />
         </section>
 
@@ -407,6 +415,8 @@ export default function App() {
         squadDiscount={squadDiscount}
         onOpenSquadModal={handleOpenSquadModal}
         currentUser={currentUser}
+        purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
+        purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
       />
 
       <WishlistDrawer
@@ -434,6 +444,7 @@ export default function App() {
       <SearchModal
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
+        products={catalogProducts}
         onSelectProduct={(p) => {
           if (p.price) {
             setActiveProduct(p);
@@ -464,7 +475,7 @@ export default function App() {
       />
 
       {/* Global Full-Width Footer */}
-      <Footer onScrollToSection={scrollToSection} />
+      <Footer onScrollToSection={scrollToSection} cmsFooter={cmsContent?.footer} />
     </div>
   );
 }

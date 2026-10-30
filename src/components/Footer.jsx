@@ -3,7 +3,7 @@ import { Instagram, Mail, Phone, MapPin, Sparkles, ArrowUp } from 'lucide-react'
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-export default function Footer({ onScrollToSection }) {
+export default function Footer({ onScrollToSection, cmsFooter }) {
   const scrollToTop = () => {
     playSound('pip');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -42,7 +42,7 @@ export default function Footer({ onScrollToSection }) {
             </div>
 
             <p className="text-zinc-400 font-mono text-xs tracking-wider uppercase text-left">
-              "{BRAND_INFO.tagline}"
+              "{cmsFooter?.tagline || BRAND_INFO.tagline}"
             </p>
 
             <p className="text-sm text-silver/75 font-montserrat leading-relaxed max-w-md text-left">

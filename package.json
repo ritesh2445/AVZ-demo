@@ -12,6 +12,7 @@
     "build:vite": "vite build"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "@tailwindcss/postcss": "^4.3.3",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",

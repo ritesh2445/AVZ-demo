@@ -10,7 +10,7 @@ import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import CinemaReelModal from './CinemaReelModal';
 import { playSound } from '../utils/audio';
 
-export default function HeroThreeDimension({ onExploreCatalogue }) {
+export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -115,7 +115,51 @@ export default function HeroThreeDimension({ onExploreCatalogue }) {
         />
       </div>
 
-      {/* 2. Video & Audio Controls HUD (Bottom-Left - Crisp Pure White Icons & Typography) */}
+      {/* 1.5 Soft High-Fashion Contrast Vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/35 pointer-events-none z-[2]" />
+
+      {/* 2. Hero Editorial Typography & Actions */}
+      <div className="relative z-[5] max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center space-y-4 sm:space-y-6 pt-10 sm:pt-0 pointer-events-auto">
+        {cmsHero?.badge_text && (
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-pink/40 bg-black/60 backdrop-blur-md text-[10px] sm:text-xs font-mono tracking-widest text-pink uppercase shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-ping" />
+            {cmsHero.badge_text}
+          </div>
+        )}
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold text-white tracking-wider uppercase leading-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+          {cmsHero?.headline_line1 || 'WEARABLE ART.'}
+          {cmsHero?.headline_line2 && (
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-silver via-white to-pink">
+              {cmsHero.headline_line2}
+            </span>
+          )}
+        </h1>
+
+        {cmsHero?.subheadline && (
+          <p className="max-w-xl text-xs sm:text-sm font-montserrat text-zinc-300 leading-relaxed drop-shadow-md">
+            {cmsHero.subheadline}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <a
+            href={cmsHero?.primary_cta_link || '#shop'}
+            onClick={() => onExploreCatalogue?.()}
+            className="px-6 py-2.5 rounded-full bg-pink hover:bg-pink/80 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(244,194,194,0.35)] hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            {cmsHero?.primary_cta_text || 'EXPLORE VAULT'}
+          </a>
+          <a
+            href={cmsHero?.secondary_cta_link || '#custom'}
+            className="px-6 py-2.5 rounded-full border border-white/20 hover:border-white/40 bg-black/40 hover:bg-white/10 backdrop-blur-md text-white font-mono text-xs tracking-widest uppercase transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            {cmsHero?.secondary_cta_text || 'ATELIER COMMISSIONS'}
+          </a>
+        </div>
+      </div>
+
+      {/* 3. Video & Audio Controls HUD (Bottom-Left - Crisp Pure White Icons & Typography) */}
       <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
         {/* Play/Pause Button */}
         <button

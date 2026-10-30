@@ -402,6 +402,7 @@ function MobileCompactProductCard({
 }
 
 export default function ShopCatalogue({
+  products: initialProducts,
   onSelectProduct,
   onAddToCart,
   currency = 'INR',
@@ -410,6 +411,7 @@ export default function ShopCatalogue({
   wishlistIds = [],
   onOpenSquadModal
 }) {
+  const activeProducts = Array.isArray(initialProducts) && initialProducts.length > 0 ? initialProducts : PRODUCTS;
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedMaterial, setSelectedMaterial] = useState('All Materials');
   const [sortBy, setSortBy] = useState('featured');
@@ -417,7 +419,7 @@ export default function ShopCatalogue({
 
   // Filtering and sorting logic
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((item) => {
+    return activeProducts.filter((item) => {
       const matchesCategory =
         selectedCategory === 'All' ||
         item.category.toLowerCase() === selectedCategory.toLowerCase();
@@ -439,7 +441,7 @@ export default function ShopCatalogue({
       if (sortBy === 'featured') return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
       return 0;
     });
-  }, [selectedCategory, selectedMaterial, sortBy, searchQuery]);
+  }, [activeProducts, selectedCategory, selectedMaterial, sortBy, searchQuery]);
 
   // Curated Best-sellers for Key Archive Pieces Carousel
   const bestsellers = useMemo(() => {
@@ -489,10 +491,10 @@ export default function ShopCatalogue({
     ];
 
     return list.map((item) => {
-      const prod = PRODUCTS.find((p) => p.id === item.id);
+      const prod = activeProducts.find((p) => p.id === item.id || p.sku === item.id) || PRODUCTS.find((p) => p.id === item.id);
       return prod ? { ...prod, ...item } : null;
     }).filter(Boolean);
-  }, []);
+  }, [activeProducts]);
 
   // Sections for Mobile View Carousels
   const mobileSections = useMemo(() => {
@@ -501,28 +503,28 @@ export default function ShopCatalogue({
         id: 'corsets-tops',
         title: 'CORSETRY & SCULPTURAL BODICES',
         badge: '01 • SIGNATURE',
-        items: PRODUCTS.filter((p) => ['corsets', 'bralettes', 'tops'].includes(p.category.toLowerCase()))
+        items: activeProducts.filter((p) => ['corsets', 'bralettes', 'tops'].includes(p.category.toLowerCase()))
       },
       {
         id: 'outerwear-jackets',
         title: 'ARMOR & REWORKED JACKETS',
         badge: '02 • HEAVY ART',
-        items: PRODUCTS.filter((p) => ['jackets'].includes(p.category.toLowerCase()))
+        items: activeProducts.filter((p) => ['jackets'].includes(p.category.toLowerCase()))
       },
       {
         id: 'jewelry-hardware',
         title: 'HARDWARE JEWELRY & RECLAIMED ACCENTS',
         badge: '03 • ARTIFACTS',
-        items: PRODUCTS.filter((p) => ['earrings', 'neckpieces', 'arm cuffs', 'belts', 'body chainmail'].includes(p.category.toLowerCase()))
+        items: activeProducts.filter((p) => ['earrings', 'neckpieces', 'arm cuffs', 'belts', 'body chainmail'].includes(p.category.toLowerCase()))
       },
       {
         id: 'lower-sets',
         title: 'RUNWAY SILHOUETTES & CO-ORD SETS',
         badge: '04 • STRUCTURE',
-        items: PRODUCTS.filter((p) => ['pants', 'skirts', 'co-ord sets', 'bags'].includes(p.category.toLowerCase()))
+        items: activeProducts.filter((p) => ['pants', 'skirts', 'co-ord sets', 'bags'].includes(p.category.toLowerCase()))
       }
     ].filter((sec) => sec.items.length > 0);
-  }, []);
+  }, [activeProducts]);
 
   return (
     <section id="shop" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none border-t border-white/10 relative text-left">

@@ -29,7 +29,9 @@ export default function CartDrawer({
   onCheckoutComplete,
   squadDiscount = null, // { squadCode, discountPercent, memberCount }
   onOpenSquadModal,
-  currentUser = null
+  currentUser = null,
+  purchasesEnabled = true,
+  purchasesDisabledMessage = ''
 }) {
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -49,6 +51,8 @@ export default function CartDrawer({
     paymentMethod: 'UPI / Instant QR Code'
   });
   const [orderComplete, setOrderComplete] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Auto-prefill if user is logged in
   useEffect(() => {
@@ -134,26 +138,156 @@ export default function CartDrawer({
 
   const handleWhatsAppCheckout = () => {
     playSound('warp');
-    const itemsList = items.map((i) => `• ${i.name} (${i.selectedSize}) - ₹${i.price}`).join('%0A');
-    const msg = `Hello AVZ Team, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A%0APlease share UPI / payment details to confirm reservation.`;
+    const itemsList = items.map((i) => `• ${i.name} (${i.selectedSize || 'Standard'}) - ₹${i.price} x ${i.quantity || 1}`).join('%0A');
+    const msg = `Hello AVZ Team, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A*Name:* ${checkoutData.fullName || 'Patron'}%0A%0APlease share UPI / payment details to confirm reservation.`;
     window.open(`https://wa.me/917304264901?text=${msg}`, '_blank');
   };
 
-  const handleCheckoutSubmit = (e) => {
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (typeof window === 'undefined') return resolve(false);
+      if (window.Razorpay) return resolve(true);
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleCheckoutSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     playSound('warp');
 
-    setTimeout(() => {
-      playSound('chord');
-      setOrderComplete(true);
-      onCheckoutComplete({
-        orderId: `AVZ-${Math.floor(100000 + Math.random() * 900000)}`,
-        items,
-        totalInr,
-        customer: checkoutData,
-        squadDiscount
+    try {
+      // 1. Authoritative server-side order creation & price check
+      const res = await fetch('/api/payments/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map((i) => ({
+            id: i.id,
+            title: i.name,
+            price: i.price,
+            quantity: i.quantity || 1,
+            size: i.selectedSize || 'Standard'
+          })),
+          customer: {
+            name: checkoutData.fullName || 'Valued Atelier Patron',
+            email: checkoutData.email || 'client@avzvaganza.com',
+            phone: checkoutData.phone || '+91 9999999999',
+            address: {
+              address_line1: checkoutData.address,
+              city: checkoutData.city,
+              state: checkoutData.state,
+              pincode: checkoutData.pincode
+            }
+          },
+          discountCode: appliedPromo?.code || null
+        })
       });
-    }, 1000);
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.error || 'Purchases temporarily paused or unavailable.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const orderData = await res.json();
+
+      if (!orderData || !orderData.orderNumber || !orderData.razorpayOrderId) {
+        alert(orderData?.error || 'Failed to initialize payment gateway order. Please reach out on WhatsApp.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Check if real Razorpay key is present
+      const scriptLoaded = await loadRazorpayScript();
+      const hasRealRazorpayKey = Boolean(orderData.keyId && !orderData.keyId.includes('placeholder'));
+
+      if (!scriptLoaded || !window.Razorpay) {
+        alert('Payment gateway could not be loaded. Please check your internet connection or ad-blocker, or complete your order via WhatsApp concierge.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!hasRealRazorpayKey) {
+        alert('Online payment gateway is temporarily unconfigured. Please complete your reservation directly with our atelier concierge on WhatsApp.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: 'AVZ VAGANZA',
+        description: `Order ${orderData.orderNumber} - Atelier Commission`,
+        order_id: orderData.razorpayOrderId,
+        prefill: {
+          name: checkoutData.fullName,
+          email: checkoutData.email,
+          contact: checkoutData.phone
+        },
+        theme: {
+          color: '#120D1A'
+        },
+        handler: async function (response) {
+          try {
+            const verifyRes = await fetch('/api/payments/razorpay/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderNumber: orderData.orderNumber,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              })
+            });
+            const verifyData = await verifyRes.json().catch(() => ({}));
+            if (verifyRes.ok && verifyData.success) {
+              setConfirmedOrder({ ...orderData, paymentId: response.razorpay_payment_id });
+              setOrderComplete(true);
+              onClearCart?.();
+              playSound('chord');
+              onCheckoutComplete?.({
+                orderId: orderData.orderNumber,
+                items,
+                totalInr,
+                customer: checkoutData,
+                squadDiscount
+              });
+            } else {
+              alert(verifyData.error || `Payment verification failed. If your account was debited, please contact our atelier team immediately with Payment ID: ${response.razorpay_payment_id}`);
+            }
+          } catch (err) {
+            alert(`Error verifying payment. If your account was debited, please contact our concierge with Payment ID: ${response.razorpay_payment_id}`);
+          } finally {
+            setIsSubmitting(false);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false);
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (resp) {
+        alert(`Payment failed: ${resp.error?.description || 'Transaction declined by issuer'}. Your cart has been preserved.`);
+        setIsSubmitting(false);
+      });
+      rzp.open();
+    } catch (err) {
+      console.error('Checkout submission error:', err);
+      alert('Unable to process order at this time. Please try again or reach out on WhatsApp.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -236,18 +370,27 @@ export default function CartDrawer({
               <p className="text-xs text-zinc-400 font-montserrat max-w-sm leading-relaxed">
                 Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.
               </p>
-              <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center">
-                <span className="text-white block font-medium mb-1">
-                  ORDER IDENTIFIER: {`AVZ-${Math.floor(100000 + Math.random() * 900000)}`}
+              <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center space-y-2">
+                <span className="text-white block font-medium text-sm">
+                  ORDER IDENTIFIER: {confirmedOrder?.orderNumber || 'AVZ-CONFIRMED'}
                 </span>
-                PRODUCTION TIMELINE: 1–2 WEEKS (HANDMADE)
+                <p className="text-[11px] text-zinc-400">
+                  Recipient: <span className="text-white">{checkoutData.fullName || 'Patron'}</span> ({checkoutData.email || 'client@avzvaganza.com'})
+                </p>
+                <p className="text-[11px] text-zinc-400">
+                  Delivery Destination: <span className="text-white">{checkoutData.city || 'India'}</span> - {checkoutData.pincode || ''}
+                </p>
+                <div className="pt-2 border-t border-white/10 text-[10px] text-zinc-500 uppercase tracking-wider">
+                  PRODUCTION TIMELINE: 1–2 WEEKS (HANDCRAFTED RUNWAY RELIC)
+                </div>
               </div>
               <button
                 onClick={() => {
-                  onClearCart();
+                  onClearCart?.();
                   onClose();
                   setOrderComplete(false);
                   setIsCheckingOut(false);
+                  setConfirmedOrder(null);
                 }}
                 className="px-6 py-2.5 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-mono text-white tracking-widest uppercase transition-all"
               >
@@ -372,6 +515,12 @@ export default function CartDrawer({
                 <span>Return & Damage Policy: An uncut continuous unboxing video sent to our WhatsApp within 48h is required for damage replacement claims.</span>
               </div>
 
+              {purchasesEnabled === false && (
+                <div className="p-3 bg-red-950/60 border border-red-800/80 rounded-xl text-red-200 text-xs font-mono">
+                  {purchasesDisabledMessage || 'Atelier purchases are momentarily paused while runway commissions are crafted. You may still explore the catalogue or inquire via WhatsApp.'}
+                </div>
+              )}
+
               <div className="pt-2 flex flex-col sm:flex-row gap-2">
                 <button
                   type="button"
@@ -382,9 +531,16 @@ export default function CartDrawer({
                 </button>
                 <button
                   type="submit"
-                  className="btn-glass-pink flex-1 text-xs py-2.5 font-bold"
+                  disabled={purchasesEnabled === false || isSubmitting}
+                  className="btn-glass-pink flex-1 text-xs py-2.5 font-bold disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  CONFIRM & PAY ({formatPrice(totalInr, currency)})
+                  {isSubmitting ? (
+                    <span>AUTHORIZING RESERVATION...</span>
+                  ) : purchasesEnabled === false ? (
+                    'COMMISSIONS PAUSED'
+                  ) : (
+                    `CONFIRM & PAY (${formatPrice(totalInr, currency)})`
+                  )}
                 </button>
               </div>
 

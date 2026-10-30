@@ -70,7 +70,7 @@ function HumanEditorialBlock({ paragraphs }) {
   );
 }
 
-export default function FoundersSection({ onScrollToSection, onOpenSquadModal }) {
+export default function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
   const scrollContainerRef = useRef(null);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [visibleCards, setVisibleCards] = useState({
@@ -270,23 +270,25 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal })
           {/* Founder's Single Authentic Photograph */}
           <div className="relative my-4 flex-1 w-full rounded-2xl overflow-hidden border border-white/15 bg-black/80 group-hover:border-pink/50 transition-colors duration-500 shadow-inner">
             <img
-              src={ASSET_MANIFEST.editorialHero}
+              src={cmsFounders?.portrait_image || ASSET_MANIFEST.editorialHero}
               alt="Dhrisni (Dhristroyer) - Founder of AVZ Vaganza"
               className="w-full h-full object-cover object-center filter brightness-100 contrast-105 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
 
             <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-pink/30 text-[10px] font-mono text-pink font-semibold image-overlay-text">
-              COUTURE SCULPTOR
+              {cmsFounders?.role || 'COUTURE SCULPTOR'}
             </div>
 
             <div className="absolute bottom-3 left-4 right-4 image-overlay-text">
               <p className="font-serif italic text-xs sm:text-sm text-pink-100/90 leading-relaxed drop-shadow-sm mb-1.5">
-                "Wearable art is armor for the autonomous spirit."
+                "{cmsFounders?.quote || 'Wearable art is armor for the autonomous spirit.'}"
               </p>
               <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 font-medium">
-                <span className="tracking-widest font-bold text-white">DHRISNI (DHRISTROYER)</span>
-                <span className="text-pink font-semibold tracking-wider">FOUNDER & VISIONARY</span>
+                <span className="tracking-widest font-bold text-white">
+                  {cmsFounders?.founder_name ? `${cmsFounders.founder_name.toUpperCase()} (${cmsFounders?.alias || 'DHRISTROYER'})` : 'DHRISNI (DHRISTROYER)'}
+                </span>
+                <span className="text-pink font-semibold tracking-wider">{cmsFounders?.role || 'FOUNDER & VISIONARY'}</span>
               </div>
             </div>
           </div>

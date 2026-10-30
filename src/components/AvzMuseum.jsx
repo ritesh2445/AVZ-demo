@@ -25,7 +25,7 @@ function createRoundedRectShape(width, height, radius) {
   return shape;
 }
 
-export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' }) {
+export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
   const mountRef = useRef(null);
   const sectionRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -558,10 +558,10 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark' })
           <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-light font-mono uppercase tracking-[0.2em] leading-tight ${
             isLight ? 'text-zinc-900' : 'text-white'
           }`}>
-            ARCHIVE <span className="text-zinc-500 font-normal">MUSEUM</span>
+            {cmsMuseum?.headline ? cmsMuseum.headline : (<>ARCHIVE <span className="text-zinc-500 font-normal">MUSEUM</span></>)}
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm mt-1.5 font-mono tracking-wider max-w-xl leading-relaxed">
-            Our permanent archive of one-of-a-kind wearable art and past pieces. Handcrafted pieces available for custom recreation.
+            {cmsMuseum?.description || 'Our permanent archive of one-of-a-kind wearable art and past pieces. Handcrafted pieces available for custom recreation.'}
           </p>
         </div>
 

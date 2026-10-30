@@ -45,7 +45,7 @@ const COMMISSION_PHASES = [
   }
 ];
 
-export default function CustomOrders({ initialReference = '', onInquirySubmitted }) {
+export default function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrders }) {
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
@@ -116,11 +116,11 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
         </div>
 
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase mb-2 leading-tight text-left">
-          CUSTOM <span className="text-zinc-500 font-light">ORDERS</span>
+          {cmsCustomOrders?.headline ? cmsCustomOrders.headline : (<>CUSTOM <span className="text-zinc-500 font-light">ORDERS</span></>)}
         </h2>
 
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base leading-relaxed font-montserrat max-w-4xl text-left">
-          Every custom AVZ piece is individually designed and handcrafted by Dhrisni and our Guwahati studio team. We never mass-produce: each piece is tailored to your measurements, hardware preferences, and unique style.
+          {cmsCustomOrders?.tagline || 'Every custom AVZ piece is individually designed and handcrafted by Dhrisni and our Guwahati studio team. We never mass-produce: each piece is tailored to your measurements, hardware preferences, and unique style.'}
         </p>
 
         {/* 4-Step Order Process */}
