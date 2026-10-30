@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 /**
- * Ultra-realistic Canvas Particle Disintegration (Haute Couture Dust & Ash Dissolve)
- * For the first 5.5 seconds, showcases the moving royal pinkish/magenta gradient
- * across the headline typography. At 5.5s, rasterizes the exact letterforms with
- * subpixel precision onto an offscreen canvas and disintegrates them into thousands
- * of glowing pink, rose gold, and silver dust micro-particles that drift away with the wind.
+ * Ultra-realistic Canvas Particle Dust Materialization (Haute Couture Dust Assembly)
+ * Instead of vanishing, the headline starts as dispersed cosmic dust / glowing particles
+ * that swirl, stream, and coalesce into the exact razor-sharp letterforms.
+ * Once assembled, it blooms into the moving royal pink/rose-gold gradient and remains
+ * permanently visible.
  */
 export default function HeroDustHeadline({
   headline1 = 'WEARABLE ART.',
@@ -15,15 +15,17 @@ export default function HeroDustHeadline({
   const line1Ref = useRef(null);
   const line2Ref = useRef(null);
   const canvasRef = useRef(null);
-  const [isDusting, setIsDusting] = useState(false);
-  const [isVanished, setIsVanished] = useState(false);
+
+  const [isDusting, setIsDusting] = useState(true);
+  const [showDomText, setShowDomText] = useState(false);
+  const [isAssembled, setIsAssembled] = useState(false);
   const animFrameRef = useRef(null);
 
   useEffect(() => {
-    // Wait 5.5 seconds of showcasing the moving royal gradient before triggering dust dissolution
+    // Initial brief 300ms pause after hero mount before cosmic dust streams in
     const timer = setTimeout(() => {
-      triggerDustDisintegration();
-    }, 5500);
+      triggerDustAssembly();
+    }, 300);
 
     return () => {
       clearTimeout(timer);
@@ -31,7 +33,7 @@ export default function HeroDustHeadline({
     };
   }, [headline1, headline2]);
 
-  const triggerDustDisintegration = async () => {
+  const triggerDustAssembly = async () => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
     const l1 = line1Ref.current;
@@ -53,9 +55,9 @@ export default function HeroDustHeadline({
     const r2 = line2Ref.current ? line2Ref.current.getBoundingClientRect() : null;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    // Expand canvas margins to allow dust particles to blow upward and rightward with natural wind
-    const marginX = 140;
-    const marginY = 120;
+    // Expand canvas margins to allow swirling dust particles from outside the text area
+    const marginX = 160;
+    const marginY = 140;
     const totalW = containerRect.width + marginX * 2;
     const totalH = containerRect.height + marginY * 2;
 
@@ -77,7 +79,7 @@ export default function HeroDustHeadline({
     const fontFamily = computed.fontFamily || "'Cinzel', serif";
     const fontWeight = computed.fontWeight || '700';
 
-    // Create an offscreen buffer canvas to draw the typography with royal pinkish gradient
+    // Create an offscreen buffer canvas to draw the target typography with royal pinkish gradient
     const offCanvas = document.createElement('canvas');
     offCanvas.width = totalW * dpr;
     offCanvas.height = totalH * dpr;
@@ -104,7 +106,7 @@ export default function HeroDustHeadline({
 
     offCtx.fillStyle = textGrad;
 
-    // Subpixel-accurate positioning matching the DOM lines exactly
+    // Subpixel-accurate target positioning matching the DOM lines exactly
     const x1 = r1.left + r1.width / 2 - containerRect.left + marginX;
     const y1 = r1.top + r1.height / 2 - containerRect.top + marginY;
     offCtx.fillText(headline1, x1, y1);
@@ -134,85 +136,101 @@ export default function HeroDustHeadline({
           const g = pixels[index + 1];
           const b = pixels[index + 2];
 
-          const posX = x / dpr;
-          const posY = y / dpr;
+          const targetX = x / dpr;
+          const targetY = y / dpr;
 
-          // Dissolve in an organic left-to-right wind gust:
-          // Particles on the left peel off first, followed progressively by particles to the right
-          const progressRatio = posX / totalW;
-          const staggerDelay = progressRatio * 40 + (Math.random() * 20);
+          // Disperse initial starting coordinates in a swirling cosmic dust cloud
+          const angle = Math.atan2(targetY - totalH / 2, targetX - totalW / 2) + (Math.random() - 0.5) * 1.5;
+          const dist = 140 + Math.random() * 260;
+          const startX = targetX + Math.cos(angle) * dist + (Math.random() - 0.5) * 80;
+          // Sweep slightly from upward/left like an elegant atmospheric wind
+          const startY = targetY + Math.sin(angle) * dist - (40 + Math.random() * 100);
+
+          const progressRatio = targetX / totalW;
+          // Stagger entry: particles stream across from left to right organically
+          const staggerDelay = progressRatio * 35 + Math.random() * 25;
+          const duration = 48 + Math.random() * 26; // frames to travel into letterform
 
           particles.push({
-            x: posX,
-            y: posY,
-            origX: posX,
-            origY: posY,
+            targetX,
+            targetY,
+            startX,
+            startY,
             r,
             g,
             b,
             baseAlpha: alpha / 255,
-            size: (Math.random() * 1.8 + 1.0), // Micro-dust grain size: 1.0px to 2.8px
-            vx: Math.random() * 2.2 + 0.8, // Ambient wind blowing rightwards
-            vy: -(Math.random() * 2.5 + 1.0), // Thermal lift floating upwards
-            wobbleSpeed: Math.random() * 0.08 + 0.03,
-            wobbleAmp: Math.random() * 2.5 + 0.8,
-            life: 0,
-            maxLife: Math.floor(Math.random() * 55 + 65), // ~1.5 - 2.0 seconds lifespan per grain
-            staggerDelay
+            targetSize: Math.random() * 1.2 + 0.9, // settled grain size: 0.9px - 2.1px
+            staggerDelay,
+            duration,
+            phase: Math.random() * Math.PI * 2,
+            turbSpeed: Math.random() * 0.08 + 0.04,
+            turbAmp: Math.random() * 28 + 12
           });
         }
       }
     }
 
-    // Start disintegration: hide original DOM text smoothly
-    setIsDusting(true);
-
     let frameCount = 0;
+    // Calculate total frames when all particles have converged
+    const maxFrames = Math.max(...particles.map((p) => p.staggerDelay + p.duration));
 
     const render = () => {
       frameCount++;
       ctx.clearRect(0, 0, totalW, totalH);
 
-      let aliveCount = 0;
+      let allArrived = true;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
         if (frameCount < p.staggerDelay) {
-          // Grain hasn't peeled away yet: draw static at original position
-          ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${p.baseAlpha})`;
-          ctx.fillRect(p.x, p.y, p.size, p.size);
-          aliveCount++;
-        } else {
-          // Grain is actively flying and dissipating into dust
-          p.life++;
-
-          if (p.life < p.maxLife) {
-            aliveCount++;
-
-            // Physics: horizontal wind drift + harmonic turbulence + upward float
-            p.x += p.vx + Math.sin(p.life * p.wobbleSpeed) * p.wobbleAmp;
-            p.y += p.vy;
-            p.vy -= 0.025; // upward acceleration like rising hot smoke/ash
-            p.size *= 0.985; // particles disintegrate into microscopic dust
-
-            const progress = p.life / p.maxLife;
-            // Smooth ease-out fade to transparent
-            const currentAlpha = (1 - progress) * p.baseAlpha;
-
-            ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${Math.max(0, currentAlpha)})`;
-            ctx.fillRect(p.x, p.y, Math.max(0.5, p.size), Math.max(0.5, p.size));
-          }
+          allArrived = false;
+          continue;
         }
+
+        const elapsed = frameCount - p.staggerDelay;
+        const t = Math.min(1, elapsed / p.duration);
+
+        if (t < 1) {
+          allArrived = false;
+        }
+
+        // Cubic ease-out: particles rush in fast then gracefully decelerate into exact letterform
+        const ease = 1 - Math.pow(1 - t, 3);
+
+        // Harmonic turbulence decays to zero as particle locks into letter pixel
+        const damp = 1 - ease;
+        const turbX = Math.sin(p.phase + frameCount * p.turbSpeed) * p.turbAmp * damp;
+        const turbY = Math.cos(p.phase + frameCount * p.turbSpeed * 0.9) * (p.turbAmp * 0.7) * damp;
+
+        const curX = p.startX + (p.targetX - p.startX) * ease + turbX;
+        const curY = p.startY + (p.targetY - p.startY) * ease + turbY;
+
+        // Sparkle alpha: micro-twinkle during transit, solidifying into full letter color
+        const sparkle = 0.85 + 0.15 * Math.sin(frameCount * 0.25 + p.phase);
+        const curAlpha = Math.min(p.baseAlpha, t * 1.6 * p.baseAlpha) * sparkle;
+
+        // Particle size starts slightly larger and blooms into fine dust grain
+        const curSize = p.targetSize + (1 - ease) * 1.1;
+
+        ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${curAlpha})`;
+        ctx.fillRect(curX, curY, curSize, curSize);
       }
 
-      if (aliveCount > 0) {
-        animFrameRef.current = requestAnimationFrame(render);
-      } else {
-        // All particles have turned into dust and vanished: cleanly terminate RAF loop
+      // Smooth handoff: around 80% assembly, fade in the live DOM gradient text
+      if (frameCount >= maxFrames * 0.82) {
+        setShowDomText(true);
+      }
+
+      // Complete assembly: cleanly terminate canvas RAF loop and hand off to permanent DOM text
+      if (allArrived && frameCount >= maxFrames + 12) {
         ctx.clearRect(0, 0, totalW, totalH);
-        setIsVanished(true);
+        setIsAssembled(true);
+        setIsDusting(false);
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      } else {
+        animFrameRef.current = requestAnimationFrame(render);
       }
     };
 
@@ -221,10 +239,10 @@ export default function HeroDustHeadline({
 
   return (
     <div ref={containerRef} className="relative w-full flex flex-col items-center justify-center select-none">
-      {/* 1. Original Shimmering Royal Headline (Fades out when dust begins) */}
+      {/* 1. Permanent Shimmering Royal Headline (Materializes via particle assembly and stays visible) */}
       <h1
-        className={`text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-500 ease-out flex flex-col items-center justify-center ${
-          isDusting || isVanished ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        className={`text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-700 ease-out flex flex-col items-center justify-center ${
+          showDomText || isAssembled ? 'opacity-100' : 'opacity-0'
         }`}
       >
         <span ref={line1Ref} className="royal-gradient-shimmer inline-block">
@@ -237,14 +255,16 @@ export default function HeroDustHeadline({
         )}
       </h1>
 
-      {/* 2. Micro-Particle Canvas Overlay (Simulates ultra-realistic ash/dust dispersion) */}
-      <canvas
-        ref={canvasRef}
-        className="absolute pointer-events-none z-10 will-change-transform"
-        style={{
-          display: isVanished ? 'none' : 'block'
-        }}
-      />
+      {/* 2. Micro-Particle Canvas Overlay (Assembles dust grains into the letterforms) */}
+      {!isAssembled && (
+        <canvas
+          ref={canvasRef}
+          className="absolute pointer-events-none z-10 will-change-transform"
+          style={{
+            display: isDusting ? 'block' : 'none'
+          }}
+        />
+      )}
     </div>
   );
 }
