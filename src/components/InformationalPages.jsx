@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronDown, ChevronUp, Mail, Phone, MapPin, Instagram, Package, Truck, RefreshCw, Sparkles, ShieldAlert } from 'lucide-react';
+import { ArrowUpRight, HelpCircle, ChevronDown, ChevronUp, Mail, Phone, MapPin, Instagram, Package, Truck, RefreshCw, Sparkles, ShieldAlert } from 'lucide-react';
 import { BRAND_INFO, FAQS } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
