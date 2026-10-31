@@ -219,21 +219,21 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
+                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}
               >
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
+                  <Phone className="w-4 h-4 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
+                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold whitespace-nowrap" style={{ color: '#d4d4d8' }}>
                       DIRECT SUPPORT
                     </span>
-                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
                       {BRAND_INFO.whatsappPrimary}
                     </span>
                   </div>
                 </div>
 
-                <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" style={{ color: '#ffffff', stroke: '#ffffff' }} />
               </a>
 
               <a
@@ -241,21 +241,20 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
-              >
+                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}>
                 <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
+                  <Phone className="w-4 h-4 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
+                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold whitespace-nowrap" style={{ color: '#d4d4d8' }}>
                       STUDIO SUPPORT
                     </span>
-                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
+                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
                       {BRAND_INFO.whatsappSecondary}
                     </span>
                   </div>
                 </div>
 
-                <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" style={{ color: '#ffffff', stroke: '#ffffff' }} />
               </a>
             </div>
 

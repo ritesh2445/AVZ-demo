@@ -744,9 +744,14 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
               {/* Minimal floating drag guide */}
               <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                <span className={`text-[10px] font-mono uppercase tracking-[0.2em] px-3 py-1 rounded-full border backdrop-blur-md ${
-                  isLight ? 'bg-white/80 text-zinc-700 border-zinc-300' : 'bg-black/60 text-zinc-400 border-white/10'
-                }`}>
+                <span
+                  className="text-[10px] font-mono uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-full border backdrop-blur-md font-bold shadow-md select-none"
+                  style={{
+                    backgroundColor: isLight ? "rgba(255, 255, 255, 0.95)" : "rgba(0, 0, 0, 0.85)",
+                    color: isLight ? "#09090b" : "#ffffff",
+                    borderColor: isLight ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.25)"
+                  }}
+                >
                   DRAG ROTUNDA TO ROTATE • PEDESTAL 0{activeIndex + 1}
                 </span>
               </div>

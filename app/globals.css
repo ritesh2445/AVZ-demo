@@ -2830,3 +2830,48 @@ html.light-theme #hero .hero-hud-btn,
 html[data-theme="light"] #hero .hero-hud-btn {
   color: #ffffff !important;
 }
+
+/* =========================================================================
+   BULLETPROOF TARGETED OVERRIDES (PILLARS, WHITE BUTTON, HOTLINE)
+   ========================================================================= */
+
+/* 1. Atelier Dark Canvas Headings & Pillar Tab Titles */
+.atelier-dark-canvas h3,
+.atelier-dark-canvas h4,
+.atelier-dark-canvas .pillar-tab-title,
+html.light-theme .atelier-dark-canvas h3,
+html.light-theme .atelier-dark-canvas h4,
+html.light-theme .atelier-dark-canvas .pillar-tab-title,
+html[data-theme="light"] .atelier-dark-canvas h3,
+html[data-theme="light"] .atelier-dark-canvas h4,
+html[data-theme="light"] .atelier-dark-canvas .pillar-tab-title {
+  color: #ffffff !important;
+}
+
+/* 2. Pure Black Text inside White Buttons */
+.atelier-dark-canvas a.bg-white,
+.atelier-dark-canvas a.bg-white span,
+.atelier-dark-canvas a.bg-white svg,
+html.light-theme .atelier-dark-canvas a.bg-white,
+html.light-theme .atelier-dark-canvas a.bg-white span,
+html.light-theme .atelier-dark-canvas a.bg-white svg,
+html[data-theme="light"] .atelier-dark-canvas a.bg-white,
+html[data-theme="light"] .atelier-dark-canvas a.bg-white span,
+html[data-theme="light"] .atelier-dark-canvas a.bg-white svg {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 3. WhatsApp Support Buttons in Both Themes */
+.contact-action-btn [class*="text-[9px]"],
+html.light-theme .contact-action-btn [class*="text-[9px]"],
+html[data-theme="light"] .contact-action-btn [class*="text-[9px]"] {
+  color: #d4d4d8 !important;
+}
+
+.contact-action-btn svg,
+html.light-theme .contact-action-btn svg,
+html[data-theme="light"] .contact-action-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}

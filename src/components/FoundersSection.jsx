@@ -205,7 +205,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
                   style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
-                  <span style={{ color: '#000000' }}>COMMISSION WITH DHRISNI</span>
+                  <span style={{ color: '#000000' }} className="text-black font-bold">COMMISSION WITH DHRISNI</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
                 </a>
 
@@ -237,7 +237,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 <span className="text-[10px] font-mono tracking-[0.28em] uppercase font-bold block mb-1" style={{ color: '#f472b6' }}>
                   STUDIO PHILOSOPHY
                 </span>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider text-white" style={{ color: '#ffffff' }}>
                   FOUR PILLARS OF AVZ STUDIO
                 </h3>
               </div>
@@ -259,7 +259,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                       playSound('cyber_hover');
                       setActivePillar(idx);
                     }}
-                    className="p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 shadow-md hover:scale-[1.02] active:scale-95"
+                    data-surface="dark" className="pillar-tab-btn p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 shadow-md hover:scale-[1.02] active:scale-95"
                     style={{
                       backgroundColor: isSelected ? '#25062c' : '#14141e',
                       borderColor: isSelected ? '#f472b6' : 'rgba(255, 255, 255, 0.18)',
@@ -280,7 +280,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                       />
                     </div>
                     <span
-                      className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-wider line-clamp-2 leading-snug"
+                      className="pillar-tab-title text-xs sm:text-[13px] font-mono font-bold uppercase tracking-wider line-clamp-2 leading-snug text-white"
                       style={{ color: '#ffffff' }}
                     >
                       {pillar.title}
