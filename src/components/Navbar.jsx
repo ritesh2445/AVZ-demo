@@ -324,15 +324,20 @@ export default function Navbar({
               onClick={handleSoundToggle}
               aria-label={soundOn ? 'Mute Audio Soundtrack' : 'Unmute Audio Soundtrack'}
               title={soundOn ? 'Sound On (Tap to Mute)' : 'Sound Off (Tap to Unmute)'}
-              className="hidden sm:flex px-2.5 py-1 rounded-full items-center gap-1.5 border border-white/20 bg-white/5 hover:bg-white/10 text-white transition-all cursor-pointer shadow-sm active:scale-95"
-              style={{ color: '#ffffff' }}
+              className={`sound-toggle-btn hidden sm:flex px-2.5 py-1 rounded-full items-center gap-1.5 border transition-all cursor-pointer shadow-sm active:scale-95 ${
+                theme === 'light'
+                  ? 'border-purple-200 bg-purple-50 hover:bg-purple-100 text-zinc-900'
+                  : 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
+              }`}
             >
               {soundOn ? (
-                <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+                <Volume2 className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
               ) : (
-                <VolumeX className="w-3.5 h-3.5 text-zinc-300" style={{ color: '#d4d4d8', stroke: '#d4d4d8' }} />
+                <VolumeX className={`w-3.5 h-3.5 shrink-0 ${theme === 'light' ? 'text-zinc-600' : 'text-zinc-300'}`} />
               )}
-              <span className="text-[9px] font-mono tracking-wider uppercase font-bold" style={{ color: '#ffffff' }}>
+              <span className={`text-[9px] font-mono tracking-wider uppercase font-bold ${
+                theme === 'light' ? 'text-zinc-900' : 'text-white'
+              }`}>
                 {soundOn ? 'SOUND ON' : 'MUTED'}
               </span>
             </button>
@@ -452,15 +457,16 @@ export default function Navbar({
             <div className="flex items-center gap-4">
               <button
                 onClick={handleSoundToggle}
-                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold text-white"
-                style={{ color: '#ffffff' }}
+                className={`flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold ${
+                  theme === 'light' ? 'text-zinc-900' : 'text-white'
+                }`}
               >
                 {soundOn ? (
-                  <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+                  <Volume2 className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
                 ) : (
-                  <VolumeX className="w-3.5 h-3.5 text-zinc-300" style={{ color: '#d4d4d8', stroke: '#d4d4d8' }} />
+                  <VolumeX className={`w-3.5 h-3.5 shrink-0 ${theme === 'light' ? 'text-zinc-600' : 'text-zinc-300'}`} />
                 )}
-                <span style={{ color: '#ffffff' }}>{soundOn ? 'SOUND ON' : 'MUTED'}</span>
+                <span>{soundOn ? 'SOUND ON' : 'MUTED'}</span>
               </button>
 
               <button

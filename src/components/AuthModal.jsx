@@ -156,7 +156,7 @@ export default function AuthModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="auth-modal-card w-full max-w-md bg-[#0d0714] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col text-left relative my-auto"
+        role="dialog" aria-modal="true" data-surface="dark" className="auth-modal-card modal-card w-full max-w-md bg-[#0d0714] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col text-left relative my-auto"
       >
         {/* Header Close & Badge */}
         <div className="flex items-center justify-between mb-5">

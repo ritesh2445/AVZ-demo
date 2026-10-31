@@ -159,7 +159,7 @@ function KeyArchiveCarousel({
               aria-label="Previous Key Piece"
               className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${canScrollLeft
                 ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
-                : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                : 'bg-black/40 border-white/10 text-zinc-500 opacity-40 cursor-not-allowed'
                 }`}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -170,7 +170,7 @@ function KeyArchiveCarousel({
               aria-label="Next Key Piece"
               className={`p-2.5 rounded-full border transition-all cursor-pointer shadow-md ${canScrollRight
                 ? 'bg-black/80 hover:bg-white/15 border-white/20 text-white hover:border-pink active:scale-95'
-                : 'bg-black/30 border-white/5 text-zinc-600 cursor-not-allowed'
+                : 'bg-black/40 border-white/10 text-zinc-500 opacity-40 cursor-not-allowed'
                 }`}
             >
               <ChevronRight className="w-4 h-4" />
@@ -243,21 +243,11 @@ function KeyArchiveCarousel({
                   <h4 className="font-mono text-sm sm:text-base font-semibold text-white group-hover:text-pink-200 transition-colors uppercase leading-snug line-clamp-1 mb-2">
                     {item.name}
                   </h4>
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {item.materials?.slice(0, 2).map((m) => (
-                      <span key={m} className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400">
-                        {m}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Price and Actions */}
                 <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
                   <div className="flex flex-col text-left">
-                    <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">
-                      PIECE
-                    </span>
                     <span className="text-sm sm:text-base font-mono font-bold text-white">
                       {formatPrice(item.price, currency)}
                     </span>
@@ -839,25 +829,11 @@ export default function ShopCatalogue({
                         {product.name}
                       </h3>
 
-                      {/* Materials Badges */}
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {product.materials.slice(0, 2).map((mat) => (
-                          <span
-                            key={mat}
-                            className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-zinc-400"
-                          >
-                            {mat}
-                          </span>
-                        ))}
-                      </div>
                     </div>
 
                     {/* Price & Action Button Row */}
                     <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
                       <div className="flex flex-col text-left">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest text-left">
-                          PIECE
-                        </span>
                         <span className="text-sm sm:text-base font-mono font-bold text-white group-hover:text-pink-200 transition-colors text-left">
                           {formatPrice(product.price, currency)}
                         </span>

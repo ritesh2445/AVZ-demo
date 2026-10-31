@@ -57,7 +57,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           Clean, calm white background. DHRISNI SVG logotype fitted perfectly in the
           exact center of the site. Zero overlapping elements. Pristine museum space.
           ========================================================================= */}
-      <div className="w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200" style={{ backgroundColor: '#ffffff', color: '#09090b' }}>
+      <div className="fixed-light-surface w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200" style={{ backgroundColor: '#ffffff', color: '#09090b' }}>
         <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
           {/* Subtle Curated Gallery Pill */}
           <div
@@ -202,7 +202,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playSound('snap')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
+                  className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
                   style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
                   <span style={{ color: '#000000' }}>COMMISSION WITH DHRISNI</span>

@@ -90,7 +90,7 @@ export default function ProductDetailModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-auto max-h-[92vh] sm:max-h-none flex flex-col md:flex-row overflow-y-auto md:overflow-hidden text-left"
+        role="dialog" aria-modal="true" data-surface="dark" className="product-modal-surface modal-card relative w-full max-w-5xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] my-auto max-h-[92vh] sm:max-h-none flex flex-col md:flex-row overflow-y-auto md:overflow-hidden text-left"
       >
         {/* Close Button — Elevated, Independent Clearance */}
         <button

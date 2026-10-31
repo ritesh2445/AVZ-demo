@@ -2658,187 +2658,89 @@ html.light-theme .atelier-dark-canvas a.bg-white * {
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
-   1. FIXED DARK SURFACES
-   (Hero, Story Canvas, Product Cards, Modals, Drawers, Dark Overlays)
-   Applies in BOTH Light Theme and Dark Theme.
+   1. FIXED DARK SURFACES (GLOBAL SHIELD)
+   (Hero, Atelier Story Canvas, Modals, Drawers, Dark Overlays, Product Cards)
+   Applies in BOTH Light Theme and Dark Theme with maximum priority!
    ------------------------------------------------------------------------- */
-#hero,
-.atelier-dark-canvas,
-.dark-story-canvas,
-[role="dialog"],
-[class*="fixed inset-0"],
-.cart-drawer,
-.wishlist-drawer,
-.search-modal-palette,
-.modal-card,
-.mobile-grunge-card,
-article[class*="mobile-grunge-card"],
-.product-card-frame,
-#vault .mobile-grunge-card,
-#lookbook .tunnel-card,
-.museum-dark-canvas,
-[data-surface="dark"] {
+:is([data-surface="dark"], [role="dialog"], .modal-card, .cart-drawer, .wishlist-drawer, .search-modal-palette, .product-modal-surface) {
   color: #ffffff;
 }
 
-/* Headings & White text in Dark Surfaces */
-#hero :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.atelier-dark-canvas :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.dark-story-canvas :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-[role="dialog"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-[class*="fixed inset-0"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.cart-drawer :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.wishlist-drawer :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.search-modal-palette :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.modal-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.mobile-grunge-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-article[class*="mobile-grunge-card"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.product-card-frame :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-#vault .mobile-grunge-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-#lookbook .tunnel-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-.museum-dark-canvas :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme #hero :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .atelier-dark-canvas :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme [role="dialog"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .cart-drawer :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .wishlist-drawer :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .search-modal-palette :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .modal-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme .mobile-grunge-card :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
-html.light-theme article[class*="mobile-grunge-card"] :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b) {
+/* 1. All Headings & White Highlights in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(h1, h2, h3, h4, h5, h6, .text-white, strong.text-white, b) {
   color: #ffffff !important;
 }
 
-/* Paragraphs & Body in Dark Surfaces */
-#hero p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.atelier-dark-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.dark-story-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]),
-[role="dialog"] p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.cart-drawer p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.wishlist-drawer p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.modal-card p:not([class*="text-pink"]):not([class*="text-zinc"]),
-.mobile-grunge-card p:not([class*="text-pink"]):not([class*="text-zinc"]),
-article[class*="mobile-grunge-card"] p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme #hero p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .atelier-dark-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme [role="dialog"] p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .cart-drawer p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .wishlist-drawer p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .modal-card p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .mobile-grunge-card p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme article[class*="mobile-grunge-card"] p:not([class*="text-pink"]):not([class*="text-zinc"]) {
+/* 2. All Paragraphs & Body Descriptions in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) p:not([class*="text-pink"]):not([class*="text-zinc"]):not(.text-black),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) p:not([class*="text-pink"]):not([class*="text-zinc"]):not(.text-black),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) p:not([class*="text-pink"]):not([class*="text-zinc"]):not(.text-black) {
   color: #e4e4e7 !important;
 }
 
-/* Light Zinc & Silver in Dark Surfaces */
-#hero :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-.atelier-dark-canvas :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-[role="dialog"] :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-.cart-drawer :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-.wishlist-drawer :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-.modal-card :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-.mobile-grunge-card :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-article[class*="mobile-grunge-card"] :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme #hero :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme .atelier-dark-canvas :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme [role="dialog"] :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme .cart-drawer :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme .wishlist-drawer :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme .modal-card :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme .mobile-grunge-card :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300),
-html.light-theme article[class*="mobile-grunge-card"] :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300) {
+/* 3. Light Zinc & Silver Secondary Text in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300, span.text-zinc-300, p.text-zinc-300),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300, span.text-zinc-300, p.text-zinc-300),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-silver, .text-zinc-100, .text-zinc-200, .text-zinc-300, span.text-zinc-300, p.text-zinc-300) {
   color: #d4d4d8 !important;
 }
 
-/* Medium Zinc Labels (Meta, category, size, price label) in Dark Surfaces */
-#hero :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.atelier-dark-canvas :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-[role="dialog"] :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.cart-drawer :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.wishlist-drawer :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.search-modal-palette :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.modal-card :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-.mobile-grunge-card :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-article[class*="mobile-grunge-card"] :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme #hero :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .atelier-dark-canvas :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme [role="dialog"] :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .cart-drawer :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .wishlist-drawer :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .search-modal-palette :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .modal-card :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme .mobile-grunge-card :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400),
-html.light-theme article[class*="mobile-grunge-card"] :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400) {
+/* 4. Medium Zinc Labels, Subtitles, Meta in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400, div.text-zinc-400, label.text-zinc-400),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400, div.text-zinc-400, label.text-zinc-400),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-400, span.text-zinc-400, p.text-zinc-400, div.text-zinc-400, label.text-zinc-400) {
   color: #a1a1aa !important;
 }
 
-/* Secondary Sub-labels in Dark Surfaces */
-#hero :is(.text-zinc-500, span.text-zinc-500),
-.atelier-dark-canvas :is(.text-zinc-500, span.text-zinc-500),
-[role="dialog"] :is(.text-zinc-500, span.text-zinc-500),
-.cart-drawer :is(.text-zinc-500, span.text-zinc-500),
-.wishlist-drawer :is(.text-zinc-500, span.text-zinc-500),
-.modal-card :is(.text-zinc-500, span.text-zinc-500),
-.mobile-grunge-card :is(.text-zinc-500, span.text-zinc-500),
-article[class*="mobile-grunge-card"] :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme #hero :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme .atelier-dark-canvas :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme [role="dialog"] :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme .cart-drawer :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme .wishlist-drawer :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme .modal-card :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme .mobile-grunge-card :is(.text-zinc-500, span.text-zinc-500),
-html.light-theme article[class*="mobile-grunge-card"] :is(.text-zinc-500, span.text-zinc-500) {
+/* 5. Zinc-500 Meta in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-500, span.text-zinc-500, p.text-zinc-500, div.text-zinc-500),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-500, span.text-zinc-500, p.text-zinc-500, div.text-zinc-500),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-zinc-500, span.text-zinc-500, p.text-zinc-500, div.text-zinc-500) {
   color: #71717a !important;
 }
 
-/* Pink Accents in Dark Surfaces */
-#hero :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-.atelier-dark-canvas :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-[role="dialog"] :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-.cart-drawer :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-.wishlist-drawer :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-.modal-card :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-.mobile-grunge-card :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-article[class*="mobile-grunge-card"] :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme #hero :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme .atelier-dark-canvas :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme [role="dialog"] :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme .cart-drawer :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme .wishlist-drawer :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme .modal-card :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme .mobile-grunge-card :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
-html.light-theme article[class*="mobile-grunge-card"] :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink) {
+/* 6. Pink Brand Highlights in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .search-modal-palette, .modal-card, .mobile-grunge-card, article[class*="mobile-grunge-card"]) :is(.text-pink, .text-pink-300, .text-pink-400, strong.text-pink) {
   color: #f472b6 !important;
 }
 
-/* Inputs in Dark Surfaces */
-[role="dialog"] :is(input, select, textarea),
-.cart-drawer :is(input, select, textarea),
-.wishlist-drawer :is(input, select, textarea),
-.modal-card :is(input, select, textarea),
-.search-modal-palette :is(input, select, textarea),
-html.light-theme [role="dialog"] :is(input, select, textarea),
-html.light-theme .cart-drawer :is(input, select, textarea),
-html.light-theme .wishlist-drawer :is(input, select, textarea),
-html.light-theme .modal-card :is(input, select, textarea),
-html.light-theme .search-modal-palette :is(input, select, textarea) {
+/* 7. Input Fields in Dark Surfaces */
+:is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) :is(input, select, textarea),
+html.light-theme :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) :is(input, select, textarea),
+html[data-theme="light"] :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) :is(input, select, textarea) {
   background-color: #141419 !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
 }
 
-/* White Buttons in Dark Surfaces */
-:is(#hero, .atelier-dark-canvas, [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white),
-html.light-theme :is(#hero, .atelier-dark-canvas, [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white) {
+/* 8. White Buttons in Dark Surfaces */
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag) {
   background-color: #ffffff !important;
   color: #000000 !important;
 }
-:is(#hero, .atelier-dark-canvas, [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white) :is(span, svg, strong),
-html.light-theme :is(#hero, .atelier-dark-canvas, [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white) :is(span, svg, strong) {
+
+:is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag) :is(span, svg, strong),
+html.light-theme :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag) :is(span, svg, strong),
+html[data-theme="light"] :is(#hero, .atelier-dark-canvas, [data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .mobile-grunge-card) :is(a.bg-white, button.bg-white, .btn-add-bag) :is(span, svg, strong) {
   color: #000000 !important;
   stroke: #000000 !important;
+}
+
+/* 9. Close Buttons in Dark Surfaces */
+:is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) button:not(.bg-white):not(.btn-add-bag) svg,
+html.light-theme :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) button:not(.bg-white):not(.btn-add-bag) svg,
+html[data-theme="light"] :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) button:not(.bg-white):not(.btn-add-bag) svg {
+  color: #d4d4d8 !important;
+}
+:is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) button:not(.bg-white):not(.btn-add-bag):hover svg,
+html.light-theme :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wishlist-drawer, .modal-card, .search-modal-palette) button:not(.bg-white):not(.btn-add-bag):hover svg {
+  color: #ffffff !important;
 }
 
 /* -------------------------------------------------------------------------

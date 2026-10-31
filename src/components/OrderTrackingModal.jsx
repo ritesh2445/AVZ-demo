@@ -39,7 +39,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg sm:max-w-xl max-h-[90vh] flex flex-col bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
+        role="dialog" aria-modal="true" data-surface="dark" className="modal-card w-full max-w-lg sm:max-w-xl max-h-[90vh] flex flex-col bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
       >
         {/* Close Button with safe clearance */}
         <button

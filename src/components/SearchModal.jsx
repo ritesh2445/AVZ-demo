@@ -131,7 +131,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="search-modal-palette w-full max-w-2xl bg-[#0b0410]/95 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden text-left"
+        role="dialog" aria-modal="true" data-surface="dark" className="search-modal-palette modal-card w-full max-w-2xl bg-[#0b0410]/95 backdrop-blur-3xl border border-white/15 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden text-left"
       >
         {/* Minimalist Command Search Input */}
         <div className="relative px-5 sm:px-6 pt-5 pb-4 border-b border-white/10 flex items-center gap-3">

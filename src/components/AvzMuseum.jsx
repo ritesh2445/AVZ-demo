@@ -908,9 +908,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
                       alt={item.name}
                       className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                     />
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-[9px] font-mono text-pink uppercase">
-                      {item.tag}
-                    </span>
+
                   </div>
                   <h4 className={`font-mono text-sm uppercase font-medium mb-1 line-clamp-1 ${
                     isLight ? 'text-zinc-900' : 'text-white'
