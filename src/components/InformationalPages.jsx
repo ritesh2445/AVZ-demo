@@ -79,10 +79,10 @@ export function ContactSection() {
       <div className="max-w-6xl mx-auto mb-12 pb-6 border-b border-white/10 text-left">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-3 text-pink text-[11px] font-mono tracking-[0.25em] uppercase font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-          <span>CUSTOMER CARE • DIRECT STUDIO CONCIERGE</span>
+          <span>CUSTOMER CARE • DIRECT STUDIO SUPPORT</span>
         </div>
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase leading-tight text-left">
-          STUDIO <span className="text-zinc-500 font-light">CONCIERGE</span>
+          STUDIO <span className="text-zinc-500 font-light">SUPPORT</span>
         </h2>
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base font-montserrat mt-2 max-w-3xl leading-relaxed">
           Direct communication channels to our Guwahati studio, founder creative direction desk, and customer styling team.
@@ -225,7 +225,7 @@ export function ContactSection() {
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">
-                      PRIMARY CONCIERGE
+                      DIRECT SUPPORT
                     </span>
                     <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold text-white tracking-wider whitespace-nowrap">
                       {BRAND_INFO.whatsappPrimary}

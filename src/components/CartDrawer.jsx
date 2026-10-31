@@ -176,7 +176,7 @@ export default function CartDrawer({
             size: i.selectedSize || 'Standard'
           })),
           customer: {
-            name: checkoutData.fullName || 'Valued Atelier Patron',
+            name: checkoutData.fullName || 'Valued Customer',
             email: checkoutData.email || 'client@avzvaganza.com',
             phone: checkoutData.phone || '+91 9999999999',
             address: {
@@ -210,13 +210,13 @@ export default function CartDrawer({
       const hasRealRazorpayKey = Boolean(orderData.keyId && !orderData.keyId.includes('placeholder'));
 
       if (!scriptLoaded || !window.Razorpay) {
-        alert('Payment gateway could not be loaded. Please check your internet connection or ad-blocker, or complete your order via WhatsApp concierge.');
+        alert('Payment gateway could not be loaded. Please check your internet connection or ad-blocker, or message us on WhatsApp to complete your order.');
         setIsSubmitting(false);
         return;
       }
 
       if (!hasRealRazorpayKey) {
-        alert('Online payment gateway is temporarily unconfigured. Please complete your reservation directly with our atelier concierge on WhatsApp.');
+        alert('Online payment gateway is temporarily unconfigured. Please complete your reservation directly with our team on WhatsApp.');
         setIsSubmitting(false);
         return;
       }
@@ -226,7 +226,7 @@ export default function CartDrawer({
         amount: orderData.amount,
         currency: orderData.currency || 'INR',
         name: 'AVZ VAGANZA',
-        description: `Order ${orderData.orderNumber} - Atelier Commission`,
+        description: `Order ${orderData.orderNumber} - Custom Order`,
         order_id: orderData.razorpayOrderId,
         prefill: {
           name: checkoutData.fullName,
@@ -262,10 +262,10 @@ export default function CartDrawer({
                 squadDiscount
               });
             } else {
-              alert(verifyData.error || `Payment verification failed. If your account was debited, please contact our atelier team immediately with Payment ID: ${response.razorpay_payment_id}`);
+              alert(verifyData.error || `Payment verification failed. If your account was debited, please message us on WhatsApp immediately with Payment ID: ${response.razorpay_payment_id}`);
             }
           } catch (err) {
-            alert(`Error verifying payment. If your account was debited, please contact our concierge with Payment ID: ${response.razorpay_payment_id}`);
+            alert(`Error verifying payment. If your account was debited, please message our support team with Payment ID: ${response.razorpay_payment_id}`);
           } finally {
             setIsSubmitting(false);
           }
@@ -381,7 +381,7 @@ export default function CartDrawer({
                   Delivery Destination: <span className="text-white">{checkoutData.city || 'India'}</span> - {checkoutData.pincode || ''}
                 </p>
                 <div className="pt-2 border-t border-white/10 text-[10px] text-zinc-500 uppercase tracking-wider">
-                  PRODUCTION TIMELINE: 1–2 WEEKS (HANDCRAFTED RUNWAY RELIC)
+                  PRODUCTION TIMELINE: 1–2 WEEKS (HANDMADE TO ORDER)
                 </div>
               </div>
               <button
@@ -517,7 +517,7 @@ export default function CartDrawer({
 
               {purchasesEnabled === false && (
                 <div className="p-3 bg-red-950/60 border border-red-800/80 rounded-xl text-red-200 text-xs font-mono">
-                  {purchasesDisabledMessage || 'Atelier purchases are momentarily paused while runway commissions are crafted. You may still explore the catalogue or inquire via WhatsApp.'}
+                  {purchasesDisabledMessage || 'Orders are temporarily paused while current custom pieces are being crafted. You can still browse the collection or message us on WhatsApp.'}
                 </div>
               )}
 

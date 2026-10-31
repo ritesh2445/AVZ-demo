@@ -114,12 +114,7 @@ export default function ProductDetailModal({
               draggable={false} className="w-full h-full object-cover transition-all duration-500 rounded-2xl pointer-events-none"
             />
 
-            {/* Provenance Badge */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
-              <span className="px-3 py-1 rounded-full bg-black/85 backdrop-blur-md border border-white/20 text-white text-[10px] font-mono tracking-widest uppercase shadow-md">
-                {product.tag || 'ONE OF ONE'}
-              </span>
-            </div>
+            
 
             {/* Wishlist Heart Toggle — Moved to Bottom-Right of Image to Never Collide with Modal Close X */}
             {onToggleWishlist && (

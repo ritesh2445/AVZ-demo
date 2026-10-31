@@ -20,7 +20,7 @@ const MANIFESTO_PILLARS = [
     icon: Flame,
     summary:
       'In a world increasingly flooded with disposable fast fashion and AI-generated blandness, things shaped by real human fingers are the ultimate modern luxury. Every stitch, spike, and solder connection carries human pulse and intention.',
-    highlight: 'Zero mass manufacturing. Every piece is an archival 1-of-1 sculptural relic.'
+    highlight: 'Zero mass manufacturing. Every piece is an original 1-of-1 wearable artwork.'
   },
   {
     id: '03',
@@ -33,7 +33,7 @@ const MANIFESTO_PILLARS = [
   },
   {
     id: '04',
-    title: 'WOMEN ARTISANS OF THE GUWAHATI ATELIER',
+    title: 'WOMEN ARTISANS OF OUR GUWAHATI STUDIO',
     subtitle: 'Mentorship, independence, and North-East craftsmanship',
     icon: Users,
     summary:
@@ -102,7 +102,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-12 sm:mb-16 border-b border-white/10 gap-3">
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-              <span style={{ color: "#f472b6" }}>✦ ATELIER MANIFESTO // 001</span>
+              <span style={{ color: "#f472b6" }}>✦ OUR STORY</span>
             </div>
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-wider uppercase">
               <MapPin className="w-3.5 h-3.5 text-pink" />
@@ -126,7 +126,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 {/* Corner Coordinates & Archival Tag */}
                 <div className="absolute top-4 left-4 z-10">
                   <span className="px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[9px] font-mono tracking-widest text-white uppercase font-bold">
-                    ARCHIVE REEL // DH-01
+                    BEHIND THE SCENES
                   </span>
                 </div>
 
@@ -193,7 +193,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 hover:border-pink/80 bg-black/60 hover:bg-white/5 text-white font-mono text-xs tracking-widest uppercase transition-all cursor-pointer"
                 >
-                  <span>EXPLORE 1-OF-1 RELICS</span>
+                  <span>EXPLORE 1-OF-1 DESIGNS</span>
                 </a>
               </div>
             </div>
@@ -206,14 +206,14 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4 text-left">
               <div>
                 <span className="text-[10px] font-mono tracking-[0.28em] text-pink uppercase font-bold block mb-1">
-                  THE ARCHIVAL DOSSIER
+                  STUDIO PHILOSOPHY
                 </span>
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider" style={{ color: "#ffffff" }}>
-                  FOUR PILLARS OF AVZ ATELIER
+                  FOUR PILLARS OF AVZ STUDIO
                 </h3>
               </div>
               <p className="text-xs font-mono text-zinc-400 tracking-wider">
-                SELECT A PILLAR TO INSPECT PHILOSOPHY
+                TAP A PILLAR TO LEARN MORE
               </p>
             </div>
 
@@ -255,7 +255,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
               <div className="relative z-10 max-w-3xl">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-pink font-mono text-xs font-bold tracking-widest uppercase">
-                    PILLAR {MANIFESTO_PILLARS[activePillar].id} • SPECIFICATION
+                    PILLAR {MANIFESTO_PILLARS[activePillar].id} • PHILOSOPHY
                   </span>
                 </div>
                 <h4 className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-wider mb-2" style={{ color: "#ffffff" }}>
@@ -305,7 +305,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   GUWAHATI
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
-                  ASSAM ATELIER BASE
+                  GUWAHATI STUDIO
                 </span>
               </div>
 

@@ -41,7 +41,7 @@ const COMMISSION_PHASES = [
     step: "04",
     title: "DELIVERY",
     subtitle: "Verification & Dispatch",
-    desc: "Final structural calibration, video sign-off, and insured express delivery."
+    desc: "Final fitting checks, video sign-off, and insured express delivery."
   }
 ];
 
@@ -206,7 +206,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">PRIMARY CONCIERGE</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">WHATSAPP SUPPORT</span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
                   </div>
                 </div>

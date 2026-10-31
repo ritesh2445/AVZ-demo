@@ -134,7 +134,7 @@ export default function AuthModal({
   };
 
   // 4. WhatsApp Quick Concierge
-  const handleWhatsAppConcierge = () => {
+  const handleWhatsAppSupport = () => {
     playSound('pip');
     const msg = encodeURIComponent(
       `Hello Dhrisni! I'm browsing AVZ Vaganza and would like VIP client access or assistance.`
@@ -531,11 +531,11 @@ export default function AuthModal({
             <div className="pt-2 border-t border-white/10 text-center">
               <button
                 type="button"
-                onClick={handleWhatsAppConcierge}
+                onClick={handleWhatsAppSupport}
                 className="inline-flex items-center gap-2 text-zinc-400 hover:text-white font-mono text-[11px] tracking-wider transition-colors cursor-pointer py-1"
               >
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Need help? Chat with AVZ Studio Concierge</span>
+                <span>Need help? Chat with Us on WhatsApp</span>
               </button>
             </div>
           </div>
