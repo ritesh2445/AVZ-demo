@@ -212,7 +212,8 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
       (entries) => {
         if (entries[0].isIntersecting && !triggered) {
           triggered = true;
-          triggerRegrowth(0); // starts with Rose Noir (Red & Blue)
+          const initialPal = Math.floor(Math.random() * GARDEN_PALETTES.length);
+          triggerRegrowth(initialPal);
         }
       },
       { threshold: 0.15 }
@@ -265,7 +266,6 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
         onMouseLeave={handleMouseLeave}
         onClick={() => triggerRegrowth()}
         className="relative w-full cursor-pointer group"
-        title="Click to regrow in a new pattern and shift palette!"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -453,54 +453,6 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
             />
           ))}
         </div>
-      </div>
-
-      {/* Interactive Haute Couture Color Shift & Pattern Selector */}
-      <div className="relative z-20 flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 px-4">
-        {/* Quick Palette Dot Swatches */}
-        <div className="inline-flex items-center gap-2 p-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-md shadow-xl">
-          {GARDEN_PALETTES.map((pal, idx) => {
-            const isActive = idx === paletteIdx;
-            return (
-              <button
-                key={pal.id}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  triggerRegrowth(idx);
-                }}
-                title={`${pal.name} (${pal.sub})`}
-                className={`relative w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isActive ? 'scale-110 ring-2 ring-white shadow-lg' : 'opacity-70 hover:opacity-100 hover:scale-105'
-                }`}
-                style={{
-                  background: `linear-gradient(135deg, ${pal.swatch[0]} 50%, ${pal.swatch[1]} 50%)`
-                }}
-              >
-                {isActive && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Click-to-Regrow Action Badge */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            triggerRegrowth();
-          }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.12] hover:border-white/30 text-white text-[11px] font-mono tracking-wider uppercase transition-all duration-300 shadow-md backdrop-blur-md active:scale-95"
-        >
-          <span
-            className="w-2 h-2 rounded-full animate-ping"
-            style={{ backgroundColor: currentPalette.petal }}
-          />
-          <span className="font-semibold">{currentPalette.name}</span>
-          <span className="text-white/40">•</span>
-          <span className="text-white/70 text-[10px]">{currentPattern.name}</span>
-          <span className="text-white/40">✦</span>
-        </button>
       </div>
     </div>
   );
