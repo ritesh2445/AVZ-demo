@@ -137,7 +137,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         />
 
         {cmsHero?.subheadline && (
-          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]">
+          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]" style={{ color: "#ffffff", fontWeight: 700 }}>
             {cmsHero.subheadline}
           </p>
         )}

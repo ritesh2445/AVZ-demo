@@ -724,7 +724,7 @@ html.light-theme [class*="bg-[#0b030f]"] {
 }
 
 /* Nested Sub-Cards (Pricing Tiers, Craft Boxes, Specs, Feature Blocks) */
-html.light-theme [class*="bg-black/60"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
+html.light-theme [class*="bg-black/60"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.atelier-dark-canvas *):not(.atelier-dark-canvas):not(.relative.aspect- *):not(input):not(select),
 html.light-theme [class*="bg-black/70"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select),
 html.light-theme [class*="bg-black/80"]:not([class*="aspect-"] *):not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.relative.aspect- *):not(input):not(select) {
   background-color: #f7f3fc !important;
@@ -823,8 +823,8 @@ html.light-theme #specs p,
 html.light-theme #specs ul,
 html.light-theme #specs li,
 html.light-theme #specs div,
-html.light-theme #about p,
-html.light-theme #about span,
+html.light-theme #about > .bg-white p,
+html.light-theme #about > .bg-white span,
 html.light-theme #custom p,
 html.light-theme #custom label,
 html.light-theme #custom span.text-zinc-300,
@@ -2574,20 +2574,83 @@ html[data-theme="light"] #hero .btn-hero-custom:hover {
 }
 
 /* Atelier Dark Dimension Canvas in Founder's Section (Preserves obsidian atmospheric theme) */
+.atelier-dark-canvas,
 html.light-theme .atelier-dark-canvas,
 html[data-theme="light"] .atelier-dark-canvas {
   background-color: #0a0a0f !important;
   color: #ffffff !important;
 }
-html.light-theme .atelier-dark-canvas p,
-html.light-theme .atelier-dark-canvas span:not(.text-black):not(.btn-glass-pink *),
+
+.atelier-dark-canvas blockquote,
 html.light-theme .atelier-dark-canvas blockquote,
+html[data-theme="light"] .atelier-dark-canvas blockquote,
+.atelier-dark-canvas h2,
+.atelier-dark-canvas h3,
+.atelier-dark-canvas h4,
+html.light-theme .atelier-dark-canvas h2,
 html.light-theme .atelier-dark-canvas h3,
 html.light-theme .atelier-dark-canvas h4,
-html[data-theme="light"] .atelier-dark-canvas p,
-html[data-theme="light"] .atelier-dark-canvas span:not(.text-black):not(.btn-glass-pink *),
-html[data-theme="light"] .atelier-dark-canvas blockquote,
+html[data-theme="light"] .atelier-dark-canvas h2,
 html[data-theme="light"] .atelier-dark-canvas h3,
 html[data-theme="light"] .atelier-dark-canvas h4 {
-  color: inherit !important;
+  color: #ffffff !important;
+}
+
+.atelier-dark-canvas .text-white,
+html.light-theme .atelier-dark-canvas .text-white,
+html[data-theme="light"] .atelier-dark-canvas .text-white,
+.atelier-dark-canvas strong.text-white,
+html.light-theme .atelier-dark-canvas strong.text-white,
+html[data-theme="light"] .atelier-dark-canvas strong.text-white {
+  color: #ffffff !important;
+}
+
+.atelier-dark-canvas p,
+html.light-theme .atelier-dark-canvas p,
+html[data-theme="light"] .atelier-dark-canvas p {
+  color: #e4e4e7 !important;
+}
+
+.atelier-dark-canvas .text-zinc-200,
+html.light-theme .atelier-dark-canvas .text-zinc-200,
+html[data-theme="light"] .atelier-dark-canvas .text-zinc-200 {
+  color: #e4e4e7 !important;
+}
+
+.atelier-dark-canvas .text-zinc-300,
+html.light-theme .atelier-dark-canvas .text-zinc-300,
+html[data-theme="light"] .atelier-dark-canvas .text-zinc-300 {
+  color: #d4d4d8 !important;
+}
+
+.atelier-dark-canvas .text-zinc-400,
+html.light-theme .atelier-dark-canvas .text-zinc-400,
+html[data-theme="light"] .atelier-dark-canvas .text-zinc-400 {
+  color: #a1a1aa !important;
+}
+
+.atelier-dark-canvas .text-zinc-500,
+html.light-theme .atelier-dark-canvas .text-zinc-500,
+html[data-theme="light"] .atelier-dark-canvas .text-zinc-500 {
+  color: #71717a !important;
+}
+
+.atelier-dark-canvas .text-pink,
+html.light-theme .atelier-dark-canvas .text-pink,
+html[data-theme="light"] .atelier-dark-canvas .text-pink,
+.atelier-dark-canvas strong.text-pink,
+html.light-theme .atelier-dark-canvas strong.text-pink,
+html[data-theme="light"] .atelier-dark-canvas strong.text-pink {
+  color: #f472b6 !important;
+}
+
+.atelier-dark-canvas a.bg-white,
+html.light-theme .atelier-dark-canvas a.bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.atelier-dark-canvas a.bg-white *,
+html.light-theme .atelier-dark-canvas a.bg-white * {
+  color: #000000 !important;
 }

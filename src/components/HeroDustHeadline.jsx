@@ -234,11 +234,35 @@ export default function HeroDustHeadline({
           showDomText || isAssembled ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <span ref={line1Ref} className="royal-gradient-shimmer inline-block">
+        <span
+          ref={line1Ref}
+          className="royal-gradient-shimmer inline-block"
+          style={{
+            backgroundImage:
+              'linear-gradient(120deg, #ffffff 0%, #fce7f3 12%, #f472b6 25%, #ec4899 40%, #be185d 55%, #ec4899 70%, #f472b6 82%, #fce7f3 92%, #ffffff 100%)',
+            backgroundSize: '280% 280%',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            color: 'transparent'
+          }}
+        >
           {headline1}
         </span>
         {headline2 && (
-          <span ref={line2Ref} className="royal-gradient-shimmer inline-block mt-1 sm:mt-2">
+          <span
+            ref={line2Ref}
+            className="royal-gradient-shimmer inline-block mt-1 sm:mt-2"
+            style={{
+              backgroundImage:
+                'linear-gradient(120deg, #ffffff 0%, #fce7f3 12%, #f472b6 25%, #ec4899 40%, #be185d 55%, #ec4899 70%, #f472b6 82%, #fce7f3 92%, #ffffff 100%)',
+              backgroundSize: '280% 280%',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent'
+            }}
+          >
             {headline2}
           </span>
         )}

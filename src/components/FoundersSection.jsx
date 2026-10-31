@@ -77,10 +77,10 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
 
           {/* Minimalist Gallery Provenance Subtitle (Clean, Calm, Below the Artwork) */}
           <div className="flex flex-col items-center gap-2 mt-8 sm:mt-12 text-center">
-            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] text-zinc-700 uppercase font-semibold">
+            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold" style={{ color: "#09090b" }}>
               DHRISNI • DHRISTROYER
             </span>
-            <span className="text-[11px] sm:text-xs font-montserrat text-zinc-500 uppercase tracking-[0.2em]">
+            <span className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.2em] font-medium" style={{ color: "#52525b" }}>
               THE ARCHITECT OF WEARABLE ART • GUWAHATI, ASSAM
             </span>
           </div>
@@ -102,7 +102,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-12 sm:mb-16 border-b border-white/10 gap-3">
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-              <span>✦ ATELIER MANIFESTO // 001</span>
+              <span style={{ color: "#f472b6" }}>✦ ATELIER MANIFESTO // 001</span>
             </div>
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-wider uppercase">
               <MapPin className="w-3.5 h-3.5 text-pink" />
@@ -155,15 +155,15 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 <span className="text-[10px] font-mono tracking-[0.3em] text-pink uppercase font-bold block mb-3">
                   ARTISAN PHILOSOPHY
                 </span>
-                <blockquote className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold text-white leading-tight tracking-wide drop-shadow-md">
+                <blockquote className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md" style={{ color: "#ffffff" }}>
                   "{quote}"
                 </blockquote>
               </div>
 
-              <div className="space-y-4 text-zinc-300 font-montserrat text-sm sm:text-base leading-relaxed max-w-2xl">
+              <div className="space-y-4 font-montserrat text-sm sm:text-base leading-relaxed max-w-2xl" style={{ color: "#d4d4d8" }}>
                 <p>
-                  Known to the world as <strong className="text-white font-mono">Dhrisni</strong> or{' '}
-                  <strong className="text-pink font-mono">@Dhristroyer</strong>, she wears many titles—actor, model, creator,
+                  Known to the world as <strong className="font-mono font-bold" style={{ color: "#ffffff" }}>Dhrisni</strong> or{' '}
+                  <strong className="font-mono font-bold" style={{ color: "#f472b6" }}>@Dhristroyer</strong>, she wears many titles—actor, model, creator,
                   and designer. But strip all that away, and at her absolute core, she is an artisan who refuses cookie-cutter minimalism.
                 </p>
                 <p>
@@ -208,7 +208,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 <span className="text-[10px] font-mono tracking-[0.28em] text-pink uppercase font-bold block mb-1">
                   THE ARCHIVAL DOSSIER
                 </span>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold text-white uppercase tracking-wider">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider" style={{ color: "#ffffff" }}>
                   FOUR PILLARS OF AVZ ATELIER
                 </h3>
               </div>
@@ -258,13 +258,13 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                     PILLAR {MANIFESTO_PILLARS[activePillar].id} • SPECIFICATION
                   </span>
                 </div>
-                <h4 className="text-xl sm:text-2xl font-mono font-bold text-white uppercase tracking-wider mb-2">
+                <h4 className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-wider mb-2" style={{ color: "#ffffff" }}>
                   {MANIFESTO_PILLARS[activePillar].title}
                 </h4>
-                <p className="text-xs sm:text-sm font-mono text-zinc-400 tracking-wider uppercase mb-5">
+                <p className="text-xs sm:text-sm font-mono tracking-wider uppercase mb-5" style={{ color: "#a1a1aa" }}>
                   {MANIFESTO_PILLARS[activePillar].subtitle}
                 </p>
-                <p className="text-sm sm:text-base font-montserrat text-zinc-200 leading-relaxed mb-6">
+                <p className="text-sm sm:text-base font-montserrat leading-relaxed mb-6" style={{ color: "#e4e4e7" }}>
                   {MANIFESTO_PILLARS[activePillar].summary}
                 </p>
                 <div className="p-4 rounded-xl border border-pink/30 bg-pink/5 text-xs sm:text-sm font-mono text-pink tracking-wide">
@@ -283,7 +283,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 ========================================================================= */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-12 border-t border-white/10 text-center">
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold text-white mb-1">
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: "#ffffff" }}>
                   200+
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
@@ -292,7 +292,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
               </div>
 
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold text-pink mb-1">
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: "#f472b6" }}>
                   1,500+
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
