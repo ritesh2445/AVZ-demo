@@ -2540,3 +2540,22 @@ html[data-theme="light"] #hero .btn-hero-custom:hover {
   color: #000000 !important;
   box-shadow: 0 0 35px rgba(244, 114, 182, 0.7) !important;
 }
+
+/* Atelier Dark Dimension Canvas in Founder's Section (Preserves obsidian atmospheric theme) */
+html.light-theme .atelier-dark-canvas,
+html[data-theme="light"] .atelier-dark-canvas {
+  background-color: #0a0a0f !important;
+  color: #ffffff !important;
+}
+html.light-theme .atelier-dark-canvas p,
+html.light-theme .atelier-dark-canvas span:not(.text-black):not(.btn-glass-pink *),
+html.light-theme .atelier-dark-canvas blockquote,
+html.light-theme .atelier-dark-canvas h3,
+html.light-theme .atelier-dark-canvas h4,
+html[data-theme="light"] .atelier-dark-canvas p,
+html[data-theme="light"] .atelier-dark-canvas span:not(.text-black):not(.btn-glass-pink *),
+html[data-theme="light"] .atelier-dark-canvas blockquote,
+html[data-theme="light"] .atelier-dark-canvas h3,
+html[data-theme="light"] .atelier-dark-canvas h4 {
+  color: inherit !important;
+}
