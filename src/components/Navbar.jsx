@@ -319,28 +319,6 @@ export default function Navbar({
               )}
             </div>
 
-            {/* Sound Toggle */}
-            <button
-              onClick={handleSoundToggle}
-              aria-label={soundOn ? 'Mute Audio Soundtrack' : 'Unmute Audio Soundtrack'}
-              title={soundOn ? 'Sound On (Tap to Mute)' : 'Sound Off (Tap to Unmute)'}
-              className={`sound-toggle-btn hidden sm:flex items-center justify-center p-2 rounded-full border transition-all cursor-pointer shadow-sm active:scale-95 shrink-0 ${
-                theme === 'light'
-                  ? 'border-purple-200 bg-purple-50 hover:bg-purple-100 text-zinc-900'
-                  : 'border-white/20 bg-white/5 hover:bg-white/10 text-white'
-              }`}
-            >
-              {soundOn ? (
-                <Volume2 className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
-              ) : (
-                <VolumeX className={`w-3.5 h-3.5 shrink-0 ${theme === 'light' ? 'text-zinc-600' : 'text-zinc-300'}`} />
-              )}
-              <span className={`text-[9px] font-mono tracking-wider uppercase font-bold hidden lg:inline ml-1 ${
-                theme === 'light' ? 'text-zinc-900' : 'text-white'
-              }`}>
-                {soundOn ? 'ON' : 'MUTED'}
-              </span>
-            </button>
 
             {/* Mobile Hamburger Toggle */}
             <button
