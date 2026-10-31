@@ -60,9 +60,9 @@ export default function ClientStorefront() {
   const isMaintenance = storefrontSettings?.maintenance_mode?.enabled;
 
   if (isMaintenance && !isAdmin) {
-    const maintenanceTitle = storefrontSettings?.maintenance_mode?.title || 'ATELIER CALIBRATION IN PROGRESS';
+    const maintenanceTitle = storefrontSettings?.maintenance_mode?.title || 'STORE UNDER MAINTENANCE';
     const maintenanceMessage = storefrontSettings?.maintenance_mode?.message ||
-      'The AVZ Vaganza dimensional gateway is momentarily undergoing bespoke maintenance and runway archiving. We will re-emerge shortly.';
+      'AVZ Vaganza is momentarily undergoing maintenance. We will be back shortly.';
     const bannerUrl = storefrontSettings?.maintenance_mode?.banner_url || '/assets/editorial_hero_portrait.jpg';
 
     return (
@@ -86,7 +86,7 @@ export default function ClientStorefront() {
           <div className="rounded-2xl overflow-hidden border border-[#2D2038] mb-8 max-h-56 bg-neutral-900">
             <img
               src={bannerUrl}
-              alt="Atelier runway archive"
+              alt="Studio collection archive"
               className="w-full h-full object-cover opacity-80"
             />
           </div>

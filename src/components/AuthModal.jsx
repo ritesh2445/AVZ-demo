@@ -307,14 +307,15 @@ export default function AuthModal({
     }
   };
 
-  // 6. WhatsApp Concierge
-  const handleWhatsAppConcierge = () => {
+  // 6. WhatsApp Support
+  const handleWhatsAppSupport = () => {
     playSound('pip');
     const msg = encodeURIComponent(
       `Hello Dhrisni! I'm browsing AVZ Vaganza and would like VIP client access or assistance.`
     );
     window.open(`https://wa.me/${BRAND_INFO.whatsapp}?text=${msg}`, '_blank');
   };
+  const handleWhatsAppConcierge = handleWhatsAppSupport;
 
   // 7. Sign Out
   const handleSignOut = async () => {
@@ -333,7 +334,7 @@ export default function AuthModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="auth-modal-card w-full max-w-md bg-[#0d0714] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col text-left relative my-auto"
+        role="dialog" aria-modal="true" data-surface="dark" className="auth-modal-card modal-card w-full max-w-md bg-[#0d0714] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-[0_30px_100px_rgba(0,0,0,0.95)] flex flex-col text-left relative my-auto"
       >
         {/* Header Close & Badge */}
         <div className="flex items-center justify-between mb-5">
@@ -805,11 +806,11 @@ export default function AuthModal({
             <div className="pt-2 border-t border-white/10 text-center">
               <button
                 type="button"
-                onClick={handleWhatsAppConcierge}
+                onClick={handleWhatsAppSupport}
                 className="inline-flex items-center gap-2 text-zinc-400 hover:text-white font-mono text-[11px] tracking-wider transition-colors cursor-pointer py-1"
               >
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Need help? Chat with AVZ Studio Concierge</span>
+                <span>Need help? Chat with Us on WhatsApp</span>
               </button>
             </div>
           </div>

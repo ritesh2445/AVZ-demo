@@ -103,7 +103,7 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
       <div className="absolute inset-0 bg-radial-gradient from-[#301934]/30 via-black to-black pointer-events-none" />
 
       {/* Main Cinema Container */}
-      <div className="relative w-full max-w-5xl h-[85vh] max-h-[850px] bg-black border border-pink/30 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(244,194,194,0.25)] flex flex-col justify-between">
+      <div role="dialog" aria-modal="true" data-surface="dark" className="modal-card relative w-full max-w-5xl h-[85vh] max-h-[850px] bg-black border border-pink/30 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_0_80px_rgba(244,194,194,0.25)] flex flex-col justify-between">
         
         {/* Top Header Bar */}
         <div className="relative z-20 flex items-center justify-between gap-3 p-4 sm:p-6 bg-gradient-to-b from-black/90 via-black/60 to-transparent">

@@ -38,7 +38,7 @@ export default function WishlistDrawer({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[88vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left"
+        role="dialog" aria-modal="true" data-surface="dark" className="wishlist-drawer modal-card w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[88vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left"
       >
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between gap-3 bg-black/40 shrink-0">

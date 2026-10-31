@@ -86,7 +86,7 @@ export default function SquadBuyModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
+        role="dialog" aria-modal="true" data-surface="dark" className="modal-card w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
       >
         {/* Close Button with safe clearance */}
         <button

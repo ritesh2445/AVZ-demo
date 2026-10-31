@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
             AVZ VAGANZA
           </h1>
           <p className="text-xs uppercase tracking-[0.25em] text-[#F4C2C2] mt-1 font-mono">
-            Commerce Control Center // Direct Portal
+            Admin Portal
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function AdminLoginPage() {
 
         <div className="mt-8 text-center border-t border-[#301934]/60 pt-4">
           <p className="text-[10px] uppercase tracking-widest text-neutral-500 font-mono">
-            Direct Hostname Security // Cloudflare Access Protected
+            Secure Admin Access • Protected
           </p>
         </div>
       </div>

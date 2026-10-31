@@ -1,436 +1,389 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sparkles, ArrowUpRight, Scissors, ShieldCheck, Users, Cpu, Flame, MapPin } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-// HUMAN, GROUNDED EDITORIAL COPY
-const COPY = {
-  aboutMother: {
-    heading: 'DHRISNI (DHRISTROYER)',
-    subheading: 'FOUNDER & CREATIVE DIRECTOR • THE MOTHER OF AVZ'
+const MANIFESTO_PILLARS = [
+  {
+    id: '01',
+    title: 'RAW REBELLION & PERSONAL FREEDOM',
+    subtitle: 'From Shillong scissors to avant-garde runways',
+    icon: Scissors,
+    summary:
+      'Growing up in a household with strict rules on clothing, Dhrisni found her voice by picking up a pair of scissors and rebuilding garments with her own hands. What began as DIY teenage tailoring grew into a defiant refusal of mass-market conformity.',
+    highlight: 'Clothes with weight, texture, and attitude—pieces you will never find on a commercial retail rack.'
   },
-  professionalRoots: {
-    heading: 'ORIGINS & ROOTS',
-    paragraphs: [
-      'Growing up between Shillong and Guwahati, Dhrisni started sharing her style online at sixteen, building an authentic following through raw, unfiltered fashion experiments.',
-      'At eighteen, she moved to Mumbai, working as a model and actor across television, reality shows, and films, while continuously honing her hands-on design craft.',
-      'Through all of it, she refused to follow mass-market trends. Her focus stayed true: building tangible, wearable art with real texture and human feeling.'
-    ]
+  {
+    id: '02',
+    title: 'HUMAN HANDS OVER MACHINE SAMENESS',
+    subtitle: 'The craft of real human sweat and intention',
+    icon: Flame,
+    summary:
+      'In a world increasingly flooded with disposable fast fashion and AI-generated blandness, things shaped by real human fingers are the ultimate modern luxury. Every stitch, spike, and solder connection carries human pulse and intention.',
+    highlight: 'Zero mass manufacturing. Every piece is an original 1-of-1 wearable artwork.'
   },
-  howBorn: {
-    heading: 'HOW VAGANZA WAS BORN',
-    paragraphs: [
-      'AVZ Vaganza started out of pure personal freedom. Growing up in a household with strict rules on clothing, Dhrisni found her voice by taking scissors to her own clothes and rebuilding them.',
-      'What began as DIY tailoring quickly turned into a movement. She wanted clothes with weight, texture, and attitude—pieces you cannot find on a standard clothing rack.',
-      'Today, every piece is sculpted by hand in our Guwahati studio. We cut, wire, and assemble each garment individually from salvaged electronics, raw hardware, and reclaimed fabrics.'
-    ]
+  {
+    id: '03',
+    title: 'SALVAGED TECHNOLOGY & RECLAIMED TEXTILES',
+    subtitle: 'Giving discarded computer hardware a bold second life',
+    icon: Cpu,
+    summary:
+      'We do not treat sustainability as a hollow corporate slogan. We gather obsolete computer motherboards, mechanical keyboard keys, discarded denim, and industrial hardware, fusing cyber-grunge technology into haute wearable armor.',
+    highlight: 'Transforming landfill electronic waste into high-fashion archival statement pieces.'
   },
-  sustainability: {
-    heading: 'TRUE SUSTAINABILITY',
-    paragraphs: [
-      'We do not treat sustainability as a marketing catchphrase. It is simply the way we work every single day.',
-      'Instead of consuming new factory textiles, we gather obsolete computer motherboards, mechanical keyboard keys, deadstock denim, and industrial hardware, giving them a bold second life.',
-      'To us, modern luxury is not an automated assembly line. It is the time, intention, and human hands behind every stitch and welded ring.'
-    ]
-  },
-  aesthetic: {
-    heading: 'THE AESTHETIC',
-    paragraphs: [
-      'AVZ Vaganza is rooted in cyber-grunge, Y2K energy, industrial punk, and avant-garde streetwear.',
-      'We reject cookie-cutter minimalism. We love tactile hardware, fluid chainmail, sharp spikes, and silhouettes that make you feel instantly confident and protected.',
-      'Our studio is for anyone who values original craftsmanship, real human effort, and the thrill of wearing something one-of-a-kind.'
-    ]
+  {
+    id: '04',
+    title: 'WOMEN ARTISANS OF OUR GUWAHATI STUDIO',
+    subtitle: 'Mentorship, independence, and North-East craftsmanship',
+    icon: Users,
+    summary:
+      'Our studio is rooted in Guwahati, Assam. Dhrisni personally trains and mentors local women artisans in wiring, structural corsetry, and heavy hardware sculpting, creating skilled economic independence through avant-garde fashion.',
+    highlight: 'Deeply empowering North-Eastern women craftsmanship on a global fashion stage.'
   }
-};
-
-const CARDS = [
-  { id: 'card-about-mother', label: 'DHRISNI (DHRISTROYER)', tag: '01' },
-  { id: 'card-professional-roots', label: 'PROFESSIONAL ROOTS', tag: '02' },
-  { id: 'card-how-born', label: 'HOW VAGANZA WAS BORN', tag: '03' },
-  { id: 'card-sustainability', label: 'SUSTAINABILITY CORE', tag: '04' },
-  { id: 'card-aesthetic', label: 'AESTHETIC INSPIRATION', tag: '05' }
 ];
 
-function HumanEditorialBlock({ paragraphs }) {
-  return (
-    <div className="space-y-4 sm:space-y-5 select-text">
-      {paragraphs.map((para, i) => (
-        <div key={i} className="relative">
-          {paragraphs.length > 1 && (
-            <span className="font-mono text-[11px] text-pink tracking-[0.2em] block mb-1.5 font-bold uppercase">
-              PART {(i + 1).toString().padStart(2, '0')}
-            </span>
-          )}
-          <p className="font-montserrat text-[14px] sm:text-[15px] lg:text-[16px] leading-[1.75] text-zinc-200 font-normal tracking-normal normal-case">
-            {para}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
-  const scrollContainerRef = useRef(null);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [visibleCards, setVisibleCards] = useState({
-    'card-about-mother': true,
-    'card-professional-roots': false,
-    'card-how-born': false,
-    'card-sustainability': false,
-    'card-aesthetic': false
-  });
+  const [activePillar, setActivePillar] = useState(0);
 
-  // Observe horizontal intersection of each card to trigger typing & update index
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleCards((prev) => ({
-              ...prev,
-              [entry.target.id]: true
-            }));
-
-            const idx = CARDS.findIndex((c) => c.id === entry.target.id);
-            if (idx !== -1) {
-              setActiveCardIndex(idx);
-            }
-          }
-        });
-      },
-      {
-        root: container,
-        threshold: 0.35
-      }
-    );
-
-    CARDS.forEach((card) => {
-      const el = document.getElementById(card.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-
-  const scrollToCard = (index) => {
-    playSound('cyber_hover');
-    setActiveCardIndex(index);
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    const cardEl = document.getElementById(CARDS[index].id);
-    if (cardEl) {
-      cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  };
-
-  const scrollPrev = () => {
-    const prev = Math.max(0, activeCardIndex - 1);
-    scrollToCard(prev);
-  };
-
-  const scrollNext = () => {
-    const next = Math.min(CARDS.length - 1, activeCardIndex + 1);
-    scrollToCard(next);
-  };
-
-
+  const founderName = cmsFounders?.founder_name || 'Dhrisni';
+  const alias = cmsFounders?.alias || 'Dhristroyer';
+  const quote = cmsFounders?.quote || 'Building wearable art with my own two hands is the ultimate rebellion.';
+  const portraitImg = cmsFounders?.portrait_image || ASSET_MANIFEST.editorialHero || '/assets/editorial_hero_portrait.jpg';
 
   return (
-    <section
-      id="about"
-      className="relative w-full bg-pitch-black text-silver overflow-hidden border-t border-[#be185d]/30 selection:bg-pink selection:text-black py-8 sm:py-12"
-    >
-      {/* Background Architectural Mesh & Subtle Ambient Violet Glow */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}
-      />
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(190,24,93,0.14),transparent_70%)]" />
-
-      {/* TOP HEADER & HORIZONTAL NAVIGATION HUD */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mb-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 border-b border-white/10 pb-4">
-        <div>
-          <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-            <span>✦ FOUNDER ARCHIVE • GUWAHATI ATELIER</span>
-          </div>
-          <h2 className="font-mono font-bold text-xl sm:text-2xl lg:text-3xl tracking-[0.14em] text-white uppercase">
-            DHRISNI (DHRISTROYER)
-          </h2>
-          <p className="font-mono text-xs text-zinc-400 tracking-wider uppercase mt-1">
-            FOUNDER & COUTURE SCULPTOR • THE AVZ DIMENSION
-          </p>
-        </div>
-
-        {/* Controls & Quick Selector */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] text-zinc-500 mr-2">
-            <span>[ 0{activeCardIndex + 1} / 0{CARDS.length} ]</span>
+    <section id="about" className="relative w-full overflow-hidden">
+      {/* =========================================================================
+          CHAPTER 1: THE MONOLITH EXHIBITION (THE WHITE GALLERY)
+          Clean, calm white background. DHRISNI SVG logotype fitted perfectly in the
+          exact center of the site. Zero overlapping elements. Pristine museum space.
+          ========================================================================= */}
+      <div className="fixed-light-surface w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200" style={{ backgroundColor: '#ffffff', color: '#09090b' }}>
+        <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
+          {/* Subtle Curated Gallery Pill */}
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-mono tracking-[0.28em] uppercase mb-8 sm:mb-12 font-bold shadow-sm"
+            style={{ color: '#18181b', backgroundColor: '#f4f4f5', borderColor: '#d4d4d8' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#18181b' }} />
+            <span style={{ color: '#18181b' }}>FOUNDER & CREATIVE DIRECTOR</span>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={scrollPrev}
-              disabled={activeCardIndex === 0}
-              className={`p-2.5 rounded-full border transition-all cursor-pointer ${
-                activeCardIndex === 0
-                  ? 'border-white/5 text-zinc-600 cursor-not-allowed'
-                  : 'border-white/15 bg-black/80 hover:border-pink text-white hover:text-pink'
-              }`}
-              title="Previous Card"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={scrollNext}
-              disabled={activeCardIndex === CARDS.length - 1}
-              className={`p-2.5 rounded-full border transition-all cursor-pointer ${
-                activeCardIndex === CARDS.length - 1
-                  ? 'border-white/5 text-zinc-600 cursor-not-allowed'
-                  : 'border-white/15 bg-black/80 hover:border-pink text-white hover:text-pink'
-              }`}
-              title="Next Card"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          {/* THE SVG LOGOTYPE — FITTED PERFECTLY IN THE CENTER WITH ZERO OVERLAP */}
+          <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl flex items-center justify-center py-2 sm:py-6">
+            <img
+              src="/assets/dhrisni_name.svg"
+              alt="DHRISNI"
+              className="w-full h-auto max-h-[160px] sm:max-h-[240px] md:max-h-[300px] object-contain select-none transition-transform duration-700 ease-out hover:scale-[1.02]"
+              draggable={false}
+            />
           </div>
-        </div>
-      </div>
 
-      {/* QUICK CARD SELECTOR TABS */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mb-6">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          {CARDS.map((card, idx) => {
-            const isActive = activeCardIndex === idx;
-            return (
-              <button
-                key={card.id}
-                onClick={() => scrollToCard(idx)}
-                className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider whitespace-nowrap transition-all duration-300 cursor-pointer border ${
-                  isActive
-                    ? 'bg-pink text-black font-bold border-pink shadow-[0_0_14px_rgba(244,194,194,0.35)]'
-                    : 'bg-black/60 text-zinc-400 border-white/10 hover:border-pink/40 hover:text-white'
-                }`}
-              >
-                {card.tag} • {card.label}
-              </button>
-            );
-          })}
+          {/* Minimalist Gallery Provenance Subtitle (Clean, Calm, Below the Artwork) */}
+          <div className="flex flex-col items-center gap-2 mt-8 sm:mt-12 text-center">
+            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold" style={{ color: '#09090b' }}>
+              DHRISNI • DHRISTROYER
+            </span>
+            <span className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.2em] font-bold" style={{ color: '#27272a' }}>
+              THE ARCHITECT OF WEARABLE ART • GUWAHATI, ASSAM
+            </span>
+          </div>
         </div>
       </div>
 
       {/* =========================================================================
-          HORIZONTAL SCROLL CONTAINER
-          Card 1 has her image. All other cards are pure text info cards with typewriter.
+          CHAPTER 2: CINEMATIC ATELIER DIMENSION — THE ARTISAN & THE MANIFESTO
+          Deep obsidian atmosphere with editorial split-screen, archival portrait,
+          and oversized haute-couture quote.
           ========================================================================= */}
       <div
-        ref={scrollContainerRef}
-        className="relative z-10 w-full overflow-x-auto px-4 sm:px-[calc(50%-270px)] lg:px-[calc(50%-280px)] py-4 flex items-stretch gap-4 sm:gap-8 scroll-smooth no-scrollbar touch-scroll-x"
-        style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+        className="atelier-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black"
+        style={{ backgroundColor: '#0a0a0f', color: '#ffffff' }}
       >
-        {/* =====================================================================
-            CARD 1: ABOUT MOTHER (With just ONE image of her)
-            ===================================================================== */}
-        <div
-          id="card-about-mother"
-          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/20 bg-gradient-to-b from-[#18041d]/95 via-[#0d0111]/95 to-black p-7 sm:p-9 flex flex-col justify-between shadow-[0_24px_60px_rgba(24,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
-        >
-          {/* Subtle Corner Markers */}
-          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+        {/* Subtle Ambient Spatial Glow */}
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(230,60,255,0.07),transparent_70%)]" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_40%_at_80%_70%,rgba(47,184,166,0.05),transparent_70%)]" />
 
-          <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-2.5">
-              <span className="text-pink font-bold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-                1. THE FOUNDER
-              </span>
-              <span className="font-mono text-zinc-400">GUWAHATI • MUMBAI</span>
+        <div className="relative z-10 max-w-7xl mx-auto">
+          {/* Section Breadcrumb & Coordinates Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-12 sm:mb-16 border-b border-white/10 gap-3">
+            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" style={{ backgroundColor: '#f472b6' }} />
+              <span style={{ color: '#f472b6' }}>✦ OUR STORY</span>
             </div>
-
-            <h3 className="font-spartan font-black text-2xl sm:text-3xl tracking-[0.1em] uppercase text-white leading-tight">
-              DHRISNI
-            </h3>
-            <p className="font-mono text-xs sm:text-[13px] text-pink tracking-[0.18em] uppercase font-bold mt-1">
-              (DHRISTROYER) • MOTHER OF AVZ
-            </p>
+            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-wider uppercase font-semibold" style={{ color: '#d4d4d8' }}>
+              <MapPin className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+              <span style={{ color: '#d4d4d8' }}>26.1445° N, 91.7362° E • GUWAHATI, ASSAM</span>
+            </div>
           </div>
 
-          {/* Founder's Single Authentic Photograph */}
-          <div className="relative my-4 flex-1 w-full rounded-2xl overflow-hidden border border-white/15 bg-black/80 group-hover:border-pink/50 transition-colors duration-500 shadow-inner">
-            <img
-              src={cmsFounders?.portrait_image || ASSET_MANIFEST.editorialHero}
-              alt="Dhrisni (Dhristroyer) - Founder of AVZ Vaganza"
-              draggable={false} className="w-full h-full object-cover object-center filter brightness-100 contrast-105 group-hover:scale-[1.03] transition-transform duration-700 ease-out pointer-events-none"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-black/20 pointer-events-none" />
+          {/* Asymmetric Split Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left 5 Cols: Editorial Archival Portrait with Museum Frame */}
+            <div className="lg:col-span-5 relative group">
+              <div className="relative aspect-[3/4] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/20 bg-black/90 shadow-[0_20px_60px_rgba(0,0,0,0.9)]">
+                <img
+                  src={portraitImg}
+                  alt={founderName}
+                  className="w-full h-full object-cover object-top filter brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out"
+                  draggable={false}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
 
-            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-pink/30 text-[10px] font-mono text-pink font-semibold image-overlay-text">
-              {cmsFounders?.role || 'COUTURE SCULPTOR'}
+                {/* Corner Coordinates & Archival Tag */}
+                <div className="absolute top-4 left-4 z-10">
+                  <span
+                    className="px-3 py-1 rounded-full border text-[9px] font-mono tracking-widest uppercase font-bold shadow-md"
+                    style={{
+                      color: '#ffffff',
+                      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                      borderColor: 'rgba(255, 255, 255, 0.3)'
+                    }}
+                  >
+                    BEHIND THE SCENES
+                  </span>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between">
+                  <div className="text-left">
+                    <span className="text-[10px] font-mono tracking-widest block font-bold uppercase" style={{ color: '#f472b6' }}>
+                      MASTER ARTISAN
+                    </span>
+                    <h3 className="text-lg font-mono font-bold uppercase" style={{ color: '#ffffff' }}>
+                      {founderName} ({alias})
+                    </h3>
+                  </div>
+                  <span
+                    className="text-[9px] font-mono border rounded-full px-2.5 py-0.5 font-semibold"
+                    style={{
+                      color: '#e4e4e7',
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                      borderColor: 'rgba(255, 255, 255, 0.3)'
+                    }}
+                  >
+                    GUWAHATI
+                  </span>
+                </div>
+              </div>
+
+              {/* Decorative Subtle Background Frame Glow */}
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-pink/20 via-transparent to-purple-500/10 blur-xl -z-10 opacity-70 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            <div className="absolute bottom-3 left-4 right-4 image-overlay-text">
-              <p className="font-serif italic text-xs sm:text-sm text-pink-100/90 leading-relaxed drop-shadow-sm mb-1.5">
-                "{cmsFounders?.quote || 'Wearable art is armor for the autonomous spirit.'}"
-              </p>
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 font-medium">
-                <span className="tracking-widest font-bold text-white">
-                  {cmsFounders?.founder_name ? `${cmsFounders.founder_name.toUpperCase()} (${cmsFounders?.alias || 'DHRISTROYER'})` : 'DHRISNI (DHRISTROYER)'}
+            {/* Right 7 Cols: The Quote & The Story */}
+            <div className="lg:col-span-7 flex flex-col justify-center text-left space-y-6 sm:space-y-8">
+              <div>
+                <span className="text-[10px] font-mono tracking-[0.3em] uppercase font-bold block mb-3" style={{ color: '#f472b6' }}>
+                  ARTISAN PHILOSOPHY
                 </span>
-                <span className="text-pink font-semibold tracking-wider">{cmsFounders?.role || 'FOUNDER & VISIONARY'}</span>
+                <blockquote
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
+                  style={{ color: '#ffffff' }}
+                >
+                  "{quote}"
+                </blockquote>
+              </div>
+
+              <div className="space-y-4 font-montserrat text-sm sm:text-base leading-relaxed max-w-2xl" style={{ color: '#e4e4e7' }}>
+                <p style={{ color: '#e4e4e7' }}>
+                  Known to the world as <strong className="font-mono font-bold" style={{ color: '#ffffff' }}>Dhrisni</strong> or{' '}
+                  <strong className="font-mono font-bold" style={{ color: '#f472b6' }}>@Dhristroyer</strong>, she wears many titles—actor, model, creator,
+                  and designer. But strip all that away, and at her absolute core, she is an artisan who refuses cookie-cutter minimalism.
+                </p>
+                <p style={{ color: '#e4e4e7' }}>
+                  Growing up in Assam with strict boundaries on clothing, her creativity had to break out. She picked up a pair
+                  of heavy scissors and began slicing up garments to sculpt raw wearable armor. Today, every single relic from
+                  AVZ Vaganza is born directly under her hands in our Guwahati workshop.
+                </p>
+              </div>
+
+              <div className="pt-2 flex flex-wrap items-center gap-4">
+                <a
+                  href={BRAND_INFO.whatsappLinkPrimary}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playSound('snap')}
+                  className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
+                  style={{ backgroundColor: '#ffffff', color: '#000000' }}
+                >
+                  <span style={{ color: '#000000' }} className="text-black font-bold">COMMISSION WITH DHRISNI</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
+                </a>
+
+                <a
+                  href="#shop"
+                  onClick={() => {
+                    playSound('snap');
+                    onScrollToSection?.('shop');
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-mono text-xs tracking-widest uppercase transition-all cursor-pointer hover:border-pink/80"
+                  style={{
+                    color: '#ffffff',
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    borderColor: 'rgba(255, 255, 255, 0.3)'
+                  }}
+                >
+                  <span style={{ color: '#ffffff' }}>EXPLORE 1-OF-1 DESIGNS</span>
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-white/15 flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
-              <span className="font-bold text-white tracking-wider">FOUNDER & MASTER ARTISAN</span>
-            </div>
-            <span className="text-pink font-bold tracking-widest">AVZ VAGANZA</span>
-          </div>
-        </div>
-
-        {/* =====================================================================
-            CARD 2: PROFESSIONAL ROOTS (Info Card With Electric Typewriter)
-            ===================================================================== */}
-        <div
-          id="card-professional-roots"
-          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
-        >
-          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-
-          <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">2. BACKGROUND & ROOTS</span>
-              <span>CHRONOLOGY</span>
+          {/* =========================================================================
+              CHAPTER 3: THE FOUR PILLARS OF DHRISTROYER (INTERACTIVE DOSSIER)
+              ========================================================================= */}
+          <div className="mt-24 sm:mt-32 pt-16 border-t border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4 text-left">
+              <div>
+                <span className="text-[10px] font-mono tracking-[0.28em] uppercase font-bold block mb-1" style={{ color: '#f472b6' }}>
+                  STUDIO PHILOSOPHY
+                </span>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider text-white" style={{ color: '#ffffff' }}>
+                  FOUR PILLARS OF AVZ STUDIO
+                </h3>
+              </div>
+              <p className="text-xs font-mono tracking-wider font-semibold" style={{ color: '#d4d4d8' }}>
+                TAP A PILLAR TO LEARN MORE
+              </p>
             </div>
 
-            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
-              {COPY.professionalRoots.heading}
-            </h3>
+            {/* Pillar Selector Tabs */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+              {MANIFESTO_PILLARS.map((pillar, idx) => {
+                const IconComponent = pillar.icon;
+                const isSelected = activePillar === idx;
 
-            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <HumanEditorialBlock paragraphs={COPY.professionalRoots.paragraphs} />
-            </div>
-          </div>
-
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>SHILLONG → GUWAHATI → MUMBAI</span>
-            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
-          </div>
-        </div>
-
-        {/* =====================================================================
-            CARD 3: HOW VAGANZA WAS BORN (Info Card With Electric Typewriter)
-            ===================================================================== */}
-        <div
-          id="card-how-born"
-          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
-        >
-          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-
-          <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">3. HOW VAGANZA WAS BORN</span>
-              <span>ORIGIN STORY</span>
-            </div>
-
-            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
-              {COPY.howBorn.heading}
-            </h3>
-
-            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <HumanEditorialBlock paragraphs={COPY.howBorn.paragraphs} />
-            </div>
-          </div>
-
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>DARK ALTERNATIVE • INDUSTRIAL ATTITUDE</span>
-            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
-          </div>
-        </div>
-
-        {/* =====================================================================
-            CARD 4: SUSTAINABILITY CORE (Info Card With Electric Typewriter)
-            ===================================================================== */}
-        <div
-          id="card-sustainability"
-          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
-        >
-          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-
-          <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">4. SUSTAINABLE CRAFT</span>
-              <span>RUTHLESS UPCYCLING</span>
+                return (
+                  <button
+                    key={pillar.id}
+                    onClick={() => {
+                      playSound('cyber_hover');
+                      setActivePillar(idx);
+                    }}
+                    data-surface="dark" className="pillar-tab-btn p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 shadow-md hover:scale-[1.02] active:scale-95"
+                    style={{
+                      backgroundColor: isSelected ? '#25062c' : '#14141e',
+                      borderColor: isSelected ? '#f472b6' : 'rgba(255, 255, 255, 0.18)',
+                      boxShadow: isSelected ? '0 0 20px rgba(244, 114, 182, 0.35)' : 'none',
+                      color: '#ffffff'
+                    }}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span
+                        className="text-xs font-mono font-bold"
+                        style={{ color: isSelected ? '#f472b6' : '#a1a1aa' }}
+                      >
+                        {pillar.id}
+                      </span>
+                      <IconComponent
+                        className="w-4 h-4"
+                        style={{ color: isSelected ? '#f472b6' : '#a1a1aa' }}
+                      />
+                    </div>
+                    <span
+                      className="pillar-tab-title text-xs sm:text-[13px] font-mono font-bold uppercase tracking-wider line-clamp-2 leading-snug text-white"
+                      style={{ color: '#ffffff' }}
+                    >
+                      {pillar.title}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
-            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
-              {COPY.sustainability.heading}
-            </h3>
+            {/* Active Pillar Showcase Card */}
+            <div
+              className="p-6 sm:p-10 rounded-3xl border text-left shadow-2xl relative overflow-hidden"
+              style={{
+                backgroundColor: '#120417',
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+                color: '#ffffff'
+              }}
+            >
+              <div className="relative z-10 max-w-3xl">
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className="font-mono text-xs font-bold tracking-widest uppercase"
+                    style={{ color: '#f472b6' }}
+                  >
+                    PILLAR {MANIFESTO_PILLARS[activePillar].id} • PHILOSOPHY
+                  </span>
+                </div>
+                <h4
+                  className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-wider mb-2"
+                  style={{ color: '#ffffff' }}
+                >
+                  {MANIFESTO_PILLARS[activePillar].title}
+                </h4>
+                <p
+                  className="text-xs sm:text-sm font-mono tracking-wider uppercase mb-5 font-semibold"
+                  style={{ color: '#d4d4d8' }}
+                >
+                  {MANIFESTO_PILLARS[activePillar].subtitle}
+                </p>
+                <p
+                  className="text-sm sm:text-base font-montserrat leading-relaxed mb-6"
+                  style={{ color: '#f4f4f5' }}
+                >
+                  {MANIFESTO_PILLARS[activePillar].summary}
+                </p>
+                <div
+                  className="p-4 rounded-xl border text-xs sm:text-sm font-mono tracking-wide font-semibold"
+                  style={{
+                    color: '#f472b6',
+                    backgroundColor: 'rgba(244, 114, 182, 0.12)',
+                    borderColor: 'rgba(244, 114, 182, 0.4)'
+                  }}
+                >
+                  ✦ {MANIFESTO_PILLARS[activePillar].highlight}
+                </div>
+              </div>
 
-            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <HumanEditorialBlock paragraphs={COPY.sustainability.paragraphs} />
+              {/* Ambient Watermark Icon */}
+              <div className="absolute right-6 -bottom-6 opacity-5 pointer-events-none hidden md:block">
+                {React.createElement(MANIFESTO_PILLARS[activePillar].icon, { className: 'w-64 h-64 text-white' })}
+              </div>
             </div>
-          </div>
 
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>DISCARDED HARDWARE • RAW TRANSFORMATION</span>
-            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
-          </div>
-        </div>
+            {/* =========================================================================
+                CHAPTER 4: PROVENANCE METRICS COUNTER
+                ========================================================================= */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-12 border-t border-white/10 text-center">
+              <div>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
+                  200+
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
+                  1-OF-1 BUILDS SCULPTED
+                </span>
+              </div>
 
-        {/* =====================================================================
-            CARD 5: AESTHETIC INSPIRATION (Info Card With Electric Typewriter)
-            ===================================================================== */}
-        <div
-          id="card-aesthetic"
-          className="snap-center shrink-0 w-[88vw] max-w-[540px] h-[580px] sm:h-[620px] rounded-3xl border border-white/15 bg-gradient-to-b from-[#120317]/95 via-black to-[#09020d]/95 p-6 sm:p-10 flex flex-col justify-between shadow-[0_20px_50px_rgba(25,2,25,0.7)] group relative overflow-hidden mobile-grunge-card"
-        >
-          <span className="absolute top-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute top-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 left-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
-          <span className="absolute bottom-3 right-3 text-pink/40 font-mono text-xs pointer-events-none">+</span>
+              <div>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
+                  1,500+
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
+                  CIRCUIT BOARDS RECLAIMED
+                </span>
+              </div>
 
-          <div>
-            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-zinc-400 uppercase mb-3">
-              <span className="text-pink font-bold">5. DESIGN VISION</span>
-              <span>THE DESTINATION</span>
+              <div>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
+                  GUWAHATI
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
+                  GUWAHATI STUDIO
+                </span>
+              </div>
+
+              <div>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
+                  100%
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
+                  HAND-SCULPTED BY DHRISNI
+                </span>
+              </div>
             </div>
-
-            <h3 className="font-mono text-xl sm:text-2xl font-bold tracking-[0.16em] uppercase text-white mb-6">
-              {COPY.aesthetic.heading}
-            </h3>
-
-            <div className="overflow-y-auto max-h-[420px] pr-2 no-scrollbar">
-              <HumanEditorialBlock paragraphs={COPY.aesthetic.paragraphs} />
-            </div>
-          </div>
-
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-            <span>BOLD STYLE • UNDERGROUND FASHION</span>
-            <span className="text-zinc-500 font-mono tracking-wider uppercase text-[10px]">AUTHENTIC ATELIER ARCHIVE</span>
           </div>
         </div>
       </div>

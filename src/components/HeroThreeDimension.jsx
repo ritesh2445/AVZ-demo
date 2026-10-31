@@ -137,7 +137,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         />
 
         {cmsHero?.subheadline && (
-          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]">
+          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]" style={{ color: "#ffffff", fontWeight: 700 }}>
             {cmsHero.subheadline}
           </p>
         )}
@@ -164,13 +164,14 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         {/* Play/Pause Button */}
         <button
           onClick={handleTogglePlay}
-          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border transition-all backdrop-blur-md cursor-pointer shadow-md"
+          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border border-white/40 flex items-center justify-center transition-all backdrop-blur-md cursor-pointer shadow-lg active:scale-95 hover:scale-105"
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderColor: 'rgba(255, 255, 255, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: 'rgba(255, 255, 255, 0.5)',
             color: '#ffffff'
           }}
           title={isPlaying ? 'Pause Audio' : 'Play Audio'}
+          aria-label={isPlaying ? 'Pause Audio' : 'Play Audio'}
         >
           {isPlaying ? (
             <Pause className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
@@ -179,25 +180,34 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
           )}
         </button>
 
-        {/* Sound Toggle Button (Crisp Pure White in all states and themes) */}
+        {/* Sound Toggle Button (Crystal Clear, Always Visible, High Contrast in all states & themes) */}
         <button
           onClick={handleToggleMute}
-          className="p-2 flex items-center justify-center text-white/80 hover:text-white transition-all cursor-pointer drop-shadow-md hover:scale-110 active:scale-95"
+          className="hero-sound-toggle-btn px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-white/40 flex items-center gap-2 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105"
           style={{
-            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.18)',
-            borderColor: isMuted ? 'rgba(255, 255, 255, 0.4)' : '#ffffff',
-            boxShadow: isMuted ? 'none' : '0 0 16px rgba(255, 255, 255, 0.5)',
+            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.85)' : 'rgba(244, 114, 182, 0.22)',
+            borderColor: isMuted ? 'rgba(255, 255, 255, 0.5)' : '#f472b6',
+            boxShadow: isMuted ? '0 4px 14px rgba(0,0,0,0.6)' : '0 0 20px rgba(244, 114, 182, 0.55)',
             color: '#ffffff'
           }}
           title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
+          aria-label={isMuted ? 'Sound Off - Tap to Unmute' : 'Sound On - Tap to Mute'}
         >
           {isMuted ? (
-            <VolumeX className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+            <>
+              <VolumeX className="w-3.5 h-3.5 text-zinc-300 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+              <span
+                className="text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
+                style={{ color: '#ffffff' }}
+              >
+                SOUND OFF
+              </span>
+            </>
           ) : (
             <>
-              <Volume2 className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+              <Volume2 className="w-3.5 h-3.5 text-pink shrink-0 animate-pulse" style={{ color: '#f472b6', stroke: '#f472b6' }} />
               <span
-                className="text-[10px] font-mono tracking-wider font-bold hidden sm:inline"
+                className="text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
                 style={{ color: '#ffffff' }}
               >
                 SOUND ON
@@ -213,15 +223,15 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
             playSound('pip');
             setIsCinemaOpen(true);
           }}
-          className="p-2 inline-flex items-center gap-1.5 text-white/80 hover:text-white transition-all cursor-pointer drop-shadow-md hover:scale-105 active:scale-95 text-[10px] sm:text-xs font-mono tracking-wider uppercase"
+          className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-white/40 inline-flex items-center gap-1.5 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase font-bold"
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            borderColor: 'rgba(255, 255, 255, 0.4)',
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: 'rgba(255, 255, 255, 0.5)',
             color: '#ffffff'
           }}
           title="Open Cinema Master Reel Modal"
         >
-          <Film className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+          <Film className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
           <span className="hidden sm:inline" style={{ color: '#ffffff' }}>FULL CINEMA REEL</span>
           <span className="sm:hidden" style={{ color: '#ffffff' }}>CINEMA</span>
         </button>

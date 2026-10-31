@@ -92,7 +92,7 @@ export default function Footer({ onScrollToSection, cmsFooter }) {
               Official FAQs
             </button>
             <button onClick={() => handleNav('contact')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Contact & Concierge
+              Contact & Support
             </button>
           </div>
 

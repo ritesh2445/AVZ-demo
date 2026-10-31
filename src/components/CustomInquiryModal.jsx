@@ -37,7 +37,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative text-center shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
+        role="dialog" aria-modal="true" data-surface="dark" className="modal-card w-full max-w-lg bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative text-center shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
       >
         {/* Close Button with safe clearance */}
         <button

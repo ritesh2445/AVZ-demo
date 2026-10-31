@@ -25,7 +25,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
         { title: 'Order Confirmed', desc: 'Craft ticket generated at studio.', done: true },
         { title: 'Raw Materials Sourced', desc: 'Circuits, hardware, and reclaimed textiles allocated.', done: true },
         { title: 'Handmade by Artisans', desc: 'Under Dhrisni’s direct studio supervision in Guwahati.', done: true, current: true },
-        { title: 'Tension & Fit Calibration', desc: 'Structural strength and hardware fit verified.', done: false },
+        { title: 'Fitting & Quality Check', desc: 'Structural strength and hardware fit verified.', done: false },
         { title: 'Packaging & Authenticity Certificate', desc: 'Sealed in matte-black box with authentication card.', done: false },
         { title: 'Dispatched via Air Courier', desc: 'In transit with real-time SMS delivery tracking.', done: false }
       ]
@@ -39,7 +39,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg sm:max-w-xl max-h-[90vh] flex flex-col bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
+        role="dialog" aria-modal="true" data-surface="dark" className="modal-card w-full max-w-lg sm:max-w-xl max-h-[90vh] flex flex-col bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-[0_25px_80px_rgba(0,0,0,0.95)] text-left relative overflow-hidden"
       >
         {/* Close Button with safe clearance */}
         <button
@@ -139,7 +139,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
                   className="text-pink hover:text-white flex items-center gap-1.5 text-[11px] font-semibold transition-colors shrink-0"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
-                  <span>WhatsApp Concierge ↗</span>
+                  <span>WhatsApp Support ↗</span>
                 </a>
               </div>
             </div>

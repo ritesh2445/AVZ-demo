@@ -23,7 +23,7 @@ export default function AdminDashboardPage() {
 
   // Global Storefront Controls state
   const [storefrontSettings, setStorefrontSettings] = useState<any>({
-    maintenance_mode: { enabled: false, title: 'ATELIER CALIBRATION IN PROGRESS', message: 'Dimensional maintenance underway.' },
+    maintenance_mode: { enabled: false, title: 'STORE UNDER MAINTENANCE', message: 'Site updates underway.' },
     announcement: { enabled: false, text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000', link: '#shop' },
     purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for runway commissions.' }
   });
@@ -54,7 +54,7 @@ export default function AdminDashboardPage() {
   const [inventoryModalOpen, setInventoryModalOpen] = useState(false);
   const [inventoryTarget, setInventoryTarget] = useState<any>(null);
   const [inventoryAdjustment, setInventoryAdjustment] = useState<number>(1);
-  const [inventoryReason, setInventoryReason] = useState<string>('Atelier Restock');
+  const [inventoryReason, setInventoryReason] = useState<string>('Studio Restock');
   const [contentEditSection, setContentEditSection] = useState<any>(null);
   const [newPromoModalOpen, setNewPromoModalOpen] = useState(false);
   const [newCollectionModalOpen, setNewCollectionModalOpen] = useState(false);
@@ -766,7 +766,7 @@ export default function AdminDashboardPage() {
               {/* RECENT ORDERS TABLE */}
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-bold text-white font-cinzel">Recent Atelier Orders</h3>
+                  <h3 className="text-sm font-bold text-white font-cinzel">Recent Studio Orders</h3>
                   <button onClick={() => setActiveTab('orders')} className="text-xs text-[#F4C2C2] hover:underline font-mono">
                     View All Orders ({orders.length}) →
                   </button>
@@ -830,7 +830,7 @@ export default function AdminDashboardPage() {
             <div className="space-y-6 max-w-7xl mx-auto">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <h2 className="text-xl font-cinzel font-bold text-white">Orders & Atelier Dispatch</h2>
+                  <h2 className="text-xl font-cinzel font-bold text-white">Orders & Shipping</h2>
                   <p className="text-xs text-neutral-400 mt-1 font-mono">Manage real customer purchases, manual courier dispatches, and packing slips.</p>
                 </div>
                 <a
@@ -1617,7 +1617,7 @@ export default function AdminDashboardPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <h2 className="text-xl font-cinzel font-bold text-white uppercase">Group Buying & Squad Buys</h2>
-                  <p className="text-xs text-neutral-400 mt-1 font-mono">Collective atelier drop activations for Discord communities and fashion cliques.</p>
+                  <p className="text-xs text-neutral-400 mt-1 font-mono">Collective studio drop activations for Discord communities and fashion cliques.</p>
                 </div>
                 <button
                   onClick={() => setNewSquadModalOpen(true)}
@@ -2276,7 +2276,7 @@ export default function AdminDashboardPage() {
                   onChange={(e) => setInventoryReason(e.target.value)}
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
                 >
-                  <option value="Atelier Restock">Atelier Studio Restock</option>
+                  <option value="Studio Restock">Atelier Studio Restock</option>
                   <option value="Physical Count Correction">Physical Studio Count Correction</option>
                   <option value="Damaged in Production">Damaged During Handcrafting</option>
                   <option value="Reserved for Runway">Reserved for Runway Exhibition</option>
@@ -2307,7 +2307,7 @@ export default function AdminDashboardPage() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-[#120D1A] border border-[#301934] rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-base font-cinzel font-bold text-white">
-              {selectedProduct ? 'Edit Catalog Piece' : 'Add New Atelier Piece'}
+              {selectedProduct ? 'Edit Catalog Piece' : 'Add New Product'}
             </h3>
 
             <div className="space-y-3 text-xs font-mono">
@@ -2662,7 +2662,7 @@ export default function AdminDashboardPage() {
                 <label className="text-neutral-400 block mb-1 uppercase">Full Name</label>
                 <input
                   name="userName"
-                  placeholder="e.g. Atelier Manager"
+                  placeholder="e.g. Studio Manager"
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                 />
               </div>

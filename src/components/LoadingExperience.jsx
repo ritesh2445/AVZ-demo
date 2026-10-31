@@ -325,7 +325,7 @@ export default function LoadingExperience({ onComplete }) {
         {/* Center Kinetic Typography Counter */}
         <div className="relative z-10 flex flex-col items-center justify-center my-auto pointer-events-none text-center">
           <div className="text-[11px] font-mono tracking-[0.4em] text-[#f472b6] font-bold uppercase mb-3">
-            INITIALIZING DIMENSIONAL ENGINE
+            PREPARING EXPERIENCE
           </div>
 
           {/* High FPS Numeric Display */}

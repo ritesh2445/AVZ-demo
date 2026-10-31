@@ -382,14 +382,14 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           cmsMuseum={cmsContent?.museum}
         />
 
-        {/* Section 7: Custom Atelier Bespoke Orders */}
+        {/* Section 7: Custom Orders */}
         <CustomOrders
           initialReference={customOrderPrefill}
           onInquirySubmitted={handleInquirySubmitted}
           cmsCustomOrders={cmsContent?.custom_orders}
         />
 
-        {/* Section 8: Founder's World & Atelier Parallax Journey (Fixed Horizontal Scroll Lock) */}
+        {/* Section 8: Founder's World & Story (Fixed Horizontal Scroll Lock) */}
         <section id="about" className="w-full">
           <AboutSection
             onScrollToSection={scrollToSection}
