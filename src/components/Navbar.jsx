@@ -8,8 +8,6 @@ import {
   VolumeX,
   Heart,
   Package,
-  Sun,
-  Moon,
   ChevronDown,
   Check,
   Globe,
@@ -29,8 +27,6 @@ export default function Navbar({
   wishlistCount = 0,
   onOpenWishlist,
   onOpenTrackingModal,
-  theme = 'dark',
-  onToggleTheme,
   user,
   onOpenAuthModal
 }) {
@@ -121,26 +117,8 @@ export default function Navbar({
       >
         {/* Sleek, Architectural Glass Capsule */}
         <div className="bg-[#0b030f]/85 backdrop-blur-2xl border border-white/12 rounded-full px-3 sm:px-4 md:px-5 h-11 sm:h-12 flex items-center justify-between gap-2 sm:gap-3 md:gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
-          {/* Left Group: Dark/Light Mode Icon Button on Very Left + Brand Mark */}
+          {/* Left Group: Brand Mark */}
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            {/* Very Left: Dark / Light Mode Toggle Icon */}
-            <button
-              type="button"
-              onClick={() => {
-                playSound('snap');
-                onToggleTheme?.();
-              }}
-              aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-              className="theme-toggle-icon-btn p-1.5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer shrink-0 active:scale-95"
-            >
-              {theme === 'light' ? (
-                <Moon className="w-3.5 h-3.5 text-purple-700 hover:text-purple-900 transition-colors" />
-              ) : (
-                <Sun className="w-3.5 h-3.5 hover:text-pink-300 transition-colors" />
-              )}
-            </button>
-
             {/* Brand Mark */}
             <button
               onClick={() => handleNavClick('hero')}
@@ -445,17 +423,6 @@ export default function Navbar({
                   <VolumeX className={`w-3.5 h-3.5 shrink-0 ${theme === 'light' ? 'text-zinc-600' : 'text-zinc-300'}`} />
                 )}
                 <span>{soundOn ? 'SOUND ON' : 'MUTED'}</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  playSound('snap');
-                  onToggleTheme?.();
-                }}
-                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-semibold text-pink hover:text-white transition-colors"
-              >
-                {theme === 'light' ? <Moon className="w-3.5 h-3.5 text-purple-400" /> : <Sun className="w-3.5 h-3.5 text-pink-300" />}
-                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
               </button>
             </div>
             {onOpenTrackingModal && (
