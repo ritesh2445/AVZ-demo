@@ -15,6 +15,10 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
   const sectionRef = useRef(null);
   const audioRef = useRef(null);
 
+  const videoRef = useRef(null);
+  const [videoBlobUrl, setVideoBlobUrl] = useState(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
   const [isMobileDevice, setIsMobileDevice] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth < 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -22,7 +26,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
     return false;
   });
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [isCinemaOpen, setIsCinemaOpen] = useState(false);
 
   // Responsive device listener for mobile video switching
@@ -30,7 +34,6 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
     const checkMobile = () => {
       const isMob = window.innerWidth < 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       setIsMobileDevice(isMob);
-      if (isMob) setIsMuted(true); // Muted by default on mobile for strict autoplay policies
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -41,26 +44,70 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
     };
   }, []);
 
+  // Parallel lossless chunk loader to deliver 100% full master 4K/2.5K video with zero compression
+  useEffect(() => {
+    let isCancelled = false;
+    let createdUrl = null;
+    const parts = isMobileDevice
+      ? ['/assets/mobile_view_part0.bin', '/assets/mobile_view_part1.bin']
+      : ['/assets/desktop_view_part0.bin', '/assets/desktop_view_part1.bin'];
+
+    setVideoLoaded(false);
+
+    async function loadMasterChunks() {
+      try {
+        const buffers = await Promise.all(
+          parts.map(async (url) => {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+            return await res.arrayBuffer();
+          })
+        );
+        if (isCancelled) return;
+        const blob = new Blob(buffers, { type: 'video/mp4' });
+        createdUrl = URL.createObjectURL(blob);
+        setVideoBlobUrl(createdUrl);
+      } catch (err) {
+        console.warn('[HERO VIDEO CHUNK LOADER]:', err);
+      }
+    }
+
+    loadMasterChunks();
+
+    return () => {
+      isCancelled = true;
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
+  }, [isMobileDevice]);
+
   const audioSource = isMobileDevice
     ? (ASSET_MANIFEST.audio?.heroMobile || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_mobile.mp4')
     : (ASSET_MANIFEST.audio?.heroDesktop || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_desktop.mp4');
 
-  // Single active Vimeo video ID: 1239586843 (Mobile vertical) or 1239586933 (Desktop 16:9)
-  const vimeoId = isMobileDevice ? '1239586843' : '1239586933';
-  const vimeoBackgroundUrl = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&playsinline=1`;
+  const posterSrc = isMobileDevice ? '/assets/mobile_poster.jpg' : '/assets/desktop_poster.jpg';
 
-  // Synchronized Master Audio Controls
+  // Synchronized Master Audio & Video Playback Controls
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio) {
-      if (isPlaying && !isMuted) {
+    const video = videoRef.current;
+
+    if (isPlaying) {
+      if (video) video.play().catch(() => {});
+      if (audio && !isMuted) {
         const p2 = audio.play();
         if (p2 && p2.catch) p2.catch(() => {});
-      } else {
-        audio.pause();
       }
+    } else {
+      if (video) video.pause();
+      if (audio) audio.pause();
     }
-  }, [isPlaying, isMuted, isMobileDevice]);
+  }, [isPlaying, isMuted, videoBlobUrl]);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   const handleTogglePlay = (e) => {
     e.stopPropagation();
@@ -75,14 +122,22 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
     playSound(newMuted ? 'toggle_off' : 'toggle_on');
 
     const audio = audioRef.current;
-    if (!audio) return;
+    const video = videoRef.current;
+
+    if (video) {
+      video.muted = newMuted;
+    }
 
     if (!newMuted) {
-      audio.muted = false;
-      audio.play().catch(() => {});
+      if (audio) {
+        audio.muted = false;
+        audio.play().catch(() => {});
+      }
     } else {
-      audio.pause();
-      audio.muted = true;
+      if (audio) {
+        audio.pause();
+        audio.muted = true;
+      }
     }
   };
 
@@ -105,25 +160,36 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         preload="auto"
       />
 
-      {/* 1. Vimeo Master Video Stream (Cover Viewport Completely, Zero White Bars) */}
+      {/* 1. Master Native Video Stream (100% Uncompressed 4K Desktop / 2.5K Mobile, Zero White Bars) */}
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
       >
-        <iframe
-          key={vimeoId}
-          src={vimeoBackgroundUrl}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none scale-105"
-          style={{
-            width: isMobileDevice ? 'max(100vw, 56.25vh)' : 'max(100vw, 177.78vh)',
-            height: isMobileDevice ? 'max(100vh, 177.78vw)' : 'max(100vh, 56.25vw)',
-            minWidth: '100vw',
-            minHeight: '100vh',
-            border: 'none'
-          }}
-          allow="autoplay; fullscreen; picture-in-picture"
-          title="AVZ Vimeo Hero Video"
+        {/* Crisp first-frame poster while video master chunks initialize */}
+        <img
+          src={posterSrc}
+          alt="AVZ Hero Master Visual"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
+            videoLoaded ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ objectFit: 'cover' }}
         />
+
+        {videoBlobUrl && (
+          <video
+            ref={videoRef}
+            src={videoBlobUrl}
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            onCanPlay={() => setVideoLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
+              videoLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ objectFit: 'cover' }}
+          />
+        )}
       </div>
 
       {/* 1.5 Soft High-Fashion Contrast Vignette */}

@@ -1,8 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, ArrowUpRight, Scissors, ShieldCheck, Users, Cpu, Flame, MapPin } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 import DhrisniGarden from './DhrisniGarden';
+
+const POLAROID_CARDS = [
+  {
+    id: 'vision',
+    tag: 'ATELIER 01',
+    headline: 'SCISSORS & INSTINCT',
+    body: 'No corporate patterns. Slicing raw denim and shaping armor by instinct.',
+    stamp: 'ORIGINAL ATELIER',
+    widthClass: 'w-48',
+    desktopPosition: '-top-8 -left-8 sm:-left-12',
+    rotation: '-rotate-6',
+    hoverRotation: 'hover:rotate-0',
+    delay: 'delay-[500ms]'
+  },
+  {
+    id: 'alias',
+    tag: 'IDENTITY 02',
+    headline: '@DHRISTROYER',
+    body: 'Actor. Sculptor. Founder. Slicing through fashion monotony since day one.',
+    stamp: 'GUWAHATI ARCHIVE',
+    widthClass: 'w-44',
+    desktopPosition: '-top-4 -right-6 sm:-right-10',
+    rotation: 'rotate-8',
+    hoverRotation: 'hover:rotate-0',
+    delay: 'delay-[650ms]'
+  },
+  {
+    id: 'medium',
+    tag: 'MEDIUM 03',
+    headline: 'SALVAGED ARMOR',
+    body: 'Motherboards, spikes, and vintage hardware transformed into couture.',
+    stamp: '1-OF-1 RELIC',
+    widthClass: 'w-44',
+    desktopPosition: 'bottom-12 -left-6 sm:-left-10',
+    rotation: '-rotate-4',
+    hoverRotation: 'hover:rotate-0',
+    delay: 'delay-[800ms]'
+  },
+  {
+    id: 'guild',
+    tag: 'COMMUNITY 04',
+    headline: 'WOMEN ARTISANS',
+    body: 'Handmade by women artisans in our Guwahati studio. True human soul over assembly lines.',
+    stamp: 'ASSAM • 26°N 91°E',
+    widthClass: 'w-52',
+    desktopPosition: 'bottom-8 -right-8 sm:-right-12',
+    rotation: 'rotate-6',
+    hoverRotation: 'hover:rotate-0',
+    delay: 'delay-[950ms]'
+  }
+];
 
 const MANIFESTO_PILLARS = [
   {
@@ -45,6 +96,35 @@ const MANIFESTO_PILLARS = [
 
 export default function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
   const [activePillar, setActivePillar] = useState(0);
+  const [isCinematicRevealed, setIsCinematicRevealed] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const chapter2Ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsCinematicRevealed(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+    if (chapter2Ref.current) {
+      observer.observe(chapter2Ref.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
+    setMousePos({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 });
+  };
 
   const founderName = cmsFounders?.founder_name || 'Dhrisni';
   const alias = cmsFounders?.alias || 'Dhristroyer';
@@ -130,67 +210,178 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             </div>
           </div>
 
-          {/* Asymmetric Split Showcase */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left 5 Cols: Editorial Archival Portrait with Museum Frame */}
-            <div className="lg:col-span-5 relative group">
-              <div className="relative aspect-[3/4] w-full max-w-md mx-auto rounded-3xl overflow-hidden border border-white/20 bg-black/90 shadow-[0_20px_60px_rgba(0,0,0,0.9)]">
-                <img
-                  src={portraitImg}
-                  alt={founderName}
-                  className="w-full h-full object-cover object-top filter brightness-95 group-hover:scale-105 transition-transform duration-700 ease-out"
-                  draggable={false}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+          {/* Asymmetric Split Showcase: 3D Cinematic Dhrisni Showcase + Artisan Philosophy */}
+          <div ref={chapter2Ref} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Left 6 Cols: Cinematic Dhrisni Pop-Up, 3D Floating Polaroid Cards & "Meet the Mother" */}
+            <div className="lg:col-span-6 flex flex-col items-center">
+              {/* Outer Spatial 3D Perspective Wrapper */}
+              <div
+                className="relative w-full max-w-[340px] sm:max-w-[380px] mx-auto py-6 sm:py-8 flex flex-col items-center"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                {/* Central Portrait Container with Cinematic Pop-Up Effect */}
+                <div
+                  className={`relative aspect-[3/4] w-full rounded-3xl overflow-visible transition-all duration-1000 ease-out transform ${
+                    isCinematicRevealed
+                      ? 'opacity-100 scale-100 translate-y-0'
+                      : 'opacity-0 scale-90 translate-y-10'
+                  }`}
+                  style={{
+                    transform: isCinematicRevealed
+                      ? `perspective(1000px) rotateY(${mousePos.x * 0.35}deg) rotateX(${mousePos.y * 0.35}deg)`
+                      : 'scale(0.9) translateY(40px)'
+                  }}
+                >
+                  {/* High-Fashion Museum Archival Frame (Uncompressed Raw Portrait) */}
+                  <div className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-white/25 bg-black/95 shadow-[0_25px_70px_rgba(0,0,0,0.95)]">
+                    <img
+                      src={portraitImg}
+                      alt={founderName}
+                      className="w-full h-full object-cover object-top filter brightness-100 transition-transform duration-700 ease-out hover:scale-105"
+                      style={{ imageRendering: '-webkit-optimize-contrast' }}
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent pointer-events-none" />
 
-                {/* Corner Coordinates & Archival Tag */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span
-                    className="px-3 py-1 rounded-full border text-[9px] font-mono tracking-widest uppercase font-bold shadow-md"
-                    style={{
-                      color: '#ffffff',
-                      backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                      borderColor: 'rgba(255, 255, 255, 0.3)'
-                    }}
-                  >
-                    BEHIND THE SCENES
-                  </span>
+                    {/* Corner Coordinates & Archival Tag */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <span
+                        className="px-3 py-1 rounded-full border text-[9px] font-mono tracking-widest uppercase font-bold shadow-md"
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                          borderColor: 'rgba(255, 255, 255, 0.3)'
+                        }}
+                      >
+                        BEHIND THE SCENES
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between pointer-events-none">
+                      <div className="text-left">
+                        <span className="text-[10px] font-mono tracking-widest block font-bold uppercase" style={{ color: '#f472b6' }}>
+                          MASTER ARTISAN
+                        </span>
+                        <h3 className="text-base sm:text-lg font-mono font-bold uppercase" style={{ color: '#ffffff' }}>
+                          {founderName} ({alias})
+                        </h3>
+                      </div>
+                      <span
+                        className="text-[9px] font-mono border rounded-full px-2.5 py-0.5 font-semibold"
+                        style={{
+                          color: '#e4e4e7',
+                          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                          borderColor: 'rgba(255, 255, 255, 0.3)'
+                        }}
+                      >
+                        GUWAHATI
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dramatic Ambient Aura Glow */}
+                  <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-pink/30 via-transparent to-purple-500/20 blur-2xl -z-10 opacity-75 animate-pulse" />
+
+                  {/* 3D Floating Polaroid Cards Orbiting Dhrisni (Desktop & Large Screens) */}
+                  <div className="hidden md:block pointer-events-auto">
+                    {POLAROID_CARDS.map((card) => (
+                      <div
+                        key={card.id}
+                        className={`absolute ${card.desktopPosition} z-20 ${card.widthClass} transition-all duration-700 ease-out transform ${
+                          isCinematicRevealed ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-8'
+                        } ${card.delay}`}
+                      >
+                        <div
+                          className={`polaroid-card p-2 sm:p-2.5 pb-5 sm:pb-6 rounded-md bg-white border border-white/90 shadow-[0_18px_38px_rgba(0,0,0,0.85)] cursor-pointer transition-all duration-500 ease-out ${card.rotation} ${card.hoverRotation} hover:scale-110 hover:z-30 hover:shadow-[0_22px_50px_rgba(244,114,182,0.45)]`}
+                          style={{ backgroundColor: '#ffffff' }}
+                          onMouseEnter={() => playSound('cyber_hover')}
+                        >
+                          {/* Pure Black Photo Aperture Inside */}
+                          <div className="bg-[#09090d] p-3 rounded-sm flex flex-col justify-between text-left min-h-[96px] border border-black/40">
+                            <div className="flex items-center justify-between gap-1 mb-1">
+                              <span className="text-[8px] font-mono tracking-widest text-[#f472b6] font-bold uppercase">
+                                {card.tag}
+                              </span>
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-pulse" />
+                            </div>
+                            <h4 className="text-[11px] font-mono font-bold text-white tracking-wide uppercase mb-1">
+                              "{card.headline}"
+                            </h4>
+                            <p className="text-[9px] font-mono text-zinc-300 leading-tight">
+                              {card.body}
+                            </p>
+                          </div>
+
+                          {/* Authentic Polaroid White Margin Chin with Archival Stamp */}
+                          <div className="mt-2 px-1 flex items-center justify-between text-[8px] font-mono font-bold tracking-widest text-zinc-800 uppercase">
+                            <span>{card.stamp}</span>
+                            <span className="text-[7px] text-zinc-500">✦ AVZ</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between">
-                  <div className="text-left">
-                    <span className="text-[10px] font-mono tracking-widest block font-bold uppercase" style={{ color: '#f472b6' }}>
-                      MASTER ARTISAN
-                    </span>
-                    <h3 className="text-lg font-mono font-bold uppercase" style={{ color: '#ffffff' }}>
-                      {founderName} ({alias})
-                    </h3>
-                  </div>
-                  <span
-                    className="text-[9px] font-mono border rounded-full px-2.5 py-0.5 font-semibold"
-                    style={{
-                      color: '#e4e4e7',
-                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                      borderColor: 'rgba(255, 255, 255, 0.3)'
-                    }}
-                  >
-                    GUWAHATI
+                {/* Big Text: "Meet the mother" emerges and settles right down below the image */}
+                <div
+                  className={`mt-8 text-center transition-all duration-1000 delay-300 ease-out transform ${
+                    isCinematicRevealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                  }`}
+                >
+                  <span className="text-[10px] font-mono tracking-[0.35em] text-[#f472b6] font-bold uppercase block mb-1">
+                    ✦ FOUNDER & VISIONARY
                   </span>
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider text-white uppercase drop-shadow-[0_4px_28px_rgba(244,114,182,0.5)]">
+                    MEET THE MOTHER
+                  </h2>
+                  <div className="mt-2 flex items-center justify-center gap-2">
+                    <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#f472b6]" />
+                    <span className="text-[9px] font-mono text-zinc-400 tracking-widest uppercase">
+                      ARCHITECT OF THE OTHER DIMENSION
+                    </span>
+                    <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#f472b6]" />
+                  </div>
+                </div>
+
+                {/* Mobile Polaroid Cards Grid (Below "Meet the mother" on Touch Devices) */}
+                <div className="grid grid-cols-2 gap-3 mt-6 w-full max-w-sm md:hidden">
+                  {POLAROID_CARDS.map((card) => (
+                    <div key={`mob-${card.id}`} className="w-full">
+                      <div
+                        className="p-2 pb-4 rounded-md bg-white border border-white/90 shadow-lg"
+                        style={{ backgroundColor: '#ffffff' }}
+                      >
+                        <div className="bg-[#09090d] p-2 rounded-sm text-left min-h-[85px]">
+                          <span className="text-[7px] font-mono tracking-widest text-[#f472b6] font-bold uppercase block mb-0.5">
+                            {card.tag}
+                          </span>
+                          <h4 className="text-[10px] font-mono font-bold text-white uppercase mb-1">
+                            "{card.headline}"
+                          </h4>
+                          <p className="text-[8px] font-mono text-zinc-300 leading-tight">
+                            {card.body}
+                          </p>
+                        </div>
+                        <div className="mt-1 px-0.5 text-[7px] font-mono font-bold text-zinc-800 text-left uppercase truncate">
+                          {card.stamp}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              {/* Decorative Subtle Background Frame Glow */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-pink/20 via-transparent to-purple-500/10 blur-xl -z-10 opacity-70 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            {/* Right 7 Cols: The Quote & The Story */}
-            <div className="lg:col-span-7 flex flex-col justify-center text-left space-y-6 sm:space-y-8">
+            {/* Right 6 Cols: The Artisan Philosophy Quote & Story */}
+            <div className="lg:col-span-6 flex flex-col justify-center text-left space-y-6 sm:space-y-8">
               <div>
                 <span className="text-[10px] font-mono tracking-[0.3em] uppercase font-bold block mb-3" style={{ color: '#f472b6' }}>
                   ARTISAN PHILOSOPHY
                 </span>
                 <blockquote
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
                   style={{ color: '#ffffff' }}
                 >
                   "{quote}"
