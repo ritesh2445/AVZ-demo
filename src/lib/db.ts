@@ -1,3 +1,4 @@
+import { createClient as createWebClient } from '@libsql/client/web';
 import { createRequire } from 'module';
 import { PRODUCTS, BRAND_INFO } from '../data/brandData';
 
@@ -15,7 +16,17 @@ let dbInstance: Client | null = null;
 let createClientFn: any = null;
 let createClientLoaded = false;
 
-function loadCreateClient(): any {
+function loadCreateClient(url?: string): any {
+  if (
+    url &&
+    (url.startsWith('libsql:') ||
+      url.startsWith('https:') ||
+      url.startsWith('http:') ||
+      url.startsWith('wss:') ||
+      url.startsWith('ws:'))
+  ) {
+    return createWebClient;
+  }
   if (createClientLoaded) return createClientFn;
   createClientLoaded = true;
   try {
@@ -104,54 +115,70 @@ function createInMemoryClient(): Client {
 }
 
 export function getDb(): Client {
-  if (dbInstance) {
-    return dbInstance;
-  }
+  if (dbInstance) return dbInstance;
 
-  const createClient = loadCreateClient();
+  const isProduction = process.env.NODE_ENV === 'production';
+  const url = process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+  const createClient = loadCreateClient(url);
 
-  if (createClient) {
-    const isProduction = process.env.NODE_ENV === 'production';
-    const url = process.env.TURSO_DATABASE_URL || process.env.DATABASE_URL;
-    const authToken = process.env.TURSO_AUTH_TOKEN;
-
-    // Priority 6: Never silently treat a local SQLite database as the production database
-    if (isProduction && !url) {
-      if (process.env.ALLOW_LOCAL_SQLITE_IN_PROD === 'true') {
-        console.warn(
-          '⚠️ [SECURITY WARNING] Running in production mode with local SQLite database fallback (ALLOW_LOCAL_SQLITE_IN_PROD=true). Never use this in deployed production!'
-        );
-      } else {
-        console.warn(
-          'TURSO_DATABASE_URL or DATABASE_URL not configured. Using local/fallback store.'
-        );
-      }
-    }
-
-    // Ensure remote Turso connection has auth token configured
-    if (isProduction && url && !url.startsWith('file:') && !authToken) {
-      console.warn(
-        'TURSO_AUTH_TOKEN not configured for remote Turso connection. Using fallback store.'
+  if (isProduction) {
+    if (!url) {
+      throw new Error(
+        'Database configuration missing: set TURSO_DATABASE_URL in production.'
       );
     }
 
-    const resolvedUrl = url || 'file:avz_commerce.db';
+    if (url.startsWith('file:')) {
+      throw new Error(
+        'Local SQLite is not supported as the production database. Configure remote Turso.'
+      );
+    }
+
+    if (!authToken) {
+      throw new Error(
+        'Database configuration missing: set TURSO_AUTH_TOKEN in production.'
+      );
+    }
+
+    if (!createClient) {
+      throw new Error(
+        '@libsql/client is unavailable. Production database initialization cannot continue.'
+      );
+    }
 
     try {
-      dbInstance = createClient({
-        url: resolvedUrl,
-        authToken: authToken || undefined,
-      });
-      return dbInstance!;
+      dbInstance = createClient({ url, authToken });
+      return dbInstance;
     } catch (err) {
-      console.warn('Failed to initialize @libsql/client, using resilient in-memory fallback store:', err);
+      throw new Error(
+        'Failed to initialize the production Turso database client.',
+        { cause: err }
+      );
     }
   }
 
+  if (createClient) {
+    try {
+      dbInstance = createClient({
+        url: url || 'file:avz_commerce.db',
+        authToken: authToken || undefined,
+      });
+      return dbInstance;
+    } catch (err) {
+      console.warn(
+        'Database client initialization failed in development:',
+        err
+      );
+    }
+  }
+
+  console.warn(
+    'Using the in-memory fallback database in development. Writes will not persist.'
+  );
   dbInstance = createInMemoryClient();
   return dbInstance;
 }
-
 // Process-level cache for database initialization
 let initPromise: Promise<void> | null = null;
 
@@ -164,21 +191,39 @@ export function resetDatabaseInitializationCache(): void {
 
 /**
  * Initializes database tables and seeds initial data if tables do not exist.
- * Concurrently shares a single in-flight promise and caches completion per process.
+ * Concurrently shares a single in-flight promise and caches completion per process/isolate.
  * If initialization fails, the cache is reset to allow a controlled retry on subsequent requests.
+ *
+ * For distributed Cloudflare Worker isolates:
+ * A fast-path query checks if the schema is already provisioned, avoiding redundant DDL/ALTER execution
+ * on cold starts. Explicit full migrations can also be run out-of-band via `npm run db:bootstrap`.
  */
 export function initializeDatabase(): Promise<void> {
   if (initPromise) {
     return initPromise;
   }
 
-  initPromise = performDatabaseInitialization().catch((err) => {
+  initPromise = ensureDatabaseInitialized().catch((err) => {
     // Reset cache on failure so next request can retry cleanly
     initPromise = null;
     throw err;
   });
 
   return initPromise;
+}
+
+async function ensureDatabaseInitialized(): Promise<void> {
+  const db = getDb();
+  try {
+    // Fast-path: Check if schema is already provisioned to avoid hitting Cloudflare's subrequest limit
+    await db.execute('SELECT 1 FROM storefront_settings LIMIT 1');
+    return;
+  } catch {
+    await performDatabaseInitialization();
+  }
+}
+export async function bootstrapDatabaseSchema(): Promise<void> {
+  await performDatabaseInitialization();
 }
 
 async function performDatabaseInitialization(): Promise<void> {
@@ -417,6 +462,78 @@ async function performDatabaseInitialization(): Promise<void> {
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_status ON refunds(status);`);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_idempotency ON refunds(idempotency_key);`);
 
+  // 18. Better Auth Tables (User Accounts, Sessions, OAuth Accounts, Verifications, Rate Limiting)
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS user (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      emailVerified INTEGER NOT NULL DEFAULT 0,
+      image TEXT,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL
+    );
+  `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS session (
+      id TEXT PRIMARY KEY,
+      expiresAt INTEGER NOT NULL,
+      token TEXT UNIQUE NOT NULL,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL,
+      ipAddress TEXT,
+      userAgent TEXT,
+      userId TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE
+    );
+  `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS account (
+      id TEXT PRIMARY KEY,
+      accountId TEXT NOT NULL,
+      providerId TEXT NOT NULL,
+      userId TEXT NOT NULL REFERENCES user(id) ON DELETE CASCADE,
+      accessToken TEXT,
+      refreshToken TEXT,
+      idToken TEXT,
+      accessTokenExpiresAt INTEGER,
+      refreshTokenExpiresAt INTEGER,
+      scope TEXT,
+      password TEXT,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL
+    );
+  `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS verification (
+      id TEXT PRIMARY KEY,
+      identifier TEXT NOT NULL,
+      value TEXT NOT NULL,
+      expiresAt INTEGER NOT NULL,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER NOT NULL
+    );
+  `);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS rateLimit (
+      id TEXT PRIMARY KEY,
+      key TEXT UNIQUE NOT NULL,
+      count INTEGER NOT NULL,
+      lastRequest INTEGER NOT NULL
+    );
+  `);
+
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_user_email ON user(email);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_session_token ON session(token);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_session_userId ON session(userId);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_account_userId ON account(userId);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_account_provider ON account(providerId, accountId);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_verification_identifier ON verification(identifier);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_rateLimit_key ON rateLimit(key);`);
+
   // --- SAFE MIGRATIONS FOR EXISTING SCHEMAS & MONEY PRECISION (PAISE) ---
   try {
     await db.execute(`ALTER TABLE orders ADD COLUMN refunded_amount REAL NOT NULL DEFAULT 0;`);
@@ -525,7 +642,7 @@ async function performDatabaseInitialization(): Promise<void> {
       key: 'announcement',
       value: JSON.stringify({
         enabled: false,
-        text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000 | 1-OF-1 BESPOKE ATELIER RELEASES',
+        text: 'ðŸª COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER â‚¹5,000 | 1-OF-1 BESPOKE ATELIER RELEASES',
         link: '#shop',
         link_text: 'EXPLORE VAULT',
         bg_color: '#301934',
@@ -627,7 +744,7 @@ async function performDatabaseInitialization(): Promise<void> {
       title: 'Global Footer & Policies',
       data: JSON.stringify({
         tagline: 'High fashion brand made by baddies for baddies.',
-        copyright: '© 2026 AVZ VAGANZA. ALL RIGHTS RESERVED.',
+        copyright: 'Â© 2026 AVZ VAGANZA. ALL RIGHTS RESERVED.',
         instagram_url: BRAND_INFO.instagramUrl,
         whatsapp_url: BRAND_INFO.whatsappLinkPrimary,
         business_email: BRAND_INFO.businessEmail,
@@ -879,3 +996,5 @@ async function performDatabaseInitialization(): Promise<void> {
     });
   }
 }
+
+

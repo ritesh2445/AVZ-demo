@@ -12,10 +12,38 @@ import {
   LogOut,
   ArrowRight,
   ShieldCheck,
-  MessageCircle
+  MessageCircle,
+  KeyRound,
+  Loader2,
+  Send,
+  ArrowLeft
 } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
+import { authClient } from '../lib/auth-client';
+
+function GoogleIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+      />
+    </svg>
+  );
+}
 
 export default function AuthModal({
   isOpen,
@@ -24,15 +52,17 @@ export default function AuthModal({
   onLogin,
   onLogout
 }) {
-  const [activeTab, setActiveTab] = useState('signin'); // 'signin' | 'signup'
+  const [activeTab, setActiveTab] = useState('signin'); // 'signin' | 'signup' | 'forgot'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [forgotEmail, setForgotEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [vipAlerts, setVipAlerts] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Close on Escape key
   useEffect(() => {
@@ -47,6 +77,7 @@ export default function AuthModal({
   // Reset status on tab switch or open
   useEffect(() => {
     setStatusMessage(null);
+    setLoading(false);
   }, [activeTab, isOpen]);
 
   if (!isOpen) return null;
@@ -69,8 +100,41 @@ export default function AuthModal({
     }, 600);
   };
 
-  // 2. Sign In Submit
-  const handleSignInSubmit = (e) => {
+  // 2. Google OAuth 2.0 One-Click Login / Register
+  const handleGoogleAuth = async () => {
+    playSound('snap');
+    setLoading(true);
+    setStatusMessage(null);
+
+    try {
+      const callbackURL = typeof window !== 'undefined' ? window.location.origin : '/';
+      const res = await authClient.signIn.social({
+        provider: 'google',
+        callbackURL,
+      });
+
+      if (res?.error) {
+        playSound('metal');
+        setStatusMessage({
+          type: 'error',
+          text:
+            res.error.message ||
+            'Google OAuth not configured. Verify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.'
+        });
+        setLoading(false);
+      }
+    } catch (err) {
+      playSound('metal');
+      setStatusMessage({
+        type: 'error',
+        text: err?.message || 'Google authentication encountered an issue.'
+      });
+      setLoading(false);
+    }
+  };
+
+  // 3. Email & Password Sign In
+  const handleSignInSubmit = async (e) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       playSound('metal');
@@ -78,25 +142,56 @@ export default function AuthModal({
       return;
     }
 
-    playSound('snap');
-    const signedInUser = {
-      id: 'client_' + Date.now().toString(36),
-      name: email.split('@')[0] || 'AVZ Client',
-      email: email.trim(),
-      isGuest: false,
-      tier: 'Archive VIP Member',
-      loginTime: new Date().toISOString()
-    };
+    setLoading(true);
+    setStatusMessage(null);
 
-    onLogin?.(signedInUser);
-    setStatusMessage({ type: 'success', text: 'Signed in successfully. Welcome back!' });
-    setTimeout(() => {
-      onClose?.();
-    }, 700);
+    try {
+      const res = await authClient.signIn.email({
+        email: email.trim(),
+        password,
+        rememberMe,
+      });
+
+      if (res.error) {
+        playSound('metal');
+        setStatusMessage({
+          type: 'error',
+          text: res.error.message || 'Invalid email or password.'
+        });
+        setLoading(false);
+        return;
+      }
+
+      playSound('snap');
+      const signedInUser = {
+        id: res.data?.user?.id || ('client_' + Date.now().toString(36)),
+        name: res.data?.user?.name || email.split('@')[0] || 'AVZ Client',
+        email: res.data?.user?.email || email.trim(),
+        image: res.data?.user?.image,
+        emailVerified: res.data?.user?.emailVerified || false,
+        isGuest: false,
+        tier: 'Archive VIP Member',
+        loginTime: new Date().toISOString()
+      };
+
+      onLogin?.(signedInUser);
+      setStatusMessage({ type: 'success', text: 'Signed in successfully. Welcome back!' });
+      setTimeout(() => {
+        onClose?.();
+        setLoading(false);
+      }, 700);
+    } catch (err) {
+      playSound('metal');
+      setStatusMessage({
+        type: 'error',
+        text: err?.message || 'Sign in failed. Please verify credentials.'
+      });
+      setLoading(false);
+    }
   };
 
-  // 3. Create Account Submit
-  const handleSignUpSubmit = (e) => {
+  // 4. Create Permanent VIP Account
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) {
       playSound('metal');
@@ -114,26 +209,105 @@ export default function AuthModal({
       return;
     }
 
-    playSound('snap');
-    const newUser = {
-      id: 'client_' + Date.now().toString(36),
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      isGuest: false,
-      tier: 'Archive VIP Member',
-      vipAlerts,
-      loginTime: new Date().toISOString()
-    };
+    setLoading(true);
+    setStatusMessage(null);
 
-    onLogin?.(newUser);
-    setStatusMessage({ type: 'success', text: 'Account created! Welcome to AVZ Vaganza.' });
-    setTimeout(() => {
-      onClose?.();
-    }, 700);
+    try {
+      const res = await authClient.signUp.email({
+        email: email.trim(),
+        password,
+        name: name.trim(),
+      });
+
+      if (res.error) {
+        playSound('metal');
+        setStatusMessage({
+          type: 'error',
+          text:
+            res.error.message ||
+            'Registration failed. An account with this email may already exist.'
+        });
+        setLoading(false);
+        return;
+      }
+
+      playSound('snap');
+      const newUser = {
+        id: res.data?.user?.id || ('client_' + Date.now().toString(36)),
+        name: res.data?.user?.name || name.trim(),
+        email: res.data?.user?.email || email.trim(),
+        image: res.data?.user?.image,
+        emailVerified: res.data?.user?.emailVerified || false,
+        phone: phone.trim(),
+        isGuest: false,
+        tier: 'Archive VIP Member',
+        vipAlerts,
+        loginTime: new Date().toISOString()
+      };
+
+      onLogin?.(newUser);
+      setStatusMessage({
+        type: 'success',
+        text: 'Account created! Welcome to AVZ Vaganza.'
+      });
+      setTimeout(() => {
+        onClose?.();
+        setLoading(false);
+      }, 700);
+    } catch (err) {
+      playSound('metal');
+      setStatusMessage({
+        type: 'error',
+        text: err?.message || 'Account creation encountered an error.'
+      });
+      setLoading(false);
+    }
   };
 
-  // 4. WhatsApp Quick Concierge
+  // 5. Forgot Password Request (Resend email delivery)
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!forgotEmail.trim() || !forgotEmail.includes('@')) {
+      playSound('metal');
+      setStatusMessage({ type: 'error', text: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setLoading(true);
+    setStatusMessage(null);
+
+    try {
+      const redirectTo = `${window.location.origin}/reset-password`;
+      const res = await authClient.forgetPassword({
+        email: forgotEmail.trim(),
+        redirectTo,
+      });
+
+      if (res?.error) {
+        playSound('metal');
+        setStatusMessage({
+          type: 'error',
+          text: res.error.message || 'Unable to process reset request.'
+        });
+      } else {
+        playSound('snap');
+        setStatusMessage({
+          type: 'success',
+          text: 'Password reset link sent to your email. Check your inbox.'
+        });
+      }
+    } catch (err) {
+      playSound('metal');
+      setStatusMessage({
+        type: 'error',
+        text: err?.message || 'Password reset request failed.'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 6. WhatsApp Concierge
   const handleWhatsAppConcierge = () => {
     playSound('pip');
     const msg = encodeURIComponent(
@@ -142,9 +316,12 @@ export default function AuthModal({
     window.open(`https://wa.me/${BRAND_INFO.whatsapp}?text=${msg}`, '_blank');
   };
 
-  // 5. Sign Out
-  const handleSignOut = () => {
+  // 7. Sign Out
+  const handleSignOut = async () => {
     playSound('snap');
+    try {
+      await authClient.signOut();
+    } catch {}
     onLogout?.();
     setStatusMessage({ type: 'success', text: 'Signed out of session.' });
   };
@@ -209,16 +386,31 @@ export default function AuthModal({
             <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-pink/20 border border-pink/40 flex items-center justify-center text-pink font-mono font-bold text-sm">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name}
+                      className="w-10 h-10 rounded-full border border-pink/40 object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-pink/20 border border-pink/40 flex items-center justify-center text-pink font-mono font-bold text-sm">
+                      {user.name?.charAt(0).toUpperCase() || 'A'}
+                    </div>
+                  )}
                   <div>
                     <h3 className="font-mono text-sm font-bold text-white uppercase">
                       {user.name}
                     </h3>
-                    <span className="text-[10px] font-mono text-pink tracking-wider uppercase block">
-                      {user.tier || (user.isGuest ? 'VIP Guest Pass' : 'Archive VIP Member')}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-pink tracking-wider uppercase block">
+                        {user.tier || (user.isGuest ? 'VIP Guest Pass' : 'Archive VIP Member')}
+                      </span>
+                      {user.emailVerified && (
+                        <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 text-[8px] font-mono uppercase rounded border border-emerald-500/30">
+                          Verified
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <span className="px-2 py-0.5 rounded-full text-[9px] font-mono uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
@@ -250,7 +442,7 @@ export default function AuthModal({
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Upgrade to Permanent Account
+                  Upgrade to Permanent VIP Account
                 </button>
               )}
 
@@ -276,89 +468,104 @@ export default function AuthModal({
             </div>
           </div>
         ) : (
-          /* USER NOT LOGGED IN: GUEST CARD + TABS (SIGN IN / SIGN UP) */
-          <div className="space-y-5">
-            {/* 1. HERO "EXPLORE AS A GUEST" BUTTON */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-950/60 via-pink/10 to-black border border-pink/35 relative overflow-hidden group hover:border-pink/60 transition-all shadow-[0_8px_30px_rgba(244,194,194,0.1)]">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
-                    Instant Guest Access
-                  </span>
+          /* USER NOT LOGGED IN: GUEST CARD + GOOGLE + TABS (SIGN IN / SIGN UP / FORGOT) */
+          <div className="space-y-4">
+            {activeTab !== 'forgot' && (
+              <>
+                {/* 1. HERO "EXPLORE AS A GUEST" BUTTON */}
+                <div className="p-3.5 rounded-2xl bg-gradient-to-br from-purple-950/60 via-pink/10 to-black border border-pink/35 relative overflow-hidden group hover:border-pink/60 transition-all shadow-[0_8px_30px_rgba(244,194,194,0.1)]">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
+                      <span className="font-mono text-xs font-bold uppercase tracking-wider text-white">
+                        Instant Guest Access
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase bg-pink text-black font-bold">
+                      Zero Friction
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-zinc-300 font-montserrat leading-relaxed mb-2.5">
+                    No password required. Explore pieces, save favorites, and place custom orders instantly.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={handleExploreAsGuest}
+                    className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-pink via-purple-400 to-pink-300 hover:brightness-110 text-black font-mono text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2.5 cursor-pointer shadow-lg active:scale-95 transition-all"
+                  >
+                    <Compass className="w-4 h-4 text-black" />
+                    <span>Explore as a Guest</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-black" />
+                  </button>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase bg-pink text-black font-bold">
-                  Zero Friction
-                </span>
-              </div>
 
-              <p className="text-xs text-zinc-300 font-montserrat leading-relaxed mb-3">
-                No sign-up or password required. Explore pieces, save favorites, and place custom orders instantly.
-              </p>
+                {/* 2. ONE-CLICK GOOGLE OAUTH 2.0 LOGIN */}
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={handleGoogleAuth}
+                  className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                >
+                  <GoogleIcon className="w-4 h-4 shrink-0" />
+                  <span>Continue with Google</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={handleExploreAsGuest}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink via-purple-400 to-pink-300 hover:brightness-110 text-black font-mono text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2.5 cursor-pointer shadow-lg active:scale-95 transition-all"
-              >
-                <Compass className="w-4 h-4 text-black" />
-                <span>Explore as a Guest</span>
-                <ArrowRight className="w-3.5 h-3.5 text-black" />
-              </button>
-            </div>
+                {/* DIVIDER */}
+                <div className="relative flex items-center justify-center py-1">
+                  <div className="border-t border-white/10 w-full" />
+                  <span className="bg-[#0d0714] px-3 font-mono text-[10px] uppercase tracking-widest text-zinc-500 shrink-0">
+                    OR WITH EMAIL
+                  </span>
+                  <div className="border-t border-white/10 w-full" />
+                </div>
 
-            {/* DIVIDER */}
-            <div className="relative flex items-center justify-center">
-              <div className="border-t border-white/10 w-full" />
-              <span className="bg-[#0d0714] px-3 font-mono text-[10px] uppercase tracking-widest text-zinc-500 shrink-0">
-                OR CLIENT LOGIN
-              </span>
-              <div className="border-t border-white/10 w-full" />
-            </div>
-
-            {/* TAB SELECTOR: SIGN IN / CREATE ACCOUNT */}
-            <div className="grid grid-cols-2 p-1 rounded-xl bg-white/5 border border-white/10">
-              <button
-                type="button"
-                onClick={() => {
-                  playSound('pip');
-                  setActiveTab('signin');
-                }}
-                className={`py-2 text-center rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  activeTab === 'signin'
-                    ? 'bg-white/15 text-white shadow-sm'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  playSound('pip');
-                  setActiveTab('signup');
-                }}
-                className={`py-2 text-center rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-                  activeTab === 'signup'
-                    ? 'bg-white/15 text-white shadow-sm'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                Create Account
-              </button>
-            </div>
+                {/* TAB SELECTOR: SIGN IN / CREATE ACCOUNT */}
+                <div className="grid grid-cols-2 p-1 rounded-xl bg-white/5 border border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound('pip');
+                      setActiveTab('signin');
+                    }}
+                    className={`py-2 text-center rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      activeTab === 'signin'
+                        ? 'bg-white/15 text-white shadow-sm'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound('pip');
+                      setActiveTab('signup');
+                    }}
+                    className={`py-2 text-center rounded-lg font-mono text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                      activeTab === 'signup'
+                        ? 'bg-white/15 text-white shadow-sm'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    Create Account
+                  </button>
+                </div>
+              </>
+            )}
 
             {/* FORM: SIGN IN */}
             {activeTab === 'signin' && (
               <form onSubmit={handleSignInSubmit} className="space-y-3.5">
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                    Email Address or Phone
+                    Email Address
                   </label>
                   <div className="relative flex items-center">
                     <Mail className="w-4 h-4 text-zinc-500 absolute left-3 pointer-events-none" />
                     <input
-                      type="text"
+                      type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -377,7 +584,8 @@ export default function AuthModal({
                       type="button"
                       onClick={() => {
                         playSound('pip');
-                        alert('Password reset link sent to your registered email or phone.');
+                        setForgotEmail(email);
+                        setActiveTab('forgot');
                       }}
                       className="text-[10px] font-mono text-pink hover:underline cursor-pointer"
                     >
@@ -422,10 +630,15 @@ export default function AuthModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                  disabled={loading}
+                  className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
                 >
-                  <User className="w-4 h-4" />
-                  Sign In
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-pink" />
+                  ) : (
+                    <User className="w-4 h-4" />
+                  )}
+                  <span>Sign In</span>
                 </button>
               </form>
             )}
@@ -519,10 +732,71 @@ export default function AuthModal({
 
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
+                  disabled={loading}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all disabled:opacity-50"
                 >
-                  <Sparkles className="w-4 h-4" />
-                  Create VIP Account
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-black" />
+                  ) : (
+                    <Sparkles className="w-4 h-4" />
+                  )}
+                  <span>Create VIP Account</span>
+                </button>
+              </form>
+            )}
+
+            {/* FORM: FORGOT PASSWORD */}
+            {activeTab === 'forgot' && (
+              <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound('pip');
+                      setActiveTab('signin');
+                    }}
+                    className="flex items-center gap-1.5 text-zinc-400 hover:text-white font-mono text-[11px] uppercase tracking-wider transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Back to Sign In</span>
+                  </button>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-pink">
+                    PASSWORD RECOVERY
+                  </span>
+                </div>
+
+                <p className="text-xs text-zinc-300 font-montserrat leading-relaxed">
+                  Enter your registered client email to receive a secure password reset link via Resend.
+                </p>
+
+                <div>
+                  <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                    Registered Email Address
+                  </label>
+                  <div className="relative flex items-center">
+                    <Mail className="w-4 h-4 text-zinc-500 absolute left-3 pointer-events-none" />
+                    <input
+                      type="email"
+                      required
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      placeholder="client@domain.com"
+                      className="w-full bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-[0.18em] flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all disabled:opacity-50"
+                >
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-black" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                  <span>Send Reset Link</span>
                 </button>
               </form>
             )}
@@ -544,4 +818,3 @@ export default function AuthModal({
     </div>
   );
 }
-

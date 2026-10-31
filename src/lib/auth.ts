@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { cookies, headers } from 'next/headers';
 import { getDb, initializeDatabase } from './db';
+import { getSupabaseAuthClient } from './supabase-auth';
 
 const SESSION_COOKIE_NAME = 'avz_admin_session';
 
@@ -189,6 +190,42 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
   await logAdminActivity(normalized, 'REQUEST_OTP', 'admin_users', user.id as string, { email: normalized });
 
   const isProd = process.env.NODE_ENV === 'production';
+  const supabase = getSupabaseAuthClient();
+
+  // 1. Supabase Auth Email OTP Delivery (Preferred)
+  if (supabase) {
+    try {
+      const { error: supabaseError } = await supabase.auth.signInWithOtp({
+        email: normalized,
+        options: {
+          shouldCreateUser: true,
+        },
+      });
+
+      if (supabaseError) {
+        console.error('[SUPABASE OTP ERROR]:', supabaseError.message);
+        if (isProd && process.env.ALLOW_DEV_ADMIN_OTP !== 'true') {
+          await db.execute({
+            sql: 'UPDATE admin_users SET otp_code = NULL, otp_expires_at = NULL WHERE email = ?',
+            args: [normalized],
+          });
+          return {
+            success: false,
+            message: `Supabase email delivery failed: ${supabaseError.message}`,
+          };
+        }
+      } else {
+        console.log(`[SUPABASE OTP DISPATCHED]: Code delivered via Supabase to ${normalized}`);
+        return {
+          success: true,
+          message: 'One-Time Passcode dispatched via Supabase to your authorized administrator address.',
+        };
+      }
+    } catch (err: any) {
+      console.error('[SUPABASE NETWORK ERROR]:', err?.message || err);
+    }
+  }
+
   const resendApiKey = process.env.RESEND_API_KEY;
 
   // In production, require email provider configuration or fail closed
@@ -238,6 +275,25 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
       if (!emailRes.ok) {
         const errData = await emailRes.json().catch(() => ({}));
         console.error('Email dispatch provider rejected request: HTTP', emailRes.status, errData?.name || errData?.message || '');
+        if (isProd && process.env.ALLOW_DEV_ADMIN_OTP !== 'true') {
+          // Clear the undelivered code from database
+          await db.execute({
+            sql: 'UPDATE admin_users SET otp_code = NULL, otp_expires_at = NULL WHERE email = ?',
+            args: [normalized]
+          });
+          return {
+            success: false,
+            message: 'Failed to deliver passcode via email service. Please check provider configuration or contact administrator.'
+          };
+        } else {
+          console.warn('[DEV PASSCODE FALLBACK]: Email delivery unavailable. Using direct passcode for development access.');
+        }
+      }
+    } catch (err: any) {
+      clearTimeout(timeoutId);
+      const isTimeout = err.name === 'AbortError' || err.message?.toLowerCase().includes('timeout');
+      console.error('Email dispatch network error:', isTimeout ? 'Request timed out (10s)' : err.message || 'Unknown network error');
+      if (isProd && process.env.ALLOW_DEV_ADMIN_OTP !== 'true') {
         // Clear the undelivered code from database
         await db.execute({
           sql: 'UPDATE admin_users SET otp_code = NULL, otp_expires_at = NULL WHERE email = ?',
@@ -245,33 +301,24 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
         });
         return {
           success: false,
-          message: 'Failed to deliver passcode via email service. Please check provider configuration or contact administrator.'
+          message: isTimeout
+            ? 'Email delivery service timed out. Please try again shortly.'
+            : 'Email delivery service unreachable. Please contact administrator.'
         };
+      } else {
+        console.warn('[DEV PASSCODE FALLBACK]: Email dispatch network error. Using direct passcode for development access.');
       }
-    } catch (err: any) {
-      clearTimeout(timeoutId);
-      const isTimeout = err.name === 'AbortError' || err.message?.toLowerCase().includes('timeout');
-      console.error('Email dispatch network error:', isTimeout ? 'Request timed out (10s)' : err.message || 'Unknown network error');
-      // Clear the undelivered code from database
-      await db.execute({
-        sql: 'UPDATE admin_users SET otp_code = NULL, otp_expires_at = NULL WHERE email = ?',
-        args: [normalized]
-      });
-      return {
-        success: false,
-        message: isTimeout
-          ? 'Email delivery service timed out. Please try again shortly.'
-          : 'Email delivery service unreachable. Please contact administrator.'
-      };
     }
   }
 
+  const allowOtpReturn = !isProd || process.env.ALLOW_DEV_ADMIN_OTP === 'true';
+
   return {
     success: true,
-    message: isProd
-      ? 'One-Time Passcode dispatched to your authorized administrator address.'
-      : 'One-Time Passcode generated successfully.',
-    otp: isProd ? undefined : otpCode // Never leak OTP in production responses
+    message: allowOtpReturn
+      ? 'One-Time Passcode generated successfully.'
+      : 'One-Time Passcode dispatched to your authorized administrator address.',
+    otp: allowOtpReturn ? otpCode : undefined
   };
 }
 
@@ -313,8 +360,29 @@ export async function verifyAdminOtp(email: string, code: string): Promise<{ suc
     args: [user.id]
   });
 
-  // Strict comparison
-  if (user.otp_code !== code.trim()) {
+  const supabase = getSupabaseAuthClient();
+  let supabaseVerified = false;
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: normalized,
+        token: code.trim(),
+        type: 'email',
+      });
+      if (!error && data?.user) {
+        supabaseVerified = true;
+      } else if (error) {
+        console.warn('[SUPABASE VERIFY NOTICE]:', error.message);
+      }
+    } catch (err: any) {
+      console.warn('[SUPABASE VERIFY ERROR]:', err?.message || err);
+    }
+  }
+
+  // Strict comparison against Supabase verification or local OTP record
+  const isMatch = supabaseVerified || (user.otp_code && user.otp_code === code.trim());
+  if (!isMatch) {
     return { success: false, message: 'Incorrect passcode. Please try again.' };
   }
 

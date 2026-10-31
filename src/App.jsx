@@ -22,6 +22,7 @@ import Footer from './components/Footer';
 import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
 import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
+import { authClient } from './lib/auth-client';
 
 export default function App({ storefrontConfig, cmsContent, products: liveProducts }) {
   // Live catalog products from database with fallback to brand data
@@ -100,6 +101,31 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
       localStorage.removeItem('avz_user');
     } catch (e) {}
   };
+
+  // Synchronize active Better Auth session (OAuth callbacks, persistent cookies)
+  useEffect(() => {
+    authClient
+      .getSession()
+      .then(({ data }) => {
+        if (data?.user) {
+          const sessionUser = {
+            id: data.user.id,
+            name: data.user.name,
+            email: data.user.email,
+            image: data.user.image,
+            emailVerified: data.user.emailVerified,
+            isGuest: false,
+            tier: 'Archive VIP Member',
+            loginTime: new Date(data.session?.createdAt || Date.now()).toISOString(),
+          };
+          setCurrentUser(sessionUser);
+          try {
+            localStorage.setItem('avz_user', JSON.stringify(sessionUser));
+          } catch (e) {}
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (theme === 'light') {

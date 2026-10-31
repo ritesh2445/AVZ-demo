@@ -23,6 +23,11 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.dev.vars*
+
+# Cloudflare Workers & OpenNext
+.open-next/
+.wrangler/
 
 # Editor & OS files
 .vscode/
@@ -50,3 +55,7 @@ scratch/
 # Local verification & test scripts (not deployed to production)
 test_*.py
 verify_*.py
+
+# Cloudflare Workers & OpenNext generated files
+.open-next/
+.wrangler/

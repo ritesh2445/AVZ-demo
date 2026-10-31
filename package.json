@@ -9,11 +9,18 @@
     "start": "next start",
     "lint": "next lint",
     "dev:vite": "vite",
-    "build:vite": "vite build"
+    "build:vite": "vite build",
+    "build:worker": "opennextjs-cloudflare build",
+    "preview:worker": "opennextjs-cloudflare preview",
+    "deploy:worker": "opennextjs-cloudflare deploy",
+    "db:bootstrap": "npx tsx scripts/bootstrap-db.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
+    "@libsql/kysely-libsql": "^0.4.1",
+    "@supabase/supabase-js": "^2.118.0",
     "@tailwindcss/postcss": "^4.3.3",
+    "better-auth": "^1.7.14",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "next": "^16.4.3",
@@ -23,6 +30,7 @@
     "three": "^0.173.0"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.14",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
@@ -31,6 +39,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "wrangler": "^4.156.0"
   }
 }
