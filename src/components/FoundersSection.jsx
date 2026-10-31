@@ -57,12 +57,15 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           Clean, calm white background. DHRISNI SVG logotype fitted perfectly in the
           exact center of the site. Zero overlapping elements. Pristine museum space.
           ========================================================================= */}
-      <div className="w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200">
+      <div className="w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200" style={{ backgroundColor: '#ffffff', color: '#09090b' }}>
         <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
           {/* Subtle Curated Gallery Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-black/15 bg-black/5 text-[10px] font-mono tracking-[0.28em] text-zinc-600 uppercase mb-8 sm:mb-12">
-            <span className="w-1.5 h-1.5 rounded-full bg-black/60" />
-            <span>FOUNDER & CREATIVE DIRECTOR</span>
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-mono tracking-[0.28em] uppercase mb-8 sm:mb-12 font-bold shadow-sm"
+            style={{ color: '#18181b', backgroundColor: '#f4f4f5', borderColor: '#d4d4d8' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#18181b' }} />
+            <span style={{ color: '#18181b' }}>FOUNDER & CREATIVE DIRECTOR</span>
           </div>
 
           {/* THE SVG LOGOTYPE — FITTED PERFECTLY IN THE CENTER WITH ZERO OVERLAP */}
@@ -77,10 +80,10 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
 
           {/* Minimalist Gallery Provenance Subtitle (Clean, Calm, Below the Artwork) */}
           <div className="flex flex-col items-center gap-2 mt-8 sm:mt-12 text-center">
-            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold" style={{ color: "#09090b" }}>
+            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold" style={{ color: '#09090b' }}>
               DHRISNI • DHRISTROYER
             </span>
-            <span className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.2em] font-medium" style={{ color: "#52525b" }}>
+            <span className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.2em] font-bold" style={{ color: '#27272a' }}>
               THE ARCHITECT OF WEARABLE ART • GUWAHATI, ASSAM
             </span>
           </div>
@@ -92,7 +95,10 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           Deep obsidian atmosphere with editorial split-screen, archival portrait,
           and oversized haute-couture quote.
           ========================================================================= */}
-      <div className="atelier-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black">
+      <div
+        className="atelier-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black"
+        style={{ backgroundColor: '#0a0a0f', color: '#ffffff' }}
+      >
         {/* Subtle Ambient Spatial Glow */}
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(230,60,255,0.07),transparent_70%)]" />
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_40%_at_80%_70%,rgba(47,184,166,0.05),transparent_70%)]" />
@@ -101,12 +107,12 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           {/* Section Breadcrumb & Coordinates Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-12 sm:mb-16 border-b border-white/10 gap-3">
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
-              <span style={{ color: "#f472b6" }}>✦ OUR STORY</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" style={{ backgroundColor: '#f472b6' }} />
+              <span style={{ color: '#f472b6' }}>✦ OUR STORY</span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-wider uppercase">
-              <MapPin className="w-3.5 h-3.5 text-pink" />
-              <span>26.1445° N, 91.7362° E • GUWAHATI, ASSAM</span>
+            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-wider uppercase font-semibold" style={{ color: '#d4d4d8' }}>
+              <MapPin className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+              <span style={{ color: '#d4d4d8' }}>26.1445° N, 91.7362° E • GUWAHATI, ASSAM</span>
             </div>
           </div>
 
@@ -125,21 +131,35 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
 
                 {/* Corner Coordinates & Archival Tag */}
                 <div className="absolute top-4 left-4 z-10">
-                  <span className="px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[9px] font-mono tracking-widest text-white uppercase font-bold">
+                  <span
+                    className="px-3 py-1 rounded-full border text-[9px] font-mono tracking-widest uppercase font-bold shadow-md"
+                    style={{
+                      color: '#ffffff',
+                      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                      borderColor: 'rgba(255, 255, 255, 0.3)'
+                    }}
+                  >
                     BEHIND THE SCENES
                   </span>
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between">
                   <div className="text-left">
-                    <span className="text-[10px] font-mono tracking-widest text-pink block font-bold uppercase">
+                    <span className="text-[10px] font-mono tracking-widest block font-bold uppercase" style={{ color: '#f472b6' }}>
                       MASTER ARTISAN
                     </span>
-                    <h3 className="text-lg font-mono font-bold text-white uppercase">
+                    <h3 className="text-lg font-mono font-bold uppercase" style={{ color: '#ffffff' }}>
                       {founderName} ({alias})
                     </h3>
                   </div>
-                  <span className="text-[9px] font-mono text-zinc-400 border border-white/20 rounded-full px-2.5 py-0.5 bg-black/60">
+                  <span
+                    className="text-[9px] font-mono border rounded-full px-2.5 py-0.5 font-semibold"
+                    style={{
+                      color: '#e4e4e7',
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                      borderColor: 'rgba(255, 255, 255, 0.3)'
+                    }}
+                  >
                     GUWAHATI
                   </span>
                 </div>
@@ -152,21 +172,24 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             {/* Right 7 Cols: The Quote & The Story */}
             <div className="lg:col-span-7 flex flex-col justify-center text-left space-y-6 sm:space-y-8">
               <div>
-                <span className="text-[10px] font-mono tracking-[0.3em] text-pink uppercase font-bold block mb-3">
+                <span className="text-[10px] font-mono tracking-[0.3em] uppercase font-bold block mb-3" style={{ color: '#f472b6' }}>
                   ARTISAN PHILOSOPHY
                 </span>
-                <blockquote className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md" style={{ color: "#ffffff" }}>
+                <blockquote
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
+                  style={{ color: '#ffffff' }}
+                >
                   "{quote}"
                 </blockquote>
               </div>
 
-              <div className="space-y-4 font-montserrat text-sm sm:text-base leading-relaxed max-w-2xl" style={{ color: "#d4d4d8" }}>
-                <p>
-                  Known to the world as <strong className="font-mono font-bold" style={{ color: "#ffffff" }}>Dhrisni</strong> or{' '}
-                  <strong className="font-mono font-bold" style={{ color: "#f472b6" }}>@Dhristroyer</strong>, she wears many titles—actor, model, creator,
+              <div className="space-y-4 font-montserrat text-sm sm:text-base leading-relaxed max-w-2xl" style={{ color: '#e4e4e7' }}>
+                <p style={{ color: '#e4e4e7' }}>
+                  Known to the world as <strong className="font-mono font-bold" style={{ color: '#ffffff' }}>Dhrisni</strong> or{' '}
+                  <strong className="font-mono font-bold" style={{ color: '#f472b6' }}>@Dhristroyer</strong>, she wears many titles—actor, model, creator,
                   and designer. But strip all that away, and at her absolute core, she is an artisan who refuses cookie-cutter minimalism.
                 </p>
-                <p>
+                <p style={{ color: '#e4e4e7' }}>
                   Growing up in Assam with strict boundaries on clothing, her creativity had to break out. She picked up a pair
                   of heavy scissors and began slicing up garments to sculpt raw wearable armor. Today, every single relic from
                   AVZ Vaganza is born directly under her hands in our Guwahati workshop.
@@ -179,10 +202,11 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playSound('snap')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
+                  style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
-                  <span>COMMISSION WITH DHRISNI</span>
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <span style={{ color: '#000000' }}>COMMISSION WITH DHRISNI</span>
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
                 </a>
 
                 <a
@@ -191,9 +215,14 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                     playSound('snap');
                     onScrollToSection?.('shop');
                   }}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 hover:border-pink/80 bg-black/60 hover:bg-white/5 text-white font-mono text-xs tracking-widest uppercase transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-mono text-xs tracking-widest uppercase transition-all cursor-pointer hover:border-pink/80"
+                  style={{
+                    color: '#ffffff',
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    borderColor: 'rgba(255, 255, 255, 0.3)'
+                  }}
                 >
-                  <span>EXPLORE 1-OF-1 DESIGNS</span>
+                  <span style={{ color: '#ffffff' }}>EXPLORE 1-OF-1 DESIGNS</span>
                 </a>
               </div>
             </div>
@@ -205,14 +234,14 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           <div className="mt-24 sm:mt-32 pt-16 border-t border-white/10">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4 text-left">
               <div>
-                <span className="text-[10px] font-mono tracking-[0.28em] text-pink uppercase font-bold block mb-1">
+                <span className="text-[10px] font-mono tracking-[0.28em] uppercase font-bold block mb-1" style={{ color: '#f472b6' }}>
                   STUDIO PHILOSOPHY
                 </span>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider" style={{ color: "#ffffff" }}>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-mono font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>
                   FOUR PILLARS OF AVZ STUDIO
                 </h3>
               </div>
-              <p className="text-xs font-mono text-zinc-400 tracking-wider">
+              <p className="text-xs font-mono tracking-wider font-semibold" style={{ color: '#d4d4d8' }}>
                 TAP A PILLAR TO LEARN MORE
               </p>
             </div>
@@ -230,19 +259,30 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                       playSound('cyber_hover');
                       setActivePillar(idx);
                     }}
-                    className={`p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 ${
-                      isSelected
-                        ? 'bg-gradient-to-b from-[#2a0833] to-[#120317] border-pink shadow-[0_0_20px_rgba(244,114,182,0.3)]'
-                        : 'bg-[#0f0f15] border-white/10 hover:border-white/30 text-zinc-400 hover:text-white'
-                    }`}
+                    className="p-4 sm:p-5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 shadow-md hover:scale-[1.02] active:scale-95"
+                    style={{
+                      backgroundColor: isSelected ? '#25062c' : '#14141e',
+                      borderColor: isSelected ? '#f472b6' : 'rgba(255, 255, 255, 0.18)',
+                      boxShadow: isSelected ? '0 0 20px rgba(244, 114, 182, 0.35)' : 'none',
+                      color: '#ffffff'
+                    }}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className={`text-xs font-mono font-bold ${isSelected ? 'text-pink' : 'text-zinc-500'}`}>
+                      <span
+                        className="text-xs font-mono font-bold"
+                        style={{ color: isSelected ? '#f472b6' : '#a1a1aa' }}
+                      >
                         {pillar.id}
                       </span>
-                      <IconComponent className={`w-4 h-4 ${isSelected ? 'text-pink' : 'text-zinc-500'}`} />
+                      <IconComponent
+                        className="w-4 h-4"
+                        style={{ color: isSelected ? '#f472b6' : '#a1a1aa' }}
+                      />
                     </div>
-                    <span className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-wider line-clamp-2 leading-snug">
+                    <span
+                      className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-wider line-clamp-2 leading-snug"
+                      style={{ color: '#ffffff' }}
+                    >
                       {pillar.title}
                     </span>
                   </button>
@@ -251,23 +291,49 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             </div>
 
             {/* Active Pillar Showcase Card */}
-            <div className="p-6 sm:p-10 rounded-3xl border border-white/15 bg-gradient-to-br from-[#120318]/90 via-[#0a0a0f]/95 to-black text-left shadow-2xl relative overflow-hidden">
+            <div
+              className="p-6 sm:p-10 rounded-3xl border text-left shadow-2xl relative overflow-hidden"
+              style={{
+                backgroundColor: '#120417',
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+                color: '#ffffff'
+              }}
+            >
               <div className="relative z-10 max-w-3xl">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-pink font-mono text-xs font-bold tracking-widest uppercase">
+                  <span
+                    className="font-mono text-xs font-bold tracking-widest uppercase"
+                    style={{ color: '#f472b6' }}
+                  >
                     PILLAR {MANIFESTO_PILLARS[activePillar].id} • PHILOSOPHY
                   </span>
                 </div>
-                <h4 className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-wider mb-2" style={{ color: "#ffffff" }}>
+                <h4
+                  className="text-xl sm:text-2xl font-mono font-bold uppercase tracking-wider mb-2"
+                  style={{ color: '#ffffff' }}
+                >
                   {MANIFESTO_PILLARS[activePillar].title}
                 </h4>
-                <p className="text-xs sm:text-sm font-mono tracking-wider uppercase mb-5" style={{ color: "#a1a1aa" }}>
+                <p
+                  className="text-xs sm:text-sm font-mono tracking-wider uppercase mb-5 font-semibold"
+                  style={{ color: '#d4d4d8' }}
+                >
                   {MANIFESTO_PILLARS[activePillar].subtitle}
                 </p>
-                <p className="text-sm sm:text-base font-montserrat leading-relaxed mb-6" style={{ color: "#e4e4e7" }}>
+                <p
+                  className="text-sm sm:text-base font-montserrat leading-relaxed mb-6"
+                  style={{ color: '#f4f4f5' }}
+                >
                   {MANIFESTO_PILLARS[activePillar].summary}
                 </p>
-                <div className="p-4 rounded-xl border border-pink/30 bg-pink/5 text-xs sm:text-sm font-mono text-pink tracking-wide">
+                <div
+                  className="p-4 rounded-xl border text-xs sm:text-sm font-mono tracking-wide font-semibold"
+                  style={{
+                    color: '#f472b6',
+                    backgroundColor: 'rgba(244, 114, 182, 0.12)',
+                    borderColor: 'rgba(244, 114, 182, 0.4)'
+                  }}
+                >
                   ✦ {MANIFESTO_PILLARS[activePillar].highlight}
                 </div>
               </div>
@@ -283,37 +349,37 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                 ========================================================================= */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-12 border-t border-white/10 text-center">
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: "#ffffff" }}>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
                   200+
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
                   1-OF-1 BUILDS SCULPTED
                 </span>
               </div>
 
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: "#f472b6" }}>
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
                   1,500+
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
                   CIRCUIT BOARDS RECLAIMED
                 </span>
               </div>
 
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold text-white mb-1">
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
                   GUWAHATI
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
                   GUWAHATI STUDIO
                 </span>
               </div>
 
               <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold text-pink mb-1">
+                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
                   100%
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 tracking-[0.2em] uppercase">
+                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
                   HAND-SCULPTED BY DHRISNI
                 </span>
               </div>

@@ -322,10 +322,19 @@ export default function Navbar({
             {/* Sound Toggle */}
             <button
               onClick={handleSoundToggle}
-              aria-label={soundOn ? 'Mute' : 'Unmute'}
-              className="hidden sm:flex w-7 h-7 rounded-full items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              aria-label={soundOn ? 'Mute Audio Soundtrack' : 'Unmute Audio Soundtrack'}
+              title={soundOn ? 'Sound On (Tap to Mute)' : 'Sound Off (Tap to Unmute)'}
+              className="hidden sm:flex px-2.5 py-1 rounded-full items-center gap-1.5 border border-white/20 bg-white/5 hover:bg-white/10 text-white transition-all cursor-pointer shadow-sm active:scale-95"
+              style={{ color: '#ffffff' }}
             >
-              {soundOn ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5 text-zinc-600" />}
+              {soundOn ? (
+                <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+              ) : (
+                <VolumeX className="w-3.5 h-3.5 text-zinc-300" style={{ color: '#d4d4d8', stroke: '#d4d4d8' }} />
+              )}
+              <span className="text-[9px] font-mono tracking-wider uppercase font-bold" style={{ color: '#ffffff' }}>
+                {soundOn ? 'SOUND ON' : 'MUTED'}
+              </span>
             </button>
 
             {/* Mobile Hamburger Toggle */}
@@ -443,10 +452,15 @@ export default function Navbar({
             <div className="flex items-center gap-4">
               <button
                 onClick={handleSoundToggle}
-                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px]"
+                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold text-white"
+                style={{ color: '#ffffff' }}
               >
-                {soundOn ? <Volume2 className="w-3.5 h-3.5 text-pink-300" /> : <VolumeX className="w-3.5 h-3.5" />}
-                <span>{soundOn ? 'Sound On' : 'Muted'}</span>
+                {soundOn ? (
+                  <Volume2 className="w-3.5 h-3.5 text-pink" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+                ) : (
+                  <VolumeX className="w-3.5 h-3.5 text-zinc-300" style={{ color: '#d4d4d8', stroke: '#d4d4d8' }} />
+                )}
+                <span style={{ color: '#ffffff' }}>{soundOn ? 'SOUND ON' : 'MUTED'}</span>
               </button>
 
               <button
