@@ -38,11 +38,11 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-silver flex flex-col items-center justify-center p-6 relative overflow-hidden select-none">
+    <div className="min-h-screen bg-black text-silver flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden select-none">
       {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-[#301934]/40 via-[#BE185D]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-gradient-to-tr from-[#301934]/40 via-[#BE185D]/20 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-md bg-[#0D0B10] border border-[#301934] rounded-2xl p-8 shadow-2xl relative z-10 backdrop-blur-xl">
+      <div className="w-full max-w-md bg-[#0D0B10] border border-[#301934] rounded-2xl p-5 sm:p-8 shadow-2xl relative z-10 backdrop-blur-xl">
         {/* Brand Header */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#301934] to-black border border-[#BE185D]/40 rounded-2xl flex items-center justify-center shadow-lg">

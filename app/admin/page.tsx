@@ -8,7 +8,7 @@ import {
   BarChart3, Compass, BookOpen, Settings, Shield, History, LogOut,
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
-  Copy, Save, Sliders, ShieldAlert, Check
+  Copy, Save, Sliders, ShieldAlert, Check, Menu
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -16,6 +16,7 @@ export default function AdminDashboardPage() {
 
   // Active navigation module
   const [activeTab, setActiveTab] = useState<string>('overview');
+  const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
 
   // Admin session state
   const [adminUser, setAdminUser] = useState<any>(null);
@@ -576,15 +577,24 @@ export default function AdminDashboardPage() {
       )}
 
       {/* TOP HEADER: Branding & Storefront Controls Bar */}
-      <header className="h-16 border-b border-[#231A2A] bg-[#0E0A14]/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#BE185D] to-[#301934] flex items-center justify-center font-cinzel font-black text-white text-sm">
+      <header className="h-16 border-b border-[#231A2A] bg-[#0E0A14]/90 backdrop-blur-md px-3 sm:px-6 flex items-center justify-between sticky top-0 z-40">
+        <div className="flex items-center gap-2 sm:gap-6">
+          {/* Mobile hamburger menu toggle */}
+          <button
+            onClick={() => setMobileNavOpen(!mobileNavOpen)}
+            className="md:hidden p-2 rounded-xl bg-[#16121D] border border-neutral-800 text-neutral-300 hover:text-white shrink-0 cursor-pointer"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileNavOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#BE185D] to-[#301934] flex items-center justify-center font-cinzel font-black text-white text-sm shrink-0">
               AVZ
             </div>
             <div>
-              <span className="font-cinzel font-bold text-white tracking-widest text-sm uppercase">AVZ Vaganza</span>
-              <span className="text-[10px] text-[#F4C2C2] block uppercase tracking-widest font-mono">Commerce Control Center</span>
+              <span className="font-cinzel font-bold text-white tracking-widest text-xs sm:text-sm uppercase">AVZ Vaganza</span>
+              <span className="text-[9px] sm:text-[10px] text-[#F4C2C2] block uppercase tracking-widest font-mono truncate max-w-[140px] sm:max-w-none">Commerce Control Center</span>
             </div>
           </div>
 
@@ -625,19 +635,19 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* User profile & preview actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <a
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-[#F4C2C2] hover:text-white bg-[#301934]/40 hover:bg-[#301934] border border-[#BE185D]/30 px-3 py-1.5 rounded-lg transition-all font-mono"
+            className="flex items-center gap-1.5 text-xs text-[#F4C2C2] hover:text-white bg-[#301934]/40 hover:bg-[#301934] border border-[#BE185D]/30 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all font-mono"
           >
             <Eye className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Preview Storefront</span>
             <ExternalLink className="w-3 h-3 opacity-60" />
           </a>
 
-          <div className="flex items-center gap-3 pl-2 border-l border-neutral-800">
+          <div className="flex items-center gap-2 sm:gap-3 pl-2 border-l border-neutral-800">
             <div className="text-right hidden sm:block">
               <span className="text-xs text-white font-medium block">{adminUser?.name || 'Administrator'}</span>
               <span className="text-[10px] text-[#F4C2C2] uppercase font-mono tracking-wider">{adminUser?.role || 'Owner'}</span>
@@ -654,9 +664,32 @@ export default function AdminDashboardPage() {
       </header>
 
       {/* MAIN CONTAINER: SIDEBAR + CONTENT AREA */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* SIDEBAR: 18 Modules */}
-        <aside className="w-64 bg-[#0A070F] border-r border-[#231A2A] flex flex-col shrink-0 overflow-y-auto">
+      <div className="flex-1 flex overflow-hidden relative">
+        {/* Mobile Backdrop */}
+        {mobileNavOpen && (
+          <div
+            onClick={() => setMobileNavOpen(false)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
+          />
+        )}
+
+        {/* SIDEBAR: 18 Modules (Responsive drawer on mobile, static on desktop) */}
+        <aside
+          className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0A070F] border-r border-[#231A2A] flex flex-col shrink-0 overflow-y-auto transition-transform duration-300 md:static md:w-64 md:translate-x-0 ${
+            mobileNavOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
+          }`}
+        >
+          {/* Mobile Sidebar Close Header */}
+          <div className="flex items-center justify-between p-3 border-b border-[#231A2A] md:hidden">
+            <span className="font-cinzel text-xs font-bold text-white tracking-wider uppercase">Menu</span>
+            <button
+              onClick={() => setMobileNavOpen(false)}
+              className="p-1.5 rounded-lg bg-[#16121D] text-neutral-400 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
           <div className="p-3">
             <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-mono px-3 py-2 block">
               Merchant Operations
@@ -668,7 +701,10 @@ export default function AdminDashboardPage() {
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      setMobileNavOpen(false);
+                    }}
                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                       isActive
                         ? 'bg-gradient-to-r from-[#BE185D]/20 to-[#301934]/40 text-white border border-[#BE185D]/50 shadow-sm'
@@ -702,7 +738,7 @@ export default function AdminDashboardPage() {
         </aside>
 
         {/* WORKSPACE CONTENT AREA */}
-        <main className="flex-1 overflow-y-auto bg-[#070609] p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-[#070609] p-4 sm:p-6 lg:p-8 min-w-0">
           {/* MODULE 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-8 max-w-7xl mx-auto">
