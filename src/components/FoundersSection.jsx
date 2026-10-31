@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, ArrowUpRight, Scissors, ShieldCheck, HeartHandshake, Cpu, Flame, MapPin } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Scissors, ShieldCheck, Users, Cpu, Flame, MapPin } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
@@ -35,7 +35,7 @@ const MANIFESTO_PILLARS = [
     id: '04',
     title: 'WOMEN ARTISANS OF THE GUWAHATI ATELIER',
     subtitle: 'Mentorship, independence, and North-East craftsmanship',
-    icon: HeartHandshake,
+    icon: Users,
     summary:
       'Our studio is rooted in Guwahati, Assam. Dhrisni personally trains and mentors local women artisans in wiring, structural corsetry, and heavy hardware sculpting, creating skilled economic independence through avant-garde fashion.',
     highlight: 'Deeply empowering North-Eastern women craftsmanship on a global fashion stage.'
