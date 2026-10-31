@@ -71,7 +71,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
           <form onSubmit={handleTrack} className="flex flex-col sm:flex-row gap-2 mb-2">
             <input
               type="text"
-              placeholder="e.g. AVZ-891029 or 7304264901"
+              placeholder="Enter Order ID (e.g. AVZ-891029)"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="flex-1 bg-black border border-white/15 focus:border-pink/50 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-mono text-white placeholder-zinc-500 focus:outline-none"

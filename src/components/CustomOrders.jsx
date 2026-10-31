@@ -207,14 +207,14 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">WHATSAPP SUPPORT</span>
-                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 73042 64901</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">CHAT DIRECTLY</span>
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
 
               <a
-                href={BRAND_INFO.whatsappLinkSecondary}
+                href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
@@ -223,8 +223,8 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">STUDIO SUPPORT</span>
-                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">+91 82910 13848</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">STUDIO CONCIERGE</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">VIP DESK</span>
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -280,7 +280,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                     name="contact"
                     value={formData.contact}
                     onChange={handleChange}
-                    placeholder="e.g. +91 98765 43210"
+                    placeholder="Your phone or WhatsApp number"
                     className={`w-full bg-black/80 border ${
                       errors.contact ? 'border-red-500' : 'border-white/15'
                     } px-4 py-2.5 rounded-xl text-xs text-white font-mono outline-none focus:border-pink transition-colors`}

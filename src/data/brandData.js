@@ -56,7 +56,7 @@ export const BRAND_INFO = {
   },
   returnsPolicy: {
     summary: "Return if visible product damage exists, or replacement if there is a sizing issue.",
-    requirement: "For visible damage claims, an uncut unboxing video must be sent to our WhatsApp (+91 73042 64901) within 48 hours of delivery."
+    requirement: "For visible damage claims, an uncut unboxing video must be sent to our official WhatsApp concierge within 48 hours of delivery."
   },
   packaging: {
     headline: "Unboxing The Alternate Dimension",
@@ -574,7 +574,7 @@ export const FAQS = [
   },
   {
     q: "What is your return and exchange policy?",
-    a: "We accept returns if there is visible damage on the product, or replacement if there is a sizing issue. Because of the delicate and one-of-a-kind nature of the garments, an uncut unboxing video must be sent to our WhatsApp contact (+91 73042 64901) for damage claims."
+    a: "We accept returns if there is visible damage on the product, or replacement if there is a sizing issue. Because of the delicate and one-of-a-kind nature of the garments, an uncut unboxing video must be sent to our official WhatsApp concierge for damage claims."
   },
   {
     q: "What does the packaging include?",

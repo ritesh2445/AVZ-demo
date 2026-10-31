@@ -178,7 +178,7 @@ export default function CartDrawer({
           customer: {
             name: checkoutData.fullName || 'Valued Customer',
             email: checkoutData.email || 'client@avzvaganza.com',
-            phone: checkoutData.phone || '+91 9999999999',
+            phone: checkoutData.phone || '',
             address: {
               address_line1: checkoutData.address,
               city: checkoutData.city,
@@ -436,7 +436,7 @@ export default function CartDrawer({
                     type="tel"
                     value={checkoutData.phone}
                     onChange={(e) => setCheckoutData({ ...checkoutData, phone: e.target.value })}
-                    placeholder="+91 9876543210"
+                    placeholder="Enter phone number"
                     className="w-full bg-black/80 border border-white/15 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
                   />
                 </div>

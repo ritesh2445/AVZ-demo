@@ -9,7 +9,7 @@ export interface CardItem {
   linkUrl?: string;
   title?: string;
   category?: string;
-  price?: number;
+  price?: number | string;
   data?: any;
 }
 
@@ -44,7 +44,6 @@ function getResponsiveMultiplier(width: number) {
  * distances when the viewport is too short for the ideal layout height.
  */
 function getHeightMultiplier(width: number) {
-  // Ideal layout heights (in px at 16px root) matching the CSS breakpoints
   let idealPx: number;
   if (width < 480) idealPx = 22 * 16;       // 352px
   else if (width < 640) idealPx = 26 * 16;  // 416px
@@ -73,7 +72,7 @@ function getSlotConfig(totalCards: number, slot: number) {
 }
 
 const ARROW_CLASSES =
-  "relative flex items-center justify-center rounded-full border-[1.5px] border-white/20 bg-black/60 backdrop-blur-[16px] text-white/80 cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-pink hover:text-white hover:scale-105 active:opacity-70 transition-all duration-300 before:content-[''] before:absolute before:inset-[3px] before:rounded-full before:border before:border-white/[0.08] before:pointer-events-none";
+  "relative flex items-center justify-center rounded-full border-[1.5px] border-white/20 bg-black/60 backdrop-blur-[16px] text-white/80 cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.6)] hover:border-pink hover:text-white hover:scale-105 active:scale-95 transition-all duration-300 before:content-[''] before:absolute before:inset-[3px] before:rounded-full before:border before:border-white/[0.08] before:pointer-events-none";
 
 export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -81,6 +80,10 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
   const hasEntered = useRef(false);
   const directionRef = useRef<"left" | "right" | null>(null);
   const prevVisible = useRef<Set<number>>(new Set());
+
+  // Touch swipe support for mobile
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   const totalCards = cards.length;
   const needsPagination = totalCards > MAX_VISIBLE;
@@ -106,6 +109,29 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
       direction === "right" ? (prev + 1) % totalCards : (prev - 1 + totalCards) % totalCards
     );
   }, [totalCards, needsPagination]);
+
+  // Touch Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - (touchStartY.current || 0);
+
+    // If swipe distance is significant and more horizontal than vertical
+    if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        cycle("right");
+      } else {
+        cycle("left");
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -155,11 +181,11 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
 
         if (isFirstMount) {
           gsap.set(card, { x: `${(x * multiplier) * 0.5}rem`, y: `${(y * hMult) + 4}rem`, rotation: 0, scale: 0.8, opacity: 0 });
-          gsap.to(card, { ...target, duration: 0.9, ease: "power2.out", delay: slot * 0.05, onComplete: onCardDone });
+          gsap.to(card, { ...target, duration: 0.8, ease: "power2.out", delay: slot * 0.04, onComplete: onCardDone });
         } else if (!wasVisible) {
           const enterX = direction === "right" ? 40 : -40;
           gsap.set(card, { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 30 : -30, scale: 0.5, opacity: 0 });
-          gsap.to(card, { ...target, duration: 0.6, ease: "power2.out", onComplete: onCardDone });
+          gsap.to(card, { ...target, duration: 0.55, ease: "power2.out", onComplete: onCardDone });
         } else {
           gsap.to(card, { ...target, duration: 0.5, ease: "power2.out", onComplete: onCardDone });
         }
@@ -268,53 +294,100 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
   );
 
   return (
-    <section className="flex flex-col items-center w-full py-4 lg:py-8 px-4 md:px-8 relative z-20">
+    <section className="flex flex-col items-center w-full py-2 lg:py-6 px-2 sm:px-4 md:px-8 relative z-20">
       <div className="flex items-center justify-center w-full max-w-[90rem]">
-        <div ref={containerRef} className="fan-layout flex relative justify-center items-center w-full max-w-[80rem]">
+        <div
+          ref={containerRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="fan-layout flex relative justify-center items-center w-full max-w-[80rem]"
+        >
           {cards.map((card, index) => {
             const image = (
               <div className="relative w-full h-full overflow-hidden group">
-                <img src={card.imgUrl} loading="lazy" alt={card.alt || `Card ${index}`} className="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-20 pointer-events-none" />
-                {card.title && (
-                  <div className="absolute bottom-3 left-3 right-3 z-30 pointer-events-none text-left">
-                    {card.category && (
-                      <span className="text-[8px] font-mono tracking-widest uppercase font-bold text-pink block mb-0.5">
-                        {card.category}
-                      </span>
-                    )}
-                    <h3 className="text-xs font-mono font-bold text-white uppercase truncate">
+                <img
+                  src={card.imgUrl}
+                  loading="lazy"
+                  alt={card.alt || `Card ${index}`}
+                  className="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30 z-20 pointer-events-none" />
+
+                {/* Card Editorial Info Overlay */}
+                <div className="absolute bottom-3 left-3 right-3 z-30 pointer-events-none text-left">
+                  {card.category && (
+                    <span className="text-[8px] sm:text-[9px] font-mono tracking-widest uppercase font-bold text-pink block mb-0.5">
+                      {card.category}
+                    </span>
+                  )}
+                  {card.title && (
+                    <h3 className="text-xs sm:text-sm font-mono font-bold text-white uppercase truncate">
                       {card.title}
                     </h3>
-                  </div>
-                )}
+                  )}
+                  {card.price && (
+                    <span className="text-[10px] font-mono text-zinc-300 block mt-0.5">
+                      {typeof card.price === 'number' ? `₹${card.price.toLocaleString('en-IN')}` : card.price}
+                    </span>
+                  )}
+                </div>
               </div>
             );
             return card.linkUrl ? (
-              <a key={index} href={card.linkUrl} onClick={(e) => {
-                if (onCardClick) {
-                  e.preventDefault();
-                  onCardClick(card, index);
-                }
-              }} target={card.linkUrl.startsWith("http") ? "_blank" : "_self"} rel="noopener noreferrer" className="fan-card block cursor-pointer">{image}</a>
+              <a
+                key={index}
+                href={card.linkUrl}
+                onClick={(e) => {
+                  if (onCardClick) {
+                    e.preventDefault();
+                    onCardClick(card, index);
+                  }
+                }}
+                target={card.linkUrl.startsWith("http") ? "_blank" : "_self"}
+                rel="noopener noreferrer"
+                className="fan-card block cursor-pointer"
+              >
+                {image}
+              </a>
             ) : (
-              <div key={index} onClick={() => onCardClick?.(card, index)} className="fan-card cursor-pointer">{image}</div>
+              <div
+                key={index}
+                onClick={() => onCardClick?.(card, index)}
+                className="fan-card cursor-pointer"
+              >
+                {image}
+              </div>
             );
           })}
         </div>
       </div>
 
       {needsPagination && (
-        <div className="flex items-center justify-center gap-4 mt-6 md:mt-8 z-30">
-          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("left")} aria-label="Previous">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-6 md:mt-8 z-30 select-none">
+          <button
+            className={`${ARROW_CLASSES} w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12`}
+            onClick={() => cycle("left")}
+            aria-label="Previous card"
+          >
             {chevron("left")}
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {cards.map((_, i) => (
-              <span key={i} className={`w-2 h-2 rounded-full transition-all duration-300 ${i === centerIndex ? "bg-pink scale-[1.4] shadow-[0_0_10px_rgba(244,114,182,0.8)]" : "bg-white/20"}`} />
+              <span
+                key={i}
+                className={`w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                  i === centerIndex
+                    ? "bg-pink scale-[1.4] shadow-[0_0_10px_rgba(244,114,182,0.8)]"
+                    : "bg-white/20"
+                }`}
+              />
             ))}
           </div>
-          <button className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`} onClick={() => cycle("right")} aria-label="Next">
+          <button
+            className={`${ARROW_CLASSES} w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12`}
+            onClick={() => cycle("right")}
+            aria-label="Next card"
+          >
             {chevron("right")}
           </button>
         </div>

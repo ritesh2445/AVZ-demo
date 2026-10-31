@@ -228,7 +228,7 @@ export function ContactSection() {
                       DIRECT SUPPORT
                     </span>
                     <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
-                      {BRAND_INFO.whatsappPrimary}
+                      CHAT WITH ATELIER
                     </span>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export function ContactSection() {
               </a>
 
               <a
-                href={BRAND_INFO.whatsappLinkSecondary}
+                href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
@@ -246,10 +246,10 @@ export function ContactSection() {
                   <Phone className="w-4 h-4 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest uppercase font-semibold whitespace-nowrap" style={{ color: '#d4d4d8' }}>
-                      STUDIO SUPPORT
+                      STUDIO CONCIERGE
                     </span>
                     <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
-                      {BRAND_INFO.whatsappSecondary}
+                      VIP STYLING DESK
                     </span>
                   </div>
                 </div>
