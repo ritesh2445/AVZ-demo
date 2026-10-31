@@ -20,10 +20,9 @@ function getSessionSecret(): string {
 }
 
 const ALLOWED_ADMINS = [
+  'avz.vaganza@gmail.com',
   'aveezahstore@gmail.com',
-  'dhrisni@aveezahvaganza.com',
-  'saksham@avzvaganza.com',
-  'admin@avzvaganza.com'
+  'dhrisni@aveezahvaganza.com'
 ];
 
 export interface AdminSession {
@@ -410,6 +409,78 @@ export async function verifyAdminOtp(email: string, code: string): Promise<{ suc
     message: 'Authentication successful.',
     session,
     token
+  };
+}
+
+/**
+ * Authenticates the administrator using email and password directly (no OTP required)
+ */
+export async function loginAdminWithPassword(
+  email: string,
+  password: string
+): Promise<{ success: boolean; message: string; session?: AdminSession; token?: string }> {
+  await initializeDatabase();
+  const normalized = email.trim().toLowerCase();
+
+  if (!isAllowedAdminEmail(normalized)) {
+    return { success: false, message: 'Invalid admin credentials.' };
+  }
+
+  const configuredPassword = process.env.ADMIN_PASSWORD || 'wyzrUz-9nifme-jijgu';
+
+  // Constant-time comparison to prevent timing attacks
+  const passBuffer = Buffer.from(password.trim());
+  const expectedBuffer = Buffer.from(configuredPassword.trim());
+
+  const isPasswordValid =
+    passBuffer.length === expectedBuffer.length &&
+    crypto.timingSafeEqual(passBuffer, expectedBuffer);
+
+  if (!isPasswordValid) {
+    return { success: false, message: 'Invalid email or password.' };
+  }
+
+  const db = getDb();
+  // Ensure user exists in admin_users
+  const userQuery = await db.execute({
+    sql: 'SELECT id, email, name, role FROM admin_users WHERE email = ?',
+    args: [normalized],
+  });
+
+  let user: any = userQuery.rows[0];
+  if (!user) {
+    const newId = `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    await db.execute({
+      sql: `INSERT INTO admin_users (id, email, name, role, created_at) VALUES (?, ?, ?, 'owner', ?)`,
+      args: [newId, normalized, 'AVZ Administrator', Date.now()],
+    });
+    user = { id: newId, email: normalized, name: 'AVZ Administrator', role: 'owner' };
+  }
+
+  // Update last login timestamp
+  await db.execute({
+    sql: 'UPDATE admin_users SET last_login_at = ? WHERE id = ?',
+    args: [Date.now(), user.id],
+  });
+
+  const session: AdminSession = {
+    userId: String(user.id),
+    email: String(user.email),
+    name: String(user.name || 'AVZ Administrator'),
+    role: (user.role as any) || 'owner',
+    issuedAt: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+  };
+
+  const token = signSessionPayload(session);
+
+  await logAdminActivity(normalized, 'LOGIN_PASSWORD_SUCCESS', 'admin_users', String(user.id), { role: user.role });
+
+  return {
+    success: true,
+    message: 'Authentication successful.',
+    session,
+    token,
   };
 }
 
