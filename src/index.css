@@ -2712,38 +2712,10 @@ html.light-theme :is([data-surface="dark"], [role="dialog"], .cart-drawer, .wish
 }
 
 /* -------------------------------------------------------------------------
-   2. FIXED LIGHT SURFACES (FOUNDER LOGO EXHIBITION GALLERY)
-   Applies in BOTH Light Theme and Dark Theme.
-   ------------------------------------------------------------------------- */
-#about > div.bg-white,
-#about > .bg-\[\#ffffff\],
+/* Founder section now harmoniously shares the dark atelier canvas */
 .fixed-light-surface {
-  background-color: #ffffff !important;
-  color: #09090b !important;
-}
-
-#about > div.bg-white :is(h1, h2, h3, h4, h5, h6, strong, b),
-#about > .bg-\[\#ffffff\] :is(h1, h2, h3, h4, h5, h6, strong, b),
-.fixed-light-surface :is(h1, h2, h3, h4, h5, h6, strong, b) {
-  color: #09090b !important;
-}
-
-#about > div.bg-white p,
-#about > .bg-\[\#ffffff\] p,
-.fixed-light-surface p {
-  color: #18181b !important;
-}
-
-#about > div.bg-white :is(span.text-zinc-600, span.text-zinc-700),
-#about > .bg-\[\#ffffff\] :is(span.text-zinc-600, span.text-zinc-700),
-.fixed-light-surface :is(span.text-zinc-600, span.text-zinc-700) {
-  color: #27272a !important;
-}
-
-#about > div.bg-white :is(span.text-zinc-500, span.text-zinc-400),
-#about > .bg-\[\#ffffff\] :is(span.text-zinc-500, span.text-zinc-400),
-.fixed-light-surface :is(span.text-zinc-500, span.text-zinc-400) {
-  color: #52525b !important;
+  background-color: #070609 !important;
+  color: #ffffff !important;
 }
 
 

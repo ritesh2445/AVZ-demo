@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, ArrowUpRight, Scissors, ShieldCheck, Users, Cpu, Flame, MapPin } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
+import DhrisniGarden from './DhrisniGarden';
 
 const MANIFESTO_PILLARS = [
   {
@@ -53,37 +54,50 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
   return (
     <section id="about" className="relative w-full overflow-hidden">
       {/* =========================================================================
-          CHAPTER 1: THE MONOLITH EXHIBITION (THE WHITE GALLERY)
-          Clean, calm white background. DHRISNI SVG logotype fitted perfectly in the
-          exact center of the site. Zero overlapping elements. Pristine museum space.
+          CHAPTER 1: THE MONOLITH EXHIBITION (THE ATELIER BOTANICAL GALLERY)
+          Deep dark atelier canvas matching the rest of the site. Interactive
+          blooming and growing botanical animation of the DHRISNI wordmark.
           ========================================================================= */}
-      <div className="fixed-light-surface w-full bg-[#ffffff] text-black py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-zinc-200" style={{ backgroundColor: '#ffffff', color: '#09090b' }}>
-        <div className="w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
-          {/* Subtle Curated Gallery Pill */}
+      <div
+        className="w-full bg-[#070609] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-white/10"
+        style={{ backgroundColor: '#070609', color: '#ffffff' }}
+      >
+        {/* Subtle Ambient Spatial Glows (Magenta & Emerald) */}
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(230,60,255,0.08),transparent_70%)]" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_40%_at_50%_80%,rgba(47,184,166,0.06),transparent_70%)]" />
+
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
+          {/* Subtle Curated Gallery Pill in Dark Haute Glass */}
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-mono tracking-[0.28em] uppercase mb-8 sm:mb-12 font-bold shadow-sm"
-            style={{ color: '#18181b', backgroundColor: '#f4f4f5', borderColor: '#d4d4d8' }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-mono tracking-[0.28em] uppercase mb-8 sm:mb-12 font-bold shadow-lg"
+            style={{
+              color: 'rgba(255, 255, 255, 0.9)',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              borderColor: 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(12px)'
+            }}
           >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#18181b' }} />
-            <span style={{ color: '#18181b' }}>FOUNDER & CREATIVE DIRECTOR</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E63CFF] shadow-[0_0_8px_#E63CFF] animate-pulse" />
+            <span>FOUNDER &amp; CREATIVE DIRECTOR</span>
           </div>
 
-          {/* THE SVG LOGOTYPE — FITTED PERFECTLY IN THE CENTER WITH ZERO OVERLAP */}
+          {/* THE BLOOMING & GROWING DHRISNI BOTANICAL ANIMATION */}
           <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl flex items-center justify-center py-2 sm:py-6">
-            <img
-              src="/assets/dhrisni_name.svg"
-              alt="DHRISNI"
-              className="w-full h-auto max-h-[160px] sm:max-h-[240px] md:max-h-[300px] object-contain select-none transition-transform duration-700 ease-out hover:scale-[1.02]"
-              draggable={false}
-            />
+            <DhrisniGarden />
           </div>
 
-          {/* Minimalist Gallery Provenance Subtitle (Clean, Calm, Below the Artwork) */}
+          {/* Minimalist Gallery Provenance Subtitle (White / Silver, Clean & Calm Below Artwork) */}
           <div className="flex flex-col items-center gap-2 mt-8 sm:mt-12 text-center">
-            <span className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold" style={{ color: '#09090b' }}>
+            <span
+              className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase font-bold"
+              style={{ color: '#ffffff', textShadow: '0 2px 10px rgba(255,255,255,0.2)' }}
+            >
               DHRISNI • DHRISTROYER
             </span>
-            <span className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.2em] font-bold" style={{ color: '#27272a' }}>
+            <span
+              className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.22em] font-semibold"
+              style={{ color: 'rgba(244, 212, 216, 0.75)' }}
+            >
               THE ARCHITECT OF WEARABLE ART • GUWAHATI, ASSAM
             </span>
           </div>

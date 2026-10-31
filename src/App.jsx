@@ -357,7 +357,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         {/* Section 6: AVZ Museum Archive Vault */}
         <AvzMuseum
           onRequestCustomCommission={handleRequestCustom}
-          theme={theme}
+          theme="dark"
           cmsMuseum={cmsContent?.museum}
         />
 
