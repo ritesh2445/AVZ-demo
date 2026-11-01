@@ -130,6 +130,26 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
   const [patternIdx, setPatternIdx] = useState(0);
   const [bloomProgress, setBloomProgress] = useState(0); // 0 to 1
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 10000));
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const isLight =
+        typeof document !== 'undefined' &&
+        (document.documentElement.classList.contains('light-theme') ||
+          document.documentElement.getAttribute('data-theme') === 'light');
+      setIsLightMode(isLight);
+    };
+    checkTheme();
+    if (typeof document !== 'undefined') {
+      const observer = new MutationObserver(checkTheme);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'data-theme']
+      });
+      return () => observer.disconnect();
+    }
+  }, []);
 
   const currentPalette = GARDEN_PALETTES[paletteIdx];
   const currentPattern = GROWTH_PATTERNS[patternIdx];
@@ -396,7 +416,7 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
                   textAnchor="middle"
                   fontSize={item.fontSize}
                   className="dhrisni-char"
-                  fill={currentPalette.text}
+                  fill={isLightMode ? "#09090b" : currentPalette.text}
                   opacity={textOpacity}
                   style={{
                     filter: 'drop-shadow(0 2px 14px rgba(255,255,255,0.28))'
@@ -473,7 +493,7 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
 
             const isTransformable = isPetal || isLeaf || isAccent || isVein;
             const transformStr = isTransformable
-              ? `translate(${item.cx}px, ${item.cy}px) scale(${scale}) translate(-${item.cx}px, -${item.cy}px)`
+              ? `translate(${item.cx}, ${item.cy}) scale(${scale}) translate(-${item.cx}, -${item.cy})`
               : undefined;
 
             return (

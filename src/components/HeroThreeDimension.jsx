@@ -282,7 +282,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
             <>
               <VolumeX className="w-3.5 h-3.5 text-zinc-300 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
               <span
-                className="text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
+                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
                 style={{ color: '#ffffff' }}
               >
                 SOUND OFF
@@ -292,7 +292,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
             <>
               <Volume2 className="w-3.5 h-3.5 text-pink shrink-0 animate-pulse" style={{ color: '#f472b6', stroke: '#f472b6' }} />
               <span
-                className="text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
+                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
                 style={{ color: '#ffffff' }}
               >
                 SOUND ON

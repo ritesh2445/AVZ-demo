@@ -3003,3 +3003,141 @@ html[data-theme="light"] .contact-action-btn svg {
     border-radius: 0.75rem;
   }
 }
+
+/* =========================================================================
+   UNIVERSAL CONTRAST AND VISIBILITY ENGINE (LIGHT & DARK THEMES)
+   Guarantees zero invisible text, zero unreadable buttons, and 100% human-readable UI.
+   ========================================================================= */
+
+/* 1. Atelier & Studio Dark Canvas in Founders Section & Dark Surfaces */
+.atelier-dark-canvas,
+.studio-dark-canvas,
+#about .atelier-dark-canvas,
+#about .studio-dark-canvas,
+html.light-theme #about .atelier-dark-canvas,
+html.light-theme #about .studio-dark-canvas,
+html.light-theme .atelier-dark-canvas,
+html.light-theme .studio-dark-canvas,
+html[data-theme="light"] #about .atelier-dark-canvas,
+html[data-theme="light"] #about .studio-dark-canvas,
+html[data-theme="light"] .atelier-dark-canvas,
+html[data-theme="light"] .studio-dark-canvas {
+  background-color: #0a0a0f !important;
+  color: #ffffff !important;
+}
+
+/* Headings and bold titles in dark studio canvas */
+:is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(h1, h2, h3, h4, h5, h6, blockquote, strong.text-white, b.text-white, .text-white),
+html.light-theme :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(h1, h2, h3, h4, h5, h6, blockquote, strong.text-white, b.text-white, .text-white),
+html[data-theme="light"] :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(h1, h2, h3, h4, h5, h6, blockquote, strong.text-white, b.text-white, .text-white) {
+  color: #ffffff !important;
+}
+
+/* Four Pillars titles and headers */
+.pillar-tab-title,
+.atelier-dark-canvas .pillar-tab-title,
+.studio-dark-canvas .pillar-tab-title,
+html.light-theme .pillar-tab-title,
+html[data-theme="light"] .pillar-tab-title {
+  color: #ffffff !important;
+}
+
+/* Body text in dark studio canvas */
+:is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(p, span):not(.text-pink):not([class*="text-pink"]):not(.text-black):not(a.bg-white *):not(button.bg-white *):not(.btn-founder-cta *),
+html.light-theme :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(p, span):not(.text-pink):not([class*="text-pink"]):not(.text-black):not(a.bg-white *):not(button.bg-white *):not(.btn-founder-cta *),
+html[data-theme="light"] :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(p, span):not(.text-pink):not([class*="text-pink"]):not(.text-black):not(a.bg-white *):not(button.bg-white *):not(.btn-founder-cta *) {
+  color: #e4e4e7 !important;
+}
+
+/* Pink accents in dark studio canvas */
+:is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(.text-pink, [class*="text-pink"]),
+html.light-theme :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(.text-pink, [class*="text-pink"]),
+html[data-theme="light"] :is(.atelier-dark-canvas, .studio-dark-canvas, #about .atelier-dark-canvas, #about .studio-dark-canvas) :is(.text-pink, [class*="text-pink"]) {
+  color: #f472b6 !important;
+}
+
+/* 2. White Buttons: STRICTLY PURE BLACK TEXT AND ICONS IN ALL THEMES */
+a.bg-white,
+button.bg-white,
+.btn-founder-cta,
+a[style*="backgroundColor: '#ffffff'"],
+button[style*="backgroundColor: '#ffffff'"],
+html.light-theme a.bg-white,
+html.light-theme button.bg-white,
+html.light-theme .btn-founder-cta,
+html[data-theme="light"] a.bg-white,
+html[data-theme="light"] button.bg-white,
+html[data-theme="light"] .btn-founder-cta {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+a.bg-white *,
+button.bg-white *,
+.btn-founder-cta *,
+a[style*="backgroundColor: '#ffffff'"] *,
+button[style*="backgroundColor: '#ffffff'"] *,
+html.light-theme a.bg-white *,
+html.light-theme button.bg-white *,
+html.light-theme .btn-founder-cta *,
+html[data-theme="light"] a.bg-white *,
+html[data-theme="light"] button.bg-white *,
+html[data-theme="light"] .btn-founder-cta * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 3. WhatsApp and Contact Support Action Buttons */
+.contact-action-btn,
+html.light-theme .contact-action-btn,
+html[data-theme="light"] .contact-action-btn {
+  background-color: #09090b !important;
+}
+
+.contact-action-btn span,
+.contact-action-btn strong,
+.contact-action-btn svg,
+html.light-theme .contact-action-btn span,
+html.light-theme .contact-action-btn strong,
+html.light-theme .contact-action-btn svg,
+html[data-theme="light"] .contact-action-btn span,
+html[data-theme="light"] .contact-action-btn strong,
+html[data-theme="light"] .contact-action-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.contact-action-btn [class*="text-[9px]"],
+html.light-theme .contact-action-btn [class*="text-[9px]"],
+html[data-theme="light"] .contact-action-btn [class*="text-[9px]"] {
+  color: #a1a1aa !important;
+}
+
+/* 4. Sound & HUD Buttons (Hero Controls) */
+#hero .hero-sound-toggle-btn,
+#hero .hero-sound-toggle-btn *,
+.hero-sound-label,
+html.light-theme #hero .hero-sound-toggle-btn,
+html.light-theme #hero .hero-sound-toggle-btn *,
+html.light-theme .hero-sound-label,
+html[data-theme="light"] #hero .hero-sound-toggle-btn,
+html[data-theme="light"] #hero .hero-sound-toggle-btn *,
+html[data-theme="light"] .hero-sound-label {
+  color: #ffffff !important;
+}
+
+#hero .hero-hud-btn,
+#hero .hero-hud-btn *,
+html.light-theme #hero .hero-hud-btn,
+html.light-theme #hero .hero-hud-btn *,
+html[data-theme="light"] #hero .hero-hud-btn,
+html[data-theme="light"] #hero .hero-hud-btn * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* 5. Botanical Animation Dhrisni Wordmark Letters */
+html.light-theme .dhrisni-char,
+html[data-theme="light"] .dhrisni-char {
+  fill: #09090b !important;
+}

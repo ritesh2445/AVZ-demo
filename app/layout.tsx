@@ -55,22 +55,6 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=League+Spartan:wght@300;400;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Reenie+Beanie&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap"
           rel="stylesheet"
         />
-
-        {/* Ultra High-Definition Editorial Fashion Reel Preloads */}
-        <link
-          rel="preload"
-          href="/assets/hero_reel_desktop.mp4"
-          as="video"
-          type="video/mp4"
-          media="(min-width: 768px)"
-        />
-        <link
-          rel="preload"
-          href="/assets/hero_reel_mobile.mp4"
-          as="video"
-          type="video/mp4"
-          media="(max-width: 767px)"
-        />
       </head>
       <body className="bg-black text-silver antialiased selection:bg-pink selection:text-black overflow-x-clip">
         {children}

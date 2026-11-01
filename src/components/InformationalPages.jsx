@@ -225,7 +225,7 @@ export function ContactSection() {
                   <Phone className="w-4 h-4 shrink-0 text-white" />
                   <div className="flex flex-col text-left min-w-0">
                     <span className="text-[9px] font-mono tracking-widest uppercase font-semibold text-zinc-400">
-                      DIRECT VIP CONCIERGE
+                      DIRECT SUPPORT
                     </span>
                     <span className="text-xs sm:text-[13px] font-mono font-bold tracking-wider text-white">
                       CHAT WITH STUDIO
