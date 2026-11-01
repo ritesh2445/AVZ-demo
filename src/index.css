@@ -100,31 +100,14 @@ html {
   will-change: transform, opacity;
 }
 
-/* Organic Living Garden Breathe Animations (100% GPU Compositor) */
-@keyframes gardenBreatheA {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(0.8px, -1.8px) rotate(0.4deg);
-  }
+/* Direct, Zero-Delay Flower Interaction */
+.dhrisni-interactive-node {
+  transition: transform 0.06s ease-out, fill 0.35s ease, stroke 0.35s ease;
+  will-change: transform;
 }
 
-@keyframes gardenBreatheB {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(-0.8px, 1.5px) rotate(-0.35deg);
-  }
-}
-
-.dhrisni-breathe-a {
-  animation: gardenBreatheA 4.2s ease-in-out infinite;
-}
-
-.dhrisni-breathe-b {
-  animation: gardenBreatheB 5.1s ease-in-out infinite;
+.dhrisni-interactive-node:hover {
+  filter: brightness(1.25) drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
 }
 
 @keyframes dr-fade-in {

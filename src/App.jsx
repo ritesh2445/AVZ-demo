@@ -32,6 +32,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   // 1. Loading sequence state
   const [isLoading, setIsLoading] = useState(true);
+  const handleLoadingComplete = useCallback(() => setIsLoading(false), []);
 
   // 2. Active section for dynamic navbar tracking
   const [activeSection, setActiveSection] = useState('hero');
@@ -293,7 +294,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     <div className="min-h-screen w-full bg-pitch-black text-silver relative overflow-x-clip selection:bg-pink selection:text-black">
       {/* Cinematic Pitch-black Loading Experience */}
       {isLoading && (
-        <LoadingExperience onComplete={() => setIsLoading(false)} />
+        <LoadingExperience onComplete={handleLoadingComplete} />
       )}
 
       {/* Main Global Icon Navigation */}

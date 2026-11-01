@@ -12,10 +12,15 @@ export default function LoadingExperience({ onComplete }) {
   const hasFinishedRef = useRef(false);
   const triggerFinishRef = useRef(null);
 
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
   useEffect(() => {
     // Only bypass if user strictly requested reduced motion in OS settings
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      onComplete();
+      onCompleteRef.current?.();
       return;
     }
 
@@ -142,7 +147,7 @@ export default function LoadingExperience({ onComplete }) {
 
       // Allow 850ms for cinematic letterbox aperture & anamorphic light sweep to open
       setTimeout(() => {
-        onComplete();
+        onCompleteRef.current?.();
       }, 850);
     };
     triggerFinishRef.current = triggerFinish;
@@ -265,7 +270,7 @@ export default function LoadingExperience({ onComplete }) {
         renderer.dispose();
       }
     };
-  }, [onComplete]);
+  }, []);
 
   return (
     <div id="loading-experience" className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
