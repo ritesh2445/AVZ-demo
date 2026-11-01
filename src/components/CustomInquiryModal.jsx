@@ -33,7 +33,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}

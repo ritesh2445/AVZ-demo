@@ -39,8 +39,8 @@ export function FAQSection() {
               key={idx}
               className={`rounded-3xl transition-all duration-300 border ${
                 isOpen
-                  ? 'bg-[#0d020f]/95 backdrop-blur-2xl border-[#be185d]/70 shadow-[0_12px_40px_rgba(190,24,93,0.25),0_0_30px_rgba(45,5,45,0.7)]'
-                  : 'bg-[#0d020f]/60 backdrop-blur-xl border-[#be185d]/20 hover:border-[#be185d]/50'
+                  ? 'bg-[#0d020f]/95 backdrop-blur-md border-[#be185d]/70 shadow-[0_12px_40px_rgba(190,24,93,0.25),0_0_30px_rgba(45,5,45,0.7)]'
+                  : 'bg-[#0d020f]/60 backdrop-blur-md border-[#be185d]/20 hover:border-[#be185d]/50'
               }`}
             >
               <button

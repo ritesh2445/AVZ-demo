@@ -62,6 +62,71 @@
   --dr-bloom-opacity: 0.7;
 }
 
+/* Global Hardware-Accelerated Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fast, Buttery-Smooth Modal & Popup Animations */
+@keyframes modalPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fastFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fastFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-card,
+.modal-surface,
+.product-modal-surface {
+  animation: modalPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Organic Living Garden Breathe Animations (100% GPU Compositor) */
+@keyframes gardenBreatheA {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(0.8px, -1.8px) rotate(0.4deg);
+  }
+}
+
+@keyframes gardenBreatheB {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-0.8px, 1.5px) rotate(-0.35deg);
+  }
+}
+
+.dhrisni-breathe-a {
+  animation: gardenBreatheA 4.2s ease-in-out infinite;
+}
+
+.dhrisni-breathe-b {
+  animation: gardenBreatheB 5.1s ease-in-out infinite;
+}
+
 @keyframes dr-fade-in {
   from {
     opacity: 0;

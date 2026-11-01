@@ -113,7 +113,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const handlePointerUp = (e) => {
     if (!isDraggingRef.current || touchStartXRef.current === null) return;
     const deltaX = e.clientX - touchStartXRef.current;
-    if (Math.abs(deltaX) > 50) {
+    if (Math.abs(deltaX) > 25) {
       if (deltaX < 0) {
         nextSlide();
       } else {
@@ -318,7 +318,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
         {/* 3D Spatial Carousel Stage */}
         <div
-          className="relative w-full h-[490px] sm:h-[560px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
+          className="relative w-full h-[490px] sm:h-[560px] flex items-center justify-center transition-transform duration-280 ease-out z-20"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${mousePos.x * 6}deg) rotateX(${-mousePos.y * 5}deg)`
@@ -354,7 +354,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     goToSlide(idx);
                   }
                 }}
-                className={`absolute top-0 w-[340px] md:w-[380px] h-[500px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-500 ease-out transform-gpu ${
+                className={`absolute top-0 w-[340px] md:w-[380px] h-[500px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-280 ease-out transform-gpu ${
                   isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
                 }`}
                 style={{
@@ -365,7 +365,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               >
                 {/* Pure Editorial Noir Card */}
                 <div
-                  className={`tunnel-card w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
+                  className={`tunnel-card w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-280 bg-[#0d0212] mobile-grunge-card ${
                     isCenter ? 'border border-white/20' : 'border border-white/10'
                   }`}
                 >
@@ -375,7 +375,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     alt={item.title}
                     draggable={false}
                     loading={isCenter ? 'eager' : 'lazy'}
-                    className={`w-full h-full object-cover transition-transform duration-700 pointer-events-none ${
+                    className={`w-full h-full object-cover transition-transform duration-300 pointer-events-none ${
                       isCenter ? 'scale-105 brightness-100' : 'scale-100 brightness-85'
                     }`}
                   />
@@ -462,7 +462,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       {activeLook && (
         <div
           onClick={closeLightbox}
-          className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fade-in"
+          className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fade-in"
         >
           {/* Left Arrow */}
           <button
@@ -491,7 +491,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
           {/* Modal Content Card */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="lookbook-modal-card relative w-full max-w-5xl max-h-[92vh] rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto z-10 shadow-2xl"
+            className="lookbook-modal-card modal-card relative w-full max-w-5xl max-h-[92vh] rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto z-10 shadow-2xl"
           >
             {/* Desktop Close Button — Elevated and Padded */}
             <button

@@ -127,7 +127,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99998] bg-black/80 backdrop-blur-2xl flex flex-col items-center justify-start p-4 sm:p-6 pt-12 sm:pt-20 animate-fade-in select-none"
+      className="fixed inset-0 z-[99998] bg-black/80 backdrop-blur-md flex flex-col items-center justify-start p-4 sm:p-6 pt-12 sm:pt-20 animate-fade-in select-none"
     >
       <div
         onClick={(e) => e.stopPropagation()}

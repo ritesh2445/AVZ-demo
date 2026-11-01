@@ -116,7 +116,7 @@ export default function Navbar({
         }`}
       >
         {/* Sleek, Architectural Glass Capsule */}
-        <div className="bg-[#0b030f]/85 backdrop-blur-2xl border border-white/12 rounded-full px-3 sm:px-4 md:px-5 h-11 sm:h-12 flex items-center justify-between gap-2 sm:gap-3 md:gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+        <div className="bg-[#0b030f]/85 backdrop-blur-md border border-white/12 rounded-full px-3 sm:px-4 md:px-5 h-11 sm:h-12 flex items-center justify-between gap-2 sm:gap-3 md:gap-4 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
           {/* Left Group: Brand Mark */}
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* Brand Mark */}
@@ -255,7 +255,7 @@ export default function Navbar({
 
               {/* Floating Glassmorphic Dropdown */}
               {currencyOpen && (
-                <div className="currency-dropdown-menu absolute right-0 top-full mt-2 w-64 p-2 rounded-2xl bg-[#0c0c12]/95 backdrop-blur-2xl border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.85)] z-50 flex flex-col gap-1 animate-fade-in text-left">
+                <div className="currency-dropdown-menu absolute right-0 top-full mt-2 w-64 p-2 rounded-2xl bg-[#0c0c12]/95 backdrop-blur-md border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.85)] z-50 flex flex-col gap-1 animate-fade-in text-left">
                   <div className="px-2.5 py-1.5 text-[9px] font-mono uppercase tracking-[0.2em] text-zinc-400 border-b border-white/10 flex items-center justify-between">
                     <span>GLOBAL CURRENCY</span>
                     <span className="text-pink font-semibold">10 MAJOR</span>
@@ -315,7 +315,7 @@ export default function Navbar({
 
       {/* Mobile Editorial Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-6 pt-20 md:hidden animate-fade-in select-none overflow-y-auto">
+        <div className="fixed inset-0 z-40 bg-black/95 backdrop-blur-md flex flex-col justify-between p-6 pt-20 md:hidden animate-fade-in select-none overflow-y-auto">
           {/* Mobile VIP Guest / Account Status Bar */}
           <div className="mb-4 pb-3 border-b border-white/10 text-left">
             <button

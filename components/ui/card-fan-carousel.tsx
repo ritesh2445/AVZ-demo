@@ -121,7 +121,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - (touchStartY.current || 0);
 
-    if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (Math.abs(deltaX) > 25 && Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         cycle("right");
       } else {
@@ -163,6 +163,11 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
       }
     };
 
+    // Failsafe fast unlock so user can rapidly cycle without getting locked out
+    const unlockTimer = setTimeout(() => {
+      isAnimating.current = false;
+    }, 280);
+
     cardElements.forEach((card, cardIndex) => {
       const slot = visibleMap.get(cardIndex);
       const wasVisible = previouslyVisible.has(cardIndex);
@@ -191,25 +196,25 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
             },
             {
               ...target,
-              duration: 0.7,
+              duration: 0.45,
               ease: "power2.out",
-              delay: slot * 0.03,
+              delay: slot * 0.02,
               onComplete: onCardDone
             }
           );
         } else if (!wasVisible) {
-          const enterX = direction === "right" ? 40 : -40;
+          const enterX = direction === "right" ? 35 : -35;
           gsap.fromTo(
             card,
-            { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 30 : -30, scale: 0.5, opacity: 0 },
-            { ...target, duration: 0.55, ease: "power2.out", onComplete: onCardDone }
+            { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 25 : -25, scale: 0.55, opacity: 0 },
+            { ...target, duration: 0.30, ease: "power2.out", onComplete: onCardDone }
           );
         } else {
-          gsap.to(card, { ...target, duration: 0.5, ease: "power2.out", onComplete: onCardDone });
+          gsap.to(card, { ...target, duration: 0.28, ease: "power2.out", onComplete: onCardDone });
         }
       } else if (wasVisible) {
-        const exitX = direction === "right" ? -40 : 40;
-        gsap.to(card, { x: `${exitX}rem`, opacity: 0, scale: 0.5, rotation: direction === "right" ? -30 : 30, duration: 0.4, ease: "power2.in", zIndex: 0 });
+        const exitX = direction === "right" ? -35 : 35;
+        gsap.to(card, { x: `${exitX}rem`, opacity: 0, scale: 0.55, rotation: direction === "right" ? -25 : 25, duration: 0.22, ease: "power2.in", zIndex: 0 });
       } else {
         gsap.set(card, { opacity: 0, scale: 0.3, x: 0, y: 0, zIndex: 0 });
       }
@@ -217,7 +222,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
 
     prevVisible.current = new Set(visibleMap.keys());
 
-    // Hover interactions
+    // Instant Hover interactions
     const visibleEntries: { el: HTMLElement; slot: number }[] = [];
     cardElements.forEach((el, i) => {
       const slot = visibleMap.get(i);
@@ -240,11 +245,9 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
         let targetY = base.y * hM;
         let targetRot = base.rot;
         let targetScale = base.scale;
-        let delay = 0;
 
         if (hoveredSlot !== null) {
           const distance = Math.abs(slot - hoveredSlot);
-          delay = distance * 0.02;
 
           if (slot === hoveredSlot) {
             targetY -= 2.5 * hM;
@@ -264,13 +267,11 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
             if (slot === visibleEntries.length - 1 && hoveredSlot < centerSlot) targetY -= 1 * hM;
             if (slot === 0 && hoveredSlot > centerSlot) targetY -= 1 * hM;
           }
-        } else {
-          delay = Math.abs(slot - centerSlot) * 0.02;
         }
 
         gsap.to(el, {
           x: `${targetX}rem`, y: `${targetY}rem`, rotation: targetRot, scale: targetScale,
-          duration: 0.5, delay, ease: "elastic.out(1,.75)", overwrite: "auto",
+          duration: 0.22, ease: "power2.out", overwrite: "auto",
         });
         gsap.set(el, { zIndex: base.zIndex });
       });
@@ -278,7 +279,6 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
 
     const enterHandlers = visibleEntries.map(({ el, slot }) => {
       const handler = () => {
-        if (isAnimating.current) return;
         if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
         if (activeSlot !== slot) { activeSlot = slot; updateHoverLayout(slot); }
       };
@@ -287,16 +287,17 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
     });
 
     const onMouseLeave = () => {
-      if (isAnimating.current) return;
       if (leaveTimer) clearTimeout(leaveTimer);
-      leaveTimer = setTimeout(() => { activeSlot = null; updateHoverLayout(null); }, 50);
+      leaveTimer = setTimeout(() => { activeSlot = null; updateHoverLayout(null); }, 30);
     };
     container.addEventListener("mouseleave", onMouseLeave);
 
-    const onResize = () => { if (!isAnimating.current) updateHoverLayout(activeSlot); };
+    const onResize = () => { updateHoverLayout(activeSlot); };
     window.addEventListener("resize", onResize);
 
     return () => {
+      clearTimeout(unlockTimer);
+      if (leaveTimer) clearTimeout(leaveTimer);
       enterHandlers.forEach(({ el, handler }) => el.removeEventListener("mouseenter", handler));
       container.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("resize", onResize);

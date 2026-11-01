@@ -248,7 +248,7 @@ export default function TestimonialsSection({ currentUser, onOpenAuthModal }) {
           onClick={() => setModalOpen(false)}
         >
           <div
-            className="relative w-full max-w-lg bg-[#09090d] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-white space-y-5"
+            className="modal-card relative w-full max-w-lg bg-[#09090d] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-white space-y-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between border-b border-white/10 pb-4">
@@ -394,7 +394,7 @@ export default function TestimonialsSection({ currentUser, onOpenAuthModal }) {
           onClick={() => setAuthPromptOpen(false)}
         >
           <div
-            className="relative w-full max-w-md bg-[#09090d] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5"
+            className="modal-card relative w-full max-w-md bg-[#09090d] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-center space-y-5"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/15 text-pink mx-auto flex items-center justify-center shadow-inner">

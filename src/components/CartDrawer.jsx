@@ -293,7 +293,7 @@ export default function CartDrawer({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99997] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-2 sm:p-6 animate-fade-in"
+      className="fixed inset-0 z-[99997] bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}
