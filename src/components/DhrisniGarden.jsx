@@ -284,6 +284,43 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
     }
   }, []);
 
+  const handleTouchMove = useCallback((e) => {
+    if (!containerRef.current || !e.touches || !e.touches[0]) return;
+    const touch = e.touches[0];
+    const rect = containerRef.current.getBoundingClientRect();
+    const mx = ((touch.clientX - rect.left) / rect.width) * 1085 + 215;
+    const my = ((touch.clientY - rect.top) / rect.height) * 405 + 155;
+
+    const nodes = cachedPathsRef.current;
+    const len = nodes.length;
+
+    for (let i = 0; i < len; i++) {
+      const node = nodes[i];
+      const dx = mx - node.cx;
+      const dy = my - node.cy;
+
+      if (Math.abs(dx) > 220 || Math.abs(dy) > 220) {
+        if (node.hasMoved) {
+          node.el.style.transform = '';
+          node.hasMoved = false;
+        }
+        continue;
+      }
+
+      const dist = Math.hypot(dx, dy);
+      if (dist < 220 && dist > 1) {
+        const f = (1 - dist / 220) * 12;
+        const rx = (dx / dist) * f;
+        const ry = (dy / dist) * f;
+        node.el.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+        node.hasMoved = true;
+      } else if (node.hasMoved) {
+        node.el.style.transform = '';
+        node.hasMoved = false;
+      }
+    }
+  }, []);
+
   const handleMouseLeave = useCallback(() => {
     const nodes = cachedPathsRef.current;
     const len = nodes.length;
@@ -311,8 +348,11 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleMouseLeave}
         onClick={() => triggerRegrowth()}
         className="relative w-full cursor-pointer group"
+        style={{ touchAction: 'pan-y' }}
       >
         <svg
           ref={svgRef}

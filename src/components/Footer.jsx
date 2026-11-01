@@ -55,45 +55,47 @@ export default function Footer({ onScrollToSection, cmsFooter }) {
           </div>
 
           {/* Navigation Links Columns - Side by side on mobile */}
-          <div className="md:col-span-2 flex flex-col gap-2 sm:gap-3 text-left">
-            <span className="text-xs font-mono uppercase text-[#f472b6] font-bold tracking-widest mb-2">EXPLORE</span>
-            <button onClick={() => handleNav('shop')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Shop Catalogue
-            </button>
-            <button onClick={() => handleNav('vault')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Vault Piece Rail
-            </button>
-            <button onClick={() => handleNav('lookbook')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Spatial Lookbook
-            </button>
-            <button onClick={() => handleNav('museum')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              AVZ Museum & Vault
-            </button>
-            <button onClick={() => handleNav('custom')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Custom Orders
-            </button>
-            <button onClick={() => handleNav('about')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              About & Dhristroyer
-            </button>
-          </div>
+          <div className="md:col-span-4 grid grid-cols-2 gap-6 text-left">
+            <div className="flex flex-col gap-2 sm:gap-3 text-left">
+              <span className="text-xs font-mono uppercase text-[#f472b6] font-bold tracking-widest mb-2">EXPLORE</span>
+              <button onClick={() => handleNav('shop')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Shop Catalogue
+              </button>
+              <button onClick={() => handleNav('vault')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Vault Piece Rail
+              </button>
+              <button onClick={() => handleNav('lookbook')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Spatial Lookbook
+              </button>
+              <button onClick={() => handleNav('museum')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                AVZ Museum & Vault
+              </button>
+              <button onClick={() => handleNav('custom')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Custom Orders
+              </button>
+              <button onClick={() => handleNav('about')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                About & Dhristroyer
+              </button>
+            </div>
 
-          <div className="md:col-span-2 flex flex-col gap-3 text-left">
-            <span className="text-xs font-mono uppercase text-[#f472b6] font-bold tracking-widest mb-2">OPERATIONS</span>
-            <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Shipping & Delivery
-            </button>
-            <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Unboxing Packaging
-            </button>
-            <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Returns & Exchanges
-            </button>
-            <button onClick={() => handleNav('faq')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Official FAQs
-            </button>
-            <button onClick={() => handleNav('contact')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
-              Contact & Support
-            </button>
+            <div className="flex flex-col gap-2 sm:gap-3 text-left">
+              <span className="text-xs font-mono uppercase text-[#f472b6] font-bold tracking-widest mb-2">OPERATIONS</span>
+              <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Shipping & Delivery
+              </button>
+              <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Unboxing Packaging
+              </button>
+              <button onClick={() => handleNav('specs')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Returns & Exchanges
+              </button>
+              <button onClick={() => handleNav('faq')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Official FAQs
+              </button>
+              <button onClick={() => handleNav('contact')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
+                Contact & Support
+              </button>
+            </div>
           </div>
 
           {/* Social & WhatsApp */}

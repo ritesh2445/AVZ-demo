@@ -303,8 +303,8 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         </button>
       </div>
 
-      {/* 3. Minimalist Scroll Guide (Bottom-Center) */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[10] opacity-60">
+      {/* 3. Minimalist Scroll Guide (Bottom-Center, hidden on small screens to avoid HUD overlap) */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
 

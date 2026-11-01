@@ -230,7 +230,7 @@ export default function HeroDustHeadline({
     <div ref={containerRef} className="relative w-full flex flex-col items-center justify-center select-none">
       {/* 1. Permanent Shimmering Royal Headline (100% Crisp Vector Live Typography) */}
       <h1
-        className={`text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-300 ease-out flex flex-col items-center justify-center ${
+        className={`text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wide sm:tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-300 ease-out flex flex-col items-center justify-center text-center px-2 ${
           showDomText || isAssembled ? 'opacity-100' : 'opacity-0'
         }`}
       >

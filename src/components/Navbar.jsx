@@ -55,6 +55,18 @@ export default function Navbar({
     };
   }, [currencyOpen]);
 
+  // Lock background scrolling on mobile when menu drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   // Auto-hide navbar on scroll down, reveal on scroll up or at top (RAF-throttled for 60fps/120fps)
   useEffect(() => {
     let lastY = typeof window !== 'undefined' ? window.scrollY : 0;
