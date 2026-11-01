@@ -202,11 +202,11 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playSound('snap')}
-                  className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
+                  className="btn-commission-white bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
                   style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
                   <span style={{ color: '#000000' }} className="text-black font-bold">COMMISSION WITH DHRISNI</span>
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000', stroke: '#000000' }} />
                 </a>
 
                 <a
@@ -215,7 +215,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                     playSound('snap');
                     onScrollToSection?.('shop');
                   }}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-mono text-xs tracking-widest uppercase transition-all cursor-pointer hover:border-pink/80"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-mono text-xs tracking-widest uppercase transition-all cursor-pointer hover:border-pink/80 text-white"
                   style={{
                     color: '#ffffff',
                     backgroundColor: 'rgba(0, 0, 0, 0.6)',
