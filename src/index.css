@@ -835,7 +835,7 @@ html.light-theme [class*="bg-white/10"]:not(button):not([class*="aspect-"] *):no
    ========================================================================= */
 html.light-theme h1,
 html.light-theme h2,
-html.light-theme h3:not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *),
+html.light-theme h3:not(#vault .mobile-grunge-card *):not(#lookbook .tunnel-card *):not(.museum-dark-canvas *):not(.atelier-dark-canvas *):not(.studio-dark-canvas *):not(#about .atelier-dark-canvas *),
 html.light-theme h4,
 html.light-theme h5,
 html.light-theme h6 {
@@ -1637,10 +1637,9 @@ html.light-theme .fixed.inset-0.z-\[99999\] > div[class*="bg-black"] {
 
 .section-scroll-reveal {
   position: relative;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
   overflow: visible;
 }
 
@@ -3140,4 +3139,150 @@ html[data-theme="light"] #hero .hero-hud-btn * {
 html.light-theme .dhrisni-char,
 html[data-theme="light"] .dhrisni-char {
   fill: #09090b !important;
+}
+
+
+/* =========================================================================
+   COMPREHENSIVE MULTI-THEME CONTRAST & VISIBILITY SHIELD
+   Eliminates all invisible texts, buttons, and badges in Light & Dark modes
+   ========================================================================= */
+
+/* 1. Four Pillars of AVZ Studio & Atelier Headings */
+.studio-pillars-heading,
+.atelier-dark-canvas .studio-pillars-heading,
+.atelier-dark-canvas h3,
+.atelier-dark-canvas h4,
+.atelier-dark-canvas .pillar-tab-title,
+html.light-theme .studio-pillars-heading,
+html.light-theme .atelier-dark-canvas .studio-pillars-heading,
+html.light-theme .atelier-dark-canvas h3,
+html.light-theme .atelier-dark-canvas h4,
+html.light-theme .atelier-dark-canvas .pillar-tab-title,
+html[data-theme="light"] .studio-pillars-heading,
+html[data-theme="light"] .atelier-dark-canvas .studio-pillars-heading,
+html[data-theme="light"] .atelier-dark-canvas h3,
+html[data-theme="light"] .atelier-dark-canvas h4,
+html[data-theme="light"] .atelier-dark-canvas .pillar-tab-title {
+  color: #ffffff !important;
+}
+
+/* 2. Pure Black Text in White Buttons (Commission with Dhrisni) */
+a.bg-white,
+button.bg-white,
+.btn-founder-cta,
+.btn-commission,
+.btn-commission-white,
+a.bg-white *,
+button.bg-white *,
+.btn-founder-cta *,
+.btn-commission *,
+.btn-commission-white *,
+html.light-theme a.bg-white,
+html.light-theme button.bg-white,
+html.light-theme .btn-founder-cta,
+html.light-theme .btn-commission,
+html.light-theme .btn-commission-white,
+html.light-theme a.bg-white *,
+html.light-theme button.bg-white *,
+html.light-theme .btn-founder-cta *,
+html.light-theme .btn-commission *,
+html.light-theme .btn-commission-white *,
+html[data-theme="light"] a.bg-white,
+html[data-theme="light"] button.bg-white,
+html[data-theme="light"] .btn-founder-cta,
+html[data-theme="light"] .btn-commission,
+html[data-theme="light"] .btn-commission-white,
+html[data-theme="light"] a.bg-white *,
+html[data-theme="light"] button.bg-white *,
+html[data-theme="light"] .btn-founder-cta *,
+html[data-theme="light"] .btn-commission *,
+html[data-theme="light"] .btn-commission-white * {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* 3. Direct WhatsApp Hotline Support Buttons */
+.contact-action-btn,
+html.light-theme .contact-action-btn,
+html[data-theme="light"] .contact-action-btn {
+  background-color: #09090b !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.contact-action-btn .contact-action-badge,
+.contact-action-btn [class*="text-[9px]"],
+html.light-theme .contact-action-btn .contact-action-badge,
+html.light-theme .contact-action-btn [class*="text-[9px]"],
+html[data-theme="light"] .contact-action-btn .contact-action-badge,
+html[data-theme="light"] .contact-action-btn [class*="text-[9px]"] {
+  color: #a1a1aa !important;
+}
+
+.contact-action-btn .contact-action-number,
+html.light-theme .contact-action-btn .contact-action-number,
+html[data-theme="light"] .contact-action-btn .contact-action-number {
+  color: #f472b6 !important;
+}
+
+.contact-action-btn svg,
+html.light-theme .contact-action-btn svg,
+html[data-theme="light"] .contact-action-btn svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* 4. Damage Verification Claims Box */
+html.light-theme .damage-claims-box,
+html[data-theme="light"] .damage-claims-box {
+  background-color: #fdf2f8 !important;
+  border-color: #fbcfe8 !important;
+}
+
+html.light-theme .damage-claims-title,
+html[data-theme="light"] .damage-claims-title {
+  color: #be185d !important;
+}
+
+html.light-theme .damage-claims-text,
+html[data-theme="light"] .damage-claims-text {
+  color: #18181b !important;
+}
+
+/* 5. Hero HUD Controls & Sound Buttons */
+#hero .hero-hud-btn,
+#hero .hero-sound-toggle-btn,
+html.light-theme #hero .hero-hud-btn,
+html.light-theme #hero .hero-sound-toggle-btn,
+html[data-theme="light"] #hero .hero-hud-btn,
+html[data-theme="light"] #hero .hero-sound-toggle-btn {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+#hero .hero-sound-toggle-btn span,
+.hero-sound-label,
+html.light-theme .hero-sound-label,
+html[data-theme="light"] .hero-sound-label {
+  color: #ffffff !important;
+}
+
+/* 6. Rotunda & Pedestal Floating Badges */
+.guide-badge,
+.pedestal-badge,
+.rotunda-guide {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+html.light-theme .guide-badge,
+html.light-theme .pedestal-badge,
+html.light-theme .rotunda-guide,
+html[data-theme="light"] .guide-badge,
+html[data-theme="light"] .pedestal-badge,
+html[data-theme="light"] .rotunda-guide {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #09090b !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
 }

@@ -184,7 +184,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
         {/* Play/Pause Button */}
         <button
           onClick={handleTogglePlay}
-          className="hero-hud-btn p-2 sm:p-2.5 rounded-full border border-white/40 flex items-center justify-center transition-all backdrop-blur-md cursor-pointer shadow-lg active:scale-95 hover:scale-105"
+          className="hero-hud-btn shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 flex items-center justify-center transition-all backdrop-blur-md cursor-pointer shadow-lg active:scale-95 hover:scale-105"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.85)',
             borderColor: 'rgba(255, 255, 255, 0.5)',
@@ -203,7 +203,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
         {/* Sound Toggle Button (Crystal Clear, Always Visible, High Contrast in all states & themes) */}
         <button
           onClick={handleToggleMute}
-          className="hero-sound-toggle-btn px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-white/40 flex items-center gap-2 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105"
+          className="hero-sound-toggle-btn shrink-0 px-3 sm:px-3.5 h-9 sm:h-10 rounded-full border border-white/40 flex items-center gap-2 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105"
           style={{
             backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.85)' : 'rgba(244, 114, 182, 0.22)',
             borderColor: isMuted ? 'rgba(255, 255, 255, 0.5)' : '#f472b6',

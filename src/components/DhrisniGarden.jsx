@@ -128,7 +128,7 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
 
   const [paletteIdx, setPaletteIdx] = useState(0); // Starts on Rose Noir (Red & Blue)
   const [patternIdx, setPatternIdx] = useState(0);
-  const [bloomProgress, setBloomProgress] = useState(0); // 0 to 1
+  const [bloomProgress, setBloomProgress] = useState(1); // Default to fully bloomed for instant solid render
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 10000));
   const [isLightMode, setIsLightMode] = useState(false);
 

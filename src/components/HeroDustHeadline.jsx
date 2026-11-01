@@ -15,8 +15,8 @@ export default function HeroDustHeadline({
   const canvasRef = useRef(null);
 
   const [isDusting, setIsDusting] = useState(true);
-  const [showDomText, setShowDomText] = useState(false);
-  const [isAssembled, setIsAssembled] = useState(false);
+  const [showDomText, setShowDomText] = useState(true);
+  const [isAssembled, setIsAssembled] = useState(true);
   const animFrameRef = useRef(null);
 
   useEffect(() => {

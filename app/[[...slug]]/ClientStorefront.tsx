@@ -18,32 +18,32 @@ export default function ClientStorefront() {
   useEffect(() => {
     const init = async () => {
       try {
-        // 1. Fetch public storefront configuration
-        const res = await fetch('/api/storefront/config');
-        if (res.ok) {
+        // Parallel fetch for zero network waterfall lag
+        const [res, contentRes, prodRes, authRes] = await Promise.all([
+          fetch('/api/storefront/config'),
+          fetch('/api/storefront/content'),
+          fetch('/api/storefront/products'),
+          fetch('/api/admin/auth/me').catch(() => null),
+        ]);
+
+        if (res && res.ok) {
           const data = await res.json();
           setStorefrontSettings(data.settings);
         }
 
-        // 2. Fetch published website content (CMS)
-        const contentRes = await fetch('/api/storefront/content');
-        if (contentRes.ok) {
+        if (contentRes && contentRes.ok) {
           const contentData = await contentRes.json();
           setCmsSections(contentData.sections);
         }
 
-        // 3. Fetch live catalog products from database
-        const prodRes = await fetch('/api/storefront/products');
-        if (prodRes.ok) {
+        if (prodRes && prodRes.ok) {
           const prodData = await prodRes.json();
           if (Array.isArray(prodData.products) && prodData.products.length > 0) {
             setStorefrontProducts(prodData.products);
           }
         }
 
-        // 4. Check if admin is currently authenticated for maintenance bypass
-        const authRes = await fetch('/api/admin/auth/me');
-        if (authRes.ok) {
+        if (authRes && authRes.ok) {
           const authData = await authRes.json();
           if (authData.authenticated) {
             setIsAdmin(true);
