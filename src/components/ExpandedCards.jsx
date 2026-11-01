@@ -87,8 +87,17 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
     playSound('pip');
     if (card.data && onSelectProduct) {
       onSelectProduct(card.data);
-    } else if (onSelectProduct && items[index % items.length]) {
+    } else if (onSelectProduct && items && items.length > 0 && items[index % items.length]) {
       onSelectProduct(items[index % items.length]);
+    } else if (onSelectProduct) {
+      onSelectProduct({
+        id: `vault-piece-${index + 1}`,
+        name: card.title || `Vault Specimen ${index + 1}`,
+        price: typeof card.price === 'number' ? card.price : 2800,
+        image: card.imgUrl,
+        category: card.category || 'Vault Specimen',
+        description: 'Authentic 1-of-1 archival creation from the AVZ Vault.'
+      });
     }
   };
 

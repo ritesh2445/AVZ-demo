@@ -95,6 +95,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     setSelectedItem(null);
     if (onRequestCustomCommission) {
       onRequestCustomCommission(item.name || item.shortName);
+    } else {
+      document.getElementById('custom')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 

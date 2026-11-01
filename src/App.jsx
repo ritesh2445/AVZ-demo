@@ -322,6 +322,8 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           <HeroThreeDimension
             isReady={!isLoading}
             onOpenTunnel={() => setTunnelOpen(true)}
+            onExploreCatalogue={() => scrollToSection('shop')}
+            onScrollToSection={scrollToSection}
             cmsHero={cmsContent?.hero}
           />
         </section>
@@ -385,6 +387,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           cmsReels={cmsContent?.reels}
           onSelectProduct={setActiveProduct}
           onRequestCustom={handleRequestCustom}
+          onScrollToSection={scrollToSection}
         />
 
         {/* Section 9: Packaging & Logistics */}

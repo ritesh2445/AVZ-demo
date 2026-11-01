@@ -84,7 +84,7 @@ const DEFAULT_REELS = [
   }
 ];
 
-export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom }) {
+export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScrollToSection }) {
   const containerRef = useRef(null);
   const [reels, setReels] = useState(DEFAULT_REELS);
   const [headline, setHeadline] = useState('SEE THEM MOVE');
@@ -326,20 +326,38 @@ export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestC
                 </p>
               )}
               <div className="flex gap-2">
-                <a
-                  href="#shop"
-                  onClick={() => setActiveReelModal(null)}
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound('snap');
+                    setActiveReelModal(null);
+                    if (onScrollToSection) {
+                      onScrollToSection('shop');
+                    } else {
+                      document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                   className="flex-1 py-3 px-4 rounded-xl bg-white text-black font-mono font-bold text-xs uppercase tracking-wider text-center hover:bg-neutral-200 transition-all shadow-lg cursor-pointer"
                 >
                   SHOP NOW ↗
-                </a>
-                <a
-                  href="#custom"
-                  onClick={() => setActiveReelModal(null)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound('snap');
+                    setActiveReelModal(null);
+                    if (onRequestCustom) {
+                      onRequestCustom(activeReelModal.title);
+                    } else if (onScrollToSection) {
+                      onScrollToSection('custom');
+                    } else {
+                      document.getElementById('custom')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                   className="py-3 px-4 rounded-xl bg-black/60 border border-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider text-center hover:border-pink transition-all cursor-pointer"
                 >
                   CUSTOM ORDER
-                </a>
+                </button>
               </div>
             </div>
           </div>

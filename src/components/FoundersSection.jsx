@@ -372,11 +372,15 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
                 </a>
 
-                <a
-                  href="#shop"
+                <button
+                  type="button"
                   onClick={() => {
                     playSound('snap');
-                    onScrollToSection?.('shop');
+                    if (onScrollToSection) {
+                      onScrollToSection('shop');
+                    } else {
+                      document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border font-mono text-xs tracking-widest uppercase transition-all cursor-pointer hover:border-pink/80"
                   style={{
@@ -386,7 +390,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   }}
                 >
                   <span style={{ color: '#ffffff' }}>EXPLORE 1-OF-1 DESIGNS</span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

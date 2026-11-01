@@ -425,14 +425,12 @@ export default function Navbar({
             <div className="flex items-center gap-4">
               <button
                 onClick={handleSoundToggle}
-                className={`flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold ${
-                  theme === 'light' ? 'text-zinc-900' : 'text-white'
-                }`}
+                className="flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-bold text-white hover:text-pink transition-colors"
               >
                 {soundOn ? (
                   <Volume2 className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
                 ) : (
-                  <VolumeX className={`w-3.5 h-3.5 shrink-0 ${theme === 'light' ? 'text-zinc-600' : 'text-zinc-300'}`} />
+                  <VolumeX className="w-3.5 h-3.5 shrink-0 text-zinc-300" />
                 )}
                 <span>{soundOn ? 'SOUND ON' : 'MUTED'}</span>
               </button>

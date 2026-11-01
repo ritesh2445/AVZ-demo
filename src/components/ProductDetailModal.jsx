@@ -304,7 +304,7 @@ export default function ProductDetailModal({
                 onClick={() => {
                   playSound('pip');
                   onClose();
-                  onRequestCustom(product.name);
+                  onRequestCustom?.(product.name);
                 }}
                 className="hover:text-white underline flex items-center gap-1 cursor-pointer transition-colors"
               >

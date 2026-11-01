@@ -283,10 +283,14 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
               {/* Commission Order Action */}
               <div className="pt-4 border-t border-white/10">
                 <button
+                  type="button"
                   onClick={() => {
+                    playSound('metal');
                     closeLightbox();
                     if (onCommissionLook) {
                       onCommissionLook(activeLook.title);
+                    } else {
+                      document.getElementById('custom')?.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
                   className="w-full py-3.5 px-5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.2em] uppercase transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 cursor-pointer"

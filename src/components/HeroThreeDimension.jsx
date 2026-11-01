@@ -11,7 +11,7 @@ import CinemaReelModal from './CinemaReelModal';
 import HeroDustHeadline from './HeroDustHeadline';
 import { playSound } from '../utils/audio';
 
-export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpenTunnel, cmsHero }) {
+export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -209,19 +209,38 @@ export default function HeroThreeDimension({ onExploreCatalogue, isReady, onOpen
         )}
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <a
-            href={cmsHero?.primary_cta_link || '#shop'}
-            onClick={() => onExploreCatalogue?.()}
+          <button
+            type="button"
+            onClick={() => {
+              playSound('snap');
+              if (onExploreCatalogue) {
+                onExploreCatalogue();
+              } else if (onScrollToSection) {
+                onScrollToSection('shop');
+              } else {
+                const el = document.getElementById('shop');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             className="px-7 py-3 rounded-full bg-gradient-to-r from-pink via-purple-300 to-pink hover:opacity-90 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(244,114,182,0.45)] hover:scale-105 active:scale-95 cursor-pointer"
           >
             {cmsHero?.primary_cta_text || 'EXPLORE VAULT'}
-          </a>
-          <a
-            href={cmsHero?.secondary_cta_link || '#custom'}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playSound('snap');
+              if (onScrollToSection) {
+                onScrollToSection('custom');
+              } else {
+                const el = document.getElementById('custom');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             className="btn-hero-custom px-7 py-3 rounded-full border-2 border-pink/80 bg-black/75 hover:bg-pink text-white hover:text-black font-mono font-bold text-xs tracking-widest uppercase transition-all backdrop-blur-xl shadow-[0_0_25px_rgba(244,114,182,0.35)] hover:shadow-[0_0_35px_rgba(244,114,182,0.65)] hover:scale-105 active:scale-95 cursor-pointer"
           >
             {cmsHero?.secondary_cta_text || 'CUSTOM ORDERS'}
-          </a>
+          </button>
         </div>
       </div>
 
