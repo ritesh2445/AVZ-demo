@@ -34,53 +34,12 @@ export function parseVimeoEmbed(url, muted = true) {
   return { type: 'unknown', src: url };
 }
 
-// Default editorial runway & studio reels
-const DEFAULT_REELS = [
-  {
-    id: 'reel-01',
-    title: 'The Motherboard Corset in Motion',
-    subtitle: 'Cybernetic armor sculpted to body contours',
-    vimeo_url: 'https://vimeo.com/824804225',
-    fallback_video: '/assets/Desktop view.MP4',
-    poster: '/assets/editorial_hero_portrait.jpg',
-    tag: 'Motherboard Top',
-    productLink: '#shop'
-  },
-  {
-    id: 'reel-02',
-    title: '72 Solid Spikes Motorcycle Shrug',
-    subtitle: 'High-contrast heavy hardware on reclaimed biker leather',
-    vimeo_url: 'https://vimeo.com/76979871',
-    fallback_video: '/assets/mobile view.mp4',
-    poster: '/assets/archive_bralette.jpg',
-    tag: 'Spiked Moto',
-    productLink: '#shop'
-  },
-  {
-    id: 'reel-03',
-    title: 'Tactile "CTRL+Z" Keycap Choker',
-    subtitle: 'Mechanical keys that click with every movement',
-    vimeo_url: 'https://vimeo.com/1084537',
-    fallback_video: '/assets/Desktop view.MP4',
-    poster: '/assets/beaded_bralette.jpg',
-    tag: 'Keycap Choker',
-    productLink: '#shop'
-  },
-  {
-    id: 'reel-04',
-    title: 'Guwahati Studio Craft & Linkwork',
-    subtitle: 'Pure human artistry — over 1,200 hand-threaded stainless rings',
-    vimeo_url: 'https://vimeo.com/824804225',
-    fallback_video: '/assets/mobile view.mp4',
-    poster: '/assets/chainmail_armor.jpg',
-    tag: 'Studio Behind The Scenes',
-    productLink: '#custom'
-  }
-];
+// Default reels are empty until added in Admin Panel
+const DEFAULT_REELS = [];
 
 export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom }) {
   const containerRef = useRef(null);
-  const [reels, setReels] = useState(DEFAULT_REELS);
+  const [reels, setReels] = useState([]);
   const [headline, setHeadline] = useState('IN MOTION // RUNWAY & REELS');
   const [subheadline, setSubheadline] = useState('Watch each piece move in real life. Behind-the-scenes, runway motion, and handmade detailing.');
   const [mutedStates, setMutedStates] = useState({});
@@ -112,9 +71,12 @@ export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestC
 
   const scrollRail = (direction) => {
     if (!containerRef.current) return;
-    const scrollAmount = direction === 'left' ? -340 : 340;
     containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   };
+
+  if (!reels || reels.length === 0) {
+    return null;
+  }
 
   return (
     <section id="reels" className="relative w-full bg-[#050508] py-20 sm:py-28 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden">
