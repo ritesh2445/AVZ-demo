@@ -123,7 +123,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           blooming and growing botanical animation of the DHRISNI wordmark.
           ========================================================================= */}
       <div
-        className="w-full bg-[#070609] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-white/10"
+        className="atelier-dark-canvas studio-dark-canvas w-full bg-[#070609] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-white/10"
         style={{ backgroundColor: '#070609', color: '#ffffff' }}
       >
         {/* Subtle Ambient Spatial Glows (Magenta & Emerald) */}
@@ -174,7 +174,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
           and oversized haute-couture quote.
           ========================================================================= */}
       <div
-        className="studio-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black"
+        className="atelier-dark-canvas studio-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black" data-surface="dark"
         style={{ backgroundColor: '#0a0a0f', color: '#ffffff' }}
       >
         {/* Subtle Ambient Spatial Glow */}
@@ -306,7 +306,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playSound('snap')}
-                  className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
+                  className="btn-founder-cta bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
                   style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
                   <span style={{ color: '#000000' }} className="text-black font-bold">START A CUSTOM ORDER</span>
