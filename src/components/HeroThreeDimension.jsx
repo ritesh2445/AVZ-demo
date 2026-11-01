@@ -51,7 +51,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
     if (!video) return;
 
     if (isPlaying) {
-      video.play().catch(() => {});
+      video.play().catch(() => { });
     } else {
       video.pause();
     }
@@ -80,7 +80,7 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
     if (video) {
       video.muted = newMuted;
       if (!newMuted) {
-        video.play().catch(() => {});
+        video.play().catch(() => { });
       }
     }
   };
@@ -104,9 +104,8 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
         <img
           src={posterSrc}
           alt="AVZ Hero Master Visual"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-            videoLoaded ? 'opacity-0' : 'opacity-100'
-          }`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-0' : 'opacity-100'
+            }`}
           style={{ objectFit: 'cover' }}
         />
 
@@ -122,9 +121,8 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
           preload="auto"
           onCanPlay={() => setVideoLoaded(true)}
           onPlaying={() => setVideoLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-            videoLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
           style={{ objectFit: 'cover' }}
         />
       </div>
