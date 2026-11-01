@@ -14,12 +14,20 @@ export function parseVimeoEmbed(url, muted = true) {
     return { type: 'video', src: url };
   }
 
+  // Preserve timestamp if present (#t=... or &t=...)
+  let timeHash = '';
+  if (url.includes('#t=')) {
+    timeHash = '#t=' + url.split('#t=')[1];
+  } else if (url.includes('&t=')) {
+    timeHash = '#t=' + url.split('&t=')[1].split('&')[0];
+  }
+
   // Already player.vimeo.com URL
   if (url.includes('player.vimeo.com/video/')) {
-    const clean = url.split('?')[0];
+    const clean = url.split('?')[0].split('#')[0];
     return {
       type: 'vimeo',
-      src: `${clean}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&transparent=1&controls=0`
+      src: `${clean}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${timeHash}`
     };
   }
 
@@ -28,7 +36,7 @@ export function parseVimeoEmbed(url, muted = true) {
   if (match && match[3]) {
     return {
       type: 'vimeo',
-      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&transparent=1&controls=0`
+      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${timeHash}`
     };
   }
 
@@ -36,13 +44,14 @@ export function parseVimeoEmbed(url, muted = true) {
 }
 
 // Curated authentic default reels (overridden instantly when edited in Admin Panel)
+// All reels use 9:16 vertical video format with staggered loop timestamps
 const DEFAULT_REELS = [
   {
     id: 'reel-01',
     title: 'The Motherboard Corset',
     subtitle: 'Cybernetic armor sculpted to body contours',
-    vimeo_url: 'https://vimeo.com/1239586933',
-    fallback_video: 'https://player.vimeo.com/video/1239586933?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    vimeo_url: 'https://vimeo.com/1239586843#t=0s',
+    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=0s',
     poster: '/assets/product_diva_top.jpg',
     tag: 'RUNWAY'
   },
@@ -50,8 +59,8 @@ const DEFAULT_REELS = [
     id: 'reel-02',
     title: 'Solid Spikes Shrug',
     subtitle: 'Heavy hardware on reclaimed biker leather',
-    vimeo_url: 'https://vimeo.com/1239586843',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    vimeo_url: 'https://vimeo.com/1239586843#t=8s',
+    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=8s',
     poster: '/assets/look_spike_bodice.jpg',
     tag: 'STUDIO'
   },
@@ -59,8 +68,8 @@ const DEFAULT_REELS = [
     id: 'reel-03',
     title: 'Stainless Steel Chainmail',
     subtitle: 'Over 1,200 hand-linked rings in fluid motion',
-    vimeo_url: 'https://vimeo.com/1239586933',
-    fallback_video: 'https://player.vimeo.com/video/1239586933?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    vimeo_url: 'https://vimeo.com/1239586843#t=16s',
+    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=16s',
     poster: '/assets/look_chainmail_armor.jpg',
     tag: 'CLOSE UP'
   },
@@ -68,8 +77,8 @@ const DEFAULT_REELS = [
     id: 'reel-04',
     title: 'Reworked Denim Armor',
     subtitle: 'Asymmetric panels with adjustable cables',
-    vimeo_url: 'https://vimeo.com/1239586843',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    vimeo_url: 'https://vimeo.com/1239586843#t=24s',
+    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=24s',
     poster: '/assets/product_reworked_jacket.jpg',
     tag: 'DETAILS'
   }
@@ -185,21 +194,21 @@ export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestC
                 }}
                 className="group relative flex-none w-[260px] sm:w-[290px] md:w-[320px] aspect-[9/16] rounded-3xl overflow-hidden ring-1 ring-white/10 group-hover:ring-pink/50 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:shadow-[0_25px_60px_rgba(244,194,194,0.25)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-2.5 bg-black"
               >
-                {/* Poster Backdrop */}
-                {reel.poster && (
+                {/* Poster Fallback */}
+                {reel.poster && !parsed && (
                   <img
                     src={reel.poster}
                     alt={reel.title}
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
                 )}
 
                 {/* Frameless Floating Video Player / Vimeo Embed */}
-                <div className="absolute inset-0 w-full h-full bg-black/40 overflow-hidden pointer-events-none">
+                <div className="absolute inset-0 w-full h-full bg-black overflow-hidden pointer-events-none">
                   {parsed?.type === 'vimeo' ? (
                     <iframe
                       src={parsed.src}
-                      className="w-[140%] h-[140%] -ml-[20%] -mt-[20%] object-cover pointer-events-none border-0"
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none border-0 scale-[1.05]"
                       allow="autoplay; fullscreen; picture-in-picture"
                       title={reel.title}
                     />
@@ -276,7 +285,7 @@ export default function AutoplayingReels({ cmsReels, onSelectProduct, onRequestC
               {parseVimeoEmbed(activeReelModal.vimeo_url || activeReelModal.fallback_video, false)?.type === 'vimeo' ? (
                 <iframe
                   src={parseVimeoEmbed(activeReelModal.vimeo_url || activeReelModal.fallback_video, false)?.src}
-                  className="w-[140%] h-[140%] -ml-[20%] -mt-[20%] object-cover border-0"
+                  className="absolute inset-0 w-full h-full object-cover border-0 scale-[1.05]"
                   allow="autoplay; fullscreen; picture-in-picture"
                   title={activeReelModal.title}
                 />

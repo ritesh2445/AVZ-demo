@@ -781,32 +781,32 @@ async function performDatabaseInitialization(): Promise<void> {
             id: 'reel-01',
             title: 'The Motherboard Corset in Motion',
             subtitle: 'Cybernetic armor sculpted to body contours',
-            vimeo_url: 'https://vimeo.com/824804225',
-            fallback_video: '/assets/Desktop view.MP4',
+            vimeo_url: 'https://vimeo.com/1239586843#t=0s',
+            fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=0s',
             tag: 'Motherboard Top'
           },
           {
             id: 'reel-02',
             title: '72 Solid Spikes Motorcycle Shrug',
             subtitle: 'High-contrast heavy hardware on reclaimed biker leather',
-            vimeo_url: 'https://vimeo.com/76979871',
-            fallback_video: '/assets/mobile view.mp4',
+            vimeo_url: 'https://vimeo.com/1239586843#t=8s',
+            fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=8s',
             tag: 'Spiked Moto'
           },
           {
             id: 'reel-03',
             title: 'Tactile "CTRL+Z" Keycap Choker',
             subtitle: 'Mechanical keys that click with every movement',
-            vimeo_url: 'https://vimeo.com/1084537',
-            fallback_video: '/assets/Desktop view.MP4',
+            vimeo_url: 'https://vimeo.com/1239586843#t=16s',
+            fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=16s',
             tag: 'Keycap Choker'
           },
           {
             id: 'reel-04',
             title: 'Guwahati Studio Craft & Linkwork',
             subtitle: 'Pure human artistry — over 1,200 hand-threaded stainless rings',
-            vimeo_url: 'https://vimeo.com/824804225',
-            fallback_video: '/assets/mobile view.mp4',
+            vimeo_url: 'https://vimeo.com/1239586843#t=24s',
+            fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=24s',
             tag: 'Studio Behind The Scenes'
           }
         ]
