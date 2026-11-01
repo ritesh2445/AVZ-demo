@@ -13,10 +13,7 @@ import { playSound } from '../utils/audio';
 
 export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
-  const audioRef = useRef(null);
-
   const videoRef = useRef(null);
-  const [videoBlobUrl, setVideoBlobUrl] = useState(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   const [isMobileDevice, setIsMobileDevice] = useState(() => {
@@ -44,68 +41,26 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
     };
   }, []);
 
-  // Parallel lossless chunk loader to deliver 100% full master 4K/2.5K video with zero compression
-  useEffect(() => {
-    let isCancelled = false;
-    let createdUrl = null;
-    const parts = isMobileDevice
-      ? ['/assets/mobile_view_part0.bin', '/assets/mobile_view_part1.bin']
-      : ['/assets/desktop_view_part0.bin', '/assets/desktop_view_part1.bin'];
-
-    setVideoLoaded(false);
-
-    async function loadMasterChunks() {
-      try {
-        const buffers = await Promise.all(
-          parts.map(async (url) => {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-            return await res.arrayBuffer();
-          })
-        );
-        if (isCancelled) return;
-        const blob = new Blob(buffers, { type: 'video/mp4' });
-        createdUrl = URL.createObjectURL(blob);
-        setVideoBlobUrl(createdUrl);
-      } catch (err) {
-        console.warn('[HERO VIDEO CHUNK LOADER]:', err);
-      }
-    }
-
-    loadMasterChunks();
-
-    return () => {
-      isCancelled = true;
-      if (createdUrl) URL.revokeObjectURL(createdUrl);
-    };
-  }, [isMobileDevice]);
-
-  const audioSource = isMobileDevice
-    ? (ASSET_MANIFEST.audio?.heroMobile || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_mobile.mp4')
-    : (ASSET_MANIFEST.audio?.heroDesktop || ASSET_MANIFEST.heroRunwayAudio || '/assets/hero_audio_desktop.mp4');
-
+  const videoSource = `/api/video/hero?device=${isMobileDevice ? 'mobile' : 'desktop'}`;
   const posterSrc = isMobileDevice ? '/assets/mobile_poster.jpg' : '/assets/desktop_poster.jpg';
 
-  // Synchronized Master Audio & Video Playback Controls
+  // Synchronized Master Video & Native Audio Playback Controls
+  // The video element natively carries the master 48kHz audio track, avoiding dual-audio drift
   useEffect(() => {
-    const audio = audioRef.current;
     const video = videoRef.current;
+    if (!video) return;
 
     if (isPlaying) {
-      if (video) video.play().catch(() => {});
-      if (audio && !isMuted) {
-        const p2 = audio.play();
-        if (p2 && p2.catch) p2.catch(() => {});
-      }
+      video.play().catch(() => {});
     } else {
-      if (video) video.pause();
-      if (audio) audio.pause();
+      video.pause();
     }
-  }, [isPlaying, isMuted, videoBlobUrl]);
+  }, [isPlaying]);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted;
+    const video = videoRef.current;
+    if (video) {
+      video.muted = isMuted;
     }
   }, [isMuted]);
 
@@ -121,22 +76,11 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
     setIsMuted(newMuted);
     playSound(newMuted ? 'toggle_off' : 'toggle_on');
 
-    const audio = audioRef.current;
     const video = videoRef.current;
-
     if (video) {
       video.muted = newMuted;
-    }
-
-    if (!newMuted) {
-      if (audio) {
-        audio.muted = false;
-        audio.play().catch(() => {});
-      }
-    } else {
-      if (audio) {
-        audio.pause();
-        audio.muted = true;
+      if (!newMuted) {
+        video.play().catch(() => {});
       }
     }
   };
@@ -151,21 +95,12 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
         background: '#000000'
       }}
     >
-      {/* 0. Synchronized Master Audio Soundtrack */}
-      <audio
-        ref={audioRef}
-        key={audioSource}
-        src={audioSource}
-        loop
-        preload="auto"
-      />
-
-      {/* 1. Master Native Video Stream (100% Uncompressed 4K Desktop / 2.5K Mobile, Zero White Bars) */}
+      {/* 1. Master Native Video Stream (Instant 206 Byte-Range Streaming, 100% Uncompressed Master Quality) */}
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Crisp first-frame poster while video master chunks initialize */}
+        {/* Instant first-frame high-resolution poster while first video frames stream */}
         <img
           src={posterSrc}
           alt="AVZ Hero Master Visual"
@@ -175,21 +110,23 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
           style={{ objectFit: 'cover' }}
         />
 
-        {videoBlobUrl && (
-          <video
-            ref={videoRef}
-            src={videoBlobUrl}
-            autoPlay
-            loop
-            muted={isMuted}
-            playsInline
-            onCanPlay={() => setVideoLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-              videoLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ objectFit: 'cover' }}
-          />
-        )}
+        <video
+          ref={videoRef}
+          key={videoSource}
+          src={videoSource}
+          poster={posterSrc}
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          preload="auto"
+          onCanPlay={() => setVideoLoaded(true)}
+          onPlaying={() => setVideoLoaded(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
+            videoLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ objectFit: 'cover' }}
+        />
       </div>
 
       {/* 1.5 Soft High-Fashion Contrast Vignette */}
