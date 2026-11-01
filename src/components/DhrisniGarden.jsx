@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import gardenItems from '../data/dhrisniGardenData.json';
-
 import { playSound } from '../utils/audio';
 
 // Curated high-fashion dark-canvas palettes (including user's requested Red & Blue)
@@ -114,15 +113,128 @@ export const GARDEN_PALETTES = [
   }
 ];
 
+const GROWTH_PATTERNS = [
+  { id: 'center-outward', name: 'Center Ripple' },
+  { id: 'left-to-right', name: 'Dawn Sweep' },
+  { id: 'right-to-left', name: 'Evening Gust' },
+  { id: 'organic-clusters', name: 'Constellation Burst' },
+  { id: 'superbloom', name: 'Wild Superbloom' }
+];
+
 export default function DhrisniGarden({ className = '', onPaletteChange }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const cachedPathsRef = useRef([]);
 
   const [paletteIdx, setPaletteIdx] = useState(0); // Starts on Rose Noir (Red & Blue)
-  const currentPalette = GARDEN_PALETTES[paletteIdx];
+  const [patternIdx, setPatternIdx] = useState(0);
+  const [bloomProgress, setBloomProgress] = useState(0); // 0 to 1
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 10000));
 
-  // Cache interactive flower nodes once on mount (0 re-queries)
+  const currentPalette = GARDEN_PALETTES[paletteIdx];
+  const currentPattern = GROWTH_PATTERNS[patternIdx];
+
+  // Random parameters seeded per regrowth
+  const seedParams = useMemo(() => {
+    const clusterOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.sin(seed + Math.random()) - 0.5);
+    const clusterDelays = {};
+    clusterOrder.forEach((cId, rank) => {
+      clusterDelays[cId] = rank * 0.08;
+    });
+
+    const springK = 6 + (seed % 4); // 6 to 9 stiffness
+    const springW = 14 + (seed % 6); // 14 to 19 frequency
+
+    return {
+      clusterDelays,
+      springK,
+      springW
+    };
+  }, [seed]);
+
+  // Spring formula from Type Garden: 1 - exp(-t*k) * cos(t*w)
+  const spr = useCallback((t, k = seedParams.springK, w = seedParams.springW) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    return 1 - Math.exp(-t * k) * Math.cos(t * w);
+  }, [seedParams.springK, seedParams.springW]);
+
+  // Ease out cubic
+  const eo = (t) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    return 1 - Math.pow(1 - t, 3);
+  };
+
+  // Trigger regrowth with optional new palette and new growth pattern
+  const triggerRegrowth = useCallback((newPalIdx = null) => {
+    playSound?.('sparkle');
+    setBloomProgress(0);
+    const nextSeed = Math.floor(Math.random() * 10000);
+    setSeed(nextSeed);
+
+    // Pick new growth pattern
+    setPatternIdx(prev => (prev + 1) % GROWTH_PATTERNS.length);
+
+    // Shift palette if requested or cycle to next
+    if (newPalIdx !== null) {
+      setPaletteIdx(newPalIdx);
+      if (onPaletteChange) onPaletteChange(GARDEN_PALETTES[newPalIdx]);
+    } else {
+      setPaletteIdx(prev => {
+        const next = (prev + 1) % GARDEN_PALETTES.length;
+        if (onPaletteChange) onPaletteChange(GARDEN_PALETTES[next]);
+        return next;
+      });
+    }
+
+    let start = performance.now();
+    const duration = 1800; // 1.8s blossom
+
+    function animate(now) {
+      const elapsed = now - start;
+      const p = Math.min(1, elapsed / duration);
+      setBloomProgress(p);
+      if (p < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+    requestAnimationFrame(animate);
+  }, [onPaletteChange]);
+
+  // Initial auto-bloom on mount and when scrolled into view
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let triggered = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !triggered) {
+          triggered = true;
+          triggerRegrowth(0);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+
+    // Fallback trigger in case observer doesn't fire immediately
+    const fallbackTimer = setTimeout(() => {
+      if (!triggered) {
+        triggered = true;
+        triggerRegrowth(0);
+      }
+    }, 200);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallbackTimer);
+    };
+  }, [triggerRegrowth]);
+
+  // Cache interactive SVG nodes whenever bloom finishes
   useEffect(() => {
     if (!svgRef.current) return;
     const nodes = [];
@@ -133,9 +245,9 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
       nodes.push({ el, cx, cy, hasMoved: false });
     });
     cachedPathsRef.current = nodes;
-  }, []);
+  }, [bloomProgress, seed]);
 
-  // Instantaneous 0ms hover reach directly via translate3d (zero re-render lag)
+  // Instantaneous hover reaction (0ms latency, zero re-render)
   const handleMouseMove = useCallback((e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -184,21 +296,11 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
     }
   }, []);
 
-  // Instant silky smooth palette morphing on click (zero lag)
-  const handleGardenClick = useCallback(() => {
-    playSound?.('sparkle');
-    setPaletteIdx((prev) => {
-      const next = (prev + 1) % GARDEN_PALETTES.length;
-      if (onPaletteChange) onPaletteChange(GARDEN_PALETTES[next]);
-      return next;
-    });
-  }, [onPaletteChange]);
-
   return (
     <div className={`relative w-full flex flex-col items-center select-none ${className}`}>
       {/* Dynamic Ambient Glow Behind Artwork */}
       <div
-        className="absolute inset-0 pointer-events-none transition-colors duration-700 ease-out"
+        className="absolute inset-0 pointer-events-none transition-colors duration-1000 ease-out"
         style={{
           background: `radial-gradient(ellipse 70% 60% at 50% 45%, ${currentPalette.ambientGrad1}, transparent 70%), radial-gradient(ellipse 55% 45% at 50% 75%, ${currentPalette.ambientGrad2}, transparent 70%)`
         }}
@@ -209,14 +311,14 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onClick={handleGardenClick}
+        onClick={() => triggerRegrowth()}
         className="relative w-full cursor-pointer group"
       >
         <svg
           ref={svgRef}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="215 155 1085 405"
-          className="w-full h-auto max-h-[190px] sm:max-h-[270px] md:max-h-[340px] object-contain transition-transform duration-150 ease-out group-hover:scale-[1.01]"
+          className="w-full h-auto max-h-[190px] sm:max-h-[270px] md:max-h-[340px] object-contain transition-transform duration-200 ease-out group-hover:scale-[1.012]"
           style={{
             filter: `drop-shadow(0 12px 40px ${currentPalette.glow})`
           }}
@@ -226,11 +328,11 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
               .dhrisni-char {
                 font-family: var(--font-cinzel), 'Cinzel', Georgia, serif;
                 font-weight: 700;
-                letter-spacing: 0.04em;
+                letter-spacing: 0.02em;
               }
             `}</style>
 
-            {/* Glowing filter for flower petals */}
+            {/* Glowing filter for blooming flower petals */}
             <filter id="bloomGlowDynamic" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="3.5" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -239,16 +341,23 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
 
           {gardenItems.map((item, i) => {
             if (item.type === 'text') {
+              // Letters fade in with crisp luminance during the first 35% of bloom
+              const textDelay = 0.04 * (i - 135);
+              const textT = Math.max(0, Math.min(1, (bloomProgress - textDelay) / 0.35));
+              const textOpacity = eo(textT);
+              const textYOffset = (1 - textOpacity) * 14;
+
               return (
                 <text
                   key={`txt-${item.id}-${i}`}
                   id={item.id}
                   x={item.x}
-                  y={parseFloat(item.y)}
+                  y={parseFloat(item.y) + textYOffset}
                   textAnchor="middle"
                   fontSize={item.fontSize}
                   className="dhrisni-char"
                   fill={currentPalette.text}
+                  opacity={textOpacity}
                   style={{
                     filter: 'drop-shadow(0 2px 14px rgba(255,255,255,0.28))'
                   }}
@@ -265,6 +374,48 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
             const isAccent = item.role === 'accent';
             const isVein = item.role === 'vein';
 
+            // Normalized position coords
+            const normX = Math.max(0, Math.min(1, (item.cx - 215) / 1085));
+            const distFromCenter = Math.abs(item.cx - 750) / 540; // 0 (center) to 1 (edges)
+
+            // DYNAMIC GROWTH PATTERNS CALCULATION:
+            let sproutDelay = 0;
+            switch (currentPattern.id) {
+              case 'center-outward':
+                sproutDelay = 0.05 + distFromCenter * 0.4;
+                break;
+              case 'right-to-left':
+                sproutDelay = 0.05 + (1 - normX) * 0.4;
+                break;
+              case 'organic-clusters':
+                const clusterKey = Math.floor(normX * 10);
+                sproutDelay = 0.05 + (seedParams.clusterDelays[clusterKey] || 0.2);
+                break;
+              case 'superbloom':
+                sproutDelay = 0.05 + ((Math.sin(i * 1.7 + seed) * 0.5 + 0.5) * 0.25);
+                break;
+              case 'left-to-right':
+              default:
+                sproutDelay = 0.05 + normX * 0.4;
+                break;
+            }
+
+            let scale = 1;
+            let opacity = 1;
+            let pathOffset = 0;
+
+            if (isVine) {
+              const vineT = Math.max(0, Math.min(1, (bloomProgress - sproutDelay) / 0.45));
+              const growth = eo(vineT);
+              opacity = growth > 0.01 ? 1 : 0;
+              pathOffset = (1 - growth) * 110;
+            } else if (isPetal || isAccent || isLeaf || isVein) {
+              const petalDelay = sproutDelay + 0.15;
+              const bloomT = Math.max(0, Math.min(1, (bloomProgress - petalDelay) / 0.4));
+              scale = spr(bloomT);
+              opacity = bloomT > 0.01 ? 1 : 0;
+            }
+
             // Dynamic Palette Colors:
             let fill = 'none';
             let stroke = 'none';
@@ -280,7 +431,10 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
               stroke = currentPalette.vein;
             }
 
-            const isInteractive = isPetal || isLeaf || isAccent || isVein;
+            const isTransformable = isPetal || isLeaf || isAccent || isVein;
+            const transformStr = isTransformable
+              ? `translate(${item.cx}px, ${item.cy}px) scale(${scale}) translate(-${item.cx}px, -${item.cy}px)`
+              : undefined;
 
             return (
               <path
@@ -291,12 +445,17 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
                 strokeWidth={item.strokeWidth || undefined}
                 strokeLinecap={item.strokeLinecap || undefined}
                 strokeLinejoin={item.strokeLinejoin || undefined}
+                opacity={opacity}
+                transform={transformStr}
                 data-cx={item.cx}
                 data-cy={item.cy}
-                className={isInteractive ? 'dhrisni-interactive-node' : undefined}
+                data-scale={scale}
+                className="dhrisni-interactive-node"
                 style={{
-                  transformBox: isInteractive ? 'fill-box' : undefined,
-                  transformOrigin: isInteractive ? 'center' : undefined,
+                  transformOrigin: `${item.cx}px ${item.cy}px`,
+                  transition: 'fill 0.35s ease, stroke 0.35s ease, opacity 0.2s ease',
+                  strokeDasharray: isVine ? '120 120' : undefined,
+                  strokeDashoffset: isVine ? pathOffset : undefined,
                   filter: isPetal ? 'url(#bloomGlowDynamic)' : undefined
                 }}
               />
@@ -304,7 +463,7 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
           })}
         </svg>
 
-        {/* Ambient floating pollen matching palette */}
+        {/* Ambient floating pollen / cyber-garden fireflies matching palette */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(6)].map((_, i) => (
             <span
