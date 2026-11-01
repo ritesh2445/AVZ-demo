@@ -1,5 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import { Scissors, Sparkles, X, ArrowUpRight, Layers, LayoutGrid, Eye } from 'lucide-react';
+'use client';
+
+import React, { useState, useMemo, useRef } from 'react';
+import { Scissors, Sparkles, X, ArrowUpRight, Layers, LayoutGrid, Eye, ChevronLeft, ChevronRight, Maximize2, Flame } from 'lucide-react';
 import SocialCards, { CardItem } from './ui/card-fan-carousel';
 import { MUSEUM_ITEMS, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -68,8 +70,10 @@ const EXPANDED_MUSEUM_ITEMS = [
 export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [viewMode, setViewMode] = useState('fan'); // 'fan' | 'grid'
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const mobileTrackRef = useRef(null);
 
-  // Map Museum pieces to Card Fan Carousel structure
+  // Map Museum pieces to Card Fan Carousel structure for desktop
   const museumCards = useMemo(() => {
     return EXPANDED_MUSEUM_ITEMS.map((item, idx) => ({
       imgUrl: item.image,
@@ -94,8 +98,42 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     }
   };
 
+  const goToSlide = (index) => {
+    playSound('whoosh');
+    const safeIdx = (index + EXPANDED_MUSEUM_ITEMS.length) % EXPANDED_MUSEUM_ITEMS.length;
+    setCurrentSlide(safeIdx);
+
+    const el = mobileTrackRef.current;
+    if (el) {
+      const card = el.querySelector('article');
+      const cardWidth = card ? card.clientWidth + 16 : 320;
+      el.scrollTo({ left: safeIdx * cardWidth, behavior: 'smooth' });
+    }
+  };
+
+  const nextSlide = (e) => {
+    e?.stopPropagation();
+    goToSlide(currentSlide + 1);
+  };
+
+  const prevSlide = (e) => {
+    e?.stopPropagation();
+    goToSlide(currentSlide - 1);
+  };
+
+  const handleMobileScroll = () => {
+    const el = mobileTrackRef.current;
+    if (!el) return;
+    const card = el.querySelector('article');
+    const cardWidth = card ? card.clientWidth + 16 : 320;
+    const idx = Math.min(Math.round(el.scrollLeft / cardWidth), EXPANDED_MUSEUM_ITEMS.length - 1);
+    if (idx >= 0 && idx !== currentSlide) {
+      setCurrentSlide(idx);
+    }
+  };
+
   return (
-    <section id="museum" className="w-full py-12 sm:py-16 md:py-20 px-3 sm:px-6 lg:px-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
+    <section id="museum" className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 lg:px-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
       {/* Section Header (Consistent on Desktop and Mobile) */}
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-4 relative z-10 text-left border-b border-white/10 pb-6">
         <div>
@@ -111,8 +149,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
           </p>
         </div>
 
-        {/* View Mode Switcher: Fan Showcase vs Grid Index */}
-        <div className="flex items-center gap-2 self-start sm:self-end">
+        {/* Desktop View Mode Switcher: Fan Showcase vs Grid Index */}
+        <div className="hidden md:flex items-center gap-2 self-start sm:self-end">
           <button
             onClick={() => {
               playSound('snap');
@@ -142,12 +180,35 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
             <span>All Items Grid</span>
           </button>
         </div>
+
+        {/* Mobile Lookbook-Format Navigation Controls & Counter */}
+        <div className="flex md:hidden items-center gap-3 shrink-0 self-start">
+          <span className="text-xs font-mono text-zinc-400 tracking-wider">
+            [ 0{currentSlide + 1} / 0{EXPANDED_MUSEUM_ITEMS.length} ]
+          </span>
+
+          <button
+            onClick={prevSlide}
+            aria-label="Previous museum piece"
+            className="w-10 h-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all cursor-pointer active:scale-95 shadow-md"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Next museum piece"
+            className="w-10 h-10 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-white hover:border-white/30 transition-all cursor-pointer active:scale-95 shadow-md"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
-      {/* Main Viewport Container */}
-      <div className="relative w-full max-w-7xl mx-auto flex justify-center items-center">
+      {/* ========================================================
+          DESKTOP VIEW: 3D FAN CAROUSEL OR GRID (MD+ SCREENS)
+          ======================================================== */}
+      <div className="hidden md:block relative w-full max-w-7xl mx-auto">
         {viewMode === 'fan' ? (
-          /* Card Fan Carousel View (Identical & Optimized for both Desktop & Mobile) */
           <div className="w-full flex flex-col items-center">
             <SocialCards cards={museumCards} onCardClick={handleCardClick} />
             <p className="text-[10px] sm:text-[11px] font-mono text-zinc-500 uppercase tracking-widest text-center mt-3 sm:mt-4">
@@ -155,7 +216,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
             </p>
           </div>
         ) : (
-          /* Archive Index Grid View (Clean, responsive layout on all screen sizes) */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full py-4">
             {EXPANDED_MUSEUM_ITEMS.map((item, idx) => (
               <div
@@ -174,7 +234,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-2.5 left-2.5 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/15 text-[9px] font-mono text-pink tracking-widest uppercase">
+                    <div className="absolute top-2.5 left-2.5 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/15 text-[9px] font-mono text-pink tracking-widest uppercase font-bold">
                       {item.tag}
                     </div>
                   </div>
@@ -196,9 +256,103 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         )}
       </div>
 
+      {/* ========================================================
+          MOBILE VIEW: FLUID HORIZONTAL SWIPEABLE RAIL (LOOKBOOK FORMAT)
+          ======================================================== */}
+      <div className="block md:hidden w-full px-2">
+        {/* Quick Look Selector Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 mb-4 scroll-smooth">
+          {EXPANDED_MUSEUM_ITEMS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goToSlide(i)}
+              className={`px-3 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all cursor-pointer border whitespace-nowrap ${
+                currentSlide === i
+                  ? 'bg-pink text-black font-bold border-pink shadow-md'
+                  : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
+              }`}
+            >
+              PIECE 0{i + 1}
+            </button>
+          ))}
+        </div>
+
+        {/* Fluid Horizontal Track */}
+        <div
+          ref={mobileTrackRef}
+          onScroll={handleMobileScroll}
+          className="flex gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory py-2 px-1 scroll-smooth touch-scroll-x"
+        >
+          {EXPANDED_MUSEUM_ITEMS.map((item, idx) => (
+            <article
+              key={item.id || idx}
+              onClick={() => {
+                playSound('pip');
+                setSelectedItem(item);
+              }}
+              className="snap-center shrink-0 w-[86vw] max-w-[350px] h-[520px] rounded-3xl overflow-hidden relative flex flex-col justify-between p-5 bg-[#0d0212] border border-white/15 shadow-2xl cursor-pointer select-none"
+            >
+              {/* Image Frame */}
+              <img
+                src={item.image}
+                alt={item.name}
+                draggable={false}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none filter brightness-95"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+
+              {/* Top Badge Bar */}
+              <div className="relative z-10 flex items-center justify-between text-left">
+                <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase font-bold">
+                  {item.year ? `MUSEUM ${item.year}` : `PIECE 00${idx + 1}`}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSound('pip');
+                    setSelectedItem(item);
+                  }}
+                  aria-label="Inspect Museum Piece"
+                  className="p-2 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:border-pink transition-all cursor-pointer shadow-md"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Bottom Editorial Content */}
+              <div className="relative z-10 flex flex-col text-left">
+                <span className="text-[10px] font-mono text-pink font-semibold tracking-widest uppercase mb-1 flex items-center gap-1">
+                  <Flame className="w-3 h-3 text-pink" />
+                  <span>{item.tag || 'MUSEUM ARCHIVE'}</span>
+                </span>
+
+                <h3 className="text-xl sm:text-2xl font-mono font-bold uppercase text-white leading-tight mb-1.5">
+                  {item.name}
+                </h3>
+
+                <p className="text-xs text-zinc-300 font-mono line-clamp-2 leading-relaxed mb-3">
+                  {item.materials || item.story}
+                </p>
+
+                <div className="flex items-center justify-between pt-2.5 border-t border-white/15 text-xs font-mono">
+                  <span className="py-1 px-3 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 bg-white/15 border border-white/20 text-white">
+                    <Eye className="w-3.5 h-3.5 text-white" />
+                    <span>SEE DETAILS ↗</span>
+                  </span>
+
+                  <span className="text-[11px] font-mono text-zinc-400 font-semibold">
+                    0{idx + 1} / 0{EXPANDED_MUSEUM_ITEMS.length}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
       {/* =========================================================================
           PIECE DETAILS MODAL
-          Clear, user-friendly details modal showing the story, craft, and custom order button
           ========================================================================= */}
       {selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-xl animate-fade-in select-none">
