@@ -2800,80 +2800,41 @@ html[data-theme="light"] #hero .hero-hud-btn {
 }
 
 /* =========================================================================
-   BULLETPROOF TARGETED OVERRIDES (ATELIER, PILLARS, WHITE BUTTON, HOTLINE, SOUND)
+   BULLETPROOF TARGETED OVERRIDES (PILLARS, WHITE BUTTON, HOTLINE)
    ========================================================================= */
 
-/* 1. Atelier Dark Canvas Full Typography (Headings, Manifesto Quote, Paragraphs, Tabs) */
-.atelier-dark-canvas blockquote,
-.atelier-dark-canvas h1,
-.atelier-dark-canvas h2,
+/* 1. Atelier Dark Canvas Headings & Pillar Tab Titles */
 .atelier-dark-canvas h3,
 .atelier-dark-canvas h4,
-.atelier-dark-canvas h5,
-.atelier-dark-canvas h6,
-.atelier-dark-canvas .founder-manifesto-quote,
 .atelier-dark-canvas .pillar-tab-title,
-html.light-theme .atelier-dark-canvas blockquote,
-html.light-theme .atelier-dark-canvas h1,
-html.light-theme .atelier-dark-canvas h2,
 html.light-theme .atelier-dark-canvas h3,
 html.light-theme .atelier-dark-canvas h4,
-html.light-theme .atelier-dark-canvas h5,
-html.light-theme .atelier-dark-canvas h6,
-html.light-theme .atelier-dark-canvas .founder-manifesto-quote,
 html.light-theme .atelier-dark-canvas .pillar-tab-title,
-html[data-theme="light"] .atelier-dark-canvas blockquote,
-html[data-theme="light"] .atelier-dark-canvas h1,
-html[data-theme="light"] .atelier-dark-canvas h2,
 html[data-theme="light"] .atelier-dark-canvas h3,
 html[data-theme="light"] .atelier-dark-canvas h4,
-html[data-theme="light"] .atelier-dark-canvas h5,
-html[data-theme="light"] .atelier-dark-canvas h6,
-html[data-theme="light"] .atelier-dark-canvas .founder-manifesto-quote,
 html[data-theme="light"] .atelier-dark-canvas .pillar-tab-title {
   color: #ffffff !important;
 }
 
-.atelier-dark-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html.light-theme .atelier-dark-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]),
-html[data-theme="light"] .atelier-dark-canvas p:not([class*="text-pink"]):not([class*="text-zinc"]) {
-  color: #f4f4f5 !important;
-}
-
-/* 2. Pure Black Text inside White Buttons (COMMISSION WITH DHRISNI) */
+/* 2. Pure Black Text inside White Buttons */
 .atelier-dark-canvas a.bg-white,
-.atelier-dark-canvas a.bg-white *,
-.atelier-dark-canvas .btn-commission-white,
-.atelier-dark-canvas .btn-commission-white *,
+.atelier-dark-canvas a.bg-white span,
+.atelier-dark-canvas a.bg-white svg,
 html.light-theme .atelier-dark-canvas a.bg-white,
-html.light-theme .atelier-dark-canvas a.bg-white *,
-html.light-theme .atelier-dark-canvas .btn-commission-white,
-html.light-theme .atelier-dark-canvas .btn-commission-white *,
+html.light-theme .atelier-dark-canvas a.bg-white span,
+html.light-theme .atelier-dark-canvas a.bg-white svg,
 html[data-theme="light"] .atelier-dark-canvas a.bg-white,
-html[data-theme="light"] .atelier-dark-canvas a.bg-white *,
-html[data-theme="light"] .atelier-dark-canvas .btn-commission-white,
-html[data-theme="light"] .atelier-dark-canvas .btn-commission-white * {
+html[data-theme="light"] .atelier-dark-canvas a.bg-white span,
+html[data-theme="light"] .atelier-dark-canvas a.bg-white svg {
   color: #000000 !important;
   stroke: #000000 !important;
 }
 
-/* 3. WhatsApp Hotline Support Buttons in Both Themes */
-.contact-action-btn,
-html.light-theme .contact-action-btn,
-html[data-theme="light"] .contact-action-btn {
-  background-color: #09090b !important;
-}
-
+/* 3. WhatsApp Support Buttons in Both Themes */
 .contact-action-btn [class*="text-[9px]"],
 html.light-theme .contact-action-btn [class*="text-[9px]"],
 html[data-theme="light"] .contact-action-btn [class*="text-[9px]"] {
   color: #d4d4d8 !important;
-}
-
-.contact-action-btn span:last-child,
-html.light-theme .contact-action-btn span:last-child,
-html[data-theme="light"] .contact-action-btn span:last-child {
-  color: #ffffff !important;
 }
 
 .contact-action-btn svg,
@@ -2881,20 +2842,4 @@ html.light-theme .contact-action-btn svg,
 html[data-theme="light"] .contact-action-btn svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
-}
-
-/* 4. Navbar & Sound Controls Visibility in Both Themes */
-.sound-toggle-btn,
-html.light-theme .sound-toggle-btn,
-html[data-theme="light"] .sound-toggle-btn {
-  white-space: nowrap !important;
-}
-
-html.light-theme .sound-toggle-btn span {
-  color: #3b0764 !important;
-  font-weight: 700 !important;
-}
-
-.sound-toggle-btn span {
-  color: #ffffff !important;
 }
