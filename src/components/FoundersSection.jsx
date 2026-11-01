@@ -194,13 +194,16 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
             </div>
           </div>
 
-          {/* Asymmetric Split Showcase: 3D Cinematic Dhrisni Showcase + Artisan Philosophy */}
-          <div ref={chapter2Ref} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            {/* Left 6 Cols: Cinematic Dhrisni Pop-Up, 3D Floating Polaroid Cards & "Meet the Mother" */}
-            <div className="lg:col-span-6 flex flex-col items-center">
+          {/* =========================================================================
+              PART A: DHRISNI'S PORTRAIT & ARTISAN PHILOSOPHY (SIDE-BY-SIDE)
+              Eliminates the empty space: Photo on left, Philosophy & Story on right
+              ========================================================================= */}
+          <div ref={chapter2Ref} className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left 5 Cols: Cinematic Dhrisni Archival Portrait with 3D Tilt */}
+            <div className="lg:col-span-5 flex flex-col items-center">
               {/* Outer Spatial 3D Perspective Wrapper */}
               <div
-                className="relative w-full max-w-[340px] sm:max-w-[380px] mx-auto py-6 sm:py-8 flex flex-col items-center"
+                className="relative w-full max-w-[340px] sm:max-w-[380px] mx-auto py-2 flex flex-col items-center"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
@@ -267,79 +270,17 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   {/* Dramatic Ambient Aura Glow */}
                   <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-pink/30 via-transparent to-purple-500/20 blur-2xl -z-10 opacity-75 animate-pulse" />
                 </div>
-
-                {/* Big Text: "Meet the mother" emerges and settles right down below the image */}
-                <div
-                  className={`mt-8 text-center transition-all duration-1000 delay-300 ease-out transform ${
-                    isCinematicRevealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                  }`}
-                >
-                  <span className="text-[10px] font-mono tracking-[0.35em] text-[#f472b6] font-bold uppercase block mb-1">
-                    ✦ FOUNDER & VISIONARY
-                  </span>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider text-white uppercase drop-shadow-[0_4px_28px_rgba(244,114,182,0.5)]">
-                    MEET THE MOTHER
-                  </h2>
-                  <div className="mt-2 flex items-center justify-center gap-2">
-                    <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#f472b6]" />
-                    <span className="text-[9px] font-mono text-zinc-400 tracking-widest uppercase">
-                      ARCHITECT OF THE OTHER DIMENSION
-                    </span>
-                    <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#f472b6]" />
-                  </div>
-                </div>
-
-                {/* 3D Popping Polaroid Cards - Placed below Meet the mother with ZERO overlap of Dhrisni's image */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 mt-8 w-full max-w-[420px] pointer-events-auto">
-                  {POLAROID_CARDS.map((card, idx) => (
-                    <div
-                      key={card.id}
-                      className={`transition-all duration-700 ease-out transform ${
-                        isCinematicRevealed ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-6'
-                      }`}
-                      style={{ transitionDelay: `${500 + idx * 120}ms` }}
-                    >
-                      <div
-                        className={`polaroid-card p-2 sm:p-2.5 pb-4 sm:pb-5 rounded-md bg-white border border-white/90 shadow-[0_14px_35px_rgba(0,0,0,0.85)] cursor-pointer transition-all duration-500 ease-out ${card.rotation} hover:rotate-0 hover:scale-105 hover:shadow-[0_20px_45px_rgba(244,114,182,0.45)]`}
-                        style={{ backgroundColor: '#ffffff' }}
-                        onMouseEnter={() => playSound('cyber_hover')}
-                      >
-                        {/* Pure Black Photo Aperture Inside */}
-                        <div className="bg-[#09090d] p-2.5 rounded-sm flex flex-col justify-between text-left min-h-[92px] border border-black/40">
-                          <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="text-[8px] font-mono tracking-widest text-[#f472b6] font-bold uppercase">
-                              {card.tag}
-                            </span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-pulse" />
-                          </div>
-                          <h4 className="text-[10px] sm:text-[11px] font-mono font-bold text-white tracking-wide uppercase mb-1">
-                            "{card.headline}"
-                          </h4>
-                          <p className="text-[8.5px] sm:text-[9px] font-mono text-zinc-300 leading-tight">
-                            {card.body}
-                          </p>
-                        </div>
-
-                        {/* Authentic Polaroid White Margin Chin with Archival Stamp */}
-                        <div className="mt-1.5 px-1 flex items-center justify-between text-[7.5px] sm:text-[8px] font-mono font-bold tracking-widest text-zinc-800 uppercase">
-                          <span>{card.stamp}</span>
-                          <span className="text-[7px] text-zinc-500">✦ AVZ</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
 
-            {/* Right 6 Cols: The Artisan Philosophy Quote & Story */}
-            <div className="lg:col-span-6 flex flex-col justify-center text-left space-y-6 sm:space-y-8">
+            {/* Right 7 Cols: The Artisan Philosophy Quote, Story Paragraphs & CTAs — Directly beside photo */}
+            <div className="lg:col-span-7 flex flex-col justify-center text-left space-y-6">
               <div>
                 <span className="text-[10px] font-mono tracking-[0.3em] uppercase font-bold block mb-3" style={{ color: '#f472b6' }}>
                   ARTISAN PHILOSOPHY
                 </span>
                 <blockquote
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-[38px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
+                  className="text-2xl sm:text-3xl lg:text-[34px] font-cinzel font-bold leading-tight tracking-wide drop-shadow-md"
                   style={{ color: '#ffffff' }}
                 >
                   "{quote}"
@@ -392,6 +333,76 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   <span style={{ color: '#ffffff' }}>EXPLORE 1-OF-1 DESIGNS</span>
                 </button>
               </div>
+            </div>
+          </div>
+
+          {/* =========================================================================
+              PART B: MEET THE MOTHER & 4 3D BOXES (POLAROID GALLERY)
+              Arranged across the full width, eliminating all empty space!
+              ========================================================================= */}
+          <div className="mt-16 sm:mt-24 pt-12 border-t border-white/10 flex flex-col items-center">
+            {/* Big Headline */}
+            <div
+              className={`text-center transition-all duration-1000 ease-out transform ${
+                isCinematicRevealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+            >
+              <span className="text-[10px] font-mono tracking-[0.35em] text-[#f472b6] font-bold uppercase block mb-1">
+                ✦ FOUNDER & VISIONARY
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-cinzel font-black tracking-wider text-white uppercase drop-shadow-[0_4px_28px_rgba(244,114,182,0.5)]">
+                MEET THE MOTHER
+              </h2>
+              <div className="mt-2 flex items-center justify-center gap-2">
+                <div className="h-[1px] w-8 sm:w-16 bg-gradient-to-r from-transparent to-[#f472b6]" />
+                <span className="text-[9px] sm:text-[10px] font-mono text-zinc-400 tracking-widest uppercase">
+                  ARCHITECT OF THE OTHER DIMENSION
+                </span>
+                <div className="h-[1px] w-8 sm:w-16 bg-gradient-to-l from-transparent to-[#f472b6]" />
+              </div>
+            </div>
+
+            {/* 4 3D Popping Polaroid Cards - Full width 4 columns on desktop, 2 on tablet, 1 on mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-10 w-full max-w-6xl mx-auto pointer-events-auto">
+              {POLAROID_CARDS.map((card, idx) => (
+                <div
+                  key={card.id}
+                  className={`transition-all duration-700 ease-out transform ${
+                    isCinematicRevealed ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-6'
+                  }`}
+                  style={{ transitionDelay: `${400 + idx * 100}ms` }}
+                >
+                  <div
+                    className={`polaroid-card p-2.5 sm:p-3 pb-4 sm:pb-5 rounded-md bg-white border border-white/90 shadow-[0_14px_35px_rgba(0,0,0,0.85)] cursor-pointer transition-all duration-500 ease-out ${card.rotation} hover:rotate-0 hover:scale-105 hover:shadow-[0_20px_45px_rgba(244,114,182,0.45)] h-full flex flex-col justify-between`}
+                    style={{ backgroundColor: '#ffffff' }}
+                    onMouseEnter={() => playSound('cyber_hover')}
+                  >
+                    {/* Pure Black Photo Aperture Inside */}
+                    <div className="bg-[#09090d] p-3 rounded-sm flex flex-col justify-between text-left min-h-[105px] border border-black/40 flex-1">
+                      <div>
+                        <div className="flex items-center justify-between gap-1 mb-1.5">
+                          <span className="text-[8px] font-mono tracking-widest text-[#f472b6] font-bold uppercase">
+                            {card.tag}
+                          </span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-pulse" />
+                        </div>
+                        <h4 className="text-[11px] sm:text-xs font-mono font-bold text-white tracking-wide uppercase mb-1">
+                          "{card.headline}"
+                        </h4>
+                      </div>
+                      <p className="text-[9px] sm:text-[9.5px] font-mono text-zinc-300 leading-snug mt-2">
+                        {card.body}
+                      </p>
+                    </div>
+
+                    {/* Authentic Polaroid White Margin Chin with Archival Stamp */}
+                    <div className="mt-2 px-1 flex items-center justify-between text-[8px] sm:text-[8.5px] font-mono font-bold tracking-widest text-zinc-800 uppercase">
+                      <span>{card.stamp}</span>
+                      <span className="text-[7.5px] text-zinc-500">✦ AVZ</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
