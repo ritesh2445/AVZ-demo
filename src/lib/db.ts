@@ -216,7 +216,7 @@ async function ensureDatabaseInitialized(): Promise<void> {
   const db = getDb();
   try {
     // Fast-path: Check if schema is already provisioned to avoid hitting Cloudflare's subrequest limit
-    await db.execute('SELECT 1 FROM storefront_settings LIMIT 1');
+    await db.execute('SELECT 1 FROM storefront_settings, testimonials, user LIMIT 1');
     return;
   } catch {
     await performDatabaseInitialization();
