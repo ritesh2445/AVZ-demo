@@ -121,7 +121,6 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     const deltaY = e.changedTouches[0].clientY - (touchStartY.current || 0);
 
-    // If swipe distance is significant and more horizontal than vertical
     if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX < 0) {
         cycle("right");
@@ -144,8 +143,8 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
     const previouslyVisible = prevVisible.current;
     const direction = directionRef.current;
     const isFirstMount = !hasEntered.current;
-    const multiplier = getResponsiveMultiplier(window.innerWidth);
-    const hMult = getHeightMultiplier(window.innerWidth);
+    const multiplier = getResponsiveMultiplier(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const hMult = getHeightMultiplier(typeof window !== 'undefined' ? window.innerWidth : 1200);
     const slotCount = needsPagination ? MAX_VISIBLE : totalCards;
     const config = (slot: number) => getSlotConfig(slotCount, slot);
 
@@ -180,12 +179,31 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
         };
 
         if (isFirstMount) {
-          gsap.set(card, { x: `${(x * multiplier) * 0.5}rem`, y: `${(y * hMult) + 4}rem`, rotation: 0, scale: 0.8, opacity: 0.4 });
-          gsap.to(card, { ...target, duration: 0.8, ease: "power2.out", delay: slot * 0.04, onComplete: onCardDone });
+          gsap.fromTo(
+            card,
+            {
+              x: `${x * multiplier * 0.6}rem`,
+              y: `${y * hMult + 2.5}rem`,
+              rotation: rot * 0.4,
+              scale: scale * 0.92,
+              opacity: 0.4,
+              zIndex
+            },
+            {
+              ...target,
+              duration: 0.7,
+              ease: "power2.out",
+              delay: slot * 0.03,
+              onComplete: onCardDone
+            }
+          );
         } else if (!wasVisible) {
           const enterX = direction === "right" ? 40 : -40;
-          gsap.set(card, { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 30 : -30, scale: 0.5, opacity: 0 });
-          gsap.to(card, { ...target, duration: 0.55, ease: "power2.out", onComplete: onCardDone });
+          gsap.fromTo(
+            card,
+            { x: `${enterX}rem`, y: `${y * hMult}rem`, rotation: direction === "right" ? 30 : -30, scale: 0.5, opacity: 0 },
+            { ...target, duration: 0.55, ease: "power2.out", onComplete: onCardDone }
+          );
         } else {
           gsap.to(card, { ...target, duration: 0.5, ease: "power2.out", onComplete: onCardDone });
         }
@@ -212,6 +230,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
     const centerSlot = visibleEntries.length >> 1;
 
     const updateHoverLayout = (hoveredSlot: number | null) => {
+      if (typeof window === 'undefined') return;
       const mult = getResponsiveMultiplier(window.innerWidth);
       const hM = getHeightMultiplier(window.innerWidth);
 
@@ -300,23 +319,33 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
           ref={containerRef}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="fan-layout flex relative justify-center items-center w-full max-w-[80rem] h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[38rem]"
+          className="fan-layout relative flex justify-center items-center w-full max-w-[80rem]"
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '34rem',
+            minHeight: '520px',
+            overflow: 'visible'
+          }}
         >
           {cards.map((card, index) => {
-            const image = (
-              <div className="relative w-full h-full overflow-hidden group">
+            const cardBody = (
+              <div className="relative w-full h-full overflow-hidden rounded-2xl border border-white/20 shadow-2xl group bg-[#09090b]">
                 <img
                   src={card.imgUrl}
                   loading="lazy"
                   alt={card.alt || `Card ${index}`}
                   className="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30 z-20 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent z-20 pointer-events-none" />
 
                 {/* Card Editorial Info Overlay */}
-                <div className="absolute bottom-3 left-3 right-3 z-30 pointer-events-none text-left">
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 z-30 pointer-events-none text-left">
                   {card.category && (
-                    <span className="text-[8px] sm:text-[9px] font-mono tracking-widest uppercase font-bold text-pink block mb-0.5">
+                    <span className="text-[9px] font-mono tracking-widest uppercase font-bold text-pink block mb-0.5">
                       {card.category}
                     </span>
                   )}
@@ -333,6 +362,25 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
                 </div>
               </div>
             );
+
+            const cardInlineStyle: React.CSSProperties = {
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: 'min(270px, 72vw)',
+              height: 'min(390px, 104vw)',
+              marginLeft: 'calc(-1 * min(270px, 72vw) / 2)',
+              marginTop: 'calc(-1 * min(390px, 104vw) / 2)',
+              transformOrigin: 'center bottom',
+              willChange: 'transform, opacity',
+              borderRadius: '1.25rem',
+              overflow: 'hidden',
+              backgroundColor: '#09090b',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.18)',
+              cursor: 'pointer',
+              userSelect: 'none'
+            };
+
             return card.linkUrl ? (
               <a
                 key={index}
@@ -345,17 +393,19 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
                 }}
                 target={card.linkUrl.startsWith("http") ? "_blank" : "_self"}
                 rel="noopener noreferrer"
-                className="fan-card block cursor-pointer w-[9.5rem] h-[13.5rem] sm:w-[11.5rem] sm:h-[16.5rem] md:w-[14rem] md:h-[20rem] lg:w-[17rem] lg:h-[24rem]"
+                className="fan-card block"
+                style={cardInlineStyle}
               >
-                {image}
+                {cardBody}
               </a>
             ) : (
               <div
                 key={index}
                 onClick={() => onCardClick?.(card, index)}
-                className="fan-card cursor-pointer w-[9.5rem] h-[13.5rem] sm:w-[11.5rem] sm:h-[16.5rem] md:w-[14rem] md:h-[20rem] lg:w-[17rem] lg:h-[24rem]"
+                className="fan-card block"
+                style={cardInlineStyle}
               >
-                {image}
+                {cardBody}
               </div>
             );
           })}
@@ -363,7 +413,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
       </div>
 
       {needsPagination && (
-        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-6 md:mt-8 z-30 select-none">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 md:mt-10 z-30 select-none">
           <button
             className={`${ARROW_CLASSES} w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12`}
             onClick={() => cycle("left")}
