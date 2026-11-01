@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://avzvaganza.com'),
   title: 'AVZ VAGANZA | THE OTHER DIMENSION — Experimental Wearable Art & Digital Fashion',
   description:
-    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (Dhristroyer). Sustainable avant-garde high fashion, sculptural wearable art, cyber-couture, upcycled motherboards, spikes, chainmail, and archival bespoke pieces.',
+    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (Dhristroyer). Sustainable avant-garde high fashion, sculptural wearable art, cyber-couture, upcycled motherboards, spikes, chainmail, and one-of-a-kind custom pieces.',
   keywords: [
     'AVZ Vaganza website',
     'Aveezah brand',

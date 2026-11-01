@@ -11,6 +11,8 @@ import AvzMuseum from './components/AvzMuseum';
 import CustomOrders from './components/CustomOrders';
 import CustomInquiryModal from './components/CustomInquiryModal';
 import AboutSection from './components/AboutSection';
+import AutoplayingReels from './components/AutoplayingReels';
+import TestimonialsSection from './components/TestimonialsSection';
 import { FAQSection, ContactSection, ShippingPackagingReturns } from './components/InformationalPages';
 import CartDrawer from './components/CartDrawer';
 import SearchModal from './components/SearchModal';
@@ -42,7 +44,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   const [customInquiryConfirm, setCustomInquiryConfirm] = useState(null);
   const [customOrderPrefill, setCustomOrderPrefill] = useState('');
 
-  // 4. Collective atelier group buy state
+  // 4. Collective group buy state
   const [squadModalOpen, setSquadModalOpen] = useState(false);
   const [squadModalProduct, setSquadModalProduct] = useState(null);
   const [squadDiscount, setSquadDiscount] = useState(null); // { squadCode, discountPercent, memberCount }
@@ -117,7 +119,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
       .catch(() => {});
   }, []);
 
-  // Enforce pure dark atelier mode
+  // Enforce pure dark studio mode
   useEffect(() => {
     document.documentElement.classList.remove('light-theme');
     document.documentElement.removeAttribute('data-theme');
@@ -168,7 +170,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   useEffect(() => {
     if (isLoading) return;
 
-    const sections = ['hero', 'vault', 'lookbook', 'shop', 'museum', 'custom', 'about', 'specs', 'faq', 'contact'];
+    const sections = ['hero', 'vault', 'lookbook', 'shop', 'museum', 'custom', 'about', 'reels', 'specs', 'testimonials', 'faq', 'contact'];
 
     // Make hero immediately visible without transition delay
     const heroEl = document.getElementById('hero');
@@ -377,12 +379,25 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           />
         </section>
 
+        {/* Section 8.5: Autoplaying Runway & Studio Reels with Vimeo links */}
+        <AutoplayingReels
+          cmsReels={cmsContent?.reels}
+          onSelectProduct={setActiveProduct}
+          onRequestCustom={handleRequestCustom}
+        />
+
         {/* Section 9: Packaging & Logistics */}
         <section id="specs" className="w-full">
           <ShippingPackagingReturns />
         </section>
 
-        {/* Section 10: FAQ */}
+        {/* Section 9.5: Customer Testimonials (What People Say) */}
+        <TestimonialsSection
+          currentUser={currentUser}
+          onOpenAuthModal={() => setAuthModalOpen(true)}
+        />
+
+        {/* Section 10: Client Questions (FAQ) */}
         <section id="faq" className="w-full">
           <FAQSection />
         </section>

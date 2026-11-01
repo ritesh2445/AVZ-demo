@@ -286,7 +286,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
                   No Matching Pieces Found
                 </h4>
                 <p className="font-montserrat text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
-                  No pieces matched "{query}". Dhrisni crafts bespoke 1-of-1 silhouettes on demand.
+                  No items matched "{query}". Dhrisni handcrafts custom 1-of-1 pieces on demand.
                 </p>
               </div>
               <button
@@ -298,7 +298,7 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
                 }}
                 className="mt-2 px-4 py-2 rounded-full bg-pink/15 border border-pink/35 text-pink hover:bg-pink/25 font-mono text-xs font-bold uppercase tracking-wider cursor-pointer transition-all"
               >
-                Request Bespoke Commission
+                Request a Custom Order
               </button>
             </div>
           ) : (

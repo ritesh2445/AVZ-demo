@@ -32,19 +32,19 @@ export const BRAND_INFO = {
   },
   pricingTiers: [
     {
-      tier: "Tiny Details & Hardware Extras",
+      tier: "Accessories & Small Pieces",
       range: "Under ₹1,000",
-      description: "Custom wire pieces, keycap jewelry, hardware chokers, spike accents, and mini ear cuffs."
+      description: "Custom wire pieces, keycap jewelry, chokers, spike accents, and ear cuffs."
     },
     {
-      tier: "The Core Statement Pieces",
+      tier: "Core Statement Pieces",
       range: "₹1,000 – ₹3,000",
-      description: "Hand-sculpted bralettes, corsets, reconstructed skirts, motherboard tops, and layered accessories."
+      description: "Handcrafted bralettes, corsets, custom skirts, and motherboard tops."
     },
     {
-      tier: "Heavy Art & Full Builds",
+      tier: "Full Outfits & Heavy Art",
       range: "₹3,000+",
-      description: "Complex hardware armors, tailored reworked jackets, structured archive recreations, and full editorial ensembles."
+      description: "Complex hardware outfits, custom jackets, and full runway sets."
     }
   ],
   customTimeline: "2 to 3 weeks (hand-built from scratch)",
@@ -398,7 +398,7 @@ export const MUSEUM_ITEMS = [
     year: "2023",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Salvaged 1998 Motherboard, Copper Wire, Velvet Ties",
-    commissionTier: "The Core Statement Pieces (₹1,000 – ₹3,000)",
+    priceTier: "Core Statement Pieces (₹1,000 – ₹3,000)",
     originalOwner: "Private Collection (Mumbai)",
     image: ASSET_MANIFEST.products.archiveBralette,
     story: "The piece that sparked the entire AVZ Vaganza movement. Dhrisni hand-cut an obsolete Intel Pentium motherboard on her bedroom floor using heavy garden snips. It became viral on Instagram, establishing her signature juxtaposition of cold silicon chips against soft velvet ties.",
@@ -412,8 +412,8 @@ export const MUSEUM_ITEMS = [
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "IBM Model M Keycaps, Silver Chainmail, Stainless Steel Carabiner",
-    commissionTier: "Tiny Details & Hardware Extras (Under ₹1,000)",
-    originalOwner: "Commissioned for Boiler Room Delhi",
+    priceTier: "Accessories & Small Pieces (Under ₹1,000)",
+    originalOwner: "Created for Boiler Room Delhi",
     image: ASSET_MANIFEST.products.beadedBralette,
     story: "Worn under strobe lights at an underground warehouse rave. The mechanical keys click when tapped, making it an interactive audio-visual garment.",
     recreationNote: "Keycap labels and colors can be customized to your preferred keyboard shortcuts."
@@ -426,8 +426,8 @@ export const MUSEUM_ITEMS = [
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Reclaimed Biker Leather, 72 Solid Steel Spikes, Raw Hardware",
-    commissionTier: "Heavy Art & Full Builds (₹3,000+)",
-    originalOwner: "Custom Commission (Berlin)",
+    priceTier: "Full Outfits & Heavy Art (₹3,000+)",
+    originalOwner: "Custom Order (Berlin)",
     image: ASSET_MANIFEST.products.reworkedJacket,
     story: "Constructed from a discarded 1980s motorcycle jacket found in a thrift crate in Guwahati. Cropped high above the bust line, with massive chrome shoulders that evoke dystopian post-apocalyptic royalty.",
     recreationNote: "Requires full shoulder and arm measurements for custom armhole drafting."
@@ -440,7 +440,7 @@ export const MUSEUM_ITEMS = [
     year: "2024",
     tag: "ARCHIVE · SOLD OUT",
     materials: "Iridescent Tech Scrap, Wire Weave, Glass Crystal Beads",
-    commissionTier: "The Core Statement Pieces (₹1,000 – ₹3,000)",
+    priceTier: "Core Statement Pieces (₹1,000 – ₹3,000)",
     originalOwner: "Fashion Creator Editorial Feature",
     image: ASSET_MANIFEST.editorialHero,
     story: "A synthesis of oceanic biological curves and synthetic e-waste. Reflects baby pink and lavender iridescence under directional lighting.",
@@ -566,11 +566,11 @@ export const FAQS = [
   },
   {
     q: "Can I order past designs or custom pieces from the archive?",
-    a: "Yes, through the AVZ Museum and vault archive. Sold-out or past custom pieces can be re-created for you, but because everything is hand-built with upcycled components and raw hardware, no two items will ever be an exact replica. Every commission is a one-of-a-kind evolution tailored entirely to you."
+    a: "Yes, through the AVZ Museum and vault archive. Sold-out or past custom pieces can be re-created for you, but because everything is hand-built with upcycled components and raw hardware, no two items will ever be an exact replica. Every custom order is one-of-a-kind and made specially for you."
   },
   {
     q: "What are the pricing tiers and timelines for custom orders?",
-    a: "• Tiny details and hardware extras (accessories, wire pieces, small hardware): Under ₹1,000.\n• Core statement pieces (bralettes, corsets, skirts, custom tops): ₹1,000 – ₹3,000.\n• Heavy art and full builds (complex hardware outfits, jackets, structured archive remakes): ₹3,000 and above.\nBecause every piece is meticulously built from scratch by hand, custom orders typically take 2 to 3 weeks to complete."
+    a: "• Accessories and small pieces (wire pieces, keycap jewelry, small hardware): Under ₹1,000.\n• Core statement pieces (bralettes, corsets, skirts, custom tops): ₹1,000 – ₹3,000.\n• Full custom outfits and heavy art (complex hardware outfits, jackets, structured remakes): ₹3,000 and above.\nBecause every piece is meticulously built from scratch by hand, custom orders typically take 2 to 3 weeks to complete."
   },
   {
     q: "What is your return and exchange policy?",

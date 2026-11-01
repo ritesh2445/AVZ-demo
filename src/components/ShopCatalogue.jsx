@@ -451,7 +451,7 @@ export default function ShopCatalogue({
       {
         id: 'avz-004',
         rank: 'EDITION 04',
-        badge: 'BESPOKE RUNWAY',
+        badge: 'HANDCRAFTED RUNWAY',
         provenance: 'Hand-Distressed Outerwear',
         socialTag: '18 HRS HANDMADE FINISH'
       },
@@ -547,7 +547,7 @@ export default function ShopCatalogue({
         wishlistIds={wishlistIds}
       />
 
-      {/* Atelier Craft & Service Ribbon */}
+      {/* Studio Craft & Service Ribbon */}
       <div className="mb-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 rounded-2xl bg-black/60 border border-white/10 text-[11px] font-mono text-zinc-300 relative z-10 text-left">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-pink shrink-0" />
@@ -559,7 +559,7 @@ export default function ShopCatalogue({
         </div>
         <div className="flex items-center gap-2">
           <Shield className="w-3.5 h-3.5 text-pink shrink-0" />
-          <span>Bespoke Sizing Guarantee</span>
+          <span>Custom Fit Guarantee</span>
         </div>
         <div className="flex items-center gap-2">
           <MessageCircle className="w-3.5 h-3.5 text-pink shrink-0" />

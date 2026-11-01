@@ -555,7 +555,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 </div>
               </div>
 
-              {/* Commission CTA button */}
+              {/* Custom Order CTA button */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
@@ -565,10 +565,10 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                       onCommissionLook(activeLook.title);
                     }
                   }}
-                  className="btn-commission-cta py-3.5 px-6 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 transition-all"
+                  className="btn-custom-cta py-3.5 px-6 text-xs font-spartan font-black tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 transition-all"
                 >
                   <Scissors className="w-4 h-4" />
-                  <span>REQUEST THIS SILHOUETTE ↗</span>
+                  <span>ORDER THIS CUSTOM LOOK ↗</span>
                 </button>
 
                 <button

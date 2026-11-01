@@ -126,7 +126,7 @@ export default function AdminLoginPage() {
             className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Return to Atelier</span>
+            <span>Return to Store</span>
           </Link>
           <span className="text-[10px] uppercase tracking-wider text-zinc-600">
             256-Bit Encrypted

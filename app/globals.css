@@ -47,6 +47,79 @@
 
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Data Rain Tokens */
+  --dr-bg-0: #020308;
+  --dr-bg-1: #05070d;
+  --dr-bg-2: #0a1020;
+  --dr-calm: #22e6ff;
+  --dr-mid: #8a5cff;
+  --dr-hot: #ff3d9a;
+  --dr-core: #eafcff;
+  --dr-vignette: 0.62;
+  --dr-grain: 0.05;
+  --dr-bloom-blur: 10px;
+  --dr-bloom-opacity: 0.7;
+}
+
+@keyframes dr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Data Rain Canvas Styles */
+.dr-root {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  animation: dr-fade-in 0.8s ease-out forwards;
+}
+
+.dr-root--contained {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dr-bloom {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(var(--dr-bloom-blur, 10px));
+  opacity: var(--dr-bloom-opacity, 0.7);
+  pointer-events: none;
+}
+
+.dr-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dr-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, var(--dr-vignette, 0.62)) 100%);
+}
+
+.dr-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--dr-grain, 0.05);
 }
 
 *,
@@ -2874,4 +2947,77 @@ html.light-theme .contact-action-btn svg,
 html[data-theme="light"] .contact-action-btn svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
+}
+
+/* =========================================================================
+   CARD FAN CAROUSEL (GSAP 3D FAN LAYOUT)
+   ========================================================================= */
+.fan-layout {
+  position: relative;
+  width: 100%;
+  height: 38rem;
+  perspective: 1200px;
+}
+@media (max-width: 1023px) {
+  .fan-layout { height: 34rem; }
+}
+@media (max-width: 767px) {
+  .fan-layout { height: 28rem; }
+}
+@media (max-width: 639px) {
+  .fan-layout { height: 26rem; }
+}
+@media (max-width: 479px) {
+  .fan-layout { height: 22rem; }
+}
+
+.fan-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 17rem;
+  height: 24rem;
+  margin-left: -8.5rem;
+  margin-top: -12rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.18);
+  background: #09090b;
+  will-change: transform, opacity;
+  transform-origin: center bottom;
+  user-select: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.fan-card:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 25px rgba(244, 114, 182, 0.4), 0 0 0 1.5px rgba(244, 114, 182, 0.8);
+}
+
+@media (max-width: 1023px) {
+  .fan-card {
+    width: 14rem;
+    height: 20rem;
+    margin-left: -7rem;
+    margin-top: -10rem;
+    border-radius: 1rem;
+  }
+}
+@media (max-width: 767px) {
+  .fan-card {
+    width: 11.5rem;
+    height: 16.5rem;
+    margin-left: -5.75rem;
+    margin-top: -8.25rem;
+    border-radius: 0.875rem;
+  }
+}
+@media (max-width: 479px) {
+  .fan-card {
+    width: 9.5rem;
+    height: 13.5rem;
+    margin-left: -4.75rem;
+    margin-top: -6.75rem;
+    border-radius: 0.75rem;
+  }
 }

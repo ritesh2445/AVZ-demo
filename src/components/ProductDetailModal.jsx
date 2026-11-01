@@ -208,7 +208,7 @@ export default function ProductDetailModal({
                 <div className="p-4 rounded-xl bg-black/80 border border-white/15 mb-3 text-xs space-y-3 animate-fade-in">
                   <div className="text-white font-mono font-medium text-[11px] uppercase flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
-                    <span>BESPOKE SIZING ESTIMATOR:</span>
+                    <span>CUSTOM SIZING GUIDE:</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>

@@ -36,8 +36,8 @@ export const GARDEN_PALETTES = [
     swatch: ['#3B82F6', '#EF4444']
   },
   {
-    id: 'orchid-atelier',
-    name: 'Orchid Atelier',
+    id: 'orchid-bloom',
+    name: 'Orchid Bloom',
     sub: 'Cyber Magenta & Emerald Teal',
     petal: '#E63CFF',       // Neon Orchid Magenta
     petalAccent: '#F9D1FF', // Lavender Pink

@@ -50,7 +50,7 @@ function createInMemoryClient(): Client {
   store.set('storefront_settings', [
     { key: 'purchases_enabled', value: JSON.stringify(true) },
     { key: 'maintenance_mode', value: JSON.stringify(false) },
-    { key: 'announcement_bar', value: JSON.stringify({ active: true, message: 'AVZ HAUTE WEARABLE ART ATELIER' }) },
+    { key: 'announcement_bar', value: JSON.stringify({ active: true, message: 'AVZ HANDMADE WEARABLE ART STUDIO' }) },
   ]);
 
   // Pre-seed products
@@ -59,7 +59,7 @@ function createInMemoryClient(): Client {
     sku: `AVZ-${p.id}`,
     name: p.name,
     tag: p.tag || '1 OF 1',
-    category: p.category || 'Atelier',
+    category: p.category || 'Studio',
     price_inr: p.price || 0,
     price_usd: Math.round((p.price || 0) / 85),
     stock: p.stock || 1,
@@ -462,6 +462,25 @@ async function performDatabaseInitialization(): Promise<void> {
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_status ON refunds(status);`);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_idempotency ON refunds(idempotency_key);`);
 
+    // 19. Testimonials & Customer Reviews
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS testimonials (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      user_name TEXT NOT NULL,
+      user_email TEXT,
+      user_avatar TEXT,
+      role_title TEXT,
+      rating INTEGER DEFAULT 5,
+      content TEXT NOT NULL,
+      product_name TEXT,
+      status TEXT NOT NULL DEFAULT 'published',
+      created_at INTEGER NOT NULL
+    );
+  `);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_testimonials_status ON testimonials(status);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_testimonials_created_at ON testimonials(created_at);`);
+
   // 18. Better Auth Tables (User Accounts, Sessions, OAuth Accounts, Verifications, Rate Limiting)
   await db.execute(`
     CREATE TABLE IF NOT EXISTS user (
@@ -608,7 +627,7 @@ async function performDatabaseInitialization(): Promise<void> {
 
   // --- SEED INITIAL ADMIN USERS ---
   const defaultAdmins = [
-    { email: 'aveezahstore@gmail.com', name: 'AVZ Atelier Admin', role: 'owner' },
+    { email: 'aveezahstore@gmail.com', name: 'AVZ Studio Admin', role: 'owner' },
     { email: 'dhrisni@aveezahvaganza.com', name: 'Dhrisni (Dhristroyer)', role: 'owner' },
     { email: 'saksham@avzvaganza.com', name: 'Saksham Admin', role: 'owner' },
     { email: 'admin@avzvaganza.com', name: 'Store Manager', role: 'store_manager' }
@@ -633,8 +652,8 @@ async function performDatabaseInitialization(): Promise<void> {
       key: 'maintenance_mode',
       value: JSON.stringify({
         enabled: false,
-        title: 'ATELIER CALIBRATION IN PROGRESS',
-        message: 'The AVZ Vaganza dimensional gateway is momentarily undergoing bespoke maintenance and runway archiving. We will re-emerge shortly.',
+        title: 'STORE UPDATE IN PROGRESS',
+        message: 'The AVZ Vaganza store is momentarily undergoing routine updates. We will be back shortly.',
         banner_url: '/assets/editorial_hero_portrait.jpg'
       })
     },
@@ -642,7 +661,7 @@ async function performDatabaseInitialization(): Promise<void> {
       key: 'announcement',
       value: JSON.stringify({
         enabled: false,
-        text: 'ðŸª COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER â‚¹5,000 | 1-OF-1 BESPOKE ATELIER RELEASES',
+        text: 'ðŸª COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER â‚¹5,000 | LIMITED STUDIO DROPS',
         link: '#shop',
         link_text: 'EXPLORE VAULT',
         bg_color: '#301934',
@@ -653,7 +672,7 @@ async function performDatabaseInitialization(): Promise<void> {
       key: 'purchases_enabled',
       value: JSON.stringify({
         enabled: true,
-        disabled_message: 'Atelier purchases are momentarily paused while founder Dhrisni finalizes runway commissions. You may still explore the catalogue.'
+        disabled_message: 'Purchases are momentarily paused while founder Dhrisni finalizes new creations. You may still explore the catalogue.'
       })
     },
     {
@@ -722,7 +741,7 @@ async function performDatabaseInitialization(): Promise<void> {
       title: 'AVZ Museum Archive',
       data: JSON.stringify({
         headline: 'THE VAULT ARCHIVE',
-        subheadline: 'A living museum of archived commissions and past milestone builds.',
+        subheadline: 'A gallery of custom designs and past signature creations.',
         description: 'These sold-out pieces can be custom-recreated for you. Because each piece is hand-sculpted with upcycled hardware, no piece is ever an exact replica.',
         pricing_tiers: BRAND_INFO.pricingTiers,
         turnaround: BRAND_INFO.customTimeline
@@ -730,9 +749,9 @@ async function performDatabaseInitialization(): Promise<void> {
     },
     {
       section_key: 'custom_orders',
-      title: 'Bespoke Atelier Commission Studio',
+      title: 'Custom Order Studio',
       data: JSON.stringify({
-        headline: 'BESPOKE COMMISSIONS',
+        headline: 'CUSTOM ORDERS',
         tagline: 'Direct Dispatch to Master Artisan Dhrisni',
         whatsapp: BRAND_INFO.whatsappPrimary,
         turnaround: BRAND_INFO.customTimeline,
@@ -749,6 +768,48 @@ async function performDatabaseInitialization(): Promise<void> {
         whatsapp_url: BRAND_INFO.whatsappLinkPrimary,
         business_email: BRAND_INFO.businessEmail,
         packaging_note: BRAND_INFO.packaging.headline
+      })
+    },
+    {
+      section_key: 'reels',
+      title: 'Autoplaying Video Reels',
+      data: JSON.stringify({
+        headline: 'IN MOTION // RUNWAY & REELS',
+        subheadline: 'Watch each piece move in real life. Behind-the-scenes, runway motion, and handmade detailing.',
+        reels: [
+          {
+            id: 'reel-01',
+            title: 'The Motherboard Corset in Motion',
+            subtitle: 'Cybernetic armor sculpted to body contours',
+            vimeo_url: 'https://vimeo.com/824804225',
+            fallback_video: '/assets/Desktop view.MP4',
+            tag: 'Motherboard Top'
+          },
+          {
+            id: 'reel-02',
+            title: '72 Solid Spikes Motorcycle Shrug',
+            subtitle: 'High-contrast heavy hardware on reclaimed biker leather',
+            vimeo_url: 'https://vimeo.com/76979871',
+            fallback_video: '/assets/mobile view.mp4',
+            tag: 'Spiked Moto'
+          },
+          {
+            id: 'reel-03',
+            title: 'Tactile "CTRL+Z" Keycap Choker',
+            subtitle: 'Mechanical keys that click with every movement',
+            vimeo_url: 'https://vimeo.com/1084537',
+            fallback_video: '/assets/Desktop view.MP4',
+            tag: 'Keycap Choker'
+          },
+          {
+            id: 'reel-04',
+            title: 'Guwahati Studio Craft & Linkwork',
+            subtitle: 'Pure human artistry — over 1,200 hand-threaded stainless rings',
+            vimeo_url: 'https://vimeo.com/824804225',
+            fallback_video: '/assets/mobile view.mp4',
+            tag: 'Studio Behind The Scenes'
+          }
+        ]
       })
     }
   ];
@@ -778,7 +839,7 @@ async function performDatabaseInitialization(): Promise<void> {
       const comparePrice = p.originalPrice || price * 1.25;
       const sku = `AVZ-${p.category?.toUpperCase()?.slice(0, 3) || 'ART'}-${p.id || '01'}`;
       const images = JSON.stringify([p.image || '/assets/editorial_hero_portrait.jpg']);
-      const materials = JSON.stringify(p.materials || ['Upcycled Hardware', 'Bespoke Metal']);
+      const materials = JSON.stringify(p.materials || ['Upcycled Hardware', 'Custom Metalwork']);
       const variants = JSON.stringify([
         { size: 'XS', stock: 1, sku: `${sku}-XS` },
         { size: 'S', stock: 1, sku: `${sku}-S` },
@@ -796,7 +857,7 @@ async function performDatabaseInitialization(): Promise<void> {
         args: [
           id,
           slug,
-          p.name || 'Bespoke Atelier Piece',
+          p.name || 'Custom Studio Piece',
           p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni.',
           price,
           comparePrice,

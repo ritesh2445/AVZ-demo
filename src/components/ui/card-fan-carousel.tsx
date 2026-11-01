@@ -180,7 +180,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
         };
 
         if (isFirstMount) {
-          gsap.set(card, { x: `${(x * multiplier) * 0.5}rem`, y: `${(y * hMult) + 4}rem`, rotation: 0, scale: 0.8, opacity: 0 });
+          gsap.set(card, { x: `${(x * multiplier) * 0.5}rem`, y: `${(y * hMult) + 4}rem`, rotation: 0, scale: 0.8, opacity: 0.4 });
           gsap.to(card, { ...target, duration: 0.8, ease: "power2.out", delay: slot * 0.04, onComplete: onCardDone });
         } else if (!wasVisible) {
           const enterX = direction === "right" ? 40 : -40;
@@ -283,7 +283,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
       window.removeEventListener("resize", onResize);
       if (leaveTimer) clearTimeout(leaveTimer);
     };
-  }, [centerIndex, totalCards, getVisibleMap, needsPagination]);
+  }, [centerIndex, totalCards, getVisibleMap, needsPagination, cards]);
 
   if (!totalCards) return null;
 
@@ -300,7 +300,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
           ref={containerRef}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="fan-layout flex relative justify-center items-center w-full max-w-[80rem]"
+          className="fan-layout flex relative justify-center items-center w-full max-w-[80rem] h-[22rem] sm:h-[26rem] md:h-[30rem] lg:h-[38rem]"
         >
           {cards.map((card, index) => {
             const image = (
@@ -345,7 +345,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
                 }}
                 target={card.linkUrl.startsWith("http") ? "_blank" : "_self"}
                 rel="noopener noreferrer"
-                className="fan-card block cursor-pointer"
+                className="fan-card block cursor-pointer w-[9.5rem] h-[13.5rem] sm:w-[11.5rem] sm:h-[16.5rem] md:w-[14rem] md:h-[20rem] lg:w-[17rem] lg:h-[24rem]"
               >
                 {image}
               </a>
@@ -353,7 +353,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
               <div
                 key={index}
                 onClick={() => onCardClick?.(card, index)}
-                className="fan-card cursor-pointer"
+                className="fan-card cursor-pointer w-[9.5rem] h-[13.5rem] sm:w-[11.5rem] sm:h-[16.5rem] md:w-[14rem] md:h-[20rem] lg:w-[17rem] lg:h-[24rem]"
               >
                 {image}
               </div>

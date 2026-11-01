@@ -213,27 +213,27 @@ export function ContactSection() {
               Direct connection to Dhrisni and our studio team. Ideal for event deadlines, measurement help, or quick order questions.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 mb-4">
+            <div className="flex flex-col gap-2.5 w-full mb-4">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}
+                className="contact-action-btn w-full p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}
               >
-                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <Phone className="w-4 h-4 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+                <div className="flex items-center gap-3 min-w-0">
+                  <Phone className="w-4 h-4 shrink-0 text-white" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold whitespace-nowrap" style={{ color: '#d4d4d8' }}>
-                      DIRECT SUPPORT
+                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold text-zinc-400">
+                      DIRECT VIP CONCIERGE
                     </span>
-                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
-                      CHAT WITH ATELIER
+                    <span className="text-xs sm:text-[13px] font-mono font-bold tracking-wider text-white">
+                      CHAT WITH STUDIO
                     </span>
                   </div>
                 </div>
 
-                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-white" />
               </a>
 
               <a
@@ -241,20 +241,21 @@ export function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('laser')}
-                className="contact-action-btn flex-1 p-3 sm:p-3.5 md:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}>
-                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-nowrap">
-                  <Phone className="w-4 h-4 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+                className="contact-action-btn w-full p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group" style={{ backgroundColor: '#09090b', borderColor: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <Phone className="w-4 h-4 shrink-0 text-white" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold whitespace-nowrap" style={{ color: '#d4d4d8' }}>
-                      STUDIO CONCIERGE
+                    <span className="text-[9px] font-mono tracking-widest uppercase font-semibold text-zinc-400">
+                      STUDIO ASSISTANT
                     </span>
-                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-bold tracking-wider whitespace-nowrap" style={{ color: '#ffffff' }}>
-                      VIP STYLING DESK
+                    <span className="text-xs sm:text-[13px] font-mono font-bold tracking-wider text-white">
+                      STYLING & HELP DESK
                     </span>
                   </div>
                 </div>
 
-                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+                <ArrowUpRight className="w-4 h-4 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-white" />
               </a>
             </div>
 

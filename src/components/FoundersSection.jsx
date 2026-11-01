@@ -7,15 +7,11 @@ import DhrisniGarden from './DhrisniGarden';
 const POLAROID_CARDS = [
   {
     id: 'vision',
-    tag: 'ATELIER 01',
+    tag: 'STUDIO 01',
     headline: 'SCISSORS & INSTINCT',
     body: 'No corporate patterns. Slicing raw denim and shaping armor by instinct.',
-    stamp: 'ORIGINAL ATELIER',
-    widthClass: 'w-48',
-    desktopPosition: '-top-8 -left-8 sm:-left-12',
-    rotation: '-rotate-6',
-    hoverRotation: 'hover:rotate-0',
-    delay: 'delay-[500ms]'
+    stamp: 'ORIGINAL STUDIO',
+    rotation: '-rotate-2'
   },
   {
     id: 'alias',
@@ -23,23 +19,15 @@ const POLAROID_CARDS = [
     headline: '@DHRISTROYER',
     body: 'Actor. Sculptor. Founder. Slicing through fashion monotony since day one.',
     stamp: 'GUWAHATI ARCHIVE',
-    widthClass: 'w-44',
-    desktopPosition: '-top-4 -right-6 sm:-right-10',
-    rotation: 'rotate-8',
-    hoverRotation: 'hover:rotate-0',
-    delay: 'delay-[650ms]'
+    rotation: 'rotate-2'
   },
   {
     id: 'medium',
     tag: 'MEDIUM 03',
     headline: 'SALVAGED ARMOR',
-    body: 'Motherboards, spikes, and vintage hardware transformed into couture.',
-    stamp: '1-OF-1 RELIC',
-    widthClass: 'w-44',
-    desktopPosition: 'bottom-12 -left-6 sm:-left-10',
-    rotation: '-rotate-4',
-    hoverRotation: 'hover:rotate-0',
-    delay: 'delay-[800ms]'
+    body: 'Motherboards, spikes, and vintage hardware transformed into wearable art.',
+    stamp: '1-OF-1 PIECE',
+    rotation: '-rotate-1'
   },
   {
     id: 'guild',
@@ -47,11 +35,7 @@ const POLAROID_CARDS = [
     headline: 'WOMEN ARTISANS',
     body: 'Handmade by women artisans in our Guwahati studio. True human soul over assembly lines.',
     stamp: 'ASSAM • 26°N 91°E',
-    widthClass: 'w-52',
-    desktopPosition: 'bottom-8 -right-8 sm:-right-12',
-    rotation: 'rotate-6',
-    hoverRotation: 'hover:rotate-0',
-    delay: 'delay-[950ms]'
+    rotation: 'rotate-2'
   }
 ];
 
@@ -134,8 +118,8 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
   return (
     <section id="about" className="relative w-full overflow-hidden">
       {/* =========================================================================
-          CHAPTER 1: THE MONOLITH EXHIBITION (THE ATELIER BOTANICAL GALLERY)
-          Deep dark atelier canvas matching the rest of the site. Interactive
+          CHAPTER 1: THE MONOLITH EXHIBITION (THE BOTANICAL STUDIO GALLERY)
+          Deep dark studio canvas matching the rest of the site. Interactive
           blooming and growing botanical animation of the DHRISNI wordmark.
           ========================================================================= */}
       <div
@@ -185,12 +169,12 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
       </div>
 
       {/* =========================================================================
-          CHAPTER 2: CINEMATIC ATELIER DIMENSION — THE ARTISAN & THE MANIFESTO
+          CHAPTER 2: CINEMATIC STUDIO DIMENSION — THE ARTISAN & THE MANIFESTO
           Deep obsidian atmosphere with editorial split-screen, archival portrait,
           and oversized haute-couture quote.
           ========================================================================= */}
       <div
-        className="atelier-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black"
+        className="studio-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black"
         style={{ backgroundColor: '#0a0a0f', color: '#ffffff' }}
       >
         {/* Subtle Ambient Spatial Glow */}
@@ -282,46 +266,6 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
 
                   {/* Dramatic Ambient Aura Glow */}
                   <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-pink/30 via-transparent to-purple-500/20 blur-2xl -z-10 opacity-75 animate-pulse" />
-
-                  {/* 3D Floating Polaroid Cards Orbiting Dhrisni (Desktop & Large Screens) */}
-                  <div className="hidden md:block pointer-events-auto">
-                    {POLAROID_CARDS.map((card) => (
-                      <div
-                        key={card.id}
-                        className={`absolute ${card.desktopPosition} z-20 ${card.widthClass} transition-all duration-700 ease-out transform ${
-                          isCinematicRevealed ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-75 translate-y-8'
-                        } ${card.delay}`}
-                      >
-                        <div
-                          className={`polaroid-card p-2 sm:p-2.5 pb-5 sm:pb-6 rounded-md bg-white border border-white/90 shadow-[0_18px_38px_rgba(0,0,0,0.85)] cursor-pointer transition-all duration-500 ease-out ${card.rotation} ${card.hoverRotation} hover:scale-110 hover:z-30 hover:shadow-[0_22px_50px_rgba(244,114,182,0.45)]`}
-                          style={{ backgroundColor: '#ffffff' }}
-                          onMouseEnter={() => playSound('cyber_hover')}
-                        >
-                          {/* Pure Black Photo Aperture Inside */}
-                          <div className="bg-[#09090d] p-3 rounded-sm flex flex-col justify-between text-left min-h-[96px] border border-black/40">
-                            <div className="flex items-center justify-between gap-1 mb-1">
-                              <span className="text-[8px] font-mono tracking-widest text-[#f472b6] font-bold uppercase">
-                                {card.tag}
-                              </span>
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-pulse" />
-                            </div>
-                            <h4 className="text-[11px] font-mono font-bold text-white tracking-wide uppercase mb-1">
-                              "{card.headline}"
-                            </h4>
-                            <p className="text-[9px] font-mono text-zinc-300 leading-tight">
-                              {card.body}
-                            </p>
-                          </div>
-
-                          {/* Authentic Polaroid White Margin Chin with Archival Stamp */}
-                          <div className="mt-2 px-1 flex items-center justify-between text-[8px] font-mono font-bold tracking-widest text-zinc-800 uppercase">
-                            <span>{card.stamp}</span>
-                            <span className="text-[7px] text-zinc-500">✦ AVZ</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
                 {/* Big Text: "Meet the mother" emerges and settles right down below the image */}
@@ -345,27 +289,41 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   </div>
                 </div>
 
-                {/* Mobile Polaroid Cards Grid (Below "Meet the mother" on Touch Devices) */}
-                <div className="grid grid-cols-2 gap-3 mt-6 w-full max-w-sm md:hidden">
-                  {POLAROID_CARDS.map((card) => (
-                    <div key={`mob-${card.id}`} className="w-full">
+                {/* 3D Popping Polaroid Cards - Placed below Meet the mother with ZERO overlap of Dhrisni's image */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 mt-8 w-full max-w-[420px] pointer-events-auto">
+                  {POLAROID_CARDS.map((card, idx) => (
+                    <div
+                      key={card.id}
+                      className={`transition-all duration-700 ease-out transform ${
+                        isCinematicRevealed ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-6'
+                      }`}
+                      style={{ transitionDelay: `${500 + idx * 120}ms` }}
+                    >
                       <div
-                        className="p-2 pb-4 rounded-md bg-white border border-white/90 shadow-lg"
+                        className={`polaroid-card p-2 sm:p-2.5 pb-4 sm:pb-5 rounded-md bg-white border border-white/90 shadow-[0_14px_35px_rgba(0,0,0,0.85)] cursor-pointer transition-all duration-500 ease-out ${card.rotation} hover:rotate-0 hover:scale-105 hover:shadow-[0_20px_45px_rgba(244,114,182,0.45)]`}
                         style={{ backgroundColor: '#ffffff' }}
+                        onMouseEnter={() => playSound('cyber_hover')}
                       >
-                        <div className="bg-[#09090d] p-2 rounded-sm text-left min-h-[85px]">
-                          <span className="text-[7px] font-mono tracking-widest text-[#f472b6] font-bold uppercase block mb-0.5">
-                            {card.tag}
-                          </span>
-                          <h4 className="text-[10px] font-mono font-bold text-white uppercase mb-1">
+                        {/* Pure Black Photo Aperture Inside */}
+                        <div className="bg-[#09090d] p-2.5 rounded-sm flex flex-col justify-between text-left min-h-[92px] border border-black/40">
+                          <div className="flex items-center justify-between gap-1 mb-1">
+                            <span className="text-[8px] font-mono tracking-widest text-[#f472b6] font-bold uppercase">
+                              {card.tag}
+                            </span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#f472b6] animate-pulse" />
+                          </div>
+                          <h4 className="text-[10px] sm:text-[11px] font-mono font-bold text-white tracking-wide uppercase mb-1">
                             "{card.headline}"
                           </h4>
-                          <p className="text-[8px] font-mono text-zinc-300 leading-tight">
+                          <p className="text-[8.5px] sm:text-[9px] font-mono text-zinc-300 leading-tight">
                             {card.body}
                           </p>
                         </div>
-                        <div className="mt-1 px-0.5 text-[7px] font-mono font-bold text-zinc-800 text-left uppercase truncate">
-                          {card.stamp}
+
+                        {/* Authentic Polaroid White Margin Chin with Archival Stamp */}
+                        <div className="mt-1.5 px-1 flex items-center justify-between text-[7.5px] sm:text-[8px] font-mono font-bold tracking-widest text-zinc-800 uppercase">
+                          <span>{card.stamp}</span>
+                          <span className="text-[7px] text-zinc-500">✦ AVZ</span>
                         </div>
                       </div>
                     </div>
@@ -410,7 +368,7 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
                   className="bg-white text-black inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-lg active:scale-95 cursor-pointer group hover:bg-zinc-200"
                   style={{ backgroundColor: '#ffffff', color: '#000000' }}
                 >
-                  <span style={{ color: '#000000' }} className="text-black font-bold">COMMISSION WITH DHRISNI</span>
+                  <span style={{ color: '#000000' }} className="text-black font-bold">START A CUSTOM ORDER</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ color: '#000000' }} />
                 </a>
 
@@ -549,46 +507,6 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
               </div>
             </div>
 
-            {/* =========================================================================
-                CHAPTER 4: PROVENANCE METRICS COUNTER
-                ========================================================================= */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-16 pt-12 border-t border-white/10 text-center">
-              <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
-                  200+
-                </span>
-                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
-                  1-OF-1 BUILDS SCULPTED
-                </span>
-              </div>
-
-              <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
-                  1,500+
-                </span>
-                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
-                  CIRCUIT BOARDS RECLAIMED
-                </span>
-              </div>
-
-              <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#ffffff' }}>
-                  GUWAHATI
-                </span>
-                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
-                  GUWAHATI STUDIO
-                </span>
-              </div>
-
-              <div>
-                <span className="block text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-1" style={{ color: '#f472b6' }}>
-                  100%
-                </span>
-                <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase font-bold" style={{ color: '#d4d4d8' }}>
-                  HAND-SCULPTED BY DHRISNI
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -100,7 +100,7 @@ function ResetPasswordForm() {
           className="flex items-center gap-1.5 text-zinc-400 hover:text-white font-mono text-xs uppercase tracking-wider transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Atelier</span>
+          <span>Studio</span>
         </Link>
         <span className="font-mono text-[10px] tracking-[0.2em] text-pink uppercase font-bold">
           SECURITY PROTOCOL

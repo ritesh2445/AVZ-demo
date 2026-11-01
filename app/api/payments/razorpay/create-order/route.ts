@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         const parsed = JSON.parse(String(settingsRes.rows[0].value));
         if (parsed.enabled === false) {
           return NextResponse.json(
-            { error: parsed.disabled_message || 'Purchases are currently paused by the atelier.' },
+            { error: parsed.disabled_message || 'Purchases are currently paused by the studio.' },
             { status: 403 }
           );
         }
@@ -68,14 +68,14 @@ export async function POST(request: Request) {
           size: cartItem.size || 'Standard'
         });
       } else {
-        // Fallback for custom bespoke commission
+        // Fallback for custom order
         const unitPrice = Number(cartItem.price || 2500);
         const qty = Number(cartItem.quantity || 1);
         calculatedSubtotal += unitPrice * qty;
         verifiedItems.push({
           id: cartItem.id || `custom_${Date.now()}`,
-          title: cartItem.name || cartItem.title || 'Bespoke Atelier Commission',
-          sku: 'AVZ-BESPOKE-01',
+          title: cartItem.name || cartItem.title || 'Custom Studio Piece',
+          sku: 'AVZ-CUSTOM-01',
           price: unitPrice,
           quantity: qty,
           size: cartItem.size || 'Custom'

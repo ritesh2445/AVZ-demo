@@ -48,15 +48,15 @@ export async function GET() {
           title: 'AVZ Museum Archive',
           data: JSON.stringify({
             headline: 'THE VAULT ARCHIVE',
-            subheadline: 'A living museum of archived commissions and past milestone builds.',
+            subheadline: 'A gallery of custom designs and past signature creations.',
             description: 'These sold-out pieces can be custom-recreated for you. Because each piece is hand-sculpted with upcycled hardware, no piece is ever an exact replica.'
           })
         },
         {
           section_key: 'custom_orders',
-          title: 'Bespoke Atelier Commission Studio',
+          title: 'Custom Order Studio',
           data: JSON.stringify({
-            headline: 'BESPOKE COMMISSIONS',
+            headline: 'CUSTOM ORDERS',
             tagline: 'Direct Dispatch to Master Artisan Dhrisni',
             whatsapp: '917099307255'
           })
@@ -69,6 +69,48 @@ export async function GET() {
             copyright: '© 2026 AVZ VAGANZA. ALL RIGHTS RESERVED.',
             business_email: 'orders@avzvaganza.com',
             packaging_note: 'Biodegradable velvet-lined archival keepsake boxes.'
+          })
+        },
+        {
+          section_key: 'reels',
+          title: 'Autoplaying Video Reels',
+          data: JSON.stringify({
+            headline: 'IN MOTION // RUNWAY & REELS',
+            subheadline: 'Watch each piece move in real life. Behind-the-scenes, runway motion, and handmade detailing.',
+            reels: [
+              {
+                id: 'reel-01',
+                title: 'The Motherboard Corset in Motion',
+                subtitle: 'Cybernetic armor sculpted to body contours',
+                vimeo_url: 'https://vimeo.com/824804225',
+                fallback_video: '/assets/Desktop view.MP4',
+                tag: 'Motherboard Top'
+              },
+              {
+                id: 'reel-02',
+                title: '72 Solid Spikes Motorcycle Shrug',
+                subtitle: 'High-contrast heavy hardware on reclaimed biker leather',
+                vimeo_url: 'https://vimeo.com/76979871',
+                fallback_video: '/assets/mobile view.mp4',
+                tag: 'Spiked Moto'
+              },
+              {
+                id: 'reel-03',
+                title: 'Tactile "CTRL+Z" Keycap Choker',
+                subtitle: 'Mechanical keys that click with every movement',
+                vimeo_url: 'https://vimeo.com/1084537',
+                fallback_video: '/assets/Desktop view.MP4',
+                tag: 'Keycap Choker'
+              },
+              {
+                id: 'reel-04',
+                title: 'Guwahati Studio Craft & Linkwork',
+                subtitle: 'Pure human artistry — over 1,200 hand-threaded stainless rings',
+                vimeo_url: 'https://vimeo.com/824804225',
+                fallback_video: '/assets/mobile view.mp4',
+                tag: 'Studio Behind The Scenes'
+              }
+            ]
           })
         }
       ];

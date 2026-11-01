@@ -17,7 +17,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
 
   // Format WhatsApp message
   const textMessage = encodeURIComponent(
-    `Hello Dhrisni (@Dhristroyer)! I just submitted a custom commission brief on the AVZ Vaganza website.\n\n` +
+    `Hello Dhrisni (@Dhristroyer)! I just submitted a custom order request on the AVZ Vaganza website.\n\n` +
     `• Name: ${inquiryData.name}\n` +
     `• Contact: ${inquiryData.contact}\n` +
     `• Requested Piece: ${inquiryData.category}\n` +

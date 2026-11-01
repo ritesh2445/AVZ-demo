@@ -26,7 +26,7 @@ export default function AdminDashboardPage() {
   const [storefrontSettings, setStorefrontSettings] = useState<any>({
     maintenance_mode: { enabled: false, title: 'STORE UNDER MAINTENANCE', message: 'Site updates underway.' },
     announcement: { enabled: false, text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000', link: '#shop' },
-    purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for runway commissions.' }
+    purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for new creations.' }
   });
   const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);
   const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
@@ -57,6 +57,20 @@ export default function AdminDashboardPage() {
   const [inventoryAdjustment, setInventoryAdjustment] = useState<number>(1);
   const [inventoryReason, setInventoryReason] = useState<string>('Studio Restock');
   const [contentEditSection, setContentEditSection] = useState<any>(null);
+  const [editableReels, setEditableReels] = useState<any[]>([]);
+  const [newReelVimeoUrl, setNewReelVimeoUrl] = useState('');
+  const [newReelTitle, setNewReelTitle] = useState('');
+  const [newReelSubtitle, setNewReelSubtitle] = useState('');
+  const [newReelTag, setNewReelTag] = useState('');
+
+  const openContentEditModal = (sec: any) => {
+    setContentEditSection(sec);
+    if (sec.data?.reels && Array.isArray(sec.data.reels)) {
+      setEditableReels([...sec.data.reels]);
+    } else {
+      setEditableReels([]);
+    }
+  };
   const [newPromoModalOpen, setNewPromoModalOpen] = useState(false);
   const [newCollectionModalOpen, setNewCollectionModalOpen] = useState(false);
   const [newSquadModalOpen, setNewSquadModalOpen] = useState(false);
@@ -1275,7 +1289,7 @@ export default function AdminDashboardPage() {
                         Updated: {new Date(Number(sec.updated_at)).toLocaleDateString('en-IN')}
                       </span>
                       <button
-                        onClick={() => setContentEditSection(sec)}
+                        onClick={() => openContentEditModal(sec)}
                         className="px-3 py-1.5 rounded-lg bg-[#2D1B36] hover:bg-[#BE185D] hover:text-black text-[#F4C2C2] text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5"
                       >
                         <Edit3 className="w-3.5 h-3.5" />
@@ -1889,7 +1903,7 @@ export default function AdminDashboardPage() {
               <div className="flex justify-between items-center">
                 <div>
                   <h2 className="text-xl font-cinzel font-bold text-white uppercase">Pages & Legal Policies</h2>
-                  <p className="text-xs text-neutral-400 mt-1 font-mono">Publish shipping specs, bespoke return policies, and privacy notices.</p>
+                  <p className="text-xs text-neutral-400 mt-1 font-mono">Publish shipping details, return policies, and privacy notices.</p>
                 </div>
                 <button
                   onClick={() => {
@@ -2225,10 +2239,10 @@ export default function AdminDashboardPage() {
               </button>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="space-y-4 text-xs">
               {Object.keys(contentEditSection.data || {}).map((key) => {
                 const val = contentEditSection.data[key];
-                if (typeof val === 'object') return null; // handle complex in json
+                if (key === 'reels' || typeof val === 'object') return null;
                 return (
                   <div key={key}>
                     <label className="block text-[11px] font-mono text-neutral-400 uppercase mb-1">
@@ -2252,6 +2266,166 @@ export default function AdminDashboardPage() {
                   </div>
                 );
               })}
+
+              {/* DEDICATED VIMEO REELS MANAGER */}
+              {(contentEditSection.section_key === 'reels' || editableReels.length > 0) && (
+                <div className="mt-6 pt-5 border-t border-neutral-800 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-cinzel font-bold text-white flex items-center gap-2">
+                        <span>Vimeo Video Reels</span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#301934] text-[#F4C2C2]">
+                          {editableReels.length} Reels
+                        </span>
+                      </h4>
+                      <p className="text-[11px] text-neutral-400 mt-0.5">
+                        Add or update Vimeo video links for the homepage autoplaying reels segment.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* List of active reels */}
+                  <div className="space-y-3">
+                    {editableReels.map((reel, rIdx) => (
+                      <div key={reel.id || rIdx} className="p-3.5 rounded-xl bg-[#181122] border border-neutral-800/80 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-[10px] text-[#F4C2C2] uppercase">
+                            Reel #{rIdx + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditableReels(editableReels.filter((_, idx) => idx !== rIdx));
+                            }}
+                            className="text-red-400 hover:text-red-300 text-xs font-mono flex items-center gap-1 cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" /> Remove
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-[10px] font-mono text-neutral-400 uppercase">Title</label>
+                            <input
+                              type="text"
+                              value={reel.title || ''}
+                              onChange={(e) => {
+                                const next = [...editableReels];
+                                next[rIdx] = { ...next[rIdx], title: e.target.value };
+                                setEditableReels(next);
+                              }}
+                              className="w-full bg-[#120D1A] border border-neutral-800 rounded p-1.5 text-white text-xs"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] font-mono text-neutral-400 uppercase">Tag / Category</label>
+                            <input
+                              type="text"
+                              value={reel.tag || ''}
+                              onChange={(e) => {
+                                const next = [...editableReels];
+                                next[rIdx] = { ...next[rIdx], tag: e.target.value };
+                                setEditableReels(next);
+                              }}
+                              className="w-full bg-[#120D1A] border border-neutral-800 rounded p-1.5 text-white text-xs"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-mono text-neutral-400 uppercase">Vimeo Link / URL</label>
+                          <input
+                            type="text"
+                            placeholder="https://vimeo.com/824804225 or player.vimeo.com/video/..."
+                            value={reel.vimeo_url || ''}
+                            onChange={(e) => {
+                              const next = [...editableReels];
+                              next[rIdx] = { ...next[rIdx], vimeo_url: e.target.value };
+                              setEditableReels(next);
+                            }}
+                            className="w-full bg-[#120D1A] border border-neutral-800 rounded p-1.5 text-white text-xs font-mono"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-mono text-neutral-400 uppercase">Caption / Subtitle</label>
+                          <input
+                            type="text"
+                            value={reel.subtitle || ''}
+                            onChange={(e) => {
+                              const next = [...editableReels];
+                              next[rIdx] = { ...next[rIdx], subtitle: e.target.value };
+                              setEditableReels(next);
+                            }}
+                            className="w-full bg-[#120D1A] border border-neutral-800 rounded p-1.5 text-white text-xs"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add New Reel Form */}
+                  <div className="p-4 rounded-xl bg-[#1C1425] border border-[#BE185D]/30 space-y-3">
+                    <h5 className="font-cinzel text-xs font-bold text-white flex items-center gap-1.5">
+                      <Plus className="w-3.5 h-3.5 text-pink" />
+                      Add New Vimeo Reel
+                    </h5>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        placeholder="Reel Title (e.g. Spiked Moto Shrug)"
+                        value={newReelTitle}
+                        onChange={(e) => setNewReelTitle(e.target.value)}
+                        className="bg-[#120D1A] border border-neutral-800 rounded-lg p-2 text-white text-xs"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Tag (e.g. Runway, Studio)"
+                        value={newReelTag}
+                        onChange={(e) => setNewReelTag(e.target.value)}
+                        className="bg-[#120D1A] border border-neutral-800 rounded-lg p-2 text-white text-xs"
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Vimeo Video Link (e.g. https://vimeo.com/824804225)"
+                      value={newReelVimeoUrl}
+                      onChange={(e) => setNewReelVimeoUrl(e.target.value)}
+                      className="w-full bg-[#120D1A] border border-neutral-800 rounded-lg p-2 text-white text-xs font-mono"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Caption / Subtitle"
+                      value={newReelSubtitle}
+                      onChange={(e) => setNewReelSubtitle(e.target.value)}
+                      className="w-full bg-[#120D1A] border border-neutral-800 rounded-lg p-2 text-white text-xs"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!newReelVimeoUrl && !newReelTitle) {
+                          alert('Please enter at least a title or Vimeo link');
+                          return;
+                        }
+                        const newReel = {
+                          id: 'reel-' + Date.now(),
+                          title: newReelTitle || 'Featured Video Reel',
+                          subtitle: newReelSubtitle || '',
+                          vimeo_url: newReelVimeoUrl,
+                          fallback_video: newReelVimeoUrl,
+                          tag: newReelTag || 'Runway'
+                        };
+                        setEditableReels([...editableReels, newReel]);
+                        setNewReelTitle('');
+                        setNewReelSubtitle('');
+                        setNewReelVimeoUrl('');
+                        setNewReelTag('');
+                      }}
+                      className="px-3.5 py-2 rounded-lg bg-[#BE185D] hover:bg-[#ff3d9a] text-black font-spartan font-bold text-xs uppercase cursor-pointer flex items-center gap-1.5 transition-all shadow-md"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      Add Reel to List
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-3 pt-4 border-t border-neutral-800">
@@ -2262,6 +2436,9 @@ export default function AdminDashboardPage() {
                     const el = document.getElementById(`content_${key}`) as HTMLInputElement | HTMLTextAreaElement;
                     if (el) updatedData[key] = el.value;
                   });
+                  if (editableReels.length > 0 || contentEditSection.section_key === 'reels') {
+                    updatedData.reels = editableReels;
+                  }
                   handleSaveContentSection(contentEditSection.section_key, contentEditSection.title, updatedData, 'draft');
                 }}
                 className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-mono"
@@ -2275,6 +2452,9 @@ export default function AdminDashboardPage() {
                     const el = document.getElementById(`content_${key}`) as HTMLInputElement | HTMLTextAreaElement;
                     if (el) updatedData[key] = el.value;
                   });
+                  if (editableReels.length > 0 || contentEditSection.section_key === 'reels') {
+                    updatedData.reels = editableReels;
+                  }
                   handleSaveContentSection(contentEditSection.section_key, contentEditSection.title, updatedData, 'published');
                 }}
                 className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] text-black font-bold text-xs font-mono uppercase"
@@ -2312,7 +2492,7 @@ export default function AdminDashboardPage() {
                   onChange={(e) => setInventoryReason(e.target.value)}
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
                 >
-                  <option value="Studio Restock">Atelier Studio Restock</option>
+                  <option value="Studio Restock">Studio Restock</option>
                   <option value="Physical Count Correction">Physical Studio Count Correction</option>
                   <option value="Damaged in Production">Damaged During Handcrafting</option>
                   <option value="Reserved for Runway">Reserved for Runway Exhibition</option>
@@ -2479,7 +2659,7 @@ export default function AdminDashboardPage() {
                 <textarea
                   name="colDesc"
                   rows={2}
-                  placeholder="Atelier theme and material notes..."
+                  placeholder="Studio theme and material notes..."
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                 />
               </div>

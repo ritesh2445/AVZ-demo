@@ -18,30 +18,30 @@ import {
 import { BRAND_INFO } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-const COMMISSION_PHASES = [
+const CUSTOM_ORDER_STEPS = [
   {
     step: "01",
     title: "CONSULTATION",
-    subtitle: "Brief & Silhouette",
-    desc: "Review of style reference, silhouette specs, and body measurements."
+    subtitle: "Your Vision & Sizing",
+    desc: "Share your style ideas, reference photos, and measurements."
   },
   {
     step: "02",
     title: "SOURCING",
-    subtitle: "Hardware Allocation",
-    desc: "Selecting motherboards, cones, rings, and deadstock denim foundations."
+    subtitle: "Materials Selection",
+    desc: "Selecting motherboards, spikes, rings, and upcycled fabrics."
   },
   {
     step: "03",
     title: "CRAFTING",
-    subtitle: "Studio Handcraft",
-    desc: "Handcrafted with precision by Dhrisni & women artisans in Guwahati."
+    subtitle: "Handcrafted in Studio",
+    desc: "Handcrafted with care by Dhrisni & women artisans in Guwahati."
   },
   {
     step: "04",
     title: "DELIVERY",
-    subtitle: "Verification & Dispatch",
-    desc: "Final fitting checks, video sign-off, and insured express delivery."
+    subtitle: "Packed & Shipped",
+    desc: "Final fitting checks, video preview, and safe express shipping."
   }
 ];
 
@@ -125,7 +125,7 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
 
         {/* 4-Step Order Process */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 mt-8 pt-6 border-t border-white/10">
-          {COMMISSION_PHASES.map((p) => (
+          {CUSTOM_ORDER_STEPS.map((p) => (
             <div key={p.step} className="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 text-left">
               <div className="flex items-center justify-between mb-1">
                 <span className="font-mono text-xs font-bold text-pink tracking-widest">STEP {p.step}</span>
@@ -195,19 +195,19 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
               Prefer to chat directly? Send photos, sketches, or event dates to our team on WhatsApp.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col gap-3 w-full">
               <a
                 href={BRAND_INFO.whatsappLinkPrimary}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="contact-action-btn flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
+                className="contact-action-btn w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group"
               >
-                <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
+                <div className="flex items-center gap-3 min-w-0">
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">WHATSAPP SUPPORT</span>
-                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">CHAT DIRECTLY</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">WHATSAPP SUPPORT</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider">CHAT DIRECTLY</span>
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -218,13 +218,13 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playSound('snap')}
-                className="contact-action-btn flex-1 p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-2.5 shadow-md active:scale-98 transition-all cursor-pointer group flex-nowrap"
+                className="contact-action-btn w-full p-3.5 sm:p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md active:scale-98 transition-all cursor-pointer group"
               >
-                <div className="flex items-center gap-2.5 min-w-0 flex-nowrap">
+                <div className="flex items-center gap-3 min-w-0">
                   <Phone className="w-4 h-4 text-white stroke-[2.2] shrink-0" />
                   <div className="flex flex-col text-left min-w-0">
-                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold whitespace-nowrap">STUDIO CONCIERGE</span>
-                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider whitespace-nowrap">VIP DESK</span>
+                    <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase font-semibold">STUDIO CONCIERGE</span>
+                    <span className="text-xs sm:text-[13px] font-mono font-bold text-white tracking-wider">VIP DESK</span>
                   </div>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-white/70 shrink-0 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

@@ -15,14 +15,14 @@ const DEFAULT_VAULT_CARDS = [
     imgUrl: ASSET_MANIFEST?.products?.spikeBodice || "/assets/look_spike_bodice.jpg",
     alt: "Spike Bodice Armour",
     title: "Hand-Riveted Spike Bodice",
-    category: "ATELIER RELIC",
+    category: "HANDMADE PIECE",
     price: 4500
   },
   {
     imgUrl: ASSET_MANIFEST?.products?.chainmailArmor || "/assets/look_chainmail_armor.jpg",
     alt: "Chainmail Cyber Armour",
     title: "Guwahati Chainmail Armour",
-    category: "HAUTE ARMOR",
+    category: "STATEMENT PIECE",
     price: 5200
   },
   {
@@ -63,7 +63,7 @@ const DEFAULT_VAULT_CARDS = [
   {
     imgUrl: "https://cdn.21st.dev/assets/mirror/ec/ec33bb1d53aef764ed557037ded0bf376df17ceb6de92411b60d8edcd68e75b2.jpg",
     alt: "Starry night workshop archive",
-    title: "Guwahati Nocturne Atelier Series",
+    title: "Guwahati Nocturne Studio Series",
     category: "STUDIO ARCHIVE",
     price: 3400
   },

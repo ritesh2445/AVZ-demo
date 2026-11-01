@@ -31,7 +31,7 @@ async function sendAuthEmail({
   const fromAddress =
     process.env.EMAIL_FROM_ADDRESS ||
     process.env.RESEND_FROM_EMAIL ||
-    'AVZ Vaganza Atelier <onboarding@resend.dev>';
+    'AVZ Vaganza Studio <onboarding@resend.dev>';
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -118,13 +118,13 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false, // Allows immediate VIP exploration; email verification can be triggered on demand
     sendResetPassword: async ({ user, url }, _request) => {
-      const brand = 'AVZ VAGANZA ATELIER';
+      const brand = 'AVZ VAGANZA STUDIO';
       const subject = `${brand} // Reset Your VIP Password`;
       const html = `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0d0714; color: #ffffff; padding: 40px; border-radius: 16px; border: 1px solid rgba(244,194,194,0.2); max-width: 520px; margin: 0 auto;">
           <div style="text-align: center; margin-bottom: 24px;">
             <h1 style="color: #f4c2c2; font-size: 16px; letter-spacing: 0.25em; text-transform: uppercase; margin: 0;">AVZ VAGANZA</h1>
-            <p style="color: #a1a1aa; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px;">HAUTE WEARABLE ART ATELIER</p>
+            <p style="color: #a1a1aa; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px;">HANDMADE WEARABLE ART STUDIO</p>
           </div>
           <p style="color: #e4e4e7; font-size: 14px; line-height: 1.6;">Hello ${user.name || 'VIP Client'},</p>
           <p style="color: #a1a1aa; font-size: 13px; line-height: 1.6;">A password reset request was initiated for your AVZ client account (${user.email}). Click the button below to establish a new password:</p>
@@ -146,13 +146,13 @@ export const auth = betterAuth({
     sendOnSignUp: false, // Can be triggered manually or via profile
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }, _request) => {
-      const brand = 'AVZ VAGANZA ATELIER';
+      const brand = 'AVZ VAGANZA STUDIO';
       const subject = `${brand} // Verify Your VIP Account`;
       const html = `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0d0714; color: #ffffff; padding: 40px; border-radius: 16px; border: 1px solid rgba(244,194,194,0.2); max-width: 520px; margin: 0 auto;">
           <div style="text-align: center; margin-bottom: 24px;">
             <h1 style="color: #f4c2c2; font-size: 16px; letter-spacing: 0.25em; text-transform: uppercase; margin: 0;">AVZ VAGANZA</h1>
-            <p style="color: #a1a1aa; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px;">HAUTE WEARABLE ART ATELIER</p>
+            <p style="color: #a1a1aa; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px;">HANDMADE WEARABLE ART STUDIO</p>
           </div>
           <p style="color: #e4e4e7; font-size: 14px; line-height: 1.6;">Welcome ${user.name || 'VIP Client'},</p>
           <p style="color: #a1a1aa; font-size: 13px; line-height: 1.6;">Please confirm your email address to complete your VIP client verification and unlock runway drop previews:</p>

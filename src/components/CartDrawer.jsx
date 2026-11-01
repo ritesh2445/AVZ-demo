@@ -537,7 +537,7 @@ export default function CartDrawer({
                   {isSubmitting ? (
                     <span>AUTHORIZING RESERVATION...</span>
                   ) : purchasesEnabled === false ? (
-                    'COMMISSIONS PAUSED'
+                    'ORDERS PAUSED'
                   ) : (
                     `CONFIRM & PAY (${formatPrice(totalInr, currency)})`
                   )}

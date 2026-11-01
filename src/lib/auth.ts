@@ -242,7 +242,7 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
 
   // If email provider is configured (required in production, optional in development):
   if (resendApiKey) {
-    const fromAddress = process.env.RESEND_FROM_EMAIL || 'AVZ Vaganza Atelier <onboarding@resend.dev>';
+    const fromAddress = process.env.RESEND_FROM_EMAIL || 'AVZ Vaganza Studio <onboarding@resend.dev>';
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -256,16 +256,16 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
         body: JSON.stringify({
           from: fromAddress,
           to: [normalized],
-          subject: 'AVZ Vaganza Atelier // Security Access Code',
+          subject: 'AVZ Vaganza Studio // Security Access Code',
           html: `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0E0A14; color: #FFFFFF; padding: 32px; border-radius: 12px; border: 1px solid #301934; max-width: 520px; margin: 0 auto;">
-            <h2 style="color: #F4C2C2; letter-spacing: 2px; margin-top: 0; font-size: 18px; text-transform: uppercase;">AVZ Vaganza Atelier</h2>
+            <h2 style="color: #F4C2C2; letter-spacing: 2px; margin-top: 0; font-size: 18px; text-transform: uppercase;">AVZ Vaganza Studio</h2>
             <p style="color: #D1D5DB; font-size: 14px; line-height: 1.5;">Your single-use administrator authentication passcode is:</p>
             <div style="font-size: 32px; font-weight: bold; letter-spacing: 6px; color: #FFFFFF; background-color: #1C1226; padding: 16px 24px; border-radius: 8px; border: 1px solid #BE185D; display: inline-block; margin: 16px 0; font-family: monospace;">
               ${otpCode}
             </div>
             <p style="color: #9CA3AF; font-size: 12px; line-height: 1.5; margin-bottom: 0;">This passcode expires in 10 minutes and can only be used once. If you did not request this code, no action is required.</p>
           </div>`,
-          text: `AVZ VAGANZA ATELIER\n\nYour single-use administrator authentication passcode is: ${otpCode}\n\nThis passcode expires in 10 minutes. If you did not request this code, no action is required.`
+          text: `AVZ VAGANZA STUDIO\n\nYour single-use administrator authentication passcode is: ${otpCode}\n\nThis passcode expires in 10 minutes. If you did not request this code, no action is required.`
         }),
         signal: controller.signal
       });

@@ -117,7 +117,7 @@ export default function Footer({ onScrollToSection, cmsFooter }) {
               className="flex items-center gap-2 text-xs font-mono text-silver hover:text-pink-300 transition-colors text-left"
             >
               <Phone className="w-4 h-4 text-[#f472b6]" />
-              <span>WhatsApp: {BRAND_INFO.whatsappPrimary}</span>
+              <span>WhatsApp: Direct Studio Concierge ↗</span>
             </a>
             <a
               href={`mailto:${BRAND_INFO.businessEmail}`}
