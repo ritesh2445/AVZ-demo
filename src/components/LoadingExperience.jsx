@@ -134,7 +134,7 @@ export default function LoadingExperience({ onComplete }) {
     let animId;
     let currentCount = 0;
     let lastStepTime = performance.now();
-    const stepDuration = 12; // ms per count: brisk, responsive 1.2s load
+    const stepDuration = 3; // ms per count: ultra-fast ~300ms counter
 
     const triggerFinish = () => {
       if (hasFinishedRef.current) return;
@@ -148,7 +148,7 @@ export default function LoadingExperience({ onComplete }) {
       // Allow 850ms for cinematic letterbox aperture & anamorphic light sweep to open
       setTimeout(() => {
         onCompleteRef.current?.();
-      }, 850);
+      }, 280);
     };
     triggerFinishRef.current = triggerFinish;
 
@@ -196,7 +196,7 @@ export default function LoadingExperience({ onComplete }) {
         }
       } else if (!hasFinishedRef.current) {
         // Triumphant hold at 100% for 380ms before triggering cinematic aperture
-        if (time - lastStepTime >= 180) {
+        if (time - lastStepTime >= 60) {
           triggerFinish();
         }
       }
@@ -273,19 +273,19 @@ export default function LoadingExperience({ onComplete }) {
   }, []);
 
   return (
-    <div id="loading-experience" className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
+    <div id="loading-experience" onClick={() => triggerFinishRef.current?.()} title="Click anywhere to skip" className="fixed inset-0 z-[99999] pointer-events-auto cursor-pointer select-none overflow-hidden">
       {/* ========================================================
           CINEMATIC APERTURE / LETTERBOX SHUTTER SYSTEM
           Top and bottom cinema curtains split vertically on exit
           ======================================================== */}
       <div
-        className={`absolute top-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[850ms] pointer-events-auto will-change-transform z-20 ${
+        className={`absolute top-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[280ms] pointer-events-auto will-change-transform z-20 ${
           isExiting ? '-translate-y-full' : 'translate-y-0'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
       />
       <div
-        className={`absolute bottom-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[850ms] pointer-events-auto will-change-transform z-20 ${
+        className={`absolute bottom-0 left-0 right-0 h-1/2 bg-black transition-transform duration-[280ms] pointer-events-auto will-change-transform z-20 ${
           isExiting ? 'translate-y-full' : 'translate-y-0'
         }`}
         style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
@@ -322,8 +322,18 @@ export default function LoadingExperience({ onComplete }) {
             <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-ping" />
             <span>AVZ VAGANZA • GUWAHATI STUDIO</span>
           </div>
-          <div className="text-silver/50 hidden sm:block">
-            DHRISTROYER WEARABLE ART ARCHIVE
+          <div className="flex items-center gap-3">
+            <span className="text-silver/50 hidden md:inline">DHRISTROYER WEARABLE ART ARCHIVE</span>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                triggerFinishRef.current?.();
+              }}
+              className="pointer-events-auto px-3 py-1 rounded-full border border-white/20 bg-black/60 hover:bg-white hover:text-black transition-all text-[10px] font-mono tracking-widest text-silver hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              SKIP [ESC]
+            </button>
           </div>
         </div>
 

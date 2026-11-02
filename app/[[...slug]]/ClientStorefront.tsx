@@ -18,17 +18,28 @@ export default function ClientStorefront() {
   useEffect(() => {
     const init = async () => {
       try {
-        // Parallel fetch for zero network waterfall lag
-        const [res, contentRes, prodRes, authRes] = await Promise.all([
+        // Parallel lightweight fetch for storefront presentation data
+        const [res, contentRes, prodRes] = await Promise.all([
           fetch('/api/storefront/config'),
           fetch('/api/storefront/content'),
           fetch('/api/storefront/products'),
-          fetch('/api/admin/auth/me').catch(() => null),
         ]);
 
         if (res && res.ok) {
           const data = await res.json();
           setStorefrontSettings(data.settings);
+
+          // Only verify admin session if maintenance mode is actually enabled
+          if (data.settings?.maintenance_mode?.enabled) {
+            fetch('/api/admin/auth/me')
+              .then((r) => r.json())
+              .then((authData) => {
+                if (authData?.authenticated) {
+                  setIsAdmin(true);
+                }
+              })
+              .catch(() => {});
+          }
         }
 
         if (contentRes && contentRes.ok) {
@@ -40,13 +51,6 @@ export default function ClientStorefront() {
           const prodData = await prodRes.json();
           if (Array.isArray(prodData.products) && prodData.products.length > 0) {
             setStorefrontProducts(prodData.products);
-          }
-        }
-
-        if (authRes && authRes.ok) {
-          const authData = await authRes.json();
-          if (authData.authenticated) {
-            setIsAdmin(true);
           }
         }
       } catch (err) {

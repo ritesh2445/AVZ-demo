@@ -59,3 +59,5 @@ verify_*.py
 # Cloudflare Workers & OpenNext generated files
 .open-next/
 .wrangler/
+
+public/assets/.originals/

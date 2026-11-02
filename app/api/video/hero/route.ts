@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
 
     // Default chunk size when client requests unbounded range (e.g. bytes=0-)
     // 3MB per chunk provides instantaneous video start (<100ms) with zero stalls
-    const DEFAULT_CHUNK_SIZE = 3 * 1024 * 1024;
+    const DEFAULT_CHUNK_SIZE = Math.floor(1.5 * 1024 * 1024);
 
     if (!rangeHeader) {
       // Client did not request Range: return first chunk with 206 so media decoder starts immediately
