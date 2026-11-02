@@ -100,14 +100,17 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
   }, []);
 
   const handleMouseMove = (e) => {
+    if (!portraitRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
-    setMousePos({ x, y });
+    portraitRef.current.style.transform = `perspective(1000px) rotateY(${x * 0.35}deg) rotateX(${y * 0.35}deg)`;
   };
 
   const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 });
+    if (portraitRef.current) {
+      portraitRef.current.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+    }
   };
 
   const founderName = cmsFounders?.founder_name || 'Dhrisni';
@@ -209,6 +212,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
               >
                 {/* Central Portrait Container with Cinematic Pop-Up Effect */}
                 <div
+                  ref={portraitRef}
                   className={`relative aspect-[3/4] w-full rounded-3xl overflow-visible transition-all duration-1000 ease-out transform ${
                     isCinematicRevealed
                       ? 'opacity-100 scale-100 translate-y-0'
@@ -216,8 +220,9 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
                   }`}
                   style={{
                     transform: isCinematicRevealed
-                      ? `perspective(1000px) rotateY(${mousePos.x * 0.35}deg) rotateX(${mousePos.y * 0.35}deg)`
-                      : 'scale(0.9) translateY(40px)'
+                      ? 'perspective(1000px) rotateY(0deg) rotateX(0deg)'
+                      : 'scale(0.9) translateY(40px)',
+                    transition: 'transform 0.15s ease-out'
                   }}
                 >
                   {/* High-Fashion Museum Archival Frame (Uncompressed Raw Portrait) */}
