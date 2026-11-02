@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { items, customer, discountCode } = body;
+    const { items, customer, discountCode, paymentMethod } = body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: 'Cart cannot be empty' }, { status: 400 });
@@ -112,14 +112,67 @@ export async function POST(request: Request) {
     const orderNumber = `AVZ-${Math.floor(10000 + Math.random() * 90000)}`;
     const grandTotalPaise = Math.round(grandTotal * 100);
     const isProduction = process.env.NODE_ENV === 'production';
+    const isCOD = paymentMethod === 'Cash on Delivery (COD Verified)' || paymentMethod === 'COD';
+
+    // Handle Cash on Delivery directly: persist to DB immediately without calling Razorpay
+    if (isCOD) {
+      const orderId = `ord_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      await db.execute({
+        sql: `INSERT INTO orders (
+          id, order_number, customer_name, customer_email, customer_phone,
+          shipping_address, items, subtotal, discount, shipping_fee, tax,
+          grand_total, grand_total_paise, currency, payment_status, payment_method,
+          razorpay_order_id, fulfillment_status, customer_notes,
+          created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          orderId,
+          orderNumber,
+          customer.name.trim(),
+          customer.email.trim(),
+          customer.phone.trim(),
+          JSON.stringify(customer.address || {}),
+          JSON.stringify(verifiedItems),
+          calculatedSubtotal,
+          discountAmount,
+          shippingFee,
+          0,
+          grandTotal,
+          grandTotalPaise,
+          'INR',
+          'pending',
+          'Cash on Delivery',
+          null,
+          'unfulfilled',
+          customer.notes || null,
+          Date.now(),
+          Date.now()
+        ]
+      });
+
+      return NextResponse.json({
+        success: true,
+        isCOD: true,
+        orderNumber,
+        orderId,
+        amount: grandTotalPaise,
+        currency: 'INR',
+        customer: {
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone
+        }
+      });
+    }
+
     const keyId = process.env.RAZORPAY_KEY_ID?.trim();
     const keySecret = process.env.RAZORPAY_KEY_SECRET?.trim();
 
-    // Production Security: Strictly fail closed if credentials are missing, blank, or placeholder
+    // Production Security: Inform user if Razorpay Key ID is not configured
     if (isProduction) {
       if (!keyId || !keySecret || keyId === '' || keySecret === '' || keyId.includes('placeholder')) {
         return NextResponse.json(
-          { error: 'Payment gateway unconfigured in production environment. Please reach out to concierge support on WhatsApp.' },
+          { error: 'Razorpay online gateway is pending key configuration. Please choose Cash on Delivery or reach out to our concierge on WhatsApp to complete your order.' },
           { status: 500 }
         );
       }

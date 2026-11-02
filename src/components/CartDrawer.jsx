@@ -186,6 +186,7 @@ export default function CartDrawer({
               pincode: checkoutData.pincode
             }
           },
+          paymentMethod: checkoutData.paymentMethod,
           discountCode: appliedPromo?.code || null
         })
       });
@@ -198,6 +199,23 @@ export default function CartDrawer({
       }
 
       const orderData = await res.json();
+
+      // Handle Cash on Delivery order completion directly
+      if (orderData.isCOD) {
+        setConfirmedOrder({ ...orderData, paymentId: 'COD_VERIFIED' });
+        setOrderComplete(true);
+        onClearCart?.();
+        playSound('chord');
+        onCheckoutComplete?.({
+          orderId: orderData.orderNumber,
+          items,
+          totalInr,
+          customer: checkoutData,
+          squadDiscount
+        });
+        setIsSubmitting(false);
+        return;
+      }
 
       if (!orderData || !orderData.orderNumber || !orderData.razorpayOrderId) {
         alert(orderData?.error || 'Failed to initialize payment gateway order. Please reach out on WhatsApp.');
