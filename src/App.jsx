@@ -48,9 +48,6 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     } catch (e) {}
   }, []);
 
-  // 2. Active section for dynamic navbar tracking
-  const [activeSection, setActiveSection] = useState('hero');
-
   // 3. Modals and drawers
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -143,43 +140,17 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     } catch (e) {}
   }, []);
 
-  // Scroll to section handler
-  const scrollToSection = (id) => {
-    setActiveSection(id);
+  // Scroll to section handler (memoized for zero child re-renders)
+  const scrollToSection = useCallback((id) => {
     const element = document.getElementById(id);
     if (element) {
       const yOffset = -75; // compensate for sleek fixed navbar
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
-  };
+  }, []);
 
-  // Track active section via IntersectionObserver with zero main-thread scroll lag
-  useEffect(() => {
-    if (isLoading) return;
 
-    const sections = ['hero', 'vault', 'lookbook', 'shop', 'museum', 'custom', 'about', 'specs', 'faq', 'contact'];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length > 0) {
-          visible.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          setActiveSection(visible[0].target.id);
-        }
-      },
-      {
-        rootMargin: '-15% 0px -40% 0px',
-        threshold: [0, 0.2, 0.5]
-      }
-    );
-
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [isLoading]);
 
   // Ensure all sections are permanently solid and rendered immediately on mount
   // Eliminates blank frames, layout jump, and artificial scroll-reveal delays
@@ -195,8 +166,8 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     });
   }, [isLoading]);
 
-  // Wishlist toggle handler
-  const handleToggleWishlist = (product) => {
+  // Wishlist toggle handler (memoized)
+  const handleToggleWishlist = useCallback((product) => {
     setWishlistItems((prev) => {
       const exists = prev.some((p) => p.id === product.id);
       let updated;
@@ -210,19 +181,19 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
       } catch (e) {}
       return updated;
     });
-  };
+  }, []);
 
-  const handleOpenSquadModal = (product = null) => {
+  const handleOpenSquadModal = useCallback((product = null) => {
     setSquadModalProduct(product);
     setSquadModalOpen(true);
-  };
+  }, []);
 
-  const handleApplySquadDiscount = (discountData) => {
+  const handleApplySquadDiscount = useCallback((discountData) => {
     setSquadDiscount(discountData);
     setCartOpen(true);
-  };
+  }, []);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = useCallback((product) => {
     setCartItems((prev) => {
       const existingIndex = prev.findIndex(
         (i) => i.id === product.id && i.selectedSize === product.selectedSize
@@ -241,11 +212,11 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
     setActiveProduct(null);
     setCartOpen(true);
-  };
+  }, []);
 
-  const handleUpdateQuantity = (id, size, newQty) => {
+  const handleUpdateQuantity = useCallback((id, size, newQty) => {
     if (newQty <= 0) {
-      handleRemoveItem(id, size);
+      setCartItems((prev) => prev.filter((i) => !(i.id === id && i.selectedSize === size)));
       return;
     }
     setCartItems((prev) =>
@@ -257,24 +228,24 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         return item;
       })
     );
-  };
+  }, []);
 
-  const handleRemoveItem = (id, size) => {
+  const handleRemoveItem = useCallback((id, size) => {
     setCartItems((prev) => prev.filter((i) => !(i.id === id && i.selectedSize === size)));
-  };
+  }, []);
 
-  const handleClearCart = () => {
+  const handleClearCart = useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
-  const handleRequestCustom = (referenceName) => {
+  const handleRequestCustom = useCallback((referenceName) => {
     setCustomOrderPrefill(referenceName);
     scrollToSection('custom');
-  };
+  }, [scrollToSection]);
 
-  const handleInquirySubmitted = (formData) => {
+  const handleInquirySubmitted = useCallback((formData) => {
     setCustomInquiryConfirm(formData);
-  };
+  }, []);
 
   // Cart total count
   const cartTotalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -288,7 +259,6 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
       {/* Main Global Icon Navigation */}
       <Navbar
-        activeSection={activeSection}
         onScrollToSection={scrollToSection}
         cartCount={cartTotalCount}
         onOpenCart={() => setCartOpen(true)}

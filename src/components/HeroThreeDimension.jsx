@@ -11,7 +11,7 @@ import CinemaReelModal from './CinemaReelModal';
 import HeroDustHeadline from './HeroDustHeadline';
 import { playSound } from '../utils/audio';
 
-export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
+function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -271,3 +271,6 @@ export default function HeroThreeDimension({ onExploreCatalogue, onScrollToSecti
     </section>
   );
 }
+
+
+export default React.memo(HeroThreeDimension);

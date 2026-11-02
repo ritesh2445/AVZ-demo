@@ -45,7 +45,7 @@ const CUSTOM_ORDER_STEPS = [
   }
 ];
 
-export default function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrders }) {
+function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrders }) {
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
@@ -418,3 +418,6 @@ export default function CustomOrders({ initialReference = '', onInquirySubmitted
     </section>
   );
 }
+
+
+export default React.memo(CustomOrders);

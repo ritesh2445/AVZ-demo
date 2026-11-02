@@ -3,7 +3,7 @@ import { Instagram, Mail, Phone, MapPin, Sparkles, ArrowUp } from 'lucide-react'
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-export default function Footer({ onScrollToSection, cmsFooter }) {
+function Footer({ onScrollToSection, cmsFooter }) {
   const scrollToTop = () => {
     playSound('pip');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -154,3 +154,6 @@ export default function Footer({ onScrollToSection, cmsFooter }) {
     </footer>
   );
 }
+
+
+export default React.memo(Footer);

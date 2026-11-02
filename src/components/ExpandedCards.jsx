@@ -58,7 +58,7 @@ const DEFAULT_VAULT_CARDS = [
   }
 ];
 
-export default function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
+function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const mobileTrackRef = useRef(null);
 
@@ -285,3 +285,6 @@ export default function ExpandedCards({ items = [], onSelectProduct, currency = 
     </section>
   );
 }
+
+
+export default React.memo(ExpandedCards);

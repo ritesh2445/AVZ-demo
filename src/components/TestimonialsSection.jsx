@@ -35,7 +35,7 @@ const DEFAULT_TESTIMONIALS = [
   }
 ];
 
-export default function TestimonialsSection({ currentUser, onOpenAuthModal }) {
+function TestimonialsSection({ currentUser, onOpenAuthModal }) {
   const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS);
   const [modalOpen, setModalOpen] = useState(false);
   const [authPromptOpen, setAuthPromptOpen] = useState(false);
@@ -433,3 +433,6 @@ export default function TestimonialsSection({ currentUser, onOpenAuthModal }) {
     </section>
   );
 }
+
+
+export default React.memo(TestimonialsSection);

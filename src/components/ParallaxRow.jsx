@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
-export default function ParallaxRow({ entries = [], onCommissionLook }) {
+function ParallaxRow({ entries = [], onCommissionLook }) {
   const [activeLook, setActiveLook] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollTrackRef = useRef(null);
@@ -309,3 +309,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
     </section>
   );
 }
+
+
+export default React.memo(ParallaxRow);

@@ -1,7 +1,7 @@
 import React from 'react';
 import FoundersSection from './FoundersSection';
 
-export default function AboutSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
+function AboutSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
   return (
     <FoundersSection
       onScrollToSection={onScrollToSection}
@@ -10,3 +10,6 @@ export default function AboutSection({ onScrollToSection, onOpenSquadModal, cmsF
     />
   );
 }
+
+
+export default React.memo(AboutSection);

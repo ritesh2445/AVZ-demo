@@ -67,7 +67,7 @@ const EXPANDED_MUSEUM_ITEMS = [
   }
 ];
 
-export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
+function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [viewMode, setViewMode] = useState('fan'); // 'fan' | 'grid'
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -455,3 +455,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     </section>
   );
 }
+
+
+export default React.memo(AvzMuseum);

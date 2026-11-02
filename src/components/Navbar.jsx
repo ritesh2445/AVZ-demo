@@ -17,7 +17,7 @@ import { ASSET_MANIFEST, CURRENCIES } from '../data/brandData';
 import { playSound, toggleSound } from '../utils/audio';
 
 export default function Navbar({
-  activeSection,
+  activeSection: activeSectionProp,
   onScrollToSection,
   cartCount,
   onOpenCart,
@@ -34,7 +34,33 @@ export default function Navbar({
   const [soundOn, setSoundOn] = useState(true);
   const [visible, setVisible] = useState(true);
   const [currencyOpen, setCurrencyOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(activeSectionProp || 'hero');
   const currencyDropdownRef = useRef(null);
+
+  // Self-contained section tracking: eliminates full-page re-renders in App.jsx
+  useEffect(() => {
+    const sections = ['hero', 'vault', 'lookbook', 'shop', 'museum', 'custom', 'about', 'specs', 'faq', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries.filter((e) => e.isIntersecting);
+        if (visibleEntries.length > 0) {
+          visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      },
+      {
+        rootMargin: '-15% 0px -40% 0px',
+        threshold: [0, 0.2, 0.5]
+      }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Close currency dropdown on click outside or Escape
   useEffect(() => {
@@ -115,6 +141,7 @@ export default function Navbar({
   const handleNavClick = (id) => {
     playSound('snap');
     setMobileMenuOpen(false);
+    setActiveSection(id);
     onScrollToSection(id);
   };
 

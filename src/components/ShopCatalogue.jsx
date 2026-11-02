@@ -382,7 +382,7 @@ function MobileCompactProductCard({
   );
 }
 
-export default function ShopCatalogue({
+function ShopCatalogue({
   products: initialProducts,
   onSelectProduct,
   onAddToCart,
@@ -874,3 +874,6 @@ export default function ShopCatalogue({
     </section>
   );
 }
+
+
+export default React.memo(ShopCatalogue);

@@ -121,7 +121,7 @@ const GROWTH_PATTERNS = [
   { id: 'superbloom', name: 'Wild Superbloom' }
 ];
 
-export default function DhrisniGarden({ className = '', onPaletteChange }) {
+function DhrisniGarden({ className = '', onPaletteChange }) {
   const containerRef = useRef(null);
   const svgRef = useRef(null);
   const cachedPathsRef = useRef([]);
@@ -230,7 +230,7 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
     let triggered = false;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !triggered) {
+        if (entries[0].isIntersecting && !triggered && !hasBloomedRef.current) {
           triggered = true;
           triggerRegrowth(0);
         }
@@ -544,3 +544,6 @@ export default function DhrisniGarden({ className = '', onPaletteChange }) {
     </div>
   );
 }
+
+
+export default React.memo(DhrisniGarden);

@@ -10,26 +10,35 @@ const LegacyApp = dynamic(() => import('@/src/App'), {
 });
 
 export default function ClientStorefront() {
-  const [storefrontSettings, setStorefrontSettings] = useState<any>(null);
-  const [cmsSections, setCmsSections] = useState<any>(null);
-  const [storefrontProducts, setStorefrontProducts] = useState<any[]>([]);
+  const [storefrontData, setStorefrontData] = useState<{
+    settings: any;
+    sections: any;
+    products: any[];
+  }>({
+    settings: null,
+    sections: null,
+    products: []
+  });
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const init = async () => {
       try {
-        // Parallel lightweight fetch for storefront presentation data
+        // Parallel fetch for storefront presentation data
         const [res, contentRes, prodRes] = await Promise.all([
           fetch('/api/storefront/config'),
           fetch('/api/storefront/content'),
           fetch('/api/storefront/products'),
         ]);
 
+        let settings = null;
+        let sections = null;
+        let products: any[] = [];
+
         if (res && res.ok) {
           const data = await res.json();
-          setStorefrontSettings(data.settings);
+          settings = data.settings;
 
-          // Only verify admin session if maintenance mode is actually enabled
           if (data.settings?.maintenance_mode?.enabled) {
             fetch('/api/admin/auth/me')
               .then((r) => r.json())
@@ -44,21 +53,28 @@ export default function ClientStorefront() {
 
         if (contentRes && contentRes.ok) {
           const contentData = await contentRes.json();
-          setCmsSections(contentData.sections);
+          sections = contentData.sections;
         }
 
         if (prodRes && prodRes.ok) {
           const prodData = await prodRes.json();
           if (Array.isArray(prodData.products) && prodData.products.length > 0) {
-            setStorefrontProducts(prodData.products);
+            products = prodData.products;
           }
         }
+
+        // Single batched state update prevents multiple successive page re-renders
+        setStorefrontData({ settings, sections, products });
       } catch (err) {
         console.error('Error fetching storefront config & content:', err);
       }
     };
     init();
   }, []);
+
+  const storefrontSettings = storefrontData.settings;
+  const cmsSections = storefrontData.sections;
+  const storefrontProducts = storefrontData.products;
 
   // 1. Check Maintenance Mode
   const isMaintenance = storefrontSettings?.maintenance_mode?.enabled;

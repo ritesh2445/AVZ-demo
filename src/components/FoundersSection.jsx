@@ -78,10 +78,10 @@ const MANIFESTO_PILLARS = [
   }
 ];
 
-export default function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
+function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
   const [activePillar, setActivePillar] = useState(0);
   const [isCinematicRevealed, setIsCinematicRevealed] = useState(true);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const portraitRef = useRef(null);
   const chapter2Ref = useRef(null);
 
   useEffect(() => {
@@ -528,3 +528,6 @@ export default function FoundersSection({ onScrollToSection, onOpenSquadModal, c
     </section>
   );
 }
+
+
+export default React.memo(FoundersSection);
