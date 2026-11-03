@@ -146,8 +146,8 @@ export default function AntiquePaintingFrame({
             onAdminEdit?.(artwork);
           }}
           className="admin-frame-edit-btn"
-          title="Curator Mode: Edit painting image, dimensions, or antique frame"
-          aria-label="Edit Painting Frame"
+          title="Edit Vault Piece"
+          aria-label="Edit Vault Piece"
         >
           <Edit3 className="w-3.5 h-3.5" />
         </button>
@@ -196,7 +196,7 @@ export default function AntiquePaintingFrame({
           {!imgLoaded && (
             <div className="absolute inset-0 bg-[#24080e] animate-pulse flex items-center justify-center">
               <span className="text-[10px] font-mono text-[#c5a059]/40 tracking-widest uppercase">
-                EXHIBIT {artwork.id}
+                VAULT PIECE {artwork.display_order || index + 1}
               </span>
             </div>
           )}
@@ -214,7 +214,7 @@ export default function AntiquePaintingFrame({
             }}
           />
 
-          {/* Quick Hover Inspect Action */}
+          {/* Quick Hover View Action */}
           <div
             className={`absolute bottom-3 right-3 z-20 transition-all duration-300 ${
               isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
@@ -222,7 +222,7 @@ export default function AntiquePaintingFrame({
           >
             <span className="px-2 py-0.5 rounded-none bg-black/85 border border-[#d4af37]/60 text-[#fae596] text-[9px] font-mono tracking-widest uppercase flex items-center gap-1 shadow-lg backdrop-blur-sm">
               <Eye className="w-2.5 h-2.5 text-[#d4af37]" />
-              <span>INSPECT</span>
+              <span>VIEW PIECE</span>
             </span>
           </div>
         </div>

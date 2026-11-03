@@ -48,7 +48,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
     is_published: 1,
     description: '',
     medium: 'Salvaged microcircuits, steel spikes, upcycled textile',
-    provenance: 'Guwahati Permanent Salon Collection',
+    provenance: 'AVZ Guwahati Studio',
     dimensions_cm: '75 × 100 cm',
     sconce_light: true,
     hanging_bracket: 'brass_chains'
@@ -110,7 +110,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
         is_published: 1,
         description: '',
         medium: 'Salvaged microcircuits, steel spikes, upcycled textile',
-        provenance: 'Guwahati Permanent Salon Collection',
+        provenance: 'AVZ Guwahati Studio',
         dimensions_cm: '75 × 100 cm',
         sconce_light: true,
         hanging_bracket: 'brass_chains'
@@ -200,7 +200,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
           <div className="flex items-center gap-2 mb-1.5">
             <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse" />
             <span className="text-[10px] font-mono tracking-widest uppercase text-[#fae596]">
-              AUTHENTIC EUROPEAN SALON WALL
+              1-OF-1 ARCHIVE GALLERY
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#fff3cc] uppercase tracking-wide">
@@ -227,7 +227,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
             className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#b3892c] via-[#fae596] to-[#b3892c] text-black font-serif font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 text-black" />
-            <span>Mount New Painting</span>
+            <span>Add New Piece</span>
           </button>
         </div>
       </div>
@@ -245,7 +245,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
           </span>
         </div>
         <div className="bg-[#120408] border border-[#d4af37]/30 p-4 rounded-xl">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[#fae596]/70 block">Salon Wall Style</span>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[#fae596]/70 block">Gallery Wall Theme</span>
           <span className="text-sm font-serif font-bold text-white mt-1 block">Burgundy Plaster</span>
         </div>
         <div className="bg-[#120408] border border-[#d4af37]/30 p-4 rounded-xl">
@@ -263,7 +263,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
           </div>
         ) : artworks.length === 0 ? (
           <div className="text-center py-16 bg-[#100407] border border-[#d4af37]/20 rounded-2xl text-neutral-400 font-serif text-sm">
-            No paintings mounted yet. Click "Mount New Painting" to curate the museum salon wall.
+            No pieces mounted yet. Click "Add New Piece" to mount a piece on the gallery wall.
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -320,7 +320,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
                     </p>
 
                     <p className="text-xs font-serif text-neutral-400 line-clamp-2 mt-2 leading-relaxed">
-                      {art.description || 'No curatorial narrative entered.'}
+                      {art.description || 'No design story entered.'}
                     </p>
                   </div>
                 </div>
@@ -358,7 +358,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
 
                     <button
                       onClick={() => handleDelete(art)}
-                      title="Dismount Painting"
+                      title="Remove From Wall"
                       className="w-7 h-7 rounded bg-red-950/60 border border-red-800 text-red-300 hover:bg-red-900 flex items-center justify-center cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -517,7 +517,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
 
               <div>
                 <label className="block text-xs font-mono text-[#fae596] uppercase tracking-wider mb-1">
-                  Curatorial Narrative & Story
+                  Design Story & Artisan Notes
                 </label>
                 <textarea
                   value={newArt.description}

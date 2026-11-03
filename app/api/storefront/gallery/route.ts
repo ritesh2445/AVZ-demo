@@ -69,6 +69,51 @@ export async function GET() {
         WHERE is_published = 1 
         ORDER BY display_order ASC, created_at ASC
       `);
+    } else {
+      // If table already has rows with old AI titles, update them to authentic human studio copy
+      const hasOldAiTitle = (res.rows || []).some((r: any) => 
+        r.title?.includes('Cyber Empress') || 
+        r.title?.includes('Allegory of') || 
+        r.title?.includes('Study in Raw') ||
+        r.title?.includes('Still Life with')
+      );
+
+      if (hasOldAiTitle) {
+        const now = Date.now();
+        for (const art of INITIAL_GALLERY_ARTWORKS) {
+          try {
+            await db.execute({
+              sql: `UPDATE gallery_artworks 
+                    SET title = ?, artist = ?, description = ?, category = ?, 
+                        aspect_ratio = ?, width_px = ?, height_px = ?, display_order = ?,
+                        metadata = ?, updated_at = ?
+                    WHERE id = ?`,
+              args: [
+                art.title,
+                art.artist,
+                art.description,
+                art.category,
+                art.aspect_ratio,
+                art.width_px,
+                art.height_px,
+                art.display_order,
+                JSON.stringify(art.metadata),
+                now,
+                art.id
+              ]
+            });
+          } catch (updateErr) {
+            console.warn('[GALLERY COPY UPGRADE ERROR]:', updateErr);
+          }
+        }
+
+        // Re-query with updated records
+        res = await db.execute(`
+          SELECT * FROM gallery_artworks 
+          WHERE is_published = 1 
+          ORDER BY display_order ASC, created_at ASC
+        `);
+      }
     }
 
     const artworks = (res.rows || []).map((row: any) => {
@@ -88,9 +133,9 @@ export async function GET() {
       success: true,
       artworks: artworks.length > 0 ? artworks : INITIAL_GALLERY_ARTWORKS,
       wallConfig: {
-        wallColor: '#2b0a11',
-        title: 'SALON D\'ARCHIVE',
-        subtitle: 'Permanent European Salon Collection • Guwahati Relics',
+        wallColor: '#4a0f18',
+        title: 'THE VAULT ARCHIVE',
+        subtitle: 'Handcrafted 1-of-1 Wearable Art • Guwahati Studio',
         ambientSound: 'wooden_glide'
       }
     });
@@ -100,9 +145,9 @@ export async function GET() {
       success: true,
       artworks: INITIAL_GALLERY_ARTWORKS,
       wallConfig: {
-        wallColor: '#2b0a11',
-        title: 'SALON D\'ARCHIVE',
-        subtitle: 'Permanent European Salon Collection • Guwahati Relics',
+        wallColor: '#4a0f18',
+        title: 'THE VAULT ARCHIVE',
+        subtitle: 'Handcrafted 1-of-1 Wearable Art • Guwahati Studio',
         ambientSound: 'wooden_glide'
       }
     });

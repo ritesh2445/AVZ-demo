@@ -43,7 +43,7 @@ export default function MuseumArtworkModal({
             playSound('pip');
             onClose();
           }}
-          aria-label="Close Dossier"
+          aria-label="Close View"
           className="absolute top-4 right-4 z-50 w-9 h-9 rounded-full bg-black/80 border border-[#d4af37] text-[#fae596] hover:bg-[#d4af37] hover:text-black flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-95"
         >
           <X className="w-4 h-4" />
@@ -71,13 +71,13 @@ export default function MuseumArtworkModal({
           </div>
         </div>
 
-        {/* Right: Museum Catalog Raisonné Dossier Information */}
+        {/* Right: Piece Information & Design Story */}
         <div className="w-full md:w-1/2 flex flex-col justify-between text-left z-10 md:pr-4">
           <div>
-            {/* Museum Header Seal */}
+            {/* Archive Header Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#2e0912] border border-[#d4af37]/40 text-[#fae596] text-[10px] font-mono tracking-[0.2em] uppercase mb-3">
               <Award className="w-3.5 h-3.5 text-[#d4af37]" />
-              <span>CATALOG RAISONNÉ • NO. 00{artwork.display_order || '01'}</span>
+              <span>AVZ VAULT SPECIMEN // NO. 00{artwork.display_order || '01'}</span>
             </div>
 
             <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#fff3cc] uppercase tracking-wide leading-tight mb-2">
@@ -85,44 +85,44 @@ export default function MuseumArtworkModal({
             </h3>
 
             <div className="text-xs sm:text-sm font-serif italic text-[#d4af37] mb-4">
-              {artwork.artist} • Anno {artwork.year || '2024'}
+              Handcrafted by {artwork.artist} • {artwork.year || '2024'}
             </div>
 
             <p className="text-xs sm:text-sm font-serif text-[#e0cfbb] leading-relaxed mb-6 border-l-2 border-[#d4af37]/50 pl-4 py-1 italic">
               "{artwork.description}"
             </p>
 
-            {/* Curatorial Specification Box */}
-            <div className="p-4 bg-[#120307] border border-[#d4af37]/30 text-xs font-serif text-[#c5b099] mb-6 space-y-2">
+            {/* Piece Specification Box */}
+            <div className="p-4 bg-[#120307] border border-[#d4af37]/30 text-xs font-serif text-[#c5b099] mb-6 space-y-2.5">
               <div className="flex items-start gap-2">
                 <Feather className="w-3.5 h-3.5 text-[#d4af37] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#fae596] font-mono text-[10px] tracking-wider uppercase block">
-                    Medium & Construction:
+                    Materials & Hardware:
                   </strong>
-                  <span>{meta.medium || 'Salvaged industrial microcircuits, stainless steel spikes, upcycled textile'}</span>
+                  <span>{meta.medium || 'Salvaged industrial microcircuits, stainless steel spikes, upcycled denim'}</span>
                 </div>
               </div>
 
               {meta.dimensions_cm && (
-                <div className="flex items-start gap-2 pt-1 border-t border-[#d4af37]/15">
+                <div className="flex items-start gap-2 pt-1.5 border-t border-[#d4af37]/15">
                   <Compass className="w-3.5 h-3.5 text-[#d4af37] shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-[#fae596] font-mono text-[10px] tracking-wider uppercase block">
-                      Canvas Dimensions:
+                      Dimensions & Sizing:
                     </strong>
                     <span>{meta.dimensions_cm}</span>
                   </div>
                 </div>
               )}
 
-              <div className="flex items-start gap-2 pt-1 border-t border-[#d4af37]/15">
+              <div className="flex items-start gap-2 pt-1.5 border-t border-[#d4af37]/15">
                 <MapPin className="w-3.5 h-3.5 text-[#d4af37] shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-[#fae596] font-mono text-[10px] tracking-wider uppercase block">
-                    Provenance & Archival Custody:
+                    Origin & Studio:
                   </strong>
-                  <span>{meta.provenance || 'Permanent Collection, Guwahati Atelier'}</span>
+                  <span>{meta.provenance || 'Guwahati Studio, Assam'}</span>
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function MuseumArtworkModal({
               className="py-3 px-6 bg-gradient-to-r from-[#b3892c] via-[#fae596] to-[#b3892c] text-black font-serif font-bold text-xs tracking-[0.16em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-xl hover:brightness-110 active:scale-98 transition-all border border-[#fae596]"
             >
               <Scissors className="w-4 h-4 text-black" />
-              <span>COMMISSION THIS SILHOUETTE ↗</span>
+              <span>COMMISSION A CUSTOM PIECE →</span>
             </button>
 
             <button
@@ -149,7 +149,7 @@ export default function MuseumArtworkModal({
               }}
               className="py-3 px-6 bg-transparent border border-[#d4af37]/60 text-[#fae596] hover:bg-[#d4af37]/20 font-serif text-xs tracking-widest uppercase cursor-pointer transition-all active:scale-98"
             >
-              RETURN TO SALON
+              BACK TO GALLERY
             </button>
           </div>
         </div>
@@ -157,4 +157,3 @@ export default function MuseumArtworkModal({
     </div>
   );
 }
-

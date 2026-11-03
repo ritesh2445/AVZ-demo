@@ -152,10 +152,10 @@ export default function QuickFrameEditorModal({
             </div>
             <div>
               <h3 className="text-lg font-serif font-bold text-[#fff2cc] uppercase tracking-wider">
-                Curator Frame Editor
+                Edit Vault Piece
               </h3>
               <p className="text-[11px] font-mono text-[#d4af37]/80">
-                Direct on-wall customization • Changes save immediately to live gallery
+                Customize piece details, framing, and wall position
               </p>
             </div>
           </div>
@@ -364,7 +364,7 @@ export default function QuickFrameEditorModal({
           {/* Description / Story */}
           <div>
             <label className="block text-xs font-mono text-[#fae596] uppercase tracking-wider mb-1">
-              Curatorial Narrative & Story
+              Design Story & Artisan Notes
             </label>
             <textarea
               name="description"
@@ -379,7 +379,7 @@ export default function QuickFrameEditorModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[11px] font-mono text-[#fae596] uppercase tracking-wider mb-1">
-                Medium & Materials
+                Materials & Hardware
               </label>
               <input
                 type="text"
@@ -393,14 +393,14 @@ export default function QuickFrameEditorModal({
 
             <div>
               <label className="block text-[11px] font-mono text-[#fae596] uppercase tracking-wider mb-1">
-                Provenance / Collection
+                Origin / Studio Location
               </label>
               <input
                 type="text"
                 name="provenance"
                 value={formData.provenance}
                 onChange={handleChange}
-                placeholder="e.g. Permanent Salon Collection"
+                placeholder="e.g. AVZ Guwahati Studio"
                 className="w-full px-3 py-1.5 bg-black/70 border border-[#d4af37]/50 text-white font-serif text-xs focus:outline-none"
               />
             </div>
@@ -415,7 +415,7 @@ export default function QuickFrameEditorModal({
               className="px-4 py-2.5 bg-red-950/80 border border-red-500 text-red-300 hover:bg-red-900 text-xs font-mono tracking-wider uppercase flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span>Dismount Painting</span>
+              <span>Remove From Wall</span>
             </button>
 
             <div className="flex items-center gap-3">
@@ -433,7 +433,7 @@ export default function QuickFrameEditorModal({
                 className="px-6 py-2.5 bg-gradient-to-r from-[#b3892c] via-[#fae596] to-[#b3892c] text-black font-mono font-bold text-xs tracking-widest uppercase flex items-center gap-2 cursor-pointer shadow-lg hover:brightness-110 active:scale-95 disabled:opacity-50"
               >
                 <Save className="w-4 h-4 text-black" />
-                <span>{saving ? 'Saving...' : 'Save to Gallery Wall'}</span>
+                <span>{saving ? 'Saving...' : 'Save Piece Changes'}</span>
               </button>
             </div>
           </div>

@@ -22,11 +22,11 @@ import { playSound } from '../utils/audio';
 const FALLBACK_ARTWORKS = [
   {
     id: 'art-005',
-    title: 'Still Life with Telecom Motherboard & Copper Relics',
-    artist: 'Dhrisni & The AVZ Atelier',
+    title: 'Telecom PCB Cuff',
+    artist: 'Dhrisni & Guwahati Guild',
     image_url: '/assets/prod_motherboard_cuff.jpg',
     thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
-    description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
+    description: 'Salvaged from broken office telecommunication boards. We cut the PCB traces to show off the raw copper pathways and golden solder joints, then lined it with thick leather so it sits smooth against your skin.',
     year: '2024',
     category: 'Wearable Hardware',
     frame_style: 'classical_cavetto',
@@ -36,9 +36,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 1,
     is_published: 1,
     metadata: {
-      medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
-      dimensions_cm: '75 × 56 cm',
-      provenance: 'Assam Industrial Heritage Vault',
+      medium: 'Reclaimed telecom PCBs, raw copper circuitry, genuine leather lining',
+      dimensions_cm: 'Custom Wrist Fit',
+      provenance: 'Guwahati Studio Archive',
       hanging_bracket: 'wire',
       wall_position: 'upper',
       sconce_light: false
@@ -46,13 +46,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-004',
-    title: 'Allegory of the Reworked Denim Relic',
+    title: 'Deconstructed Trucker Relic',
     artist: 'Dhrisni',
     image_url: '/assets/product_reworked_jacket.jpg',
     thumbnail_url: '/assets/product_reworked_jacket.jpg',
-    description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
+    description: 'Cut up from an oversized vintage trucker jacket into 18 raw denim panels at 3 AM. Laced back together with industrial aircraft cables and silver eyelets. Pure chaotic structure.',
     year: '2024',
-    category: 'Tailored Relic',
+    category: 'Upcycled Denim',
     frame_style: 'antique_fillet',
     aspect_ratio: '1:1',
     width_px: 280,
@@ -60,9 +60,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 2,
     is_published: 1,
     metadata: {
-      medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
-      dimensions_cm: '70 × 70 cm',
-      provenance: 'Private Collection, Mumbai',
+      medium: '14oz vintage deconstructed denim, aircraft steel cables, chrome eyelets',
+      dimensions_cm: 'Chest 38-42" / Adjustable Fit',
+      provenance: 'Studio Relic 004',
       hanging_bracket: 'hidden',
       wall_position: 'lower',
       sconce_light: false
@@ -70,13 +70,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-001',
-    title: 'Portrait of the Cyber Empress in Gilded Armor',
-    artist: 'Dhrisni & The AVZ Atelier',
+    title: 'Cyber Motherboard Bustier',
+    artist: 'Dhrisni',
     image_url: '/assets/editorial_hero_portrait.jpg',
     thumbnail_url: '/assets/editorial_hero_portrait.jpg',
-    description: 'An archival masterwork featuring reclaimed computer motherboard breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
+    description: 'Our signature piece. Hand-shaped from decommissioned computer motherboards and high-gauge wire over structured denim. Fits like futuristic armor. No two boards are ever cut the same.',
     year: '2023',
-    category: 'Sculptural Breastplate',
+    category: 'Wearable Tech',
     frame_style: 'ornate_baroque',
     aspect_ratio: '3:4',
     width_px: 380,
@@ -84,9 +84,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 3,
     is_published: 1,
     metadata: {
-      medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
-      dimensions_cm: '78 × 104 cm',
-      provenance: 'Guwahati Permanent Salon Collection',
+      medium: 'Decommissioned motherboard chips, copper tracing, structured denim, silver grommets',
+      dimensions_cm: 'Bust 32-35" / Lace-Up Back',
+      provenance: 'AVZ Permanent Archive',
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
       sconce_light: true
@@ -94,13 +94,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-002',
-    title: 'Study in Raw Chrome Spikes & Distressed Denim',
+    title: 'Subcultural Bodice Spikes',
     artist: 'Dhrisni',
     image_url: '/assets/look_spike_bodice.jpg',
     thumbnail_url: '/assets/look_spike_bodice.jpg',
-    description: 'Sixty-four solid steel lathe-turned spikes hand-riveted onto reconstructed vintage Japanese denim, framed within an antique Italian rococo profile.',
+    description: '64 solid lathe-turned steel spikes individually bolted through heavy black denim. Defensive fashion built for people who refuse to be touched without permission.',
     year: '2023',
-    category: 'Armored Bodice',
+    category: 'Hardware Intimates',
     frame_style: 'gilded_rococo',
     aspect_ratio: '4:5',
     width_px: 290,
@@ -108,9 +108,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 4,
     is_published: 1,
     metadata: {
-      medium: 'Steel spikes, upcycled 14oz indigo denim, polished brass grommets',
-      dimensions_cm: '65 × 82 cm',
-      provenance: 'Private Collection, Bangalore (Archival Loan)',
+      medium: 'Solid lathe-turned steel spikes, heavy-duty black denim, industrial rivets',
+      dimensions_cm: 'Bust 32-36" / Adjustable',
+      provenance: 'Private Archive',
       hanging_bracket: 'wire',
       wall_position: 'upper',
       sconce_light: false
@@ -118,13 +118,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-007',
-    title: 'Composition with Hand-Strung Beadwork & Metal Shards',
+    title: 'Hematite & Steel Shard Top',
     artist: 'Dhrisni & Guwahati Guild',
     image_url: '/assets/product_beaded_bralette.jpg',
     thumbnail_url: '/assets/product_beaded_bralette.jpg',
-    description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
+    description: 'Faceted hematite micro-stones hand-strung between polished scrap metal offcuts. Shimmers with real mechanical weight under club lighting.',
     year: '2024',
-    category: 'Haute Bijouterie',
+    category: 'Hand-Strung Metal',
     frame_style: 'ornate_baroque',
     aspect_ratio: '4:5',
     width_px: 280,
@@ -132,9 +132,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 5,
     is_published: 1,
     metadata: {
-      medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
-      dimensions_cm: '60 × 75 cm',
-      provenance: 'Permanent Archive Showcase',
+      medium: 'Faceted hematite stones, polished scrap metal offcuts, high-tensile silk cord',
+      dimensions_cm: 'Adjustable Tie-Back',
+      provenance: 'Guild Showcase Piece',
       hanging_bracket: 'wire',
       wall_position: 'lower',
       sconce_light: false
@@ -142,11 +142,11 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-003',
-    title: 'The Guwahati River Chainmail Nocturne',
-    artist: 'AVZ Women Artisan Guild',
+    title: 'Liquid Steel Chainmail',
+    artist: 'AVZ Women Guild',
     image_url: '/assets/look_chainmail_armor.jpg',
     thumbnail_url: '/assets/look_chainmail_armor.jpg',
-    description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
+    description: 'Over 1,200 surgical stainless steel rings linked by hand ring-by-ring in our Guwahati studio. Cold to the touch, heavy in your hands, and flexes with your body like liquid metal.',
     year: '2024',
     category: 'Fluid Chainmail',
     frame_style: 'florentine_gold',
@@ -156,9 +156,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 6,
     is_published: 1,
     metadata: {
-      medium: 'Hand-linked 316L surgical stainless steel rings, industrial carabiners',
-      dimensions_cm: '90 × 120 cm',
-      provenance: 'Permanent Exhibition Pavilion',
+      medium: '16-gauge 316L stainless steel jump rings, heavy carabiner closures',
+      dimensions_cm: 'Torso Wrap / Fluid Drape',
+      provenance: 'AVZ Guwahati Studio',
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
       sconce_light: true
@@ -166,13 +166,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-006',
-    title: 'The Altar of the Spiked Brassiere',
+    title: 'Cold-Forged Spike Bra',
     artist: 'Dhrisni',
     image_url: '/assets/product_spike_bra.jpg',
     thumbnail_url: '/assets/product_spike_bra.jpg',
-    description: 'A radical synthesis of classical Parisian lingerie silhouette with subcultural industrial hardware. Solid steel conical spikes anchored with reinforced rivets.',
+    description: 'Heavy cone spikes bolted directly onto structured denim with adjustable lobster-clasp chain straps. Built to be worn loud with zero apologies.',
     year: '2023',
-    category: 'Subcultural Armor',
+    category: 'Hardware Intimates',
     frame_style: 'tarnished_brass',
     aspect_ratio: '3:4',
     width_px: 350,
@@ -180,9 +180,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 7,
     is_published: 1,
     metadata: {
-      medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
-      dimensions_cm: '68 × 90 cm',
-      provenance: 'Atelier Archive No. 008',
+      medium: 'Bolted steel cone spikes, reinforced denim foundation, cushioned inner lining',
+      dimensions_cm: 'Bust 32A-34B',
+      provenance: 'Studio Relic 006',
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
       sconce_light: false
@@ -190,13 +190,13 @@ const FALLBACK_ARTWORKS = [
   },
   {
     id: 'art-008',
-    title: 'The Cybernetic Diva in Full Regalia',
+    title: 'The Dhristroyer Runway Armor',
     artist: 'Dhrisni',
     image_url: '/assets/product_diva_top.jpg',
     thumbnail_url: '/assets/product_diva_top.jpg',
-    description: 'Monumental one-of-one silhouette uniting high-contrast cybernetic motifs with traditional couture boning and hand-finished edges.',
+    description: "Dhrisni's personal runway set. A boned corset framework meeting raw industrial steel closures and reclaimed cybernetic hardware. Loud, heavy, and unapologetically maximalist.",
     year: '2024',
-    category: 'Monumental Couture',
+    category: 'Maximalist Couture',
     frame_style: 'gilded_rococo',
     aspect_ratio: '3:4',
     width_px: 400,
@@ -204,9 +204,9 @@ const FALLBACK_ARTWORKS = [
     display_order: 8,
     is_published: 1,
     metadata: {
-      medium: 'Boned silk corset, reclaimed alloy embellishments, raw steel closures',
-      dimensions_cm: '85 × 114 cm',
-      provenance: 'Guwahati Master Collection',
+      medium: 'Boned corset foundation, salvaged alloy embellishments, raw steel closures',
+      dimensions_cm: 'Runway Custom Fit',
+      provenance: 'Dhristroyer Personal Vault',
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
       sconce_light: true
@@ -385,16 +385,16 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
           {/* Classical French Salon Crest */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#170307]/90 border border-[#d4af37]/40 shadow-md text-[#fae596] text-[10px] sm:text-[11px] font-mono tracking-[0.22em] uppercase mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse shrink-0" />
-            <span>L'ATELIER D'ART VAGANZA • PERMANENT SALON COLLECTION</span>
+            <span>AVZ VAULT // 1-OF-1 ARCHIVE</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-[0.08em] text-[#fff2cc] uppercase leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
-            THE ARCHIVAL <span className="text-[#d4af37] font-normal italic">GALLERY WALL</span>
+            THE ARCHIVE <span className="text-[#d4af37] font-normal italic">GALLERY</span>
           </h2>
 
           <p className="text-[#c5b099] text-xs sm:text-sm max-w-2xl font-serif italic mt-2.5 leading-relaxed">
             {cmsMuseum?.description ||
-              'A classical European salon hang of 1-of-1 wearable art relics, oil portraits, and archival silhouettes handcrafted in our Guwahati studio.'}
+              'In a world drowning in fast fashion and AI generation, things made by real human hands are the ultimate luxury. 1-of-1 wearable art relics from our Guwahati studio.'}
           </p>
         </div>
 
@@ -404,7 +404,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
           {isAdmin && (
             <div className="px-3 py-1.5 bg-[#d4af37]/15 border border-[#d4af37] text-[#fae596] text-[10px] font-mono tracking-widest uppercase flex items-center gap-1.5">
               <Sparkles className="w-3 h-3 text-[#d4af37]" />
-              <span>CURATOR MODE ACTIVE</span>
+              <span>STUDIO CURATOR ACTIVE</span>
             </div>
           )}
 
@@ -583,7 +583,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       <div className="w-full flex items-center justify-center mt-2 relative z-20 pointer-events-none">
         <span className="text-[10px] font-mono text-[#d4af37]/70 tracking-[0.28em] uppercase flex items-center gap-2">
           <span>←</span>
-          <span>DRAG HORIZONTALLY TO EXPLORE GALLERY WALL</span>
+          <span>DRAG HORIZONTALLY TO EXPLORE THE VAULT</span>
           <span>→</span>
         </span>
       </div>
