@@ -21,7 +21,7 @@ const TRENDING_SEARCHES = [
   'Upcycled Denim'
 ];
 
-export default function SearchModal({ isOpen, onClose, onSelectProduct, currency = 'INR' }) {
+export default function SearchModal({ isOpen, onClose, onSelectProduct, currency = 'INR', products = [] }) {
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const inputRef = useRef(null);
@@ -50,24 +50,29 @@ export default function SearchModal({ isOpen, onClose, onSelectProduct, currency
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Active catalog list (live products from database, falling back to brandData)
+  const catalogList = useMemo(() => {
+    return Array.isArray(products) && products.length > 0 ? products : PRODUCTS;
+  }, [products]);
+
   // Curated items for empty state
   const curatedPicks = useMemo(() => {
     return [
-      PRODUCTS[0], // Motherboard Diva Top
-      PRODUCTS[1], // Silicon Cyber Corset
-      PRODUCTS[2]  // Industrial Spike Cuff
+      catalogList[0],
+      catalogList[1],
+      catalogList[2]
     ].filter(Boolean);
-  }, []);
+  }, [catalogList]);
 
   // Filtered results
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
 
     // Map shop products
-    let shopItems = PRODUCTS.map((p) => ({
+    let shopItems = catalogList.map((p) => ({
       ...p,
       type: 'Shop Piece',
-      badge: 'In Stock'
+      badge: (p.stock === 1 || p.inventory_quantity === 1) ? '1-of-1 Piece' : 'In Stock'
     }));
 
     // Map museum items

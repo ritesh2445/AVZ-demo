@@ -97,29 +97,42 @@ export default function CartDrawer({
   const shippingCostInr = isFreeShipping ? 0 : 250;
   const totalInr = discountedSubtotal + shippingCostInr;
 
-  const handleApplyPromo = (e) => {
+  const handleApplyPromo = async (e) => {
     e.preventDefault();
     const code = promoCode.trim().toUpperCase();
     if (!code) return;
 
     playSound('snap');
-    if (code === 'AVZ10' || code === 'BADDIE10') {
-      setAppliedPromo({ code, percent: 10 });
-      setPromoError('');
-    } else if ((code === 'ARCHIVE15' || code === 'SLAY') && subtotalInr >= 3000) {
-      setAppliedPromo({ code, percent: 15 });
-      setPromoError('');
-    } else if ((code === 'ARCHIVE15' || code === 'SLAY') && subtotalInr < 3000) {
-      setPromoError('ARCHIVE15 code requires a minimum order value of ₹3,000.');
-    } else if (code === 'SQUAD') {
-      setAppliedPromo({ code, percent: 15 });
-      setPromoError('');
-    } else if (code === 'FREESHIP') {
-      setAppliedPromo({ code, percent: 0, offInr: 0 });
-      setPromoError('');
-    } else {
-      playSound('glitch');
-      setPromoError('Invalid promotional code. Please check and try again.');
+    setPromoError('');
+
+    try {
+      const res = await fetch('/api/storefront/promotions/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, subtotal: subtotalInr })
+      });
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setAppliedPromo({
+          code: data.code,
+          percent: data.percent,
+          offInr: data.offInr
+        });
+        setPromoError('');
+        playSound('chord');
+      } else {
+        playSound('glitch');
+        setPromoError(data.error || 'Invalid promotional code. Please check and try again.');
+      }
+    } catch (err) {
+      // Fallback
+      if (code === 'AVZ10' || code === 'BADDIE10') {
+        setAppliedPromo({ code, percent: 10 });
+        setPromoError('');
+      } else {
+        playSound('glitch');
+        setPromoError('Unable to verify promotion code. Please check your internet connection.');
+      }
     }
   };
 
@@ -612,8 +625,13 @@ export default function CartDrawer({
                           {item.name}
                         </h4>
                         <button
-                          onClick={() => onRemoveItem(item.id, item.selectedSize)}
-                          className="text-zinc-500 hover:text-red-400 p-1 cursor-pointer transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            playSound('trash');
+                            onRemoveItem(item.id, item.selectedSize);
+                          }}
+                          aria-label={`Remove ${item.name} from bag`}
+                          className="text-zinc-500 hover:text-red-400 p-1.5 cursor-pointer transition-colors active:scale-95"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>

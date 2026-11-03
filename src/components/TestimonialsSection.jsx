@@ -96,7 +96,10 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
           rating,
           content: content.trim(),
           product_name: productName.trim() || null,
-          role_title: roleTitle.trim() || null
+          productName: productName.trim() || null,
+          role_title: roleTitle.trim() || null,
+          roleTitle: roleTitle.trim() || null,
+          user: currentUser
         })
       });
 

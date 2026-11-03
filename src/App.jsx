@@ -78,8 +78,18 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   // 7. Global currency preference
   const [currency, setCurrency] = useState('INR');
 
-  // 8. Shopping bag state with 1-of-1 inventory restrictions
-  const [cartItems, setCartItems] = useState([]);
+  // 8. Shopping bag state with 1-of-1 inventory restrictions & localStorage persistence
+  const [cartItems, setCartItems] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('avz_cart');
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  });
 
   // 10. Client Auth & Guest Explorer state with persistence
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -195,19 +205,24 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   const handleAddToCart = useCallback((product) => {
     setCartItems((prev) => {
+      const targetSize = product.selectedSize || 'Standard';
       const existingIndex = prev.findIndex(
-        (i) => i.id === product.id && i.selectedSize === product.selectedSize
+        (i) => String(i.id) === String(product.id) && (i.selectedSize || 'Standard') === targetSize
       );
 
-      // If already exists and stock is 1, prevent duplicate
+      let updated;
       if (existingIndex > -1) {
         if (product.stock === 1) return prev;
-        const updated = [...prev];
+        updated = [...prev];
         updated[existingIndex].quantity += 1;
-        return updated;
       } else {
-        return [...prev, { ...product, quantity: 1 }];
+        updated = [...prev, { ...product, quantity: 1, selectedSize: targetSize }];
       }
+
+      try {
+        localStorage.setItem('avz_cart', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
     });
 
     setActiveProduct(null);
@@ -215,27 +230,46 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   }, []);
 
   const handleUpdateQuantity = useCallback((id, size, newQty) => {
-    if (newQty <= 0) {
-      setCartItems((prev) => prev.filter((i) => !(i.id === id && i.selectedSize === size)));
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) => {
-        if (item.id === id && item.selectedSize === size) {
-          if (item.stock === 1 && newQty > 1) return item;
-          return { ...item, quantity: newQty };
-        }
-        return item;
-      })
-    );
+    setCartItems((prev) => {
+      let updated;
+      if (newQty <= 0) {
+        updated = prev.filter(
+          (i) => !(String(i.id) === String(id) && (!size || !i.selectedSize || i.selectedSize === size))
+        );
+      } else {
+        updated = prev.map((item) => {
+          if (String(item.id) === String(id) && (!size || !item.selectedSize || item.selectedSize === size)) {
+            if (item.stock === 1 && newQty > 1) return item;
+            return { ...item, quantity: newQty };
+          }
+          return item;
+        });
+      }
+
+      try {
+        localStorage.setItem('avz_cart', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   }, []);
 
   const handleRemoveItem = useCallback((id, size) => {
-    setCartItems((prev) => prev.filter((i) => !(i.id === id && i.selectedSize === size)));
+    setCartItems((prev) => {
+      const updated = prev.filter(
+        (i) => !(String(i.id) === String(id) && (!size || !i.selectedSize || i.selectedSize === size))
+      );
+      try {
+        localStorage.setItem('avz_cart', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   }, []);
 
   const handleClearCart = useCallback(() => {
     setCartItems([]);
+    try {
+      localStorage.removeItem('avz_cart');
+    } catch (e) {}
   }, []);
 
   const handleRequestCustom = useCallback((referenceName) => {
@@ -255,6 +289,34 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
       {/* Cinematic Pitch-black Loading Experience */}
       {isLoading && (
         <LoadingExperience onComplete={handleLoadingComplete} />
+      )}
+
+      {/* Global Studio Announcement Bar (Configured via Admin Panel) */}
+      {storefrontConfig?.announcement?.enabled && storefrontConfig?.announcement?.text && (
+        <aside
+          role="region"
+          aria-label="Studio Announcement"
+          className="relative z-50 w-full py-2 px-4 bg-gradient-to-r from-[#1f0326] via-[#be185d] to-[#1f0326] text-white text-[11px] font-mono tracking-widest uppercase font-bold text-center border-b border-pink/40 shadow-sm flex items-center justify-center gap-2 select-none"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-pink-200 animate-pulse shrink-0" />
+          {storefrontConfig.announcement.link ? (
+            <a
+              href={storefrontConfig.announcement.link}
+              onClick={(e) => {
+                if (storefrontConfig.announcement.link.startsWith('#')) {
+                  e.preventDefault();
+                  scrollToSection(storefrontConfig.announcement.link.replace('#', ''));
+                }
+              }}
+              className="hover:underline flex items-center gap-1.5 cursor-pointer text-white"
+            >
+              <span>{storefrontConfig.announcement.text}</span>
+              <span className="text-pink-200">↗</span>
+            </a>
+          ) : (
+            <span>{storefrontConfig.announcement.text}</span>
+          )}
+        </aside>
       )}
 
       {/* Main Global Icon Navigation */}

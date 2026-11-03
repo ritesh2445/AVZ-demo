@@ -109,7 +109,10 @@ export default function WishlistDrawer({
                   <button
                     onClick={() => {
                       playSound('click');
-                      onAddToCart(item);
+                      onAddToCart({
+                        ...item,
+                        selectedSize: item.selectedSize || (item.sizes ? item.sizes[0] : 'Standard')
+                      });
                       onRemoveFromWishlist(item.id);
                     }}
                     title="Move to Bag"

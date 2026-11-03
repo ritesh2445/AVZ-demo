@@ -2588,6 +2588,41 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
               <div>
+                <label className="block text-neutral-400 mb-1">Primary Image URL or Asset Path</label>
+                <input
+                  type="text"
+                  id="p_image"
+                  defaultValue={selectedProduct?.images?.[0] || selectedProduct?.image || '/assets/editorial_hero_portrait.jpg'}
+                  placeholder="e.g. /assets/look_chainmail_armor.jpg or https://..."
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-neutral-400 mb-1">Status</label>
+                  <select
+                    id="p_status"
+                    defaultValue={selectedProduct?.status || 'published'}
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
+                  >
+                    <option value="published">Published (Visible on site)</option>
+                    <option value="draft">Draft (Hidden)</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                </div>
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    type="checkbox"
+                    id="p_featured"
+                    defaultChecked={Boolean(selectedProduct?.is_featured)}
+                    className="w-4 h-4 accent-[#BE185D]"
+                  />
+                  <label htmlFor="p_featured" className="text-neutral-300 font-mono text-[11px] cursor-pointer">
+                    Feature on Vault Rail (Homepage)
+                  </label>
+                </div>
+              </div>
+              <div>
                 <label className="block text-neutral-400 mb-1">Description</label>
                 <textarea
                   id="p_description"
@@ -2612,20 +2647,24 @@ export default function AdminDashboardPage() {
                   const category = (document.getElementById('p_category') as HTMLSelectElement)?.value;
                   const price = Number((document.getElementById('p_price') as HTMLInputElement)?.value);
                   const inventory_quantity = Number((document.getElementById('p_stock') as HTMLInputElement)?.value);
+                  const image = (document.getElementById('p_image') as HTMLInputElement)?.value || '/assets/editorial_hero_portrait.jpg';
+                  const status = (document.getElementById('p_status') as HTMLSelectElement)?.value || 'published';
+                  const is_featured = (document.getElementById('p_featured') as HTMLInputElement)?.checked ?? false;
                   const description = (document.getElementById('p_description') as HTMLTextAreaElement)?.value;
+                  const images = [image];
 
                   if (selectedProduct) {
                     await fetch(`/api/admin/products/${selectedProduct.id}`, {
                       method: 'PUT',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description })
+                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
                     });
                     showNotification('Product updated successfully');
                   } else {
                     await fetch('/api/admin/products', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description })
+                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
                     });
                     showNotification('Product created successfully');
                   }

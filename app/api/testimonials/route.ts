@@ -130,8 +130,8 @@ export async function POST(req: NextRequest) {
     const newId = `test_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     const userName = user.name || (user.email ? user.email.split('@')[0] : 'Verified Member');
     const userAvatar = user.image || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userName)}&backgroundColor=1a0520&textColor=F4C2C2`;
-    const userRole = roleTitle || 'Verified Member';
-    const cleanProduct = productName || 'Custom Piece';
+    const userRole = roleTitle || body.role_title || 'Verified Member';
+    const cleanProduct = productName || body.product_name || 'Custom Piece';
     const createdAt = Date.now();
 
     await db.execute({
