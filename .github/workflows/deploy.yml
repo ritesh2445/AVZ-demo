@@ -1,0 +1,45 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build & Deploy AVZ Vaganza
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build OpenNext Worker
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+          ALLOW_LOCAL_SQLITE_IN_PROD: 'true'
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET || 'build-time-secret-for-static-pages-32-chars-long' }}
+          ADMIN_SESSION_SECRET: ${{ secrets.ADMIN_SESSION_SECRET || 'avz-production-build-time-session-secret-32-chars' }}
+        run: npm run build:worker
+
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || '6596fd26db9ad0e646e44edb07a79059' }}
+        run: npm run deploy:worker

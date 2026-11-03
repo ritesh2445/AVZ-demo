@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "avz-vaganza",
+  "account_id": "6596fd26db9ad0e646e44edb07a79059",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-10-30",
   "compatibility_flags": [
