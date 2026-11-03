@@ -1,9 +1,21 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { getDb, initializeDatabase } from '@/src/lib/db';
+import { PRODUCTS } from '@/src/data/brandData';
+import { getClientIp, checkRateLimit, isValidEmail, isValidPhone, sanitizeText } from '@/src/lib/security';
 
 export async function POST(request: Request) {
   try {
+    // 0. Defense Against Automated Order Flooding (Rate Limiting)
+    const clientIp = getClientIp(request);
+    const rateCheck = checkRateLimit(`order_create_${clientIp}`, 10, 60000); // Max 10 order initiations per minute
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: `Too many checkout requests. Please wait ${rateCheck.resetInSeconds} seconds before trying again.` },
+        { status: 429 }
+      );
+    }
+
     await initializeDatabase();
     const db = getDb();
 
@@ -36,12 +48,35 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Customer contact information is required' }, { status: 400 });
     }
 
-    // 2. Authoritative Price Calculation & Inventory Check from Database
+    // Input Validation & Sanitization
+    if (!isValidEmail(customer.email)) {
+      return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
+    }
+
+    if (!isValidPhone(customer.phone)) {
+      return NextResponse.json({ error: 'Please provide a valid 10-digit phone number.' }, { status: 400 });
+    }
+
+    const cleanCustomerName = sanitizeText(customer.name, 100);
+    const cleanCustomerEmail = customer.email.trim().toLowerCase();
+    const cleanCustomerPhone = customer.phone.replace(/[^0-9+]/g, '');
+
+    // 2. Authoritative Price Calculation & Inventory Check
     let calculatedSubtotal = 0;
     const verifiedItems: any[] = [];
 
     for (const cartItem of items) {
-      // Find in DB
+      // Validate integer quantity to prevent arithmetic underflow / negative price injection
+      const rawQty = cartItem.quantity !== undefined ? Number(cartItem.quantity) : 1;
+      if (!Number.isInteger(rawQty) || rawQty < 1 || rawQty > 20) {
+        return NextResponse.json(
+          { error: 'Invalid product quantity. Quantity must be a whole number between 1 and 20.' },
+          { status: 400 }
+        );
+      }
+      const qty = rawQty;
+
+      // Check database products first
       const prodRes = await db.execute({
         sql: 'SELECT id, title, price, sku, inventory_quantity, status FROM products WHERE id = ? OR title = ?',
         args: [cartItem.id || '', cartItem.name || cartItem.title || '']
@@ -50,11 +85,13 @@ export async function POST(request: Request) {
       if (prodRes.rows.length > 0) {
         const prod = prodRes.rows[0];
         const unitPrice = Number(prod.price);
-        const qty = Number(cartItem.quantity || 1);
+
+        if (isNaN(unitPrice) || unitPrice <= 0) {
+          return NextResponse.json({ error: 'Invalid product pricing configuration.' }, { status: 500 });
+        }
 
         // Check stock
         if (Number(prod.inventory_quantity) < qty && prod.status === 'published') {
-          // Alert low/out of stock
           console.warn(`Limited inventory for ${prod.title}`);
         }
 
@@ -65,21 +102,49 @@ export async function POST(request: Request) {
           sku: prod.sku,
           price: unitPrice,
           quantity: qty,
-          size: cartItem.size || 'Standard'
+          size: sanitizeText(cartItem.size || 'Standard', 30)
         });
       } else {
-        // Fallback for custom order
-        const unitPrice = Number(cartItem.price || 2500);
-        const qty = Number(cartItem.quantity || 1);
-        calculatedSubtotal += unitPrice * qty;
-        verifiedItems.push({
-          id: cartItem.id || `custom_${Date.now()}`,
-          title: cartItem.name || cartItem.title || 'Custom Studio Piece',
-          sku: 'AVZ-CUSTOM-01',
-          price: unitPrice,
-          quantity: qty,
-          size: cartItem.size || 'Custom'
-        });
+        // Check authoritative brand catalog
+        const brandMatch = PRODUCTS.find(
+          p => String(p.id) === String(cartItem.id) || p.title?.toLowerCase() === (cartItem.name || cartItem.title || '').toLowerCase()
+        );
+
+        if (brandMatch) {
+          const unitPrice = Number(brandMatch.price);
+          calculatedSubtotal += unitPrice * qty;
+          verifiedItems.push({
+            id: brandMatch.id,
+            title: brandMatch.title,
+            sku: brandMatch.sku || `AVZ-${brandMatch.id}`,
+            price: unitPrice,
+            quantity: qty,
+            size: sanitizeText(cartItem.size || 'Standard', 30)
+          });
+        } else {
+          // Genuine custom commission piece
+          // Enforce studio minimum price tier (₹1,000) to prevent arbitrary ₹1 sub-rupee tampering
+          const clientPrice = Number(cartItem.price);
+          const STUDIO_MIN_TIER_INR = 1000;
+          
+          if (isNaN(clientPrice) || clientPrice < STUDIO_MIN_TIER_INR) {
+            return NextResponse.json(
+              { error: `Custom studio commissions start at minimum ₹${STUDIO_MIN_TIER_INR.toLocaleString('en-IN')}. Please contact atelier on WhatsApp for custom billing.` },
+              { status: 400 }
+            );
+          }
+
+          const unitPrice = Math.round(clientPrice);
+          calculatedSubtotal += unitPrice * qty;
+          verifiedItems.push({
+            id: cartItem.id || `custom_${Date.now()}`,
+            title: sanitizeText(cartItem.name || cartItem.title || 'Custom Studio Commission', 120),
+            sku: 'AVZ-CUSTOM-01',
+            price: unitPrice,
+            quantity: qty,
+            size: sanitizeText(cartItem.size || 'Custom', 30)
+          });
+        }
       }
     }
 
@@ -103,7 +168,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 4. Shipping Calculation: Free above ₹5000, else flat ₹250 domestic
+    // 4. Shipping Calculation: Free above â‚¹5000, else flat â‚¹250 domestic
     const freeShippingThreshold = 5000;
     const shippingFee = (calculatedSubtotal - discountAmount) >= freeShippingThreshold ? 0 : 250;
     const grandTotal = Math.max(0, calculatedSubtotal - discountAmount + shippingFee);
@@ -128,9 +193,9 @@ export async function POST(request: Request) {
         args: [
           orderId,
           orderNumber,
-          customer.name.trim(),
-          customer.email.trim(),
-          customer.phone.trim(),
+          cleanCustomerName,
+          cleanCustomerEmail,
+          cleanCustomerPhone,
           JSON.stringify(customer.address || {}),
           JSON.stringify(verifiedItems),
           calculatedSubtotal,
@@ -144,7 +209,7 @@ export async function POST(request: Request) {
           'Cash on Delivery',
           null,
           'unfulfilled',
-          customer.notes || null,
+          customer.notes ? sanitizeText(customer.notes, 500) : null,
           Date.now(),
           Date.now()
         ]
@@ -253,9 +318,9 @@ export async function POST(request: Request) {
       args: [
         orderId,
         orderNumber,
-        customer.name.trim(),
-        customer.email.trim(),
-        customer.phone.trim(),
+        cleanCustomerName,
+        cleanCustomerEmail,
+        cleanCustomerPhone,
         JSON.stringify(customer.address || {}),
         JSON.stringify(verifiedItems),
         calculatedSubtotal,
@@ -269,7 +334,7 @@ export async function POST(request: Request) {
         'Razorpay',
         razorpayOrderId,
         'unfulfilled',
-        customer.notes || null,
+        customer.notes ? sanitizeText(customer.notes, 500) : null,
         Date.now(),
         Date.now()
       ]

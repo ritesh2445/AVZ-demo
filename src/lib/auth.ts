@@ -421,22 +421,35 @@ export async function loginAdminWithPassword(
 ): Promise<{ success: boolean; message: string; session?: AdminSession; token?: string }> {
   await initializeDatabase();
   const normalized = email.trim().toLowerCase();
+  const isProd = process.env.NODE_ENV === 'production';
 
   if (!isAllowedAdminEmail(normalized)) {
+    await logAdminActivity(normalized, 'LOGIN_FAILED_UNAUTHORIZED_EMAIL', 'admin_users', undefined, { email: normalized });
     return { success: false, message: 'Invalid admin credentials.' };
   }
 
-  const configuredPassword = process.env.ADMIN_PASSWORD || 'wyzrUz-9nifme-jijgu';
+  // Security enforcement: Disallow default dev password in production environment
+  const configuredPassword = process.env.ADMIN_PASSWORD || (!isProd ? 'wyzrUz-9nifme-jijgu' : '');
+
+  if (isProd && (!configuredPassword || configuredPassword === 'wyzrUz-9nifme-jijgu')) {
+    await logAdminActivity(normalized, 'LOGIN_BLOCKED_UNCONFIGURED_PASSWORD', 'admin_users', undefined, { reason: 'ADMIN_PASSWORD missing or insecure in production' });
+    return {
+      success: false,
+      message: 'Direct password login is disabled until an explicit ADMIN_PASSWORD secret is configured. Please use One-Time Passcode (OTP) login.'
+    };
+  }
 
   // Constant-time comparison to prevent timing attacks
   const passBuffer = Buffer.from(password.trim());
-  const expectedBuffer = Buffer.from(configuredPassword.trim());
+  const expectedBuffer = Buffer.from((configuredPassword || '').trim());
 
   const isPasswordValid =
+    configuredPassword.length > 0 &&
     passBuffer.length === expectedBuffer.length &&
     crypto.timingSafeEqual(passBuffer, expectedBuffer);
 
   if (!isPasswordValid) {
+    await logAdminActivity(normalized, 'LOGIN_FAILED_INVALID_PASSWORD', 'admin_users', undefined, { email: normalized });
     return { success: false, message: 'Invalid email or password.' };
   }
 

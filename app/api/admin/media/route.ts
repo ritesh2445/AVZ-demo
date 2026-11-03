@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
+import { isValidMediaUrl, sanitizeText } from '@/src/lib/security';
 
 export async function GET() {
   const session = await getAdminSession();
@@ -51,14 +52,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Title and URL are required' }, { status: 400 });
     }
 
+    if (!isValidMediaUrl(url)) {
+      return NextResponse.json({ error: 'Invalid URL. Only secure http, https, or local asset paths (/assets/...) are permitted.' }, { status: 400 });
+    }
+
     await initializeDatabase();
     const db = getDb();
     const id = `med_${Date.now()}`;
 
+    const cleanTitle = sanitizeText(title, 120);
+    const cleanAlt = sanitizeText(alt_text || '', 200);
+
     await db.execute({
       sql: `INSERT INTO media_assets (id, title, url, media_type, alt_text, tags, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      args: [id, title.trim(), url.trim(), media_type, alt_text || '', JSON.stringify(tags), Date.now()]
+      args: [id, cleanTitle, url.trim(), media_type === 'video' ? 'video' : 'image', cleanAlt, JSON.stringify(tags), Date.now()]
     });
 
     await logAdminActivity(session.email, 'ADD_MEDIA', 'media_assets', id, { title, url, media_type });

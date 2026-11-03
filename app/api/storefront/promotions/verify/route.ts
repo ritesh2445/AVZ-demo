@@ -1,14 +1,29 @@
 import { NextResponse } from 'next/server';
 import { getDb, initializeDatabase } from '@/src/lib/db';
+import { getClientIp, checkRateLimit } from '@/src/lib/security';
 
 export async function POST(request: Request) {
   try {
+    // Brute-force defense against discount code enumeration: Max 12 attempts per minute per IP
+    const clientIp = getClientIp(request);
+    const rateCheck = checkRateLimit(`promo_verify_${clientIp}`, 12, 60000);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { valid: false, error: `Too many code verification attempts. Please wait ${rateCheck.resetInSeconds} seconds before trying again.` },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const rawCode = (body.code || '').trim().toUpperCase();
     const subtotal = Number(body.subtotal || 0);
 
     if (!rawCode) {
       return NextResponse.json({ valid: false, error: 'Please enter a promotion code.' }, { status: 400 });
+    }
+
+    if (rawCode.length > 30) {
+      return NextResponse.json({ valid: false, error: 'Invalid promotion code format.' }, { status: 400 });
     }
 
     // 1. Check database promotions first
@@ -42,7 +57,7 @@ export async function POST(request: Request) {
         if (minOrder > 0 && subtotal < minOrder) {
           return NextResponse.json({
             valid: false,
-            error: `Code '${rawCode}' requires a minimum order of ₹${minOrder.toLocaleString('en-IN')}.`
+            error: `Code '${rawCode}' requires a minimum order of â‚¹${minOrder.toLocaleString('en-IN')}.`
           }, { status: 400 });
         }
 
@@ -65,7 +80,7 @@ export async function POST(request: Request) {
           discount_value: discountValue,
           percent,
           offInr,
-          description: promo.description || `Special discount of ${discountType === 'percentage' ? `${discountValue}%` : `₹${discountValue}`}`
+          description: promo.description || `Special discount of ${discountType === 'percentage' ? `${discountValue}%` : `â‚¹${discountValue}`}`
         });
       }
     } catch (dbErr) {
@@ -89,7 +104,7 @@ export async function POST(request: Request) {
       if (subtotal < 3000) {
         return NextResponse.json({
           valid: false,
-          error: `${rawCode} code requires a minimum order value of ₹3,000.`
+          error: `${rawCode} code requires a minimum order value of â‚¹3,000.`
         }, { status: 400 });
       }
       const percent = 15;
@@ -135,3 +150,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ valid: false, error: err.message || 'Error verifying promo code' }, { status: 500 });
   }
 }
+

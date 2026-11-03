@@ -29,6 +29,10 @@ const securityHeaders = [
     key: 'Cross-Origin-Opener-Policy',
     value: 'same-origin-allow-popups',
   },
+  {
+    key: 'X-XSS-Protection',
+    value: '1; mode=block',
+  },
 ];
 
 const nextConfig: NextConfig = {
