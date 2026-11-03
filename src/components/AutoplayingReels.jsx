@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Volume2, VolumeX, Maximize2, ChevronRight, ChevronLeft, Film, ExternalLink, X } from 'lucide-react';
-import { Play } from 'lucide-react';
+import DataRain from '@/components/ui/data-rain';
 import { playSound } from '../utils/audio';
 
 export function parseVimeoEmbed(url, muted = true) {
@@ -126,8 +126,19 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
 
   return (
     <section id="reels" className="relative w-full bg-[#050508] py-16 sm:py-24 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden select-none">
-      {/* Background Cyber Ambient Glow Layer */}
-      <div className="absolute inset-0 pointer-events-none opacity-40 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(138,92,255,0.12),transparent_70%),radial-gradient(ellipse_50%_40%_at_80%_60%,rgba(255,61,154,0.10),transparent_70%)]" />
+      {/* Background Cyber Rain Sparkles Layer */}
+      <div className="absolute inset-0 pointer-events-none opacity-30 z-0">
+        <DataRain
+          fullscreen={false}
+          count={1200}
+          flowSpeed={0.8}
+          palette={{
+            calm: '#22e6ff',
+            mid: '#8a5cff',
+            hot: '#ff3d9a'
+          }}
+        />
+      </div>
 
       {/* Header with Simple, Clear Language */}
       <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
@@ -183,19 +194,35 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                 }}
                 className="group relative flex-none w-[260px] sm:w-[290px] md:w-[320px] aspect-[9/16] rounded-3xl overflow-hidden ring-1 ring-white/10 group-hover:ring-pink/50 shadow-[0_20px_50px_rgba(0,0,0,0.85)] hover:shadow-[0_25px_60px_rgba(244,194,194,0.25)] snap-start cursor-pointer transition-all duration-300 hover:-translate-y-2.5 bg-black"
               >
-                {/* Visual Poster Cover */}
-                <img
-                  src={reel.poster || '/assets/editorial_hero_portrait.jpg'}
-                  alt={reel.title}
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
-                />
+                {/* Poster Fallback */}
+                {reel.poster && !parsed && (
+                  <img
+                    src={reel.poster}
+                    alt={reel.title}
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                  />
+                )}
 
-                {/* Central Play Badge */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-15">
-                  <div className="w-14 h-14 rounded-full bg-black/60 border border-white/30 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-115 group-hover:border-pink group-hover:text-pink transition-all duration-300 shadow-2xl">
-                    <Play className="w-6 h-6 fill-current ml-0.5" />
-                  </div>
+                {/* Frameless Floating Video Player / Vimeo Embed */}
+                <div className="absolute inset-0 w-full h-full bg-black overflow-hidden pointer-events-none">
+                  {parsed?.type === 'vimeo' ? (
+                    <iframe
+                      src={parsed.src}
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none border-0 scale-[1.05]"
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      title={reel.title}
+                    />
+                  ) : (
+                    <video
+                      src={reel.fallback_video || parsed?.src}
+                      poster={reel.poster}
+                      autoPlay
+                      loop
+                      muted={isMuted}
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                 </div>
 
                 {/* Glassmorphic Gradient Overlay */}
