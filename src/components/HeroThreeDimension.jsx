@@ -13,8 +13,7 @@ import { playSound } from '../utils/audio';
 
 function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
-  const videoRef = useRef(null);
-  const [videoBlobUrl, setVideoBlobUrl] = useState(null);
+  const iframeRef = useRef(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   const [isMobileDevice, setIsMobileDevice] = useState(() => {
@@ -42,68 +41,55 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     };
   }, []);
 
-  // Parallel lossless chunk loader to deliver 100% full master 4K/2.5K video with zero compression
-  useEffect(() => {
-    let isCancelled = false;
-    let createdUrl = null;
-    const parts = isMobileDevice
-      ? ['/assets/mobile_view_part0.bin', '/assets/mobile_view_part1.bin']
-      : ['/assets/desktop_view_part0.bin', '/assets/desktop_view_part1.bin'];
-
-    setVideoLoaded(false);
-
-    async function loadMasterChunks() {
-      try {
-        const buffers = await Promise.all(
-          parts.map(async (url) => {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
-            return await res.arrayBuffer();
-          })
-        );
-        if (isCancelled) return;
-        const blob = new Blob(buffers, { type: 'video/mp4' });
-        createdUrl = URL.createObjectURL(blob);
-        setVideoBlobUrl(createdUrl);
-      } catch (err) {
-        console.warn('[HERO VIDEO CHUNK LOADER]:', err);
-      }
-    }
-
-    loadMasterChunks();
-
-    return () => {
-      isCancelled = true;
-      if (createdUrl) URL.revokeObjectURL(createdUrl);
-    };
-  }, [isMobileDevice]);
-
   const posterSrc = isMobileDevice ? '/assets/mobile_poster.jpg' : '/assets/desktop_poster.jpg';
+  const vimeoId = isMobileDevice ? '1239586843' : '1239586933';
 
-  // Synchronized Master Video & Native Audio Playback Controls
-  // The video element natively carries the master 48kHz audio track, avoiding dual-audio drift
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (isPlaying) {
-      video.play().catch(() => { });
-    } else {
-      video.pause();
+  // Helper to send postMessage commands to Vimeo Player iframe
+  const postVimeoMessage = (method, value) => {
+    try {
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        const payload = value !== undefined ? { method, value } : { method };
+        iframeRef.current.contentWindow.postMessage(JSON.stringify(payload), '*');
+      }
+    } catch (e) {
+      console.warn('[VIMEO POSTMESSAGE]:', e);
     }
-  }, [isPlaying, videoBlobUrl]);
+  };
 
+  // Listen to Vimeo Player ready and playback events to smoothly reveal video
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = isMuted;
-    }
-  }, [isMuted, videoBlobUrl]);
+    const handleVimeoMessage = (event) => {
+      if (!event.origin.includes('vimeo.com')) return;
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        if (data.event === 'ready' || data.event === 'play' || data.event === 'timeupdate') {
+          setVideoLoaded(true);
+        }
+      } catch (e) {
+        // ignore parse error for non-json postMessages
+      }
+    };
+    window.addEventListener('message', handleVimeoMessage);
+    return () => window.removeEventListener('message', handleVimeoMessage);
+  }, []);
+
+  // Sync play state with Vimeo Player
+  useEffect(() => {
+    postVimeoMessage(isPlaying ? 'play' : 'pause');
+  }, [isPlaying]);
+
+  // Sync mute/volume state with Vimeo Player
+  useEffect(() => {
+    postVimeoMessage('setVolume', isMuted ? 0 : 1);
+    postVimeoMessage('setMuted', isMuted);
+  }, [isMuted]);
 
   const handleTogglePlay = (e) => {
     e.stopPropagation();
     playSound('pip');
-    setIsPlaying((prev) => !prev);
+    const nextPlaying = !isPlaying;
+    setIsPlaying(nextPlaying);
+    postVimeoMessage(nextPlaying ? 'play' : 'pause');
   };
 
   const handleToggleMute = (e) => {
@@ -111,13 +97,11 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     const newMuted = !isMuted;
     setIsMuted(newMuted);
     playSound(newMuted ? 'toggle_off' : 'toggle_on');
-
-    const video = videoRef.current;
-    if (video) {
-      video.muted = newMuted;
-      if (!newMuted) {
-        video.play().catch(() => { });
-      }
+    postVimeoMessage('setVolume', newMuted ? 0 : 1);
+    postVimeoMessage('setMuted', newMuted);
+    if (!newMuted && !isPlaying) {
+      setIsPlaying(true);
+      postVimeoMessage('play');
     }
   };
 
@@ -131,7 +115,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         background: '#000000'
       }}
     >
-      {/* 1. Master Native Video Stream (100% Uncompressed Master Quality via Cloudflare Static Assets) */}
+      {/* 1. Vimeo Adaptive Bitrate Video Stream (Instant Loading & Dynamic Quality Scaling) */}
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
@@ -140,28 +124,31 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         <img
           src={posterSrc}
           alt="AVZ Hero Master Visual"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-0' : 'opacity-100'
-            }`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
+            videoLoaded ? 'opacity-0' : 'opacity-100'
+          }`}
           style={{ objectFit: 'cover' }}
         />
 
-        {videoBlobUrl ? (
-          <video
-            ref={videoRef}
-            src={videoBlobUrl}
-            poster={posterSrc}
-            autoPlay
-            loop
-            muted={isMuted}
-            playsInline
-            preload="auto"
-            onCanPlay={() => setVideoLoaded(true)}
-            onPlaying={() => setVideoLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-            style={{ objectFit: 'cover' }}
-          />
-        ) : null}
+        {/* Vimeo Background Video Stream */}
+        <iframe
+          ref={iframeRef}
+          key={`hero-vimeo-${vimeoId}`}
+          src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=${isMuted ? 1 : 0}&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&dnt=1`}
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${
+            videoLoaded ? 'opacity-100' : 'opacity-0'
+          } ${
+            isMobileDevice
+              ? 'min-h-[100dvh] min-w-[56.25vh] w-[100vw] h-[177.78vw]'
+              : 'min-w-[100vw] min-h-[100dvh] w-[177.78vh] h-[56.25vw]'
+          }`}
+          allow="autoplay; fullscreen; picture-in-picture"
+          title="AVZ Hero Runway Stream"
+          style={{ border: 0 }}
+          onLoad={() => {
+            setTimeout(() => setVideoLoaded(true), 350);
+          }}
+        />
       </div>
 
       {/* 1.5 Soft High-Fashion Contrast Vignette */}
@@ -227,8 +214,8 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
             borderColor: 'rgba(255, 255, 255, 0.5)',
             color: '#ffffff'
           }}
-          title={isPlaying ? 'Pause Audio' : 'Play Audio'}
-          aria-label={isPlaying ? 'Pause Audio' : 'Play Audio'}
+          title={isPlaying ? 'Pause Video' : 'Play Video'}
+          aria-label={isPlaying ? 'Pause Video' : 'Play Video'}
         >
           {isPlaying ? (
             <Pause className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
@@ -294,7 +281,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         </button>
       </div>
 
-      {/* 3. Minimalist Scroll Guide (Bottom-Center, hidden on small screens to avoid HUD overlap) */}
+      {/* 3. Minimalist Scroll Guide */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center pointer-events-none z-[10] opacity-60">
         <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
       </div>
@@ -308,6 +295,5 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     </section>
   );
 }
-
 
 export default React.memo(HeroThreeDimension);

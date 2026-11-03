@@ -12,10 +12,44 @@ import {
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
-function ParallaxRow({ entries = [], onCommissionLook }) {
+export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const [activeLook, setActiveLook] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const scrollTrackRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHoveringStage, setIsHoveringStage] = useState(false);
+  const stageRef = useRef(null);
+
+  // Swipe & Drag Gesture Tracking
+  const touchStartXRef = useRef(null);
+  const touchStartYRef = useRef(null);
+  const isDraggingRef = useRef(false);
+
+  // RAF-throttled mouse tilt tracking for smooth 120fps/60fps 3D Spatial Stage
+  const rafRef = useRef(null);
+  const handleMouseMove = (e) => {
+    if (!stageRef.current) return;
+    if (rafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      if (!stageRef.current) return;
+      const rect = stageRef.current.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const y = ((clientY - rect.top) / rect.height) * 2 - 1;
+      setMousePos({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
+    });
+  };
+
+  const handleMouseEnter = () => setIsHoveringStage(true);
+  const handleMouseLeave = () => {
+    setIsHoveringStage(false);
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    setMousePos({ x: 0, y: 0 });
+  };
 
   const currentEntry = entries[currentSlide] || entries[0];
 
@@ -23,13 +57,6 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
     playSound('whoosh');
     const safeIdx = (index + entries.length) % entries.length;
     setCurrentSlide(safeIdx);
-
-    const el = scrollTrackRef.current;
-    if (el) {
-      const card = el.querySelector('article');
-      const cardWidth = card ? card.clientWidth + 20 : 320;
-      el.scrollTo({ left: safeIdx * cardWidth, behavior: 'smooth' });
-    }
   };
 
   const nextSlide = (e) => {
@@ -42,15 +69,50 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
     goToSlide(currentSlide - 1);
   };
 
-  const handleScroll = () => {
-    const el = scrollTrackRef.current;
-    if (!el) return;
-    const card = el.querySelector('article');
-    const cardWidth = card ? card.clientWidth + 20 : 320;
-    const idx = Math.min(Math.round(el.scrollLeft / cardWidth), entries.length - 1);
-    if (idx >= 0 && idx !== currentSlide) {
-      setCurrentSlide(idx);
+  // Touch Swipe Handlers for mobile swipeability
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartXRef.current;
+    const deltaY = touchEndY - touchStartYRef.current;
+
+    // Trigger swipe if horizontal motion exceeds vertical and passes 40px threshold
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+      if (deltaX < 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
     }
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
+
+  // Pointer drag support for desktop swipeability
+  const handlePointerDown = (e) => {
+    if (e.target.closest('button') || e.target.closest('a')) return;
+    touchStartXRef.current = e.clientX;
+    isDraggingRef.current = true;
+  };
+
+  const handlePointerUp = (e) => {
+    if (!isDraggingRef.current || touchStartXRef.current === null) return;
+    const deltaX = e.clientX - touchStartXRef.current;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX < 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    isDraggingRef.current = false;
+    touchStartXRef.current = null;
   };
 
   const openLightbox = (look, index) => {
@@ -64,11 +126,14 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
     setActiveLook(null);
   };
 
-  // Keyboard navigation for modal
+  // Keyboard navigation for modal & spatial stage
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (activeLook) {
         if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+      } else {
         if (e.key === 'ArrowRight') nextSlide();
         if (e.key === 'ArrowLeft') prevSlide();
       }
@@ -78,9 +143,9 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
   }, [activeLook, currentSlide]);
 
   return (
-    <section id="lookbook" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none relative overflow-hidden border-t border-white/10">
-      {/* Header Bar (Unified for Desktop and Mobile) */}
-      <div className="w-full mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10 text-left border-b border-white/10 pb-6">
+    <section id="lookbook" className="w-full py-10 sm:py-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
+      {/* Header Bar — Fullscreen Edge-to-Edge Matching Collection Archive */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10 text-left border-b border-white/10 pb-6">
         <div>
           <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
@@ -117,96 +182,182 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
         </div>
       </div>
 
-      {/* Main Container — Identical on Desktop and Mobile */}
-      <div className="w-full">
-        {/* Quick Look Selector Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mb-4 scroll-smooth">
-          {entries.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => goToSlide(i)}
-              className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider transition-all cursor-pointer border whitespace-nowrap ${
-                currentSlide === i
-                  ? 'bg-pink text-black font-bold border-pink shadow-md scale-105'
-                  : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
-              }`}
-            >
-              LOOK 0{i + 1}
-            </button>
-          ))}
+      {/* Quick Look Selector Pills */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mb-2 scroll-smooth">
+        {entries.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goToSlide(i)}
+            className={`px-3.5 py-1.5 rounded-full text-[10px] sm:text-[11px] font-mono tracking-wider transition-all cursor-pointer border whitespace-nowrap ${
+              currentSlide === i
+                ? 'bg-pink text-black font-bold border-pink shadow-md scale-105'
+                : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
+            }`}
+          >
+            LOOK 0{i + 1}
+          </button>
+        ))}
+      </div>
+
+      {/* ========================================================
+          SWIPABLE 3D SPATIAL CATWALK STAGE (FULLSCREEN)
+          ======================================================== */}
+      <div
+        ref={stageRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        className="relative w-full px-4 sm:px-8 lg:px-12 pt-4 pb-10 flex flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
+        style={{ perspective: '1400px' }}
+      >
+        {/* Perspective 3D Runway Grid Floor */}
+        <div
+          className="absolute bottom-2 left-0 right-0 h-48 pointer-events-none opacity-40 overflow-hidden"
+          style={{
+            perspective: '600px',
+            maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%)'
+          }}
+        >
+          <div
+            className="w-full h-full transform-gpu rotate-x-65 scale-125"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(244, 114, 182, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(147, 51, 234, 0.2) 1px, transparent 1px)`,
+              backgroundSize: '40px 40px',
+              transform: `rotateX(65deg) translateY(${mousePos.y * 10}px)`
+            }}
+          />
         </div>
 
-        {/* Fluid Horizontal Editorial Rail */}
+        {/* 3D Spatial Carousel Stage */}
         <div
-          ref={scrollTrackRef}
-          onScroll={handleScroll}
-          className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory py-4 px-1 scroll-smooth touch-scroll-x"
+          className="relative w-full h-[490px] sm:h-[560px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: `rotateY(${mousePos.x * 6}deg) rotateX(${-mousePos.y * 5}deg)`
+          }}
         >
-          {entries.map((item, idx) => (
-            <article
-              key={item.id || idx}
-              onClick={() => openLightbox(item, idx)}
-              className="snap-center shrink-0 w-[86vw] sm:w-[340px] md:w-[360px] lg:w-[380px] h-[500px] sm:h-[540px] rounded-3xl overflow-hidden relative flex flex-col justify-between p-5 sm:p-6 bg-[#0d0212] border border-white/15 shadow-2xl cursor-pointer select-none transition-all duration-300 hover:border-pink/60 hover:shadow-[0_20px_50px_rgba(244,194,194,0.2)] hover:-translate-y-2 group"
-            >
-              {/* Image Frame */}
-              <img
-                src={item.image}
-                alt={item.title}
-                draggable={false}
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none filter brightness-95 group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+          {entries.map((item, idx) => {
+            const count = entries.length;
+            let diff = (idx - currentSlide) % count;
+            if (diff > count / 2) diff -= count;
+            if (diff < -count / 2) diff += count;
 
-              {/* Top Badge Bar */}
-              <div className="relative z-10 flex items-center justify-between text-left">
-                <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase font-bold">
-                  {item.code?.split('•')[0]?.trim() || `LOOK 00${idx + 1}`}
-                </span>
+            const isCenter = diff === 0;
+            const isVisible = Math.abs(diff) <= 2;
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
+            if (!isVisible) return null;
+
+            let translateX = diff * (typeof window !== 'undefined' && window.innerWidth < 640 ? 170 : 340);
+            let translateZ = isCenter ? 120 : -90 * Math.abs(diff);
+            let rotateY = diff * -25;
+            let scale = isCenter ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 1.02 : 1.06) : 0.82;
+            let opacity = isCenter ? 1 : Math.max(0.25, 1 - Math.abs(diff) * 0.45);
+
+            const tiltX = isCenter ? -mousePos.y * 12 : 0;
+            const tiltY = isCenter ? mousePos.x * 14 : 0;
+
+            return (
+              <div
+                key={item.id || idx}
+                onClick={() => {
+                  if (isCenter) {
                     openLightbox(item, idx);
-                  }}
-                  aria-label="Inspect Full Look"
-                  className="p-2 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:border-pink transition-all cursor-pointer shadow-md"
+                  } else {
+                    goToSlide(idx);
+                  }
+                }}
+                className={`absolute top-0 w-[270px] sm:w-[340px] md:w-[380px] h-[470px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
+                  isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
+                }`}
+                style={{
+                  transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY + tiltY}deg) rotateX(${tiltX}deg) scale(${scale})`,
+                  opacity,
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                {/* Pure Editorial Noir Card */}
+                <div
+                  className={`tunnel-card w-full h-full rounded-3xl overflow-hidden relative flex flex-col justify-between transition-all duration-500 bg-[#0d0212] mobile-grunge-card ${
+                    isCenter ? 'border border-pink/50 shadow-[0_20px_60px_rgba(244,114,182,0.25)]' : 'border border-white/10'
+                  }`}
                 >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-              </div>
+                  {/* Image Layer */}
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading={isCenter ? 'eager' : 'lazy'}
+                    className={`w-full h-full object-cover transition-transform duration-700 ${
+                      isCenter ? 'scale-105 brightness-100' : 'scale-100 brightness-85'
+                    }`}
+                  />
 
-              {/* Bottom Editorial Content */}
-              <div className="relative z-10 flex flex-col text-left">
-                <span className="text-[10px] font-mono text-pink font-semibold tracking-widest uppercase mb-1 flex items-center gap-1">
-                  <Flame className="w-3 h-3 text-pink" />
-                  <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
-                </span>
+                  {/* Scrim Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-85" />
 
-                <h3 className="text-xl sm:text-2xl font-mono font-bold uppercase text-white leading-tight mb-1.5">
-                  {item.title}
-                </h3>
+                  {/* Top Badges */}
+                  <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-20 image-overlay-text">
+                    <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase">
+                      <span>{item.code?.split('•')[0]?.trim() || `LOOK 00${idx + 1}`}</span>
+                    </span>
 
-                <p className="text-xs text-zinc-300 font-mono line-clamp-2 leading-relaxed mb-3">
-                  {item.subtitle || item.story}
-                </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openLightbox(item, idx);
+                      }}
+                      aria-label="Inspect Full Look"
+                      className="w-9 h-9 rounded-full border border-white/20 bg-black/70 backdrop-blur-md flex items-center justify-center text-white hover:border-pink hover:text-pink transition-all cursor-pointer shadow-md"
+                    >
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                  </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
-                  <span className="py-1 px-3 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 bg-white/15 border border-white/20 text-white group-hover:bg-white group-hover:text-black transition-all">
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>SEE FULL LOOK ↗</span>
-                  </span>
+                  {/* Bottom Editorial Caption */}
+                  <div className="absolute bottom-5 left-5 right-5 flex flex-col text-left z-20 image-overlay-text">
+                    <span className="text-[10px] font-mono text-zinc-300 font-bold tracking-widest uppercase mb-1 flex items-center gap-1">
+                      <Flame className="w-3 h-3 text-pink" />
+                      <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
+                    </span>
 
-                  <span className="text-[11px] font-mono text-zinc-400 font-semibold">
-                    0{idx + 1} / 0{entries.length}
-                  </span>
+                    <h3 className="text-2xl sm:text-3xl font-mono font-bold uppercase text-white leading-tight mb-2">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-xs text-zinc-300 font-mono line-clamp-2 leading-relaxed mb-3">
+                      {item.subtitle || item.story}
+                    </p>
+
+                    {/* Small 'See Full Look' button on every card */}
+                    <div className="flex items-center justify-between pt-3 border-t border-white/15 text-xs font-mono">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openLightbox(item, idx);
+                        }}
+                        className="py-1.5 px-3.5 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase flex items-center gap-1.5 cursor-pointer bg-white/10 hover:bg-pink hover:text-black border border-white/20 text-white transition-all active:scale-95"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>SEE FULL LOOK ↗</span>
+                      </button>
+
+                      <span className="text-[11px] font-mono text-zinc-400">
+                        {idx + 1} / {entries.length}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Progress Dot Indicators */}
-        <div className="flex items-center justify-center gap-2 mt-6">
+        {/* Runway Slide Progress Indicators */}
+        <div className="flex items-center gap-2 mt-6 z-30">
           {entries.map((_, i) => (
             <button
               key={i}
@@ -214,7 +365,7 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
               aria-label={`Go to look ${i + 1}`}
               className={`transition-all duration-300 rounded-full cursor-pointer ${
                 i === currentSlide
-                  ? 'w-8 h-2 bg-pink shadow-[0_0_10px_rgba(244,114,182,0.8)]'
+                  ? 'w-8 h-2 bg-gradient-to-r from-[#f472b6] to-[#c084fc] shadow-[0_0_10px_rgba(244,114,182,0.8)]'
                   : 'w-2 h-2 bg-white/20 hover:bg-white/50'
               }`}
             />
@@ -222,85 +373,127 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
         </div>
       </div>
 
-      {/* Fullscreen Lightbox Modal */}
+      {/* ========================================================
+          FULL-SCREEN INSPECT MODAL (LIGHTBOX)
+          ======================================================== */}
       {activeLook && (
         <div
           onClick={closeLightbox}
           className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fade-in"
         >
+          {/* Left Arrow */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              prevSlide();
+            }}
+            aria-label="Previous look"
+            className="hidden sm:flex absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          {/* Right Arrow */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
+            aria-label="Next look"
+            className="hidden sm:flex absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-white/20 bg-black/80 backdrop-blur-md items-center justify-center text-white hover:text-pink-300 hover:border-[#f472b6] hover:bg-[#be185d]/20 transition-all z-50 cursor-pointer shadow-lg"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
           {/* Modal Content Card */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="lookbook-modal-card modal-card relative w-full max-w-5xl max-h-[92vh] rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto z-10 shadow-2xl bg-[#0d0212] border border-white/20"
+            className="lookbook-modal-card relative w-full max-w-5xl max-h-[92vh] rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 flex flex-col md:flex-row gap-6 md:gap-8 items-center overflow-y-auto z-10 shadow-2xl bg-[#0d0212] border border-white/20"
           >
-            {/* Close Button */}
+            {/* Desktop Close Button */}
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white cursor-pointer transition-all"
               aria-label="Close modal"
+              className="lookbook-close-x hidden md:flex absolute top-5 right-5 z-50 w-9 h-9 rounded-full items-center justify-center cursor-pointer shadow-lg active:scale-95 transition-all bg-white/10 hover:bg-white/20 text-white"
             >
               <X className="w-4 h-4" />
             </button>
 
-            {/* Left: Lookbook High-Res Image */}
-            <div className="w-full md:w-1/2 aspect-[3/4] rounded-2xl overflow-hidden relative shadow-2xl bg-black border border-white/10">
+            {/* Mobile Header Bar */}
+            <div className="w-full flex md:hidden items-center justify-between border-b border-white/10 pb-3 shrink-0">
+              <div className="lookbook-code text-xs font-mono tracking-widest uppercase flex items-center gap-2 font-bold text-white">
+                <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
+                <span>{activeLook.code || `LOOK 0${currentSlide + 1}`} • {currentSlide + 1} OF {entries.length}</span>
+              </div>
+              <button
+                onClick={closeLightbox}
+                aria-label="Close modal"
+                className="lookbook-close-x w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-all bg-white/10 text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Main Visual Frame */}
+            <div className="relative w-full md:w-1/2 max-h-[48vh] md:max-h-[68vh] flex items-center justify-center rounded-2xl overflow-hidden bg-black/80 border border-white/10 shrink-0 z-10 shadow-inner">
               <img
                 src={activeLook.image}
                 alt={activeLook.title}
-                className="w-full h-full object-cover"
+                className="max-h-[48vh] md:max-h-[68vh] w-full object-contain rounded-2xl"
               />
-              <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-[10px] font-mono text-pink tracking-widest uppercase font-bold">
-                {activeLook.code || 'RUNWAY EDITORIAL'}
-              </div>
             </div>
 
-            {/* Right: Look Details & Custom Commission */}
-            <div className="w-full md:w-1/2 flex flex-col justify-between text-left">
+            {/* Information & Action */}
+            <div className="w-full md:w-1/2 flex flex-col justify-between text-left md:pr-10 z-10">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink font-semibold block mb-1">
-                  EDITORIAL ARCHIVE SPECIMEN
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-mono font-bold uppercase text-white mb-2 leading-tight">
+                <div className="lookbook-code hidden md:flex items-center gap-2 mb-2 text-xs font-mono tracking-widest uppercase font-bold text-white">
+                  <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
+                  <span>{activeLook.code || `LOOK 0${currentSlide + 1}`} • {currentSlide + 1} OF {entries.length}</span>
+                </div>
+                <h3 className="lookbook-title text-2xl sm:text-3xl font-mono font-bold uppercase mb-2 leading-tight text-left text-white">
                   {activeLook.title}
                 </h3>
+                <div className="lookbook-subtitle text-sm font-display mb-4 italic text-left text-pink">
+                  "{activeLook.subtitle}"
+                </div>
 
-                <p className="text-xs sm:text-sm font-mono text-zinc-300 mb-4 leading-relaxed">
-                  {activeLook.story || activeLook.subtitle}
+                <p className="lookbook-story text-xs sm:text-sm font-montserrat leading-relaxed mb-6 text-left text-zinc-300">
+                  {activeLook.story}
                 </p>
 
-                {activeLook.materials && (
-                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 mb-4">
-                    <span className="text-zinc-500 block uppercase text-[9px] font-mono tracking-[0.2em] mb-1 font-semibold">
-                      MATERIALS & CONSTRUCTION
-                    </span>
-                    <span className="text-white text-xs font-mono">
-                      {activeLook.materials}
-                    </span>
-                  </div>
-                )}
+                {/* Details Badges */}
+                <div className="lookbook-specs p-4 rounded-2xl text-xs font-mono mb-6 space-y-1.5 text-left shadow-inner bg-white/5 border border-white/10 text-zinc-300">
+                  <div><strong className="text-white">Materials:</strong> {activeLook.materials || 'Reclaimed electronics, spikes, upcycled denim, steel'}</div>
+                  <div><strong className="text-white">Craftsmanship:</strong> 100% Handcrafted by Dhrisni in Guwahati</div>
+                  <div><strong className="text-white">Vibe:</strong> {activeLook.vibe || 'Haute Wearable Art'}</div>
+                  {activeLook.caption && (
+                    <div className="lookbook-caption pt-1 text-[11px] text-zinc-400">{activeLook.caption}</div>
+                  )}
+                </div>
               </div>
 
-              {/* Commission Order Action */}
-              <div className="pt-4 border-t border-white/10">
+              {/* Commission CTA button */}
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  type="button"
                   onClick={() => {
-                    playSound('metal');
+                    playSound('subdrop');
                     closeLightbox();
                     if (onCommissionLook) {
                       onCommissionLook(activeLook.title);
-                    } else {
-                      document.getElementById('custom')?.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="w-full py-3.5 px-5 rounded-full bg-white hover:bg-zinc-200 text-black font-mono font-bold text-xs tracking-[0.2em] uppercase transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  className="btn-commission-cta py-3.5 px-6 text-xs font-mono font-bold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 transition-all bg-pink text-black hover:bg-pink/90 rounded-full"
                 >
                   <Scissors className="w-4 h-4" />
-                  <span>COMMISSION SIMILAR LOOK ↗</span>
+                  <span>REQUEST THIS SILHOUETTE ↗</span>
                 </button>
-                <p className="text-[10px] font-mono text-zinc-500 text-center mt-2 uppercase tracking-wider">
-                  Handcrafted made-to-measure by Dhrisni • 2 to 3 weeks
-                </p>
+
+                <button
+                  onClick={closeLightbox}
+                  className="lookbook-close-btn py-3.5 px-6 text-xs font-mono font-bold tracking-widest uppercase cursor-pointer rounded-full active:scale-98 transition-all border border-white/20 text-white hover:bg-white/10"
+                >
+                  CLOSE
+                </button>
               </div>
             </div>
           </div>
@@ -309,6 +502,3 @@ function ParallaxRow({ entries = [], onCommissionLook }) {
     </section>
   );
 }
-
-
-export default React.memo(ParallaxRow);
