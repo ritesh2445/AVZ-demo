@@ -370,7 +370,9 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       id="museum"
       className="museum-salon-wall w-full py-14 sm:py-20 relative select-none overflow-hidden border-t border-[#3d0d18]"
     >
-      {/* Authentic Stippled Plaster Damask Texture */}
+      {/* Authentic Crimson Lace Damask Wallpaper & Atmospheric Lighting */}
+      <div className="museum-damask-wallpaper" />
+      <div className="museum-wall-lighting" />
       <div className="museum-wall-texture" />
 
       {/* Atmospheric Gallery Salon Lighting Spots */}

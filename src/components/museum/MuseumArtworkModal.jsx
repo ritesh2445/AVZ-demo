@@ -34,8 +34,14 @@ export default function MuseumArtworkModal({
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-5xl max-h-[92vh] bg-[#1a050b] border-2 border-[#d4af37]/60 shadow-[0_0_80px_rgba(212,175,55,0.25)] flex flex-col md:flex-row items-center overflow-y-auto z-10 p-5 sm:p-8 md:p-10 gap-6 md:gap-10 rounded-none"
       >
+        {/* Subtle Damask Wallpaper Inset */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 bg-repeat"
+          style={{ backgroundImage: "url('/assets/museum_wall_damask.jpg')", backgroundSize: '360px auto' }}
+        />
+
         {/* Ornate Gold Outer Fillet Liner */}
-        <div className="absolute inset-2 pointer-events-none border border-[#fae596]/30" />
+        <div className="absolute inset-2 pointer-events-none border border-[#fae596]/30 z-1" />
 
         {/* Close Button — Antique Brass Medallion */}
         <button
