@@ -14,6 +14,7 @@ import { playSound } from '../utils/audio';
 function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
+  const [videoBlobUrl, setVideoBlobUrl] = useState(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   const [isMobileDevice, setIsMobileDevice] = useState(() => {
@@ -41,7 +42,42 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     };
   }, []);
 
-  const videoSource = `/api/video/hero?device=${isMobileDevice ? 'mobile' : 'desktop'}`;
+  // Parallel lossless chunk loader to deliver 100% full master 4K/2.5K video with zero compression
+  useEffect(() => {
+    let isCancelled = false;
+    let createdUrl = null;
+    const parts = isMobileDevice
+      ? ['/assets/mobile_view_part0.bin', '/assets/mobile_view_part1.bin']
+      : ['/assets/desktop_view_part0.bin', '/assets/desktop_view_part1.bin'];
+
+    setVideoLoaded(false);
+
+    async function loadMasterChunks() {
+      try {
+        const buffers = await Promise.all(
+          parts.map(async (url) => {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+            return await res.arrayBuffer();
+          })
+        );
+        if (isCancelled) return;
+        const blob = new Blob(buffers, { type: 'video/mp4' });
+        createdUrl = URL.createObjectURL(blob);
+        setVideoBlobUrl(createdUrl);
+      } catch (err) {
+        console.warn('[HERO VIDEO CHUNK LOADER]:', err);
+      }
+    }
+
+    loadMasterChunks();
+
+    return () => {
+      isCancelled = true;
+      if (createdUrl) URL.revokeObjectURL(createdUrl);
+    };
+  }, [isMobileDevice]);
+
   const posterSrc = isMobileDevice ? '/assets/mobile_poster.jpg' : '/assets/desktop_poster.jpg';
 
   // Synchronized Master Video & Native Audio Playback Controls
@@ -55,14 +91,14 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     } else {
       video.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, videoBlobUrl]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
       video.muted = isMuted;
     }
-  }, [isMuted]);
+  }, [isMuted, videoBlobUrl]);
 
   const handleTogglePlay = (e) => {
     e.stopPropagation();
@@ -95,7 +131,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         background: '#000000'
       }}
     >
-      {/* 1. Master Native Video Stream (Instant 206 Byte-Range Streaming, 100% Uncompressed Master Quality) */}
+      {/* 1. Master Native Video Stream (100% Uncompressed Master Quality via Cloudflare Static Assets) */}
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
@@ -109,22 +145,23 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           style={{ objectFit: 'cover' }}
         />
 
-        <video
-          ref={videoRef}
-          key={videoSource}
-          src={videoSource}
-          poster={posterSrc}
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-          preload="auto"
-          onCanPlay={() => setVideoLoaded(true)}
-          onPlaying={() => setVideoLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-          style={{ objectFit: 'cover' }}
-        />
+        {videoBlobUrl ? (
+          <video
+            ref={videoRef}
+            src={videoBlobUrl}
+            poster={posterSrc}
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            preload="auto"
+            onCanPlay={() => setVideoLoaded(true)}
+            onPlaying={() => setVideoLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${videoLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            style={{ objectFit: 'cover' }}
+          />
+        ) : null}
       </div>
 
       {/* 1.5 Soft High-Fashion Contrast Vignette */}
