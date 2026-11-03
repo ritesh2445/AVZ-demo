@@ -136,9 +136,9 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
   };
 
   return (
-    <section id="vault" className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 lg:px-14 bg-transparent select-none relative overflow-hidden">
+    <section id="vault" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none relative">
       {/* Refined Minimalist Editorial Header */}
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4 relative z-10 text-left border-b border-white/10 pb-6">
+      <div className="w-full flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4 relative z-10 text-left border-b border-white/10 pb-6">
         <div>
           <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
@@ -188,7 +188,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
       {/* ========================================================
           DESKTOP VIEW: GSAP 3D CARD FAN CAROUSEL
           ======================================================== */}
-      <div className="hidden md:flex relative w-full max-w-7xl mx-auto justify-center items-center py-4 sm:py-6">
+      <div className="hidden md:flex relative w-full justify-center items-center py-2 sm:py-4">
         <SocialCards cards={cards} onCardClick={handleCardClick} />
       </div>
 

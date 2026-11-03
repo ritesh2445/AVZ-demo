@@ -184,7 +184,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_20%_30%,rgba(230,60,255,0.07),transparent_70%)]" />
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_40%_at_80%_70%,rgba(47,184,166,0.05),transparent_70%)]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="relative z-10 w-full">
           {/* Section Breadcrumb & Coordinates Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-12 sm:mb-16 border-b border-white/10 gap-3">
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-pink uppercase font-bold">
@@ -368,7 +368,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
             </div>
 
             {/* 4 3D Popping Polaroid Cards - Full width 4 columns on desktop, 2 on tablet, 1 on mobile */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-10 w-full max-w-6xl mx-auto pointer-events-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-10 w-full pointer-events-auto">
               {POLAROID_CARDS.map((card, idx) => (
                 <div
                   key={card.id}

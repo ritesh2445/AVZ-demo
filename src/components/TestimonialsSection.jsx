@@ -134,7 +134,7 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[250px] bg-gradient-to-t from-black via-black/50 to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 w-full">
         {/* Section Header (Consistent with brand design system) */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
           <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-4 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">

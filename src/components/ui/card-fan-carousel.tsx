@@ -314,13 +314,13 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
   );
 
   return (
-    <section className="flex flex-col items-center w-full py-2 lg:py-6 px-2 sm:px-4 md:px-8 relative z-20">
-      <div className="flex items-center justify-center w-full max-w-[90rem]">
+    <section className="flex flex-col items-center w-full py-2 px-2 sm:px-4 relative z-20">
+      <div className="flex items-center justify-center w-full">
         <div
           ref={containerRef}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="fan-layout relative flex justify-center items-center w-full max-w-[80rem]"
+          className="fan-layout relative flex justify-center items-center w-full"
           style={{
             position: 'relative',
             display: 'flex',

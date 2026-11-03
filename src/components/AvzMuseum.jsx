@@ -135,9 +135,9 @@ function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
   };
 
   return (
-    <section id="museum" className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-8 lg:px-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
+    <section id="museum" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none relative overflow-hidden border-t border-white/10">
       {/* Section Header (Consistent on Desktop and Mobile) */}
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-4 relative z-10 text-left border-b border-white/10 pb-6">
+      <div className="w-full flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-4 relative z-10 text-left border-b border-white/10 pb-6">
         <div>
           <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
@@ -209,7 +209,7 @@ function AvzMuseum({ onRequestCustomCommission, theme = 'dark', cmsMuseum }) {
       {/* ========================================================
           DESKTOP VIEW: 3D FAN CAROUSEL OR GRID (MD+ SCREENS)
           ======================================================== */}
-      <div className="hidden md:block relative w-full max-w-7xl mx-auto">
+      <div className="hidden md:block relative w-full">
         {viewMode === 'fan' ? (
           <div className="w-full flex flex-col items-center">
             <SocialCards cards={museumCards} onCardClick={handleCardClick} />

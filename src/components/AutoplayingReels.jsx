@@ -130,7 +130,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
       <div className="absolute inset-0 pointer-events-none opacity-40 z-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(138,92,255,0.12),transparent_70%),radial-gradient(ellipse_50%_40%_at_80%_60%,rgba(255,61,154,0.10),transparent_70%)]" />
 
       {/* Header with Simple, Clear Language */}
-      <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
+      <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink/10 border border-pink/30 text-pink text-[11px] font-mono uppercase tracking-widest mb-3 shadow-sm">
             <Film className="w-3.5 h-3.5 text-pink animate-pulse" />
@@ -164,7 +164,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
       </div>
 
       {/* Floating Frameless Reels Carousel Rail */}
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 w-full">
         <div
           ref={containerRef}
           className="flex gap-5 sm:gap-6 overflow-x-auto pb-6 scrollbar-none snap-x snap-mandatory"

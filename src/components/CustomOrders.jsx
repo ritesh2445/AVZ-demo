@@ -107,9 +107,9 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
   };
 
   return (
-    <section id="custom" className="w-full py-8 sm:py-14 px-4 sm:px-8 lg:px-14 bg-transparent select-none border-t border-white/10 text-left">
+    <section id="custom" className="w-full py-10 sm:py-14 px-4 sm:px-8 lg:px-12 bg-transparent select-none border-t border-white/10 text-left">
       {/* Editorial Header */}
-      <div className="max-w-6xl mx-auto mb-10 pb-6 border-b border-white/10 text-left">
+      <div className="w-full mb-10 pb-6 border-b border-white/10 text-left">
         <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
           <span>CUSTOM ORDERS • HANDCRAFTED IN GUWAHATI</span>
@@ -142,7 +142,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 text-left items-start">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 text-left items-start">
         {/* Left Column: Pricing Tiers & Direct Support (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-6 text-left">
           {/* Production Timeline */}
