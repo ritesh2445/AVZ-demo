@@ -591,3 +591,4 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
     </div>
   );
 }
+

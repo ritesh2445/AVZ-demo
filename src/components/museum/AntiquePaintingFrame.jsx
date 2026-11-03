@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Edit3, Eye, Sparkles } from 'lucide-react';
+import { Edit3, Eye } from 'lucide-react';
 import { playSound } from '../../utils/audio';
 
 const FRAME_CLASSES = {
@@ -22,9 +22,61 @@ const ASPECT_RATIO_STYLES = {
   '2:3': 'aspect-[2/3]'
 };
 
+/**
+ * Authentic Ornate Baroque & Rococo Carved Gold Corner Cartouche
+ * Features acanthus scrolls, corner relief boss, and gilded burnishing
+ */
+function OrnateCornerFiligree() {
+  return (
+    <svg
+      viewBox="0 0 44 44"
+      className="w-full h-full drop-shadow-[1px_2px_4px_rgba(0,0,0,0.92)] pointer-events-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="goldCornerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fff8db" />
+          <stop offset="25%" stopColor="#e5bb49" />
+          <stop offset="55%" stopColor="#8c6418" />
+          <stop offset="85%" stopColor="#e0ba4a" />
+          <stop offset="100%" stopColor="#3d2806" />
+        </linearGradient>
+        <radialGradient id="goldGemGrad" cx="40%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#fff9e6" />
+          <stop offset="50%" stopColor="#d4af37" />
+          <stop offset="100%" stopColor="#4a350c" />
+        </radialGradient>
+      </defs>
+      {/* Outer Baroque Acanthus Scroll Flourish */}
+      <path
+        d="M3 3 C12 3, 20 6, 26 13 C29 17, 28 23, 22 26 C16 29, 10 25, 11 18 C12 12, 19 12, 22 16"
+        stroke="url(#goldCornerGrad)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M3 3 C3 12, 6 20, 13 26 C17 29, 23 28, 26 22 C29 16, 25 10, 18 11 C12 12, 12 19, 16 22"
+        stroke="url(#goldCornerGrad)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+      {/* Solid Carved Cartouche Base */}
+      <path
+        d="M2 2 L23 2 C19 6, 14 10, 8 10 C10 14, 6 19, 2 23 Z"
+        fill="url(#goldCornerGrad)"
+      />
+      {/* Central Gilded Rosette Boss */}
+      <circle cx="10.5" cy="10.5" r="4.5" fill="url(#goldGemGrad)" stroke="#ffd700" strokeWidth="0.8" />
+      <circle cx="10.5" cy="10.5" r="2" fill="#2d1c04" />
+    </svg>
+  );
+}
+
 export default function AntiquePaintingFrame({
   artwork,
-  index,
+  index = 0,
+  isStacked = false,
   onInspect,
   onAdminEdit,
   isAdmin = false
@@ -37,20 +89,15 @@ export default function AntiquePaintingFrame({
   const meta = artwork.metadata || {};
 
   const wallPosition = meta.wall_position || (index % 3 === 0 ? 'center' : index % 3 === 1 ? 'upper' : 'lower');
-  const hasSconce = meta.sconce_light || index % 3 === 0;
-  const hasHangingHardware = meta.hanging_bracket === 'brass_chains' || meta.hanging_bracket === 'wire';
+  const hasSconce = !isStacked && (meta.sconce_light || index % 2 === 0);
+  const hasHangingHardware = !isStacked && (meta.hanging_bracket === 'brass_chains' || meta.hanging_bracket === 'wire');
 
-  // Calculate vertical alignment for authentic salon wall hang
-  const getVerticalMargin = () => {
-    switch (wallPosition) {
-      case 'upper':
-        return 'self-start mt-2 sm:mt-4 mb-auto';
-      case 'lower':
-        return 'self-end mb-8 sm:mb-12 mt-auto';
-      case 'center':
-      default:
-        return 'self-center my-auto';
+  // Width calculation: Stacked items are slightly more compact (matching photo columns)
+  const getFrameWidth = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+      return isStacked ? 220 : Math.min(artwork.width_px || 320, 280);
     }
+    return isStacked ? Math.min(artwork.width_px || 280, 290) : (artwork.width_px || 360);
   };
 
   const handleFrameClick = (e) => {
@@ -62,16 +109,18 @@ export default function AntiquePaintingFrame({
 
   return (
     <div
-      className={`relative shrink-0 flex flex-col items-center group cursor-pointer transition-transform duration-500 ease-out select-none ${getVerticalMargin()}`}
+      className={`relative shrink-0 flex flex-col items-center group cursor-pointer transition-transform duration-500 ease-out select-none ${
+        isStacked ? (wallPosition === 'upper' ? 'mb-2' : 'mt-2') : 'my-auto'
+      }`}
       style={{
-        width: typeof window !== 'undefined' && window.innerWidth < 640 ? Math.min(artwork.width_px || 340, 290) : (artwork.width_px || 360),
-        zIndex: isHovered ? 30 : 10
+        width: getFrameWidth(),
+        zIndex: isHovered ? 35 : 15
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleFrameClick}
     >
-      {/* 1. Hanging Hardware & Rail Hook (Optional classical detail) */}
+      {/* 1. Hanging Hardware & Rail Hook (For grand single pieces) */}
       {hasHangingHardware && (
         <>
           <div className="hanging-wire-left" />
@@ -110,6 +159,27 @@ export default function AntiquePaintingFrame({
           isHovered ? '-translate-y-1.5' : 'translate-y-0'
         }`}
       >
+        {/* Carved Ornate Gold Corner Cartouches (protruding outside frame corners) */}
+        <div className="ornate-corner ornate-corner-tl">
+          <OrnateCornerFiligree />
+        </div>
+        <div className="ornate-corner ornate-corner-tr">
+          <OrnateCornerFiligree />
+        </div>
+        <div className="ornate-corner ornate-corner-bl">
+          <OrnateCornerFiligree />
+        </div>
+        <div className="ornate-corner ornate-corner-br">
+          <OrnateCornerFiligree />
+        </div>
+
+        {/* On-Frame Engraved Brass Label Plaque (Mounted directly on bottom frame rail) */}
+        <div className="frame-mounted-brass-plate">
+          <span title={`${artwork.title} (${artwork.artist}, ${artwork.year || '2024'})`}>
+            {artwork.title}
+          </span>
+        </div>
+
         {/* Subtle hover spotlight highlight */}
         <div
           className={`absolute inset-0 pointer-events-none transition-opacity duration-500 z-10 ${
@@ -150,25 +220,12 @@ export default function AntiquePaintingFrame({
               isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
             }`}
           >
-            <span className="px-2.5 py-1 rounded-none bg-black/85 border border-[#d4af37]/60 text-[#fae596] text-[10px] font-mono tracking-widest uppercase flex items-center gap-1.5 shadow-lg backdrop-blur-sm">
-              <Eye className="w-3 h-3 text-[#d4af37]" />
+            <span className="px-2 py-0.5 rounded-none bg-black/85 border border-[#d4af37]/60 text-[#fae596] text-[9px] font-mono tracking-widest uppercase flex items-center gap-1 shadow-lg backdrop-blur-sm">
+              <Eye className="w-2.5 h-2.5 text-[#d4af37]" />
               <span>INSPECT</span>
             </span>
           </div>
         </div>
-      </div>
-
-      {/* 6. Engraved Brass Museum Wall Plaque */}
-      <div className="mt-4 w-[88%] max-w-[320px] px-3.5 py-2 brass-museum-plaque text-center flex flex-col items-center justify-center transition-all duration-300">
-        <span className="text-[8px] sm:text-[9px] font-mono font-bold tracking-[0.22em] text-[#362407] uppercase block leading-none mb-1">
-          AVZ ARCHIVE • NO. 00{artwork.display_order || index + 1}
-        </span>
-        <h4 className="text-[11px] sm:text-[12px] font-serif font-bold text-[#140b02] uppercase tracking-[0.06em] leading-tight line-clamp-1">
-          {artwork.title}
-        </h4>
-        <span className="text-[9px] sm:text-[10px] font-serif italic text-[#38260a] tracking-wide block mt-0.5">
-          {artwork.artist} • {artwork.year || '2024'}
-        </span>
       </div>
     </div>
   );

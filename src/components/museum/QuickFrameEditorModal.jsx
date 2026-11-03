@@ -44,6 +44,7 @@ export default function QuickFrameEditorModal({
     provenance: artwork.metadata?.provenance || '',
     dimensions_cm: artwork.metadata?.dimensions_cm || '',
     object_position: artwork.metadata?.object_position || 'center 20%',
+    wall_position: artwork.metadata?.wall_position || 'center',
     sconce_light: Boolean(artwork.metadata?.sconce_light),
     hanging_bracket: artwork.metadata?.hanging_bracket || 'brass_chains'
   });
@@ -86,6 +87,7 @@ export default function QuickFrameEditorModal({
           provenance: formData.provenance,
           dimensions_cm: formData.dimensions_cm,
           object_position: formData.object_position,
+          wall_position: formData.wall_position,
           sconce_light: formData.sconce_light,
           hanging_bracket: formData.hanging_bracket
         }
@@ -210,8 +212,8 @@ export default function QuickFrameEditorModal({
             </div>
           </div>
 
-          {/* Frame Style & Aspect Ratio */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Frame Style, Aspect Ratio & Wall Placement */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-mono text-[#fae596] uppercase tracking-wider mb-1">
                 Antique Gold Frame Style
@@ -245,6 +247,28 @@ export default function QuickFrameEditorModal({
                     {a.name}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-mono text-[#fae596] uppercase tracking-wider mb-1">
+                Wall Hang Tier
+              </label>
+              <select
+                name="wall_position"
+                value={formData.wall_position}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-black/80 border border-[#d4af37]/50 text-[#fae596] font-mono text-xs focus:outline-none focus:border-[#fae596]"
+              >
+                <option value="center" className="bg-[#1a050b] text-white">
+                  Centerpiece (Single Full-Height)
+                </option>
+                <option value="upper" className="bg-[#1a050b] text-white">
+                  Upper Tier (Stacked Top Frame)
+                </option>
+                <option value="lower" className="bg-[#1a050b] text-white">
+                  Lower Tier (Stacked Bottom Frame)
+                </option>
               </select>
             </div>
           </div>
@@ -418,3 +442,4 @@ export default function QuickFrameEditorModal({
     </div>
   );
 }
+

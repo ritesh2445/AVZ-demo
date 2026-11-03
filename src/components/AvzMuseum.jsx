@@ -21,17 +21,67 @@ import { playSound } from '../utils/audio';
 // Initial fallback archive pieces ensuring zero empty screen
 const FALLBACK_ARTWORKS = [
   {
+    id: 'art-005',
+    title: 'Still Life with Telecom Motherboard & Copper Relics',
+    artist: 'Dhrisni & The AVZ Atelier',
+    image_url: '/assets/prod_motherboard_cuff.jpg',
+    thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
+    description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
+    year: '2024',
+    category: 'Wearable Hardware',
+    frame_style: 'classical_cavetto',
+    aspect_ratio: '4:3',
+    width_px: 290,
+    height_px: 218,
+    display_order: 1,
+    is_published: 1,
+    metadata: {
+      medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
+      dimensions_cm: '75 × 56 cm',
+      provenance: 'Assam Industrial Heritage Vault',
+      hanging_bracket: 'wire',
+      wall_position: 'upper',
+      sconce_light: false
+    }
+  },
+  {
+    id: 'art-004',
+    title: 'Allegory of the Reworked Denim Relic',
+    artist: 'Dhrisni',
+    image_url: '/assets/product_reworked_jacket.jpg',
+    thumbnail_url: '/assets/product_reworked_jacket.jpg',
+    description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
+    year: '2024',
+    category: 'Tailored Relic',
+    frame_style: 'antique_fillet',
+    aspect_ratio: '1:1',
+    width_px: 280,
+    height_px: 280,
+    display_order: 2,
+    is_published: 1,
+    metadata: {
+      medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
+      dimensions_cm: '70 × 70 cm',
+      provenance: 'Private Collection, Mumbai',
+      hanging_bracket: 'hidden',
+      wall_position: 'lower',
+      sconce_light: false
+    }
+  },
+  {
     id: 'art-001',
     title: 'Portrait of the Cyber Empress in Gilded Armor',
     artist: 'Dhrisni & The AVZ Atelier',
     image_url: '/assets/editorial_hero_portrait.jpg',
+    thumbnail_url: '/assets/editorial_hero_portrait.jpg',
     description: 'An archival masterwork featuring reclaimed computer motherboard breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
     year: '2023',
     category: 'Sculptural Breastplate',
     frame_style: 'ornate_baroque',
     aspect_ratio: '3:4',
     width_px: 380,
-    display_order: 1,
+    height_px: 510,
+    display_order: 3,
     is_published: 1,
     metadata: {
       medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
@@ -47,13 +97,15 @@ const FALLBACK_ARTWORKS = [
     title: 'Study in Raw Chrome Spikes & Distressed Denim',
     artist: 'Dhrisni',
     image_url: '/assets/look_spike_bodice.jpg',
+    thumbnail_url: '/assets/look_spike_bodice.jpg',
     description: 'Sixty-four solid steel lathe-turned spikes hand-riveted onto reconstructed vintage Japanese denim, framed within an antique Italian rococo profile.',
     year: '2023',
     category: 'Armored Bodice',
     frame_style: 'gilded_rococo',
     aspect_ratio: '4:5',
-    width_px: 330,
-    display_order: 2,
+    width_px: 290,
+    height_px: 362,
+    display_order: 4,
     is_published: 1,
     metadata: {
       medium: 'Steel spikes, upcycled 14oz indigo denim, polished brass grommets',
@@ -65,17 +117,43 @@ const FALLBACK_ARTWORKS = [
     }
   },
   {
+    id: 'art-007',
+    title: 'Composition with Hand-Strung Beadwork & Metal Shards',
+    artist: 'Dhrisni & Guwahati Guild',
+    image_url: '/assets/product_beaded_bralette.jpg',
+    thumbnail_url: '/assets/product_beaded_bralette.jpg',
+    description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
+    year: '2024',
+    category: 'Haute Bijouterie',
+    frame_style: 'ornate_baroque',
+    aspect_ratio: '4:5',
+    width_px: 280,
+    height_px: 350,
+    display_order: 5,
+    is_published: 1,
+    metadata: {
+      medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
+      dimensions_cm: '60 × 75 cm',
+      provenance: 'Permanent Archive Showcase',
+      hanging_bracket: 'wire',
+      wall_position: 'lower',
+      sconce_light: false
+    }
+  },
+  {
     id: 'art-003',
     title: 'The Guwahati River Chainmail Nocturne',
     artist: 'AVZ Women Artisan Guild',
     image_url: '/assets/look_chainmail_armor.jpg',
+    thumbnail_url: '/assets/look_chainmail_armor.jpg',
     description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
     year: '2024',
     category: 'Fluid Chainmail',
     frame_style: 'florentine_gold',
     aspect_ratio: '3:4',
     width_px: 420,
-    display_order: 3,
+    height_px: 560,
+    display_order: 6,
     is_published: 1,
     metadata: {
       medium: 'Hand-linked 316L surgical stainless steel rings, industrial carabiners',
@@ -87,61 +165,19 @@ const FALLBACK_ARTWORKS = [
     }
   },
   {
-    id: 'art-004',
-    title: 'Allegory of the Reworked Denim Relic',
-    artist: 'Dhrisni',
-    image_url: '/assets/product_reworked_jacket.jpg',
-    description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
-    year: '2024',
-    category: 'Tailored Relic',
-    frame_style: 'antique_fillet',
-    aspect_ratio: '1:1',
-    width_px: 340,
-    display_order: 4,
-    is_published: 1,
-    metadata: {
-      medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
-      dimensions_cm: '70 × 70 cm',
-      provenance: 'Private Collection, Mumbai',
-      hanging_bracket: 'hidden',
-      wall_position: 'lower',
-      sconce_light: false
-    }
-  },
-  {
-    id: 'art-005',
-    title: 'Still Life with Telecom Motherboard & Copper Relics',
-    artist: 'Dhrisni & The AVZ Atelier',
-    image_url: '/assets/prod_motherboard_cuff.jpg',
-    description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
-    year: '2024',
-    category: 'Wearable Hardware',
-    frame_style: 'classical_cavetto',
-    aspect_ratio: '4:3',
-    width_px: 380,
-    display_order: 5,
-    is_published: 1,
-    metadata: {
-      medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
-      dimensions_cm: '75 × 56 cm',
-      provenance: 'Assam Industrial Heritage Vault',
-      hanging_bracket: 'wire',
-      wall_position: 'upper',
-      sconce_light: true
-    }
-  },
-  {
     id: 'art-006',
     title: 'The Altar of the Spiked Brassiere',
     artist: 'Dhrisni',
     image_url: '/assets/product_spike_bra.jpg',
+    thumbnail_url: '/assets/product_spike_bra.jpg',
     description: 'A radical synthesis of classical Parisian lingerie silhouette with subcultural industrial hardware. Solid steel conical spikes anchored with reinforced rivets.',
     year: '2023',
     category: 'Subcultural Armor',
     frame_style: 'tarnished_brass',
     aspect_ratio: '3:4',
     width_px: 350,
-    display_order: 6,
+    height_px: 466,
+    display_order: 7,
     is_published: 1,
     metadata: {
       medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
@@ -153,38 +189,18 @@ const FALLBACK_ARTWORKS = [
     }
   },
   {
-    id: 'art-007',
-    title: 'Composition with Hand-Strung Beadwork & Metal Shards',
-    artist: 'Dhrisni & Guwahati Guild',
-    image_url: '/assets/product_beaded_bralette.jpg',
-    description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
-    year: '2024',
-    category: 'Haute Bijouterie',
-    frame_style: 'ornate_baroque',
-    aspect_ratio: '4:5',
-    width_px: 320,
-    display_order: 7,
-    is_published: 1,
-    metadata: {
-      medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
-      dimensions_cm: '60 × 75 cm',
-      provenance: 'Permanent Archive Showcase',
-      hanging_bracket: 'wire',
-      wall_position: 'lower',
-      sconce_light: true
-    }
-  },
-  {
     id: 'art-008',
     title: 'The Cybernetic Diva in Full Regalia',
     artist: 'Dhrisni',
     image_url: '/assets/product_diva_top.jpg',
+    thumbnail_url: '/assets/product_diva_top.jpg',
     description: 'Monumental one-of-one silhouette uniting high-contrast cybernetic motifs with traditional couture boning and hand-finished edges.',
     year: '2024',
     category: 'Monumental Couture',
     frame_style: 'gilded_rococo',
     aspect_ratio: '3:4',
     width_px: 400,
+    height_px: 533,
     display_order: 8,
     is_published: 1,
     metadata: {
@@ -452,17 +468,88 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         }}
       >
         {/* Salon Wall Composition: Paintings Staggered Asymmetrically across the Long Continuous Wall */}
-        <div className="inline-flex items-center gap-8 sm:gap-14 md:gap-16 min-h-[580px] pb-10">
-          {artworks.map((art, idx) => (
-            <AntiquePaintingFrame
-              key={art.id || idx}
-              artwork={art}
-              index={idx}
-              onInspect={(artwork) => setSelectedArtwork(artwork)}
-              onAdminEdit={(artwork) => setEditingArtwork(artwork)}
-              isAdmin={isAdmin}
-            />
-          ))}
+        {/* Helper to build physical salon wall clusters */}
+        <div className="inline-flex items-center gap-7 sm:gap-12 md:gap-14 min-h-[600px] pb-10">
+          {(() => {
+            // Group artworks into stacked 2-tier columns or single grand centerpieces
+            const columns = [];
+            let i = 0;
+            let globalIdx = 0;
+
+            while (i < artworks.length) {
+              const current = artworks[i];
+              const next = artworks[i + 1];
+
+              const currentPos = current.metadata?.wall_position;
+              const nextPos = next?.metadata?.wall_position;
+
+              const isExplicitPair =
+                (currentPos === 'upper' && nextPos === 'lower') ||
+                (currentPos === 'lower' && nextPos === 'upper');
+
+              if (next && isExplicitPair) {
+                columns.push({
+                  type: 'stack',
+                  items: currentPos === 'lower' ? [next, current] : [current, next],
+                  startIndex: globalIdx
+                });
+                i += 2;
+                globalIdx += 2;
+              } else {
+                columns.push({
+                  type: 'single',
+                  items: [current],
+                  startIndex: globalIdx
+                });
+                i += 1;
+                globalIdx += 1;
+              }
+            }
+
+            return columns.map((col, colIdx) => {
+              if (col.type === 'stack') {
+                return (
+                  <div
+                    key={`col-stack-${colIdx}`}
+                    className="shrink-0 flex flex-col justify-between items-center gap-5 sm:gap-6 self-stretch min-h-[580px] py-1"
+                  >
+                    <AntiquePaintingFrame
+                      artwork={col.items[0]}
+                      index={col.startIndex}
+                      isStacked={true}
+                      onInspect={(artwork) => setSelectedArtwork(artwork)}
+                      onAdminEdit={(artwork) => setEditingArtwork(artwork)}
+                      isAdmin={isAdmin}
+                    />
+                    <AntiquePaintingFrame
+                      artwork={col.items[1]}
+                      index={col.startIndex + 1}
+                      isStacked={true}
+                      onInspect={(artwork) => setSelectedArtwork(artwork)}
+                      onAdminEdit={(artwork) => setEditingArtwork(artwork)}
+                      isAdmin={isAdmin}
+                    />
+                  </div>
+                );
+              }
+
+              return (
+                <div
+                  key={`col-single-${colIdx}`}
+                  className="shrink-0 flex items-center justify-center self-stretch min-h-[580px] py-1"
+                >
+                  <AntiquePaintingFrame
+                    artwork={col.items[0]}
+                    index={col.startIndex}
+                    isStacked={false}
+                    onInspect={(artwork) => setSelectedArtwork(artwork)}
+                    onAdminEdit={(artwork) => setEditingArtwork(artwork)}
+                    isAdmin={isAdmin}
+                  />
+                </div>
+              );
+            });
+          })()}
 
           {/* Terminal Salon Plaque / Invitation to Custom Orders */}
           <div className="self-center shrink-0 w-[300px] sm:w-[360px] p-8 bg-[#180409]/95 border-2 border-[#d4af37] shadow-2xl text-center flex flex-col items-center justify-center space-y-4">

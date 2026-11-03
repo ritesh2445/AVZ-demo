@@ -1,5 +1,53 @@
 export const INITIAL_GALLERY_ARTWORKS = [
   {
+    id: 'art-005',
+    title: 'Still Life with Telecom Motherboard & Copper Relics',
+    artist: 'Dhrisni & The AVZ Atelier',
+    image_url: '/assets/prod_motherboard_cuff.jpg',
+    thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
+    description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
+    year: '2024',
+    category: 'Wearable Hardware',
+    frame_style: 'classical_cavetto',
+    aspect_ratio: '4:3',
+    width_px: 290,
+    height_px: 218,
+    display_order: 1,
+    is_published: 1,
+    metadata: {
+      medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
+      dimensions_cm: '75 × 56 cm',
+      provenance: 'Assam Industrial Heritage Vault',
+      hanging_bracket: 'wire',
+      wall_position: 'upper',
+      sconce_light: false
+    }
+  },
+  {
+    id: 'art-004',
+    title: 'Allegory of the Reworked Denim Relic',
+    artist: 'Dhrisni',
+    image_url: '/assets/product_reworked_jacket.jpg',
+    thumbnail_url: '/assets/product_reworked_jacket.jpg',
+    description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
+    year: '2024',
+    category: 'Tailored Relic',
+    frame_style: 'antique_fillet',
+    aspect_ratio: '1:1',
+    width_px: 280,
+    height_px: 280,
+    display_order: 2,
+    is_published: 1,
+    metadata: {
+      medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
+      dimensions_cm: '70 × 70 cm',
+      provenance: 'Private Collection, Mumbai',
+      hanging_bracket: 'hidden',
+      wall_position: 'lower',
+      sconce_light: false
+    }
+  },
+  {
     id: 'art-001',
     title: 'Portrait of the Cyber Empress in Gilded Armor',
     artist: 'Dhrisni & The AVZ Atelier',
@@ -12,7 +60,7 @@ export const INITIAL_GALLERY_ARTWORKS = [
     aspect_ratio: '3:4',
     width_px: 380,
     height_px: 510,
-    display_order: 1,
+    display_order: 3,
     is_published: 1,
     metadata: {
       medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
@@ -34,9 +82,9 @@ export const INITIAL_GALLERY_ARTWORKS = [
     category: 'Armored Bodice',
     frame_style: 'gilded_rococo',
     aspect_ratio: '4:5',
-    width_px: 330,
-    height_px: 412,
-    display_order: 2,
+    width_px: 290,
+    height_px: 362,
+    display_order: 4,
     is_published: 1,
     metadata: {
       medium: 'Steel spikes, upcycled 14oz indigo denim, polished brass grommets',
@@ -44,6 +92,30 @@ export const INITIAL_GALLERY_ARTWORKS = [
       provenance: 'Private Collection, Bangalore (Archival Loan)',
       hanging_bracket: 'wire',
       wall_position: 'upper',
+      sconce_light: false
+    }
+  },
+  {
+    id: 'art-007',
+    title: 'Composition with Hand-Strung Beadwork & Metal Shards',
+    artist: 'Dhrisni & Guwahati Guild',
+    image_url: '/assets/product_beaded_bralette.jpg',
+    thumbnail_url: '/assets/product_beaded_bralette.jpg',
+    description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
+    year: '2024',
+    category: 'Haute Bijouterie',
+    frame_style: 'ornate_baroque',
+    aspect_ratio: '4:5',
+    width_px: 280,
+    height_px: 350,
+    display_order: 5,
+    is_published: 1,
+    metadata: {
+      medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
+      dimensions_cm: '60 × 75 cm',
+      provenance: 'Permanent Archive Showcase',
+      hanging_bracket: 'wire',
+      wall_position: 'lower',
       sconce_light: false
     }
   },
@@ -60,7 +132,7 @@ export const INITIAL_GALLERY_ARTWORKS = [
     aspect_ratio: '3:4',
     width_px: 420,
     height_px: 560,
-    display_order: 3,
+    display_order: 6,
     is_published: 1,
     metadata: {
       medium: 'Hand-linked 316L surgical stainless steel rings, industrial carabiners',
@@ -68,54 +140,6 @@ export const INITIAL_GALLERY_ARTWORKS = [
       provenance: 'Permanent Exhibition Pavilion',
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
-      sconce_light: true
-    }
-  },
-  {
-    id: 'art-004',
-    title: 'Allegory of the Reworked Denim Relic',
-    artist: 'Dhrisni',
-    image_url: '/assets/product_reworked_jacket.jpg',
-    thumbnail_url: '/assets/product_reworked_jacket.jpg',
-    description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
-    year: '2024',
-    category: 'Tailored Relic',
-    frame_style: 'antique_fillet',
-    aspect_ratio: '1:1',
-    width_px: 340,
-    height_px: 340,
-    display_order: 4,
-    is_published: 1,
-    metadata: {
-      medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
-      dimensions_cm: '70 × 70 cm',
-      provenance: 'Private Collection, Mumbai',
-      hanging_bracket: 'hidden',
-      wall_position: 'lower',
-      sconce_light: false
-    }
-  },
-  {
-    id: 'art-005',
-    title: 'Still Life with Telecom Motherboard & Copper Relics',
-    artist: 'Dhrisni & The AVZ Atelier',
-    image_url: '/assets/prod_motherboard_cuff.jpg',
-    thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
-    description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
-    year: '2024',
-    category: 'Wearable Hardware',
-    frame_style: 'classical_cavetto',
-    aspect_ratio: '4:3',
-    width_px: 380,
-    height_px: 285,
-    display_order: 5,
-    is_published: 1,
-    metadata: {
-      medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
-      dimensions_cm: '75 × 56 cm',
-      provenance: 'Assam Industrial Heritage Vault',
-      hanging_bracket: 'wire',
-      wall_position: 'upper',
       sconce_light: true
     }
   },
@@ -132,7 +156,7 @@ export const INITIAL_GALLERY_ARTWORKS = [
     aspect_ratio: '3:4',
     width_px: 350,
     height_px: 466,
-    display_order: 6,
+    display_order: 7,
     is_published: 1,
     metadata: {
       medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
@@ -141,30 +165,6 @@ export const INITIAL_GALLERY_ARTWORKS = [
       hanging_bracket: 'brass_chains',
       wall_position: 'center',
       sconce_light: false
-    }
-  },
-  {
-    id: 'art-007',
-    title: 'Composition with Hand-Strung Beadwork & Metal Shards',
-    artist: 'Dhrisni & Guwahati Guild',
-    image_url: '/assets/product_beaded_bralette.jpg',
-    thumbnail_url: '/assets/product_beaded_bralette.jpg',
-    description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
-    year: '2024',
-    category: 'Haute Bijouterie',
-    frame_style: 'ornate_baroque',
-    aspect_ratio: '4:5',
-    width_px: 320,
-    height_px: 400,
-    display_order: 7,
-    is_published: 1,
-    metadata: {
-      medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
-      dimensions_cm: '60 × 75 cm',
-      provenance: 'Permanent Archive Showcase',
-      hanging_bracket: 'wire',
-      wall_position: 'lower',
-      sconce_light: true
     }
   },
   {
