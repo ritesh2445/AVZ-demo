@@ -17,7 +17,16 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHoveringStage, setIsHoveringStage] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(1200);
   const stageRef = useRef(null);
+
+  // Track window width reactively to eliminate card spacing collisions on all screen sizes
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Swipe & Drag Gesture Tracking
   const touchStartXRef = useRef(null);
@@ -143,7 +152,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   }, [activeLook, currentSlide]);
 
   return (
-    <section id="lookbook" className="w-full py-10 sm:py-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
+    <div className="w-full py-10 sm:py-14 bg-transparent select-none relative overflow-hidden border-t border-white/10">
       {/* Header Bar — Fullscreen Edge-to-Edge Matching Collection Archive */}
       <div className="w-full px-4 sm:px-8 lg:px-12 mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 relative z-10 text-left border-b border-white/10 pb-6">
         <div>
@@ -211,7 +220,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         onTouchEnd={handleTouchEnd}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
-        className="relative w-full px-4 sm:px-8 lg:px-12 pt-4 pb-10 flex flex-col items-center justify-center min-h-[560px] sm:min-h-[620px] select-none cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
+        className="relative w-full px-4 sm:px-8 lg:px-12 pt-6 pb-12 flex flex-col items-center justify-center min-h-[580px] sm:min-h-[640px] select-none cursor-grab active:cursor-grabbing touch-pan-y overflow-visible"
         style={{ perspective: '1400px' }}
       >
         {/* Perspective 3D Runway Grid Floor */}
@@ -235,7 +244,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
         {/* 3D Spatial Carousel Stage */}
         <div
-          className="relative w-full h-[490px] sm:h-[560px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
+          className="relative w-full h-[510px] sm:h-[580px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${mousePos.x * 6}deg) rotateX(${-mousePos.y * 5}deg)`
@@ -252,11 +261,15 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
             if (!isVisible) return null;
 
-            let translateX = diff * (typeof window !== 'undefined' && window.innerWidth < 640 ? 170 : 340);
-            let translateZ = isCenter ? 120 : -90 * Math.abs(diff);
-            let rotateY = diff * -25;
-            let scale = isCenter ? (typeof window !== 'undefined' && window.innerWidth < 640 ? 1.02 : 1.06) : 0.82;
-            let opacity = isCenter ? 1 : Math.max(0.25, 1 - Math.abs(diff) * 0.45);
+            const isMobile = screenWidth < 640;
+            const isTablet = screenWidth >= 640 && screenWidth < 1024;
+            const spacing = isMobile ? 250 : isTablet ? 340 : 420;
+
+            let translateX = diff * spacing;
+            let translateZ = isCenter ? 120 : -100 * Math.abs(diff);
+            let rotateY = diff * -22;
+            let scale = isCenter ? (isMobile ? 1.02 : 1.06) : 0.82;
+            let opacity = isCenter ? 1 : Math.max(0.35, 1 - Math.abs(diff) * 0.4);
 
             const tiltX = isCenter ? -mousePos.y * 12 : 0;
             const tiltY = isCenter ? mousePos.x * 14 : 0;
@@ -271,11 +284,11 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                     goToSlide(idx);
                   }
                 }}
-                className={`absolute top-0 w-[270px] sm:w-[340px] md:w-[380px] h-[470px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
+                className={`absolute top-1/2 left-1/2 w-[270px] sm:w-[340px] md:w-[380px] h-[470px] sm:h-[540px] rounded-3xl cursor-pointer transition-all duration-700 ease-out transform-gpu ${
                   isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
                 }`}
                 style={{
-                  transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY + tiltY}deg) rotateX(${tiltX}deg) scale(${scale})`,
+                  transform: `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY + tiltY}deg) rotateX(${tiltX}deg) scale(${scale})`,
                   opacity,
                   transformStyle: 'preserve-3d'
                 }}
@@ -324,11 +337,15 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                       <span>{item.vibe || 'HAUTE WEARABLE ART'}</span>
                     </span>
 
-                    <h3 className="text-2xl sm:text-3xl font-mono font-bold uppercase text-white leading-tight mb-2">
+                    <h3 className={`font-mono font-bold uppercase text-white leading-tight mb-2 ${
+                      isCenter ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl line-clamp-2'
+                    }`}>
                       {item.title}
                     </h3>
 
-                    <p className="text-xs text-zinc-300 font-mono line-clamp-2 leading-relaxed mb-3">
+                    <p className={`text-xs text-zinc-300 font-mono leading-relaxed mb-3 ${
+                      isCenter ? 'line-clamp-2' : 'line-clamp-1 opacity-70'
+                    }`}>
                       {item.subtitle || item.story}
                     </p>
 
@@ -499,6 +516,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
