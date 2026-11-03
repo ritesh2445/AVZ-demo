@@ -1,0 +1,377 @@
+/* ========================================================
+   VINTAGE EUROPEAN ART MUSEUM SALON WALL & ANTIQUE FRAMES
+   ======================================================== */
+
+/* Burgundy Museum Salon Wall Texture */
+.museum-salon-wall {
+  background-color: #26070e;
+  background-image: 
+    radial-gradient(circle at 50% 18%, rgba(255, 230, 180, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 15% 40%, rgba(255, 215, 150, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 40%, rgba(255, 215, 150, 0.05) 0%, transparent 45%),
+    linear-gradient(to bottom, #1d040a 0%, #2a0810 25%, #2c0a12 70%, #170308 100%);
+  position: relative;
+}
+
+/* Subtle damask stippled plaster wall overlay */
+.museum-wall-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mix-blend-mode: soft-light;
+}
+
+/* Realistic Frame Physical Drop Shadows onto Wall */
+.museum-frame-shadow {
+  box-shadow:
+    0 25px 50px -8px rgba(0, 0, 0, 0.95),
+    0 12px 24px -4px rgba(0, 0, 0, 0.85),
+    0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.museum-frame-shadow:hover {
+  box-shadow:
+    0 30px 60px -6px rgba(0, 0, 0, 0.98),
+    0 16px 30px -4px rgba(0, 0, 0, 0.9),
+    0 0 25px rgba(212, 175, 55, 0.25);
+}
+
+/* ========================================================
+   AUTHENTIC ANTIQUE GOLD FRAME STYLES (PURE MITRED BEVELS)
+   ======================================================== */
+
+/* 1. ORNATE BAROQUE — Heavy sculpted triple-tiered gold leaf frame */
+.frame-ornate-baroque {
+  border: 18px solid #997325;
+  border-image: linear-gradient(
+    135deg,
+    #fae596 0%,
+    #d4af37 20%,
+    #aa8024 40%,
+    #fae596 55%,
+    #694c12 75%,
+    #d4af37 90%,
+    #42300b 100%
+  ) 18;
+  box-shadow:
+    inset 0 0 0 4px #2b1d07,
+    inset 0 0 0 7px #d4af37,
+    inset 0 0 0 10px #42300b,
+    inset 0 8px 18px rgba(0, 0, 0, 0.9);
+  background: #2b1d07;
+}
+
+/* 2. GILDED ROCOCO — Lush 24k gold leaf with undulating warm luster */
+.frame-gilded-rococo {
+  border: 16px solid #b3892c;
+  border-image: linear-gradient(
+    140deg,
+    #fff2b8 0%,
+    #e2ba49 25%,
+    #946e1a 50%,
+    #ffd966 70%,
+    #5c410c 85%,
+    #c49830 100%
+  ) 16;
+  box-shadow:
+    inset 0 0 0 3px #1f1404,
+    inset 0 0 0 6px #ffd966,
+    inset 0 0 0 8px #5c410c,
+    inset 0 10px 20px rgba(0, 0, 0, 0.85);
+  background: #1f1404;
+}
+
+/* 3. FLORENTINE GOLD — Renaissance egg-and-dart burnished leaf */
+.frame-florentine-gold {
+  border: 20px solid #7d5b1b;
+  border-image: linear-gradient(
+    135deg,
+    #e8c874 0%,
+    #b88a28 20%,
+    #4d370e 45%,
+    #d4af37 60%,
+    #2a1c05 80%,
+    #997325 100%
+  ) 20;
+  box-shadow:
+    inset 0 0 0 3px #1a1103,
+    inset 0 0 0 6px #caa23b,
+    inset 0 0 0 9px #2a1c05,
+    inset 0 6px 14px rgba(0, 0, 0, 0.9);
+  background: #1a1103;
+}
+
+/* 4. ANTIQUE FILLET & EBONIZED WOOD — Museum shadowbox with 24k gold inner fillet */
+.frame-antique-fillet {
+  border: 14px solid #14110e;
+  border-image: linear-gradient(
+    135deg,
+    #2c241c 0%,
+    #14110e 40%,
+    #0a0807 70%,
+    #221c16 100%
+  ) 14;
+  box-shadow:
+    inset 0 0 0 4px #d4af37,
+    inset 0 0 0 7px #523e11,
+    inset 0 0 0 11px #fae596,
+    inset 0 0 0 14px #1a150f,
+    inset 0 8px 16px rgba(0, 0, 0, 0.95);
+  background: #120e0a;
+}
+
+/* 5. CLASSICAL CAVETTO — Concave French museum molding with fluted relief */
+.frame-classical-cavetto {
+  border: 18px solid #8f6c24;
+  border-image: linear-gradient(
+    130deg,
+    #fae084 0%,
+    #c4972f 25%,
+    #59400f 50%,
+    #fae084 75%,
+    #3b2908 100%
+  ) 18;
+  box-shadow:
+    inset 0 0 0 3px #241704,
+    inset 0 0 0 6px #e0b64c,
+    inset 0 0 0 10px #3b2908,
+    inset 0 8px 18px rgba(0, 0, 0, 0.85);
+  background: #241704;
+}
+
+/* 6. TARNISHED BRASS — Heavy aged brass with antique verdigris patina */
+.frame-tarnished-brass {
+  border: 16px solid #6b5523;
+  border-image: linear-gradient(
+    135deg,
+    #b3934d 0%,
+    #7a5f25 30%,
+    #3b2f15 55%,
+    #967936 75%,
+    #241e0f 100%
+  ) 16;
+  box-shadow:
+    inset 0 0 0 3px #17130a,
+    inset 0 0 0 5px #a68944,
+    inset 0 0 0 8px #2b2312,
+    inset 0 8px 16px rgba(0, 0, 0, 0.9);
+  background: #17130a;
+}
+
+/* ========================================================
+   CANVAS TEXTURE & INNER SHADOW OVERLAYS
+   ======================================================== */
+
+.painting-canvas {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 8px 20px rgba(0, 0, 0, 0.7),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.5),
+    inset 4px 0 12px rgba(0, 0, 0, 0.5),
+    inset -4px 0 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Fine vintage linen oil canvas grain */
+.painting-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, transparent 1px, transparent 2px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.2) 0px, transparent 1px, transparent 2px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+}
+
+/* ========================================================
+   BRASS MUSEUM ENGRAVED WALL PLAQUE
+   ======================================================== */
+
+.brass-museum-plaque {
+  background: linear-gradient(
+    135deg,
+    #c49e4d 0%,
+    #f2d57e 30%,
+    #e0bc5c 50%,
+    #9c772b 75%,
+    #5e4513 100%
+  );
+  border: 1px solid #fae596;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.6);
+  color: #170d03;
+  text-shadow: 0 1px 0 rgba(255, 240, 190, 0.4);
+  letter-spacing: 0.08em;
+  position: relative;
+}
+
+/* Plaque corner brass mounting pins */
+.brass-museum-plaque::before,
+.brass-museum-plaque::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #362407;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.brass-museum-plaque::before {
+  left: 6px;
+}
+
+.brass-museum-plaque::after {
+  right: 6px;
+}
+
+/* ========================================================
+   BRASS PICTURE SCONCE LIGHT (OVERHEAD SPOTLIGHT)
+   ======================================================== */
+
+.brass-picture-light {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 14px;
+  background: linear-gradient(to right, #7a5a1c, #d4af37, #fae596, #d4af37, #7a5a1c);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+.brass-picture-light::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 6px;
+  background: #1f1404;
+  border-radius: 0 0 3px 3px;
+}
+
+/* Warm conical downward spotlight pool */
+.spotlight-cone {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110%;
+  height: 180px;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 230, 170, 0.22) 0%,
+    rgba(255, 210, 130, 0.08) 45%,
+    transparent 80%
+  );
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+/* ========================================================
+   PICTURE HANGING WIRES & BRASS CHAINS
+   ======================================================== */
+
+.hanging-wire-left,
+.hanging-wire-right {
+  position: absolute;
+  top: -60px;
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.5));
+  z-index: 1;
+}
+
+.hanging-wire-left {
+  left: 30px;
+}
+
+.hanging-wire-right {
+  right: 30px;
+}
+
+.hanging-hook-top {
+  position: absolute;
+  top: -64px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fae596;
+  border: 2px solid #5c410c;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  z-index: 2;
+}
+
+/* ========================================================
+   WOODEN SKIRTING & MUSEUM WAINSCOTING RUNNER
+   ======================================================== */
+
+.museum-floor-runner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to bottom, #120307 0%, #1a060a 30%, #0d0205 100%);
+  border-top: 3px solid #3d0d18;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
+
+.museum-brass-rail {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #4a3410 0%, #d4af37 50%, #4a3410 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ========================================================
+   ADMIN QUICK CURATOR EDIT BUTTON ON FRAME
+   ======================================================== */
+
+.admin-frame-edit-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 40;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fae596, #d4af37, #6e4d10);
+  border: 1.5px solid #fff5cc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), 0 0 10px rgba(212, 175, 55, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a0f02;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-frame-edit-btn:hover {
+  transform: scale(1.15) rotate(12deg);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.9), 0 0 16px rgba(250, 229, 150, 0.9);
+}

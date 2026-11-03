@@ -72,6 +72,218 @@ function createInMemoryClient(): Client {
     updated_at: Date.now()
   }));
   store.set('products', productRows);
+  // Pre-seed gallery_artworks
+  store.set('gallery_artworks', [
+    {
+      id: 'art-001',
+      title: 'Portrait of the Cyber Empress in Gilded Armor',
+      artist: 'Dhrisni & The AVZ Atelier',
+      image_url: '/assets/editorial_hero_portrait.jpg',
+      thumbnail_url: '/assets/editorial_hero_portrait.jpg',
+      description: 'An archival masterwork featuring reclaimed computer motherboard breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
+      year: '2023',
+      category: 'Sculptural Breastplate',
+      frame_style: 'ornate_baroque',
+      aspect_ratio: '3:4',
+      width_px: 380,
+      height_px: 510,
+      display_order: 1,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
+        dimensions_cm: '78 × 104 cm',
+        provenance: 'Guwahati Permanent Salon Collection',
+        hanging_bracket: 'brass_chains',
+        wall_position: 'center',
+        sconce_light: true
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-002',
+      title: 'Study in Raw Chrome Spikes & Distressed Denim',
+      artist: 'Dhrisni',
+      image_url: '/assets/look_spike_bodice.jpg',
+      thumbnail_url: '/assets/look_spike_bodice.jpg',
+      description: 'Sixty-four solid steel lathe-turned spikes hand-riveted onto reconstructed vintage Japanese denim, framed within an antique Italian rococo profile.',
+      year: '2023',
+      category: 'Armored Bodice',
+      frame_style: 'gilded_rococo',
+      aspect_ratio: '4:5',
+      width_px: 330,
+      height_px: 412,
+      display_order: 2,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Steel spikes, upcycled 14oz indigo denim, polished brass grommets',
+        dimensions_cm: '65 × 82 cm',
+        provenance: 'Private Collection, Bangalore (Archival Loan)',
+        hanging_bracket: 'wire',
+        wall_position: 'upper',
+        sconce_light: false
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-003',
+      title: 'The Guwahati River Chainmail Nocturne',
+      artist: 'AVZ Women Artisan Guild',
+      image_url: '/assets/look_chainmail_armor.jpg',
+      thumbnail_url: '/assets/look_chainmail_armor.jpg',
+      description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
+      year: '2024',
+      category: 'Fluid Chainmail',
+      frame_style: 'florentine_gold',
+      aspect_ratio: '3:4',
+      width_px: 420,
+      height_px: 560,
+      display_order: 3,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Hand-linked 316L surgical stainless steel rings, industrial carabiners',
+        dimensions_cm: '90 × 120 cm',
+        provenance: 'Permanent Exhibition Pavilion',
+        hanging_bracket: 'brass_chains',
+        wall_position: 'center',
+        sconce_light: true
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-004',
+      title: 'Allegory of the Reworked Denim Relic',
+      artist: 'Dhrisni',
+      image_url: '/assets/product_reworked_jacket.jpg',
+      thumbnail_url: '/assets/product_reworked_jacket.jpg',
+      description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
+      year: '2024',
+      category: 'Tailored Relic',
+      frame_style: 'antique_fillet',
+      aspect_ratio: '1:1',
+      width_px: 340,
+      height_px: 340,
+      display_order: 4,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
+        dimensions_cm: '70 × 70 cm',
+        provenance: 'Private Collection, Mumbai',
+        hanging_bracket: 'hidden',
+        wall_position: 'lower',
+        sconce_light: false
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-005',
+      title: 'Still Life with Telecom Motherboard & Copper Relics',
+      artist: 'Dhrisni & The AVZ Atelier',
+      image_url: '/assets/prod_motherboard_cuff.jpg',
+      thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
+      description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
+      year: '2024',
+      category: 'Wearable Hardware',
+      frame_style: 'classical_cavetto',
+      aspect_ratio: '4:3',
+      width_px: 380,
+      height_px: 285,
+      display_order: 5,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
+        dimensions_cm: '75 × 56 cm',
+        provenance: 'Assam Industrial Heritage Vault',
+        hanging_bracket: 'wire',
+        wall_position: 'upper',
+        sconce_light: true
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-006',
+      title: 'The Altar of the Spiked Brassiere',
+      artist: 'Dhrisni',
+      image_url: '/assets/product_spike_bra.jpg',
+      thumbnail_url: '/assets/product_spike_bra.jpg',
+      description: 'A radical synthesis of classical Parisian lingerie silhouette with subcultural industrial hardware. Solid steel conical spikes anchored with reinforced rivets.',
+      year: '2023',
+      category: 'Subcultural Armor',
+      frame_style: 'tarnished_brass',
+      aspect_ratio: '3:4',
+      width_px: 350,
+      height_px: 466,
+      display_order: 6,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
+        dimensions_cm: '68 × 90 cm',
+        provenance: 'Atelier Archive No. 008',
+        hanging_bracket: 'brass_chains',
+        wall_position: 'center',
+        sconce_light: false
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-007',
+      title: 'Composition with Hand-Strung Beadwork & Metal Shards',
+      artist: 'Dhrisni & Guwahati Guild',
+      image_url: '/assets/product_beaded_bralette.jpg',
+      thumbnail_url: '/assets/product_beaded_bralette.jpg',
+      description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
+      year: '2024',
+      category: 'Haute Bijouterie',
+      frame_style: 'ornate_baroque',
+      aspect_ratio: '4:5',
+      width_px: 320,
+      height_px: 400,
+      display_order: 7,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
+        dimensions_cm: '60 × 75 cm',
+        provenance: 'Permanent Archive Showcase',
+        hanging_bracket: 'wire',
+        wall_position: 'lower',
+        sconce_light: true
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    },
+    {
+      id: 'art-008',
+      title: 'The Cybernetic Diva in Full Regalia',
+      artist: 'Dhrisni',
+      image_url: '/assets/product_diva_top.jpg',
+      thumbnail_url: '/assets/product_diva_top.jpg',
+      description: 'Monumental one-of-one silhouette uniting high-contrast cybernetic motifs with traditional couture boning and hand-finished edges.',
+      year: '2024',
+      category: 'Monumental Couture',
+      frame_style: 'gilded_rococo',
+      aspect_ratio: '3:4',
+      width_px: 400,
+      height_px: 533,
+      display_order: 8,
+      is_published: 1,
+      metadata: JSON.stringify({
+        medium: 'Boned silk corset, reclaimed alloy embellishments, raw steel closures',
+        dimensions_cm: '85 × 114 cm',
+        provenance: 'Guwahati Master Collection',
+        hanging_bracket: 'brass_chains',
+        wall_position: 'center',
+        sconce_light: true
+      }),
+      created_at: Date.now(),
+      updated_at: Date.now()
+    }
+  ]);
+
 
   const client: Client = {
     async execute(stmt: any) {
@@ -216,7 +428,7 @@ async function ensureDatabaseInitialized(): Promise<void> {
   const db = getDb();
   try {
     // Fast-path: Check if schema is already provisioned to avoid hitting Cloudflare's subrequest limit
-    await db.execute('SELECT 1 FROM storefront_settings, testimonials, user LIMIT 1');
+    await db.execute('SELECT 1 FROM storefront_settings, testimonials, user, gallery_artworks LIMIT 1');
     return;
   } catch {
     await performDatabaseInitialization();
@@ -461,6 +673,32 @@ async function performDatabaseInitialization(): Promise<void> {
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_provider_id ON refunds(provider_refund_id);`);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_status ON refunds(status);`);
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_idempotency ON refunds(idempotency_key);`);
+
+  // 18. Gallery Wall Artworks (Classical European Art Museum Salon)
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS gallery_artworks (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      artist TEXT NOT NULL,
+      image_url TEXT NOT NULL,
+      thumbnail_url TEXT,
+      description TEXT,
+      year TEXT,
+      category TEXT DEFAULT 'Archival Haute Couture',
+      frame_style TEXT NOT NULL DEFAULT 'ornate_baroque',
+      aspect_ratio TEXT NOT NULL DEFAULT '3:4',
+      width_px INTEGER DEFAULT 360,
+      height_px INTEGER DEFAULT 480,
+      display_order INTEGER NOT NULL DEFAULT 0,
+      is_published INTEGER NOT NULL DEFAULT 1,
+      metadata TEXT DEFAULT '{}',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_gallery_display_order ON gallery_artworks(display_order);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_gallery_is_published ON gallery_artworks(is_published);`);
+
 
     // 19. Testimonials & Customer Reviews
   await db.execute(`
@@ -1056,6 +1294,222 @@ async function performDatabaseInitialization(): Promise<void> {
       ]
     });
   }
+
+  // --- SEED INITIAL GALLERY ARTWORKS ---
+  const existingArtworks = await db.execute('SELECT COUNT(*) as count FROM gallery_artworks');
+  const artworkCount = Number(existingArtworks.rows[0]?.count || 0);
+
+  if (artworkCount === 0) {
+    const initialArtworks = [
+      {
+        id: 'art-001',
+        title: 'Portrait of the Cyber Empress in Gilded Armor',
+        artist: 'Dhrisni & The AVZ Atelier',
+        image_url: '/assets/editorial_hero_portrait.jpg',
+        thumbnail_url: '/assets/editorial_hero_portrait.jpg',
+        description: 'An archival masterwork featuring reclaimed computer motherboard breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
+        year: '2023',
+        category: 'Sculptural Breastplate',
+        frame_style: 'ornate_baroque',
+        aspect_ratio: '3:4',
+        width_px: 380,
+        height_px: 510,
+        display_order: 1,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
+          dimensions_cm: '78 × 104 cm',
+          provenance: 'Guwahati Permanent Salon Collection',
+          hanging_bracket: 'brass_chains',
+          wall_position: 'center',
+          sconce_light: true
+        })
+      },
+      {
+        id: 'art-002',
+        title: 'Study in Raw Chrome Spikes & Distressed Denim',
+        artist: 'Dhrisni',
+        image_url: '/assets/look_spike_bodice.jpg',
+        thumbnail_url: '/assets/look_spike_bodice.jpg',
+        description: 'Sixty-four solid steel lathe-turned spikes hand-riveted onto reconstructed vintage Japanese denim, framed within an antique Italian rococo profile.',
+        year: '2023',
+        category: 'Armored Bodice',
+        frame_style: 'gilded_rococo',
+        aspect_ratio: '4:5',
+        width_px: 330,
+        height_px: 412,
+        display_order: 2,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Steel spikes, upcycled 14oz indigo denim, polished brass grommets',
+          dimensions_cm: '65 × 82 cm',
+          provenance: 'Private Collection, Bangalore (Archival Loan)',
+          hanging_bracket: 'wire',
+          wall_position: 'upper',
+          sconce_light: false
+        })
+      },
+      {
+        id: 'art-003',
+        title: 'The Guwahati River Chainmail Nocturne',
+        artist: 'AVZ Women Artisan Guild',
+        image_url: '/assets/look_chainmail_armor.jpg',
+        thumbnail_url: '/assets/look_chainmail_armor.jpg',
+        description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
+        year: '2024',
+        category: 'Fluid Chainmail',
+        frame_style: 'florentine_gold',
+        aspect_ratio: '3:4',
+        width_px: 420,
+        height_px: 560,
+        display_order: 3,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Hand-linked 316L surgical stainless steel rings, industrial carabiners',
+          dimensions_cm: '90 × 120 cm',
+          provenance: 'Permanent Exhibition Pavilion',
+          hanging_bracket: 'brass_chains',
+          wall_position: 'center',
+          sconce_light: true
+        })
+      },
+      {
+        id: 'art-004',
+        title: 'Allegory of the Reworked Denim Relic',
+        artist: 'Dhrisni',
+        image_url: '/assets/product_reworked_jacket.jpg',
+        thumbnail_url: '/assets/product_reworked_jacket.jpg',
+        description: 'Eighteen deconstructed panels from an oversized vintage trucker jacket, rebuilt with tensile steel cable lacing and distressed distressing.',
+        year: '2024',
+        category: 'Tailored Relic',
+        frame_style: 'antique_fillet',
+        aspect_ratio: '1:1',
+        width_px: 340,
+        height_px: 340,
+        display_order: 4,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Upcycled vintage denim, silver eyelets, aircraft tension cables',
+          dimensions_cm: '70 × 70 cm',
+          provenance: 'Private Collection, Mumbai',
+          hanging_bracket: 'hidden',
+          wall_position: 'lower',
+          sconce_light: false
+        })
+      },
+      {
+        id: 'art-005',
+        title: 'Still Life with Telecom Motherboard & Copper Relics',
+        artist: 'Dhrisni & The AVZ Atelier',
+        image_url: '/assets/prod_motherboard_cuff.jpg',
+        thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
+        description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
+        year: '2024',
+        category: 'Wearable Hardware',
+        frame_style: 'classical_cavetto',
+        aspect_ratio: '4:3',
+        width_px: 380,
+        height_px: 285,
+        display_order: 5,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Reclaimed telecommunication PCB boards, copper traces, Italian leather backing',
+          dimensions_cm: '75 × 56 cm',
+          provenance: 'Assam Industrial Heritage Vault',
+          hanging_bracket: 'wire',
+          wall_position: 'upper',
+          sconce_light: true
+        })
+      },
+      {
+        id: 'art-006',
+        title: 'The Altar of the Spiked Brassiere',
+        artist: 'Dhrisni',
+        image_url: '/assets/product_spike_bra.jpg',
+        thumbnail_url: '/assets/product_spike_bra.jpg',
+        description: 'A radical synthesis of classical Parisian lingerie silhouette with subcultural industrial hardware. Solid steel conical spikes anchored with reinforced rivets.',
+        year: '2023',
+        category: 'Subcultural Armor',
+        frame_style: 'tarnished_brass',
+        aspect_ratio: '3:4',
+        width_px: 350,
+        height_px: 466,
+        display_order: 6,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
+          dimensions_cm: '68 × 90 cm',
+          provenance: 'Atelier Archive No. 008',
+          hanging_bracket: 'brass_chains',
+          wall_position: 'center',
+          sconce_light: false
+        })
+      },
+      {
+        id: 'art-007',
+        title: 'Composition with Hand-Strung Beadwork & Metal Shards',
+        artist: 'Dhrisni & Guwahati Guild',
+        image_url: '/assets/product_beaded_bralette.jpg',
+        thumbnail_url: '/assets/product_beaded_bralette.jpg',
+        description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
+        year: '2024',
+        category: 'Haute Bijouterie',
+        frame_style: 'ornate_baroque',
+        aspect_ratio: '4:5',
+        width_px: 320,
+        height_px: 400,
+        display_order: 7,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Hematite micro-beads, silver alloy offcuts, silk threading',
+          dimensions_cm: '60 × 75 cm',
+          provenance: 'Permanent Archive Showcase',
+          hanging_bracket: 'wire',
+          wall_position: 'lower',
+          sconce_light: true
+        })
+      },
+      {
+        id: 'art-008',
+        title: 'The Cybernetic Diva in Full Regalia',
+        artist: 'Dhrisni',
+        image_url: '/assets/product_diva_top.jpg',
+        thumbnail_url: '/assets/product_diva_top.jpg',
+        description: 'Monumental one-of-one silhouette uniting high-contrast cybernetic motifs with traditional couture boning and hand-finished edges.',
+        year: '2024',
+        category: 'Monumental Couture',
+        frame_style: 'gilded_rococo',
+        aspect_ratio: '3:4',
+        width_px: 400,
+        height_px: 533,
+        display_order: 8,
+        is_published: 1,
+        metadata: JSON.stringify({
+          medium: 'Boned silk corset, reclaimed alloy embellishments, raw steel closures',
+          dimensions_cm: '85 × 114 cm',
+          provenance: 'Guwahati Master Collection',
+          hanging_bracket: 'brass_chains',
+          wall_position: 'center',
+          sconce_light: true
+        })
+      }
+    ];
+
+    for (const art of initialArtworks) {
+      await db.execute({
+        sql: `INSERT INTO gallery_artworks (
+          id, title, artist, image_url, thumbnail_url, description, year, category,
+          frame_style, aspect_ratio, width_px, height_px, display_order, is_published,
+          metadata, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          art.id, art.title, art.artist, art.image_url, art.thumbnail_url,
+          art.description, art.year, art.category, art.frame_style, art.aspect_ratio,
+          art.width_px, art.height_px, art.display_order, art.is_published,
+          art.metadata, Date.now(), Date.now()
+        ]
+      });
+    }
+  }
+
 }
-
-

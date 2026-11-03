@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../src/styles/vintage-gallery.css";
 
 @theme {
   --color-pitch-black: #000000;

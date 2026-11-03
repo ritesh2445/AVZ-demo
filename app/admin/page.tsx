@@ -9,7 +9,8 @@ import {
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
   Copy, Save, Sliders, ShieldAlert, Check, Menu
-} from 'lucide-react';
+, Palette } from 'lucide-react';
+import MuseumGalleryAdminTab from '@/src/components/admin/MuseumGalleryAdminTab';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -553,6 +554,7 @@ export default function AdminDashboardPage() {
     { id: 'collections', label: 'Collections', icon: Layers },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'content', label: 'Content & Website Editor', icon: FileEdit, highlight: true },
+    { id: 'gallery', label: 'Museum Gallery Wall', icon: Palette, highlight: true },
     { id: 'media', label: 'Media Library', icon: ImageIcon },
     { id: 'promotions', label: 'Promotions & Discounts', icon: Tag },
     { id: 'group_buying', label: 'Group Buying', icon: UsersRound },
@@ -1242,6 +1244,10 @@ export default function AdminDashboardPage() {
           )}
 
           {/* MODULE 7: CONTENT & WEBSITE EDITOR (MANDATORY STAR FEATURE) */}
+          {activeTab === 'gallery' && (
+            <MuseumGalleryAdminTab showNotification={showNotification} />
+          )}
+
           {activeTab === 'content' && (
             <div className="space-y-6 max-w-7xl mx-auto">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
