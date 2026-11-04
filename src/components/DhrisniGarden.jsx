@@ -226,31 +226,19 @@ export const GARDEN_COLOR_THEMES = [
 ];
 
 /**
- * Full-spectrum chromatic stardust palette.
- * Particles following the mouse spawn in every vibrant cosmic color.
+ * The 5 signature colors from each of the 5 garden botanical themes:
+ * 1. Lavender Orchid (#d99af4)
+ * 2. Solar Gold (#fbbf24)
+ * 3. Sakura Rose Pink (#f472b6)
+ * 4. Cyber Emerald (#10b981)
+ * 5. Oceanic Sapphire (#3b82f6)
  */
-export const ALL_STARDUST_COLORS = [
+export const FIVE_THEME_STARDUST_COLORS = [
+  '#d99af4', // Cosmic Lavender
+  '#fbbf24', // Solar Gold
   '#f472b6', // Sakura Pink
-  '#ec4899', // Hot Pink
-  '#fb7185', // Coral Rose
-  '#f87171', // Soft Crimson
-  '#fb923c', // Tangerine Orange
-  '#f59e0b', // Radiant Amber
-  '#fbbf24', // Pure Gold
-  '#fde047', // Solar Yellow
-  '#a3e635', // Chartreuse / Lime
-  '#34d399', // Mint Green
-  '#10b981', // Emerald Green
-  '#2dd4bf', // Aquamarine
-  '#06b6d4', // Electric Cyan
-  '#38bdf8', // Sky Blue
-  '#60a5fa', // Cobalt Sapphire
-  '#818cf8', // Celestial Indigo
-  '#a855f7', // Royal Purple
-  '#c084fc', // Orchid Lilac
-  '#d99af4', // Lavender
-  '#f5d5ff', // Starlight Violet
-  '#ffffff', // Diamond White
+  '#10b981', // Cyber Emerald
+  '#3b82f6', // Oceanic Sapphire
 ];
 
 function DhrisniGarden({ className = '' }) {
@@ -281,7 +269,19 @@ function DhrisniGarden({ className = '' }) {
 
   // Cycle to next chromatic bloom set and replay the entrance sequence
   const handleReplay = useCallback(() => {
-    setThemeIndex((prev) => (prev + 1) % GARDEN_COLOR_THEMES.length);
+    setThemeIndex((prev) => {
+      const next = (prev + 1) % GARDEN_COLOR_THEMES.length;
+      if (next === 0) {
+        // Returned to default: stop and clear all active stardust immediately
+        particlesRef.current = [];
+        const canvas = canvasRef.current;
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      return next;
+    });
     setAnimationKey((prev) => prev + 1);
   }, []);
 
@@ -368,19 +368,26 @@ function DhrisniGarden({ className = '' }) {
     }
   }, []);
 
-  // Smooth cursor stardust spawner with multi-colored particles in every color
+  // Cursor stardust spawner:
+  // - Default theme (themeIndex === 0): STARDUST STOPS COMING COMPLETELY
+  // - Clicked themes (themeIndex !== 0): Stardust comes from mouse in all 5 theme colors!
   const handleMouseMove = useCallback(
     (e) => {
+      // When on the default theme (or returned to default), stardust stops coming
+      if (themeIndex === 0) return;
+
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Spawns vibrant stardust grains picking randomly across the entire spectrum
+      // Spawns vibrant stardust grains picking from all 5 botanical colors
       for (let i = 0; i < 2; i++) {
         const randomColor =
-          ALL_STARDUST_COLORS[Math.floor(Math.random() * ALL_STARDUST_COLORS.length)];
+          FIVE_THEME_STARDUST_COLORS[
+            Math.floor(Math.random() * FIVE_THEME_STARDUST_COLORS.length)
+          ];
         particlesRef.current.push({
           x: x + (Math.random() - 0.5) * 8,
           y: y + (Math.random() - 0.5) * 8,
@@ -395,14 +402,14 @@ function DhrisniGarden({ className = '' }) {
         });
       }
 
-      // Keep up to 60 sparkling particles alive for fluid, dense trails
-      if (particlesRef.current.length > 60) {
-        particlesRef.current.splice(0, particlesRef.current.length - 60);
+      // Keep up to 50 sparkling particles alive for fluid, dense trails
+      if (particlesRef.current.length > 50) {
+        particlesRef.current.splice(0, particlesRef.current.length - 50);
       }
 
       runStardustLoop();
     },
-    [runStardustLoop]
+    [themeIndex, runStardustLoop]
   );
 
   useEffect(() => {
