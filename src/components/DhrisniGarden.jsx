@@ -48,7 +48,7 @@ export const GARDEN_COLOR_THEMES = [
     flightHighlight: '#f4dcff',
     jumpStarFill: '#f0caff',
     jumpStarGlow: '#d99aff',
-    stardustColors: ['#f5d5ff', '#bd78dc'],
+    stardustColors: ['#f5d5ff', '#d99af4', '#ffffff'],
     flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #c476ff)',
   },
   {
@@ -91,7 +91,7 @@ export const GARDEN_COLOR_THEMES = [
     flightHighlight: '#fef9c3',
     jumpStarFill: '#fef08a',
     jumpStarGlow: '#f59e0b',
-    stardustColors: ['#fef08a', '#f59e0b'],
+    stardustColors: ['#fef08a', '#fbbf24', '#ffffff'],
     flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #f59e0b)',
   },
   {
@@ -134,7 +134,7 @@ export const GARDEN_COLOR_THEMES = [
     flightHighlight: '#ffffff',
     jumpStarFill: '#fce7f3',
     jumpStarGlow: '#f472b6',
-    stardustColors: ['#fce7f3', '#f472b6'],
+    stardustColors: ['#fce7f3', '#f472b6', '#ffffff'],
     flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #ec4899)',
   },
   {
@@ -177,7 +177,7 @@ export const GARDEN_COLOR_THEMES = [
     flightHighlight: '#ecfeff',
     jumpStarFill: '#a7f3d0',
     jumpStarGlow: '#10b981',
-    stardustColors: ['#a7f3d0', '#2dd4bf'],
+    stardustColors: ['#a7f3d0', '#2dd4bf', '#ffffff'],
     flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #2dd4bf)',
   },
   {
@@ -220,7 +220,7 @@ export const GARDEN_COLOR_THEMES = [
     flightHighlight: '#eff6ff',
     jumpStarFill: '#dbeafe',
     jumpStarGlow: '#3b82f6',
-    stardustColors: ['#dbeafe', '#60a5fa'],
+    stardustColors: ['#dbeafe', '#60a5fa', '#ffffff'],
     flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #3b82f6)',
   },
 ];
@@ -335,24 +335,24 @@ function DhrisniGarden({ className = '' }) {
         ctx.rotate(p.rotation);
         ctx.globalAlpha = Math.max(0, p.life);
 
-        // Radiant glow
+        // Subtle, refined glow
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8 * dpr;
+        ctx.shadowBlur = 3 * dpr;
 
-        // Core star glint (4-pointed diamond)
+        // Delicate micro 4-pointed diamond star
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.moveTo(0, -size * 2);
-        ctx.quadraticCurveTo(size * 0.25, 0, size * 2, 0);
-        ctx.quadraticCurveTo(size * 0.25, 0, 0, size * 2);
-        ctx.quadraticCurveTo(-size * 0.25, 0, -size * 2, 0);
-        ctx.quadraticCurveTo(-size * 0.25, 0, 0, -size * 2);
+        ctx.moveTo(0, -size * 1.5);
+        ctx.quadraticCurveTo(size * 0.2, 0, size * 1.5, 0);
+        ctx.quadraticCurveTo(size * 0.2, 0, 0, size * 1.5);
+        ctx.quadraticCurveTo(-size * 0.2, 0, -size * 1.5, 0);
+        ctx.quadraticCurveTo(-size * 0.2, 0, 0, -size * 1.5);
         ctx.fill();
 
-        // Glowing center core
+        // Micro pinpoint center
         ctx.shadowBlur = 0;
         ctx.beginPath();
-        ctx.arc(0, 0, size * 0.75, 0, Math.PI * 2);
+        ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
 
@@ -367,8 +367,7 @@ function DhrisniGarden({ className = '' }) {
     }
   }, []);
 
-  // Cursor stardust spawner: Active in ALL 5 themes (including default theme)
-  // Spawns vibrant stardust in all 5 signature garden botanical colors
+  // Cursor stardust spawner: Uses matching colors for each design, airy and lightweight
   const handleMouseMove = useCallback(
     (e) => {
       const canvas = canvasRef.current;
@@ -380,34 +379,34 @@ function DhrisniGarden({ className = '' }) {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Spawn 2-3 radiant particles per mouse movement in all 5 theme colors
-      for (let i = 0; i < 3; i++) {
-        const randomColor =
-          FIVE_THEME_STARDUST_COLORS[
-            Math.floor(Math.random() * FIVE_THEME_STARDUST_COLORS.length)
-          ];
+      const colors = currentTheme.stardustColors;
+      // Spawn 1 delicate particle (occasionally 2) for a light, non-bulky trail
+      const count = Math.random() > 0.65 ? 2 : 1;
+
+      for (let i = 0; i < count; i++) {
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
         particlesRef.current.push({
-          x: x + (Math.random() - 0.5) * 12,
-          y: y + (Math.random() - 0.5) * 12,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5 - 0.5,
-          size: Math.random() * 3.5 + 3.0,
+          x: x + (Math.random() - 0.5) * 6,
+          y: y + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8 - 0.35,
+          size: Math.random() * 1.4 + 1.2, // Delicate micro-stardust (1.2px - 2.6px)
           color: randomColor,
           rotation: Math.random() * Math.PI,
-          rotSpeed: (Math.random() - 0.5) * 0.1,
+          rotSpeed: (Math.random() - 0.5) * 0.08,
           life: 1.0,
-          decay: Math.random() * 0.02 + 0.015, // lasts ~0.8s
+          decay: Math.random() * 0.035 + 0.025, // Snappy ~0.5s graceful fade
         });
       }
 
-      // Keep up to 70 sparkling particles alive for dense, fluid trails
-      if (particlesRef.current.length > 70) {
-        particlesRef.current.splice(0, particlesRef.current.length - 70);
+      // Keep max 24 particles active to eliminate any clumping or bulkiness
+      if (particlesRef.current.length > 24) {
+        particlesRef.current.splice(0, particlesRef.current.length - 24);
       }
 
       runStardustLoop();
     },
-    [syncCanvasDimensions, runStardustLoop]
+    [currentTheme, syncCanvasDimensions, runStardustLoop]
   );
 
   useEffect(() => {
