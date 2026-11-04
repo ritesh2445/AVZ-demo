@@ -822,6 +822,18 @@ export default function DataRain(props: DataRainProps) {
     const ro = new ResizeObserver(() => resize());
     ro.observe(root);
 
+    let isIntersecting = true;
+    const io = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+      if (!isIntersecting) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      } else if (live && !disposed && !document.hidden && !raf) {
+        start();
+      }
+    }, { threshold: 0.05 });
+    io.observe(root);
+
     apiRef.current = {
       refresh: () => {
         if (disposed || !initialised) return;
@@ -865,6 +877,7 @@ export default function DataRain(props: DataRainProps) {
       document.documentElement.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
       ro.disconnect();
+      io.disconnect();
       apiRef.current = null;
       haloGradient = null;
     };

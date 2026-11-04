@@ -15,9 +15,9 @@ const FRAME_OPTIONS = [
 
 const ASPECT_RATIO_OPTIONS = [
   { id: '3:4', name: '3:4 Classic Portrait' },
-  { id: '4:5', name: '4:5 Salon Vertical' },
+  { id: '4:5', name: '4:5 Gallery Vertical' },
   { id: '1:1', name: '1:1 Archival Square' },
-  { id: '4:3', name: '4:3 Salon Landscape' },
+  { id: '4:3', name: '4:3 Gallery Landscape' },
   { id: '16:9', name: '16:9 Monumental Wide' },
   { id: '2:3', name: '2:3 Tall Masterpiece' }
 ];
@@ -33,7 +33,7 @@ export default function QuickFrameEditorModal({
     artist: artwork.artist || '',
     image_url: artwork.image_url || '',
     year: artwork.year || '2024',
-    category: artwork.category || 'Archival Haute Couture',
+    category: artwork.category || 'Archival Wearable Art',
     frame_style: artwork.frame_style || 'ornate_baroque',
     aspect_ratio: artwork.aspect_ratio || '3:4',
     width_px: artwork.width_px || 360,
@@ -291,7 +291,7 @@ export default function QuickFrameEditorModal({
 
             <div>
               <label className="block text-xs font-mono text-[#fae596] uppercase tracking-wider mb-1">
-                Artist Name & Atelier
+                Artist Name & Studio
               </label>
               <input
                 type="text"

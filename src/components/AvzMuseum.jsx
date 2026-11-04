@@ -16,6 +16,7 @@ import AntiquePaintingFrame from './museum/AntiquePaintingFrame';
 import MuseumArtworkModal from './museum/MuseumArtworkModal';
 import QuickFrameEditorModal from './museum/QuickFrameEditorModal';
 import { playGalleryMoveSound, stopGalleryMoveSound } from '../utils/galleryAudio';
+import { startGuitarMelody, stopGuitarMelody } from '../utils/guitarAudio';
 import { playSound } from '../utils/audio';
 
 // Initial fallback archive pieces ensuring zero empty screen
@@ -196,7 +197,7 @@ const FALLBACK_ARTWORKS = [
     thumbnail_url: '/assets/product_diva_top.jpg',
     description: "Dhrisni's personal runway set. A boned corset framework meeting raw industrial steel closures and reclaimed cybernetic hardware. Loud, heavy, and unapologetically maximalist.",
     year: '2024',
-    category: 'Maximalist Couture',
+    category: 'Maximalist High Fashion',
     frame_style: 'gilded_rococo',
     aspect_ratio: '3:4',
     width_px: 400,
@@ -347,12 +348,22 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     setSoundEnabled(next);
     playSound(next ? 'toggle_on' : 'toggle_off');
     if (next) {
+      startGuitarMelody();
       playGalleryMoveSound(true, 1.2);
       setTimeout(() => stopGalleryMoveSound(), 300);
     } else {
+      stopGuitarMelody();
       stopGalleryMoveSound();
     }
   };
+
+  // Clean up audio if user leaves the page or unmounts
+  useEffect(() => {
+    return () => {
+      stopGuitarMelody();
+      stopGalleryMoveSound();
+    };
+  }, []);
 
   // Callback after an admin modifies or dismounts a frame in real time
   const handleArtworkSaved = (updatedArt) => {
@@ -418,18 +429,18 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
                 ? 'bg-[#d4af37] text-black border-[#fae596] font-bold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
                 : 'bg-[#150307]/80 text-[#d4af37] border-[#d4af37]/40 hover:border-[#d4af37]'
             }`}
-            title={soundEnabled ? 'Mute Gallery Movement Audio' : 'Enable Vintage Museum Movement Sound'}
+            title={soundEnabled ? 'Mute Acoustic Guitar Melody' : 'Play Acoustic Guitar Melody'}
             aria-label={soundEnabled ? 'Sound On' : 'Sound Off'}
           >
             {soundEnabled ? (
               <>
                 <Volume2 className="w-3.5 h-3.5 text-black" />
-                <span>SOUND ON</span>
+                <span>GUITAR MELODY ON</span>
               </>
             ) : (
               <>
                 <VolumeX className="w-3.5 h-3.5 text-[#d4af37]" />
-                <span>SOUND OFF</span>
+                <span>GUITAR MELODY OFF</span>
               </>
             )}
           </button>
@@ -559,7 +570,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
               ✦
             </div>
             <h3 className="text-lg font-serif font-bold text-[#fff2cc] uppercase tracking-wider">
-              L'ATELIER SUR-MESURE
+              THE BESPOKE CUSTOM STUDIO
             </h3>
             <p className="text-xs font-serif italic text-[#c5b099] leading-relaxed">
               Every specimen in our permanent archive is a handcrafted one-of-one relic. Recreations and custom silhouettes can be commissioned directly with Master Artisan Dhrisni.
@@ -568,7 +579,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
               onClick={() => {
                 playSound('subdrop');
                 if (onRequestCustomCommission) {
-                  onRequestCustomCommission('Atelier Custom Piece');
+                  onRequestCustomCommission('Bespoke Custom Piece');
                 } else {
                   document.getElementById('custom')?.scrollIntoView({ behavior: 'smooth' });
                 }

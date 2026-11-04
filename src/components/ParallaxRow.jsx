@@ -15,7 +15,6 @@ import { playSound } from '../utils/audio';
 export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const [activeLook, setActiveLook] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHoveringStage, setIsHoveringStage] = useState(false);
   const [screenWidth, setScreenWidth] = useState(1200);
   const stageRef = useRef(null);
@@ -33,7 +32,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const touchStartYRef = useRef(null);
   const isDraggingRef = useRef(false);
 
-  // RAF-throttled mouse tilt tracking for smooth 120fps/60fps 3D Spatial Stage
+  // GPU-composited CSS variable tilt tracking (0 React re-renders, 120fps smooth)
   const rafRef = useRef(null);
   const handleMouseMove = (e) => {
     if (!stageRef.current) return;
@@ -44,9 +43,10 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       rafRef.current = null;
       if (!stageRef.current) return;
       const rect = stageRef.current.getBoundingClientRect();
-      const x = ((clientX - rect.left) / rect.width) * 2 - 1;
-      const y = ((clientY - rect.top) / rect.height) * 2 - 1;
-      setMousePos({ x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) });
+      const x = Math.max(-1, Math.min(1, ((clientX - rect.left) / rect.width) * 2 - 1));
+      const y = Math.max(-1, Math.min(1, ((clientY - rect.top) / rect.height) * 2 - 1));
+      stageRef.current.style.setProperty('--mouse-x', x.toString());
+      stageRef.current.style.setProperty('--mouse-y', y.toString());
     });
   };
 
@@ -57,7 +57,10 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
-    setMousePos({ x: 0, y: 0 });
+    if (stageRef.current) {
+      stageRef.current.style.setProperty('--mouse-x', '0');
+      stageRef.current.style.setProperty('--mouse-y', '0');
+    }
   };
 
   const currentEntry = entries[currentSlide] || entries[0];
@@ -237,7 +240,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             style={{
               backgroundImage: `linear-gradient(to right, rgba(244, 114, 182, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(147, 51, 234, 0.2) 1px, transparent 1px)`,
               backgroundSize: '40px 40px',
-              transform: `rotateX(65deg) translateY(${mousePos.y * 10}px)`
+              transform: `rotateX(65deg) translateY(calc(var(--mouse-y, 0) * 10px))`
             }}
           />
         </div>
@@ -247,7 +250,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
           className="relative w-full h-[510px] sm:h-[580px] flex items-center justify-center transition-transform duration-500 ease-out z-20"
           style={{
             transformStyle: 'preserve-3d',
-            transform: `rotateY(${mousePos.x * 6}deg) rotateX(${-mousePos.y * 5}deg)`
+            transform: `rotateY(calc(var(--mouse-x, 0) * 6deg)) rotateX(calc(var(--mouse-y, 0) * -5deg))`
           }}
         >
           {entries.map((item, idx) => {
@@ -271,9 +274,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             let scale = isCenter ? (isMobile ? 1.02 : 1.06) : 0.82;
             let opacity = isCenter ? 1 : Math.max(0.35, 1 - Math.abs(diff) * 0.4);
 
-            const tiltX = isCenter ? -mousePos.y * 12 : 0;
-            const tiltY = isCenter ? mousePos.x * 14 : 0;
-
             return (
               <div
                 key={item.id || idx}
@@ -288,7 +288,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   isCenter ? 'z-30' : Math.abs(diff) === 1 ? 'z-20' : 'z-10'
                 }`}
                 style={{
-                  transform: `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY + tiltY}deg) rotateX(${tiltX}deg) scale(${scale})`,
+                  transform: `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(calc(${rotateY}deg + ${isCenter ? 'var(--mouse-x, 0) * 14deg' : '0deg'})) rotateX(${isCenter ? 'calc(var(--mouse-y, 0) * -12deg)' : '0deg'}) scale(${scale})`,
                   opacity,
                   transformStyle: 'preserve-3d'
                 }}

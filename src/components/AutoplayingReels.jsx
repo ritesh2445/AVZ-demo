@@ -127,10 +127,10 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
   return (
     <section id="reels" className="relative w-full bg-[#050508] py-16 sm:py-24 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden select-none">
       {/* Background Cyber Rain Sparkles Layer */}
-      <div className="absolute inset-0 pointer-events-none opacity-30 z-0">
+      <div className="absolute inset-0 pointer-events-none opacity-25 z-0">
         <DataRain
           fullscreen={false}
-          count={1200}
+          count={180}
           flowSpeed={0.8}
           palette={{
             calm: '#22e6ff',

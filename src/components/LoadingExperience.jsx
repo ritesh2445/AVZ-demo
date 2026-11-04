@@ -188,7 +188,7 @@ export default function LoadingExperience({ onComplete }) {
             } else if (currentCount < 90) {
               phaseRef.current.textContent = "SYNTHESIZING ZERO-WASTE SILHOUETTES";
             } else if (currentCount < 100) {
-              phaseRef.current.textContent = "CALIBRATING HAUTE-COUTURE RUNWAY";
+              phaseRef.current.textContent = "CALIBRATING THE FASHION RUNWAY";
             } else {
               phaseRef.current.textContent = "AVZ FASHION DIMENSION READY";
             }

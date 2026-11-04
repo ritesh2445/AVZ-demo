@@ -142,7 +142,7 @@ function Footer({ onScrollToSection, cmsFooter }) {
         {/* Bottom Bar & SEO Footnote */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-silver/50 gap-4">
           <div>
-            © {new Date().getFullYear()} AVZ VAGANZA. ALL RIGHTS RESERVED. HAUTE COUTURE ARCHIVE.
+            © {new Date().getFullYear()} AVZ VAGANZA. ALL RIGHTS RESERVED. WEARABLE ART & BESPOKE ARCHIVE.
           </div>
           <div className="flex items-center gap-3">
             <span>DOMAIN: {BRAND_INFO.domain}</span>
