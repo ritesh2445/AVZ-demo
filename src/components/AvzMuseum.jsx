@@ -15,7 +15,14 @@ import {
 import AntiquePaintingFrame from './museum/AntiquePaintingFrame';
 import MuseumArtworkModal from './museum/MuseumArtworkModal';
 import QuickFrameEditorModal from './museum/QuickFrameEditorModal';
-import { startGuitarMelody, stopGuitarMelody, playInteractiveGuitarString, pluckString } from '../utils/guitarAudio';
+import {
+  startGuitarMelody,
+  stopGuitarMelody,
+  playInteractiveGuitarString,
+  pluckString,
+  queueGuitarScrollMelody,
+  playFrameGuitarString
+} from '../utils/guitarAudio';
 import { playSound } from '../utils/audio';
 
 // Initial fallback archive pieces ensuring zero empty screen
@@ -228,6 +235,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   const scrollLeftRef = useRef(0);
   const lastMoveTimeRef = useRef(0);
   const lastPosRef = useRef(0);
+  const lastScrollLeftRef = useRef(0);
+  const lastScrollTimeRef = useRef(0);
 
   // 1. Fetch Dynamic Gallery Artworks from Backend
   const fetchArtworks = useCallback(async () => {
@@ -265,7 +274,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     checkAdminStatus();
   }, [fetchArtworks, checkAdminStatus]);
 
-  // 3. Horizontal Wheel Navigation (Translates vertical mouse wheel to horizontal glide)
+  // 3. Horizontal Wheel Navigation (Translates vertical mouse wheel to horizontal glide + fast acoustic melody queue)
   const handleWheel = (e) => {
     const el = wallScrollRef.current;
     if (!el) return;
@@ -283,10 +292,13 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       e.preventDefault();
       el.scrollLeft += e.deltaY * 1.25;
 
-      const velocity = Math.abs(e.deltaY) / 100;
-      playInteractiveGuitarString(velocity, soundEnabled);
+      const velocity = Math.abs(e.deltaY) / 60;
+      const dir = e.deltaY > 0 ? 1 : -1;
+      queueGuitarScrollMelody(velocity, dir, true);
     } else if (Math.abs(e.deltaX) > 0) {
-      playInteractiveGuitarString(Math.abs(e.deltaX) / 100, soundEnabled);
+      const velocity = Math.abs(e.deltaX) / 60;
+      const dir = e.deltaX > 0 ? 1 : -1;
+      queueGuitarScrollMelody(velocity, dir, true);
     }
   };
 
@@ -313,13 +325,14 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const walk = (x - startXRef.current) * 1.5;
     el.scrollLeft = scrollLeftRef.current - walk;
 
-    // Calculate velocity for realistic sound
+    // Calculate velocity and direction for realistic guitar pluck queue
     const now = Date.now();
     const dt = Math.max(1, now - lastMoveTimeRef.current);
-    const dx = Math.abs(e.pageX - lastPosRef.current);
-    const velocity = (dx / dt) * 10;
+    const dx = e.pageX - lastPosRef.current;
+    const velocity = (Math.abs(dx) / dt) * 12;
+    const dir = dx < 0 ? 1 : -1;
 
-    playInteractiveGuitarString(velocity, soundEnabled);
+    queueGuitarScrollMelody(velocity, dir, true);
 
     lastPosRef.current = e.pageX;
     lastMoveTimeRef.current = now;
@@ -331,12 +344,33 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     }
   };
 
-  // 5. Arrow Key and Button Navigation
+  // 5. Continuous Scroll Listener (For trackpads, touch gestures, and inertial gliding)
+  const handleTrackScroll = useCallback(() => {
+    const el = wallScrollRef.current;
+    if (!el) return;
+
+    const currentLeft = el.scrollLeft;
+    const now = Date.now();
+    const dt = Math.max(1, now - (lastScrollTimeRef.current || now));
+    const delta = currentLeft - (lastScrollLeftRef.current || currentLeft);
+
+    if (Math.abs(delta) > 2) {
+      const velocity = (Math.abs(delta) / dt) * 4;
+      const dir = delta > 0 ? 1 : -1;
+      queueGuitarScrollMelody(velocity, dir, true);
+    }
+
+    lastScrollLeftRef.current = currentLeft;
+    lastScrollTimeRef.current = now;
+  }, []);
+
+  // 6. Arrow Key and Button Navigation
   const scrollByAmount = (offset) => {
     const el = wallScrollRef.current;
     if (!el) return;
     playSound('whoosh');
-    playInteractiveGuitarString(1.5, soundEnabled);
+    const dir = offset > 0 ? 1 : -1;
+    queueGuitarScrollMelody(1.8, dir, true);
     el.scrollBy({ left: offset, behavior: 'smooth' });
   };
 
@@ -472,6 +506,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
+        onScroll={handleTrackScroll}
         className="w-full overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none relative z-10 py-8 px-4 sm:px-12 scroll-smooth touch-pan-x"
         style={{
           minHeight: '620px'

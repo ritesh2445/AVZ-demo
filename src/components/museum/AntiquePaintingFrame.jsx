@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Edit3, Eye } from 'lucide-react';
 import { playSound } from '../../utils/audio';
+import { playFrameGuitarString } from '../../utils/guitarAudio';
 
 const FRAME_CLASSES = {
   ornate_baroque: 'frame-ornate-baroque',
@@ -103,7 +104,8 @@ export default function AntiquePaintingFrame({
   const handleFrameClick = (e) => {
     // If admin clicked the edit button, don't open viewer
     if (e.target.closest('.admin-frame-edit-btn')) return;
-    playSound('pip');
+    // Every frame makes its own distinct acoustic guitar string sound!
+    playFrameGuitarString(index, 1.25, true);
     onInspect?.(artwork);
   };
 
