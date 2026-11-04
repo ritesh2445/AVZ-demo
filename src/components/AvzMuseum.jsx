@@ -395,7 +395,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
           {/* Classical French Salon Crest */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#170307]/90 border border-[#d4af37]/40 shadow-md text-[#fae596] text-[10px] sm:text-[11px] font-mono tracking-[0.22em] uppercase mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37] animate-pulse shrink-0" />
-            <span>AVZ VAULT // 1-OF-1 ARCHIVE</span>
+            <span>AVZ VAULT 1-OF-1 ARCHIVE</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold tracking-[0.08em] text-[#fff2cc] uppercase leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
