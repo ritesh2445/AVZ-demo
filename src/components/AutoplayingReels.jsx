@@ -22,21 +22,33 @@ export function parseVimeoEmbed(url, muted = true) {
     timeHash = '#t=' + url.split('&t=')[1].split('&')[0];
   }
 
-  // Already player.vimeo.com URL
-  if (url.includes('player.vimeo.com/video/')) {
-    const clean = url.split('?')[0].split('#')[0];
-    return {
-      type: 'vimeo',
-      src: `${clean}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${timeHash}`
-    };
+  // Extract unlisted privacy hash (?h=... or &h=... or vimeo.com/12345/abcdef)
+  let hashParam = '';
+  const hashQueryMatch = url.match(/[?&]h=([a-z0-9]+)/i);
+  const slashHashMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)\/([a-z0-9]{8,14})/i);
+  if (hashQueryMatch) {
+    hashParam = `&h=${hashQueryMatch[1]}`;
+  } else if (slashHashMatch) {
+    hashParam = `&h=${slashHashMatch[2]}`;
   }
 
-  // Standard vimeo.com/123456789 or channel/group URL
+  // Already player.vimeo.com URL
+  if (url.includes('player.vimeo.com/video/')) {
+    const idMatch = url.match(/player\.vimeo\.com\/video\/(\d+)/);
+    if (idMatch) {
+      return {
+        type: 'vimeo',
+        src: `https://player.vimeo.com/video/${idMatch[1]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${hashParam}${timeHash}`
+      };
+    }
+  }
+
+  // Standard vimeo.com/123456789 or channel/group/video URL
   const match = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)/);
   if (match && match[3]) {
     return {
       type: 'vimeo',
-      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${timeHash}`
+      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${hashParam}${timeHash}`
     };
   }
 
@@ -44,43 +56,52 @@ export function parseVimeoEmbed(url, muted = true) {
 }
 
 // Curated authentic default reels (overridden instantly when edited in Admin Panel)
-// All reels use 9:16 vertical video format with staggered loop timestamps
+// All reels use 9:16 vertical video format with dedicated Vimeo adaptive streams
 const DEFAULT_REELS = [
   {
     id: 'reel-01',
-    title: 'The Motherboard Corset',
-    subtitle: 'Cybernetic armor sculpted to body contours',
-    vimeo_url: 'https://vimeo.com/1239586843#t=0s',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=0s',
-    poster: '/assets/product_diva_top.jpg',
+    title: 'Chainmail Top & Leg Warmers',
+    subtitle: 'Fluid handcrafted stainless steel chainmail in motion',
+    vimeo_url: 'https://vimeo.com/1243097495/3c90e1325e',
+    fallback_video: 'https://player.vimeo.com/video/1243097495?h=3c90e1325e&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    poster: '/assets/look_chainmail_armor.jpg',
     tag: 'RUNWAY'
   },
   {
     id: 'reel-02',
-    title: 'Solid Spikes Shrug',
-    subtitle: 'Heavy hardware on reclaimed biker leather',
-    vimeo_url: 'https://vimeo.com/1239586843#t=8s',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=8s',
+    title: 'Sculptural Metal Bodice',
+    subtitle: 'Heavy hardware and contoured metal plates',
+    vimeo_url: 'https://vimeo.com/1243095627/80fef24f4b',
+    fallback_video: 'https://player.vimeo.com/video/1243095627?h=80fef24f4b&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
     poster: '/assets/look_spike_bodice.jpg',
     tag: 'STUDIO'
   },
   {
     id: 'reel-03',
-    title: 'Stainless Steel Chainmail',
-    subtitle: 'Over 1,200 hand-linked rings in fluid motion',
-    vimeo_url: 'https://vimeo.com/1239586843#t=16s',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=16s',
-    poster: '/assets/look_chainmail_armor.jpg',
-    tag: 'CLOSE UP'
+    title: 'Cybernetic Armor Runway',
+    subtitle: 'Intricate circuit tracing and tactile hardware detail',
+    vimeo_url: 'https://vimeo.com/1243095629/47f3f9c6c6',
+    fallback_video: 'https://player.vimeo.com/video/1243095629?h=47f3f9c6c6&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    poster: '/assets/product_diva_top.jpg',
+    tag: 'ATELIER'
   },
   {
     id: 'reel-04',
-    title: 'Reworked Denim Armor',
-    subtitle: 'Asymmetric panels with adjustable cables',
-    vimeo_url: 'https://vimeo.com/1239586843#t=24s',
-    fallback_video: 'https://player.vimeo.com/video/1239586843?autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0#t=24s',
+    title: 'Avant-Garde Studio Fitting',
+    subtitle: 'Experimental silhouettes sculpted to the body',
+    vimeo_url: 'https://vimeo.com/1243095630/e6e88578e0',
+    fallback_video: 'https://player.vimeo.com/video/1243095630?h=e6e88578e0&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
     poster: '/assets/product_reworked_jacket.jpg',
-    tag: 'DETAILS'
+    tag: 'FITTING'
+  },
+  {
+    id: 'reel-05',
+    title: 'Wearable Art Showcase',
+    subtitle: '1-of-1 handmade creations from our Guwahati studio',
+    vimeo_url: 'https://vimeo.com/1243095628/95ae4f7ecd',
+    fallback_video: 'https://player.vimeo.com/video/1243095628?h=95ae4f7ecd&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
+    poster: '/assets/editorial_hero_portrait.jpg',
+    tag: '1-OF-1 ARCHIVE'
   }
 ];
 
