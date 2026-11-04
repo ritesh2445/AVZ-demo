@@ -83,7 +83,7 @@ function createInMemoryClient(): Client {
         }))
       ),
       sizes: JSON.stringify(sizes),
-      status: stock === 0 ? 'draft' : 'published',
+      status: 'published',
       is_featured: p.featured ? 1 : 0,
       custom_made: p.customMade ? 1 : 0,
       tag: p.tag || (stock === 1 ? 'ONE OF ONE' : 'SMALL RUN'),
@@ -1123,7 +1123,7 @@ async function performDatabaseInitialization(): Promise<void> {
             sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}`
           }))
         );
-        const status = stock === 0 ? 'draft' : 'published';
+        const status = 'published';
 
         await db.execute({
           sql: `INSERT INTO products (

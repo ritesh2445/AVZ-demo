@@ -3,6 +3,7 @@ import { getDb, initializeDatabase } from '@/src/lib/db';
 import { PRODUCTS as fallbackProducts } from '@/src/data/brandData';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   try {
@@ -34,6 +35,10 @@ export async function GET(request: Request) {
         success: true,
         products: fallbackProducts,
         source: 'static_fallback'
+      }, {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+        }
       });
     }
 
@@ -65,6 +70,8 @@ export async function GET(request: Request) {
         }
       })();
 
+      const stockNum = Number(row.inventory_quantity);
+
       return {
         id: String(row.id),
         name: String(row.title),
@@ -74,9 +81,10 @@ export async function GET(request: Request) {
         originalPrice: row.compare_at_price ? Number(row.compare_at_price) : null,
         compare_at_price: row.compare_at_price ? Number(row.compare_at_price) : null,
         sku: String(row.sku),
-        stock: Number(row.inventory_quantity),
-        inventory_quantity: Number(row.inventory_quantity),
-        inStock: Number(row.inventory_quantity) > 0,
+        stock: stockNum,
+        inventory_quantity: stockNum,
+        inStock: stockNum > 0,
+        tag: stockNum === 0 ? 'SOLD OUT' : stockNum === 1 ? 'ONE OF ONE' : 'SMALL RUN',
         category: String(row.category),
         image: parsedImages[0] || '/assets/editorial_hero_portrait.jpg',
         images: parsedImages,
@@ -96,6 +104,10 @@ export async function GET(request: Request) {
       products,
       count: products.length,
       source: 'database'
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+      }
     });
   } catch (e: any) {
     console.error('Error fetching storefront products:', e);
@@ -104,6 +116,10 @@ export async function GET(request: Request) {
       products: fallbackProducts,
       source: 'error_fallback',
       error: e.message
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+      }
     });
   }
 }

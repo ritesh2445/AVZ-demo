@@ -203,7 +203,7 @@ async function seedViaApi(baseUrl, sessionCookie) {
       materials: item.materials,
       images: imgs,
       variants: item.sizes.map(s => ({ size: s, stock: item.stock > 1 ? Math.ceil(item.stock / item.sizes.length) : item.stock })),
-      status: item.stock === 0 ? 'draft' : 'published',
+      status: 'published',
       is_featured: item.featured,
       custom_made: false,
     });
@@ -249,7 +249,7 @@ async function seedViaApi(baseUrl, sessionCookie) {
 async function main() {
   const args = process.argv.slice(2);
   const apiIdx = args.indexOf('--api');
-  const baseUrl = apiIdx !== -1 ? args[apiIdx + 1] : 'http://localhost:3000';
+  const baseUrl = apiIdx !== -1 ? args[apiIdx + 1] : 'https://aveezahvaganza.com';
   const cookieIdx = args.indexOf('--cookie');
   const sessionCookie = cookieIdx !== -1 ? args[cookieIdx + 1] : null;
 

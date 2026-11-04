@@ -41,6 +41,7 @@ export default function ProductDetailModal({
 
   // Check if this 1-of-1 product is already in the bag
   const isAlreadyInCart = cartItems.some((item) => item.id === product.id);
+  const isSoldOut = product?.stock === 0 || product?.inventory_quantity === 0;
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -53,6 +54,11 @@ export default function ProductDetailModal({
   }, [onClose]);
 
   const handleAdd = () => {
+    if (isSoldOut) {
+      playSound('glitch');
+      setErrorNotice("Notice: This archive piece is currently sold out. You can request a custom commission below.");
+      return;
+    }
     if (product.stock === 1 && isAlreadyInCart) {
       playSound('glitch');
       setErrorNotice("Notice: This unique 1-of-1 piece is already reserved in your shopping bag.");
@@ -111,8 +117,18 @@ export default function ProductDetailModal({
             <img
               src={product.images ? product.images[activeImageIndex] : product.image}
               alt={product.name}
-              draggable={false} className="w-full h-full object-cover transition-all duration-500 rounded-2xl pointer-events-none"
+              draggable={false} className={`w-full h-full object-cover transition-all duration-500 rounded-2xl pointer-events-none ${isSoldOut ? "filter grayscale-[30%] brightness-85" : ""}`}
             />
+
+            {/* Sold Out Tag on Modal Image */}
+            {isSoldOut && (
+              <div className="absolute top-4 left-4 z-20">
+                <span className="px-3 py-1.5 rounded-full bg-red-950/90 border border-red-500/80 text-red-200 text-xs font-mono uppercase tracking-widest font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                  SOLD OUT
+                </span>
+              </div>
+            )}
 
             
 
@@ -170,6 +186,19 @@ export default function ProductDetailModal({
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 uppercase mb-2">
               <span className="text-white font-medium tracking-wider">{product.category}</span>
               <span className="tracking-widest text-zinc-500 hidden sm:inline">GUWAHATI STUDIO</span>
+            </div>
+
+            <div className="mb-3">
+              {isSoldOut ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 border border-red-500/60 text-red-200 text-[11px] font-mono uppercase tracking-widest font-bold">
+                  <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                  SOLD OUT · ARCHIVED PIECE
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-mono uppercase tracking-wider">
+                  {product.stock === 1 ? '1 OF 1 UNIQUE PIECE' : 'LIMITED STUDIO RUN'}
+                </span>
+              )}
             </div>
 
             <h2 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">
@@ -284,16 +313,20 @@ export default function ProductDetailModal({
           <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
             <button
               onClick={handleAdd}
-              disabled={product.stock === 1 && isAlreadyInCart}
+              disabled={isSoldOut || (product.stock === 1 && isAlreadyInCart)}
               className={`w-full py-3.5 px-6 rounded-full text-xs font-mono font-semibold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all ${
-                product.stock === 1 && isAlreadyInCart
+                isSoldOut
+                  ? 'opacity-60 cursor-not-allowed bg-red-950/40 text-red-300 border border-red-500/50'
+                  : product.stock === 1 && isAlreadyInCart
                   ? 'opacity-50 cursor-not-allowed bg-zinc-800 text-zinc-500 border border-zinc-700'
                   : 'btn-add-bag bg-white text-black hover:bg-zinc-200 active:scale-[0.99] shadow-md'
               }`}
             >
               <ShoppingBag className="w-4 h-4" />
               <span>
-                {product.stock === 1 && isAlreadyInCart
+                {isSoldOut
+                  ? 'SOLD OUT · PIECE ARCHIVED'
+                  : product.stock === 1 && isAlreadyInCart
                   ? 'ALREADY RESERVED IN BAG (1 OF 1)'
                   : 'ACQUIRE PIECE ↗'}
               </span>

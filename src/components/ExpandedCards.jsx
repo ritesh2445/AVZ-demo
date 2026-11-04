@@ -69,7 +69,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
         imgUrl: p.image || p.images?.[0] || DEFAULT_VAULT_CARDS[idx % DEFAULT_VAULT_CARDS.length].imgUrl,
         alt: p.name || `Vault Specimen ${idx + 1}`,
         title: p.name,
-        category: p.category ? `${p.category.toUpperCase()} · ARCHIVE` : 'VAULT PIECE',
+        category: p.stock === 0 ? 'SOLD OUT · ARCHIVE' : p.category ? `${p.category.toUpperCase()} · ARCHIVE` : 'VAULT PIECE',
         price: p.price,
         data: p
       }));

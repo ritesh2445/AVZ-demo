@@ -106,7 +106,7 @@ async function main() {
         size: s,
         stock: item.stock > 1 ? Math.ceil(item.stock / item.sizes.length) : item.stock
       })),
-      status: item.stock === 0 ? 'draft' : 'published',
+      status: 'published',
       is_featured: item.featured,
       custom_made: false,
     };

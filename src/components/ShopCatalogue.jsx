@@ -207,6 +207,22 @@ function KeyArchiveCarousel({
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
+                {/* KeyArchive SOLD OUT Tag */}
+                {item.stock === 0 ? (
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="px-2.5 py-1 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[9px] font-mono tracking-widest uppercase font-bold shadow-lg backdrop-blur-md flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                      SOLD OUT
+                    </span>
+                  </div>
+                ) : item.stock === 1 ? (
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="px-2 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md">
+                      1 OF 1
+                    </span>
+                  </div>
+                ) : null}
+
                 
 
                 {/* Wishlist Button */}
@@ -325,6 +341,21 @@ function MobileCompactProductCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
 
+        {/* MobileCompact SOLD OUT Tag */}
+        {product.stock === 0 ? (
+          <div className="absolute top-2 left-2 z-10">
+            <span className="px-2 py-0.5 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[8px] font-mono tracking-wider uppercase font-bold backdrop-blur-md">
+              SOLD OUT
+            </span>
+          </div>
+        ) : product.stock === 1 ? (
+          <div className="absolute top-2 left-2 z-10">
+            <span className="px-1.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[8px] font-mono tracking-wider uppercase backdrop-blur-md">
+              1 OF 1
+            </span>
+          </div>
+        ) : null}
+
         
 
         {/* Wishlist Button */}
@@ -426,55 +457,15 @@ function ShopCatalogue({
 
   // Curated Best-sellers for Key Archive Pieces Carousel
   const bestsellers = useMemo(() => {
-    const list = [
-      {
-        id: 'avz-001',
-        rank: 'EDITION 01',
-        badge: 'ARCHIVE ICON',
-        provenance: 'Sculptural Hardware Corsetry',
-        socialTag: 'METALLIC ARCHITECTURE'
-      },
-      {
-        id: 'avz-002',
-        rank: 'EDITION 02',
-        badge: 'STUDIO PROTOTYPE',
-        provenance: 'Cold-Forged Raw Alloy',
-        socialTag: 'RECLAIMED ALLOY'
-      },
-      {
-        id: 'avz-003',
-        rank: 'EDITION 03',
-        badge: 'EDITORIAL VAULT',
-        provenance: 'Zero-Waste Breastplate',
-        socialTag: 'UPCYCLED CIRCUITRY'
-      },
-      {
-        id: 'avz-004',
-        rank: 'EDITION 04',
-        badge: 'HANDCRAFTED RUNWAY',
-        provenance: 'Hand-Distressed Outerwear',
-        socialTag: '18 HRS HANDMADE FINISH'
-      },
-      {
-        id: 'avz-005',
-        rank: 'EDITION 05',
-        badge: 'MODULAR RUNWAY',
-        provenance: 'Detachable Cargo Silhouette',
-        socialTag: 'DECONSTRUCTED DENIM'
-      },
-      {
-        id: 'avz-007',
-        rank: 'EDITION 06',
-        badge: 'TACTILE ARTIFACT',
-        provenance: 'Mechanical Keycap Hardware',
-        socialTag: 'CYBER MERMAIDCORE'
-      }
-    ];
-
-    return list.map((item) => {
-      const prod = activeProducts.find((p) => p.id === item.id || p.sku === item.id) || PRODUCTS.find((p) => p.id === item.id);
-      return prod ? { ...prod, ...item } : null;
-    }).filter(Boolean);
+    // Curated or featured active products directly from live database
+    const featured = activeProducts.filter((p) => p.featured || p.is_featured);
+    const pool = featured.length >= 4 ? featured : activeProducts;
+    return pool.slice(0, 8).map((prod, idx) => ({
+      ...prod,
+      rank: `EDITION ${String(idx + 1).padStart(2, '0')}`,
+      badge: prod.stock === 0 ? 'SOLD OUT' : prod.stock === 1 ? '1 OF 1 ARCHIVE' : 'STUDIO PIECE',
+      socialTag: (prod.category || 'AVZ ATELIER').toUpperCase()
+    }));
   }, [activeProducts]);
 
   // Sections for Mobile View Carousels
@@ -574,7 +565,7 @@ function ShopCatalogue({
           {CATEGORIES.map((cat) => {
             const Icon = CATEGORY_ICONS[cat] || LayoutGrid;
             const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
-            const count = cat === 'All' ? PRODUCTS.length : PRODUCTS.filter(p => p.category.toLowerCase() === cat.toLowerCase()).length;
+            const count = cat === 'All' ? activeProducts.length : activeProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()).length;
 
             return (
               <button
@@ -723,10 +714,10 @@ function ShopCatalogue({
         <div className="pt-6 border-t border-white/15">
           <div className="flex items-center justify-between mb-4 px-1">
             <span className="text-xs font-mono tracking-widest text-white uppercase font-bold">
-              ALL AVAILABLE DESIGNS ({PRODUCTS.length})
+              ALL AVAILABLE DESIGNS ({activeProducts.length})
             </span>
             <span className="text-[10px] font-mono text-zinc-400">
-              {PRODUCTS.length} TOTAL
+              {activeProducts.length} TOTAL
             </span>
           </div>
 
@@ -791,6 +782,22 @@ function ShopCatalogue({
 
                     {/* Dark Vignette Scrim */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-40 transition-opacity pointer-events-none" />
+
+                    {/* Desktop Grid SOLD OUT Tag */}
+                    {product.stock === 0 ? (
+                      <div className="absolute top-3 left-3 z-20">
+                        <span className="px-2.5 py-1 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[10px] font-mono tracking-widest uppercase font-bold shadow-lg backdrop-blur-md flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                          SOLD OUT
+                        </span>
+                      </div>
+                    ) : product.stock === 1 ? (
+                      <div className="absolute top-3 left-3 z-20">
+                        <span className="px-2.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md">
+                          1 OF 1
+                        </span>
+                      </div>
+                    ) : null}
 
                     
 

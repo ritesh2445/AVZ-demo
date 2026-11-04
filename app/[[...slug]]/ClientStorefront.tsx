@@ -28,7 +28,7 @@ export default function ClientStorefront() {
         const [res, contentRes, prodRes] = await Promise.all([
           fetch('/api/storefront/config'),
           fetch('/api/storefront/content'),
-          fetch('/api/storefront/products'),
+          fetch('/api/storefront/products', { cache: 'no-store' }),
         ]);
 
         let settings = null;
