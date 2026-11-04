@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
-import { playSound } from '../utils/audio';
 
 function DhrisniGarden({ className = '' }) {
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const particlesRef = useRef([]);
+  const animFrameRef = useRef(null);
   const [inView, setInView] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
-  const [interactiveStars, setInteractiveStars] = useState([]);
 
   // Trigger entrance when scrolled into view
   useEffect(() => {
@@ -24,45 +25,133 @@ function DhrisniGarden({ className = '' }) {
     return () => observer.disconnect();
   }, []);
 
-  // Click to replay sequence
+  // Replay sequence silently without intrusive sounds
   const handleReplay = useCallback(() => {
-    try {
-      playSound?.('sparkle');
-    } catch {
-      // Audio fallback
-    }
     setAnimationKey((prev) => prev + 1);
   }, []);
 
-  // Interactive cursor stardust trail
+  // Initialize and size stardust canvas with high DPI
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const updateCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+    };
+    updateCanvasSize();
+    window.addEventListener('resize', updateCanvasSize);
+    return () => window.removeEventListener('resize', updateCanvasSize);
+  }, []);
+
+  // Ultra-Smooth 120 FPS Stardust Loop (Zero React state updates, 100% consistent)
+  const runStardustLoop = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const render = () => {
+      const particles = particlesRef.current;
+      if (particles.length === 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        animFrameRef.current = null;
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy -= 0.02; // subtle cosmic upward drift
+        p.life -= p.decay;
+        p.rotation += p.rotSpeed;
+
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        const cx = p.x * dpr;
+        const cy = p.y * dpr;
+        const size = p.size * dpr * p.life;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(p.rotation);
+        ctx.globalAlpha = Math.max(0, p.life);
+
+        // Core star glint (4-pointed diamond)
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.moveTo(0, -size * 1.8);
+        ctx.quadraticCurveTo(size * 0.2, 0, size * 1.8, 0);
+        ctx.quadraticCurveTo(size * 0.2, 0, 0, size * 1.8);
+        ctx.quadraticCurveTo(-size * 0.2, 0, -size * 1.8, 0);
+        ctx.quadraticCurveTo(-size * 0.2, 0, 0, -size * 1.8);
+        ctx.fill();
+
+        // Soft starlight halo center
+        ctx.beginPath();
+        ctx.arc(0, 0, size * 0.65, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      animFrameRef.current = requestAnimationFrame(render);
+    };
+
+    if (!animFrameRef.current) {
+      animFrameRef.current = requestAnimationFrame(render);
+    }
+  }, []);
+
+  // Smooth, continuous cursor stardust spawner
   const handleMouseMove = useCallback((e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    if (Math.random() > 0.45) return;
+    // Spawns 2 graceful, consistent stardust particles per move
+    for (let i = 0; i < 2; i++) {
+      particlesRef.current.push({
+        x: x + (Math.random() - 0.5) * 8,
+        y: y + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: (Math.random() - 0.5) * 1.2 - 0.4,
+        size: Math.random() * 3.5 + 2.5,
+        color: Math.random() > 0.45 ? '#f5d5ff' : '#bd78dc',
+        rotation: Math.random() * Math.PI,
+        rotSpeed: (Math.random() - 0.5) * 0.08,
+        life: 1.0,
+        decay: Math.random() * 0.025 + 0.02
+      });
+    }
 
-    const newStar = {
-      id: Math.random(),
-      x,
-      y,
-      size: Math.random() * 5 + 3,
-      color: Math.random() > 0.5 ? '#f4d5ff' : '#bd78dc',
-      rotation: Math.random() * 360
-    };
+    // Keep memory clean: max 45 active stardust points
+    if (particlesRef.current.length > 45) {
+      particlesRef.current.splice(0, particlesRef.current.length - 45);
+    }
 
-    setInteractiveStars((prev) => [...prev.slice(-12), newStar]);
-  }, []);
+    runStardustLoop();
+  }, [runStardustLoop]);
 
-  // Fade out interactive sparkles
   useEffect(() => {
-    if (interactiveStars.length === 0) return;
-    const timer = setTimeout(() => {
-      setInteractiveStars((prev) => prev.slice(1));
-    }, 600);
-    return () => clearTimeout(timer);
-  }, [interactiveStars]);
+    return () => {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -282,7 +371,7 @@ function DhrisniGarden({ className = '' }) {
           }
         }
 
-        /* GPU-Composited Orbiting Flying Stars (NEVER stops during scroll) */
+        /* GPU-Composited Orbiting Flying Stars */
         .flyers {
           pointer-events: none;
           overflow: visible;
@@ -563,86 +652,33 @@ function DhrisniGarden({ className = '' }) {
             <use href="#purpleStar" className="bloom-star" style={{ '--t': '4.0s' }} />
           </g>
 
-          {/* Orbiting Flying Lavender Stars (Compositor-driven: both CSS Motion Path and SMIL fallback) */}
+          {/* Orbiting Flying Lavender Stars */}
           <g className="flyers" aria-hidden="true">
             <g className="flyer-node flyer-1">
               <use href="#flightStar" />
-              <animateMotion
-                dur="6.8s"
-                begin="1.2s"
-                repeatCount="indefinite"
-                rotate="auto"
-                path="M105 205 C170 110 240 65 330 105 S470 255 570 195 S730 70 810 155 S730 285 615 260 S365 280 250 220 S140 125 105 205"
-              />
             </g>
 
             <g className="flyer-node flyer-2">
               <use href="#flightStar" />
-              <animateMotion
-                dur="8.2s"
-                begin="1.8s"
-                repeatCount="indefinite"
-                rotate="auto"
-                path="M780 95 C690 45 585 55 520 115 S405 245 305 225 S160 155 115 185 S250 295 385 270 S670 190 780 95"
-              />
             </g>
 
             <g className="flyer-node flyer-3">
               <use href="#flightStar" />
-              <animateMotion
-                dur="5.7s"
-                begin="2.2s"
-                repeatCount="indefinite"
-                rotate="auto"
-                path="M190 265 C250 205 270 115 360 90 S530 105 590 155 S700 255 770 220"
-              />
             </g>
 
             <g className="flyer-node flyer-4">
               <use href="#flightStar" />
-              <animateMotion
-                dur="7.4s"
-                begin="2.6s"
-                repeatCount="indefinite"
-                rotate="auto"
-                path="M730 275 C650 300 560 280 500 225 S390 95 300 105 S175 180 150 245"
-              />
             </g>
           </g>
         </svg>
 
-        {/* Interactive Mouse Stardust Particles */}
-        {interactiveStars.map((s) => (
-          <div
-            key={s.id}
-            className="pointer-events-none absolute z-30 transition-all duration-700 ease-out"
-            style={{
-              left: `${s.x}px`,
-              top: `${s.y}px`,
-              width: `${s.size}px`,
-              height: `${s.size}px`,
-              backgroundColor: s.color,
-              boxShadow: `0 0 10px ${s.color}, 0 0 20px #c14cff`,
-              borderRadius: '50%',
-              transform: `translate(-50%, -50%) rotate(${s.rotation}deg) scale(0)`,
-              animation: 'starParticleBurst 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
-            }}
-          />
-        ))}
+        {/* 120 FPS High-Performance Canvas Stardust Trail (Zero React State, Consistent & Smooth) */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none z-30"
+          style={{ imageRendering: 'auto' }}
+        />
       </div>
-
-      <style jsx global>{`
-        @keyframes starParticleBurst {
-          0% {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.4);
-          }
-          100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) translateY(-18px) scale(0.2);
-          }
-        }
-      `}</style>
     </div>
   );
 }

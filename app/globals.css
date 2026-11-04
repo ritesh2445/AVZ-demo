@@ -69,16 +69,6 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Off-screen Render Optimization: Prevents layout lag by deferring deep offscreen painting */
-#custom,
-#specs,
-#testimonials,
-#faq,
-#contact {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 700px;
-}
-
 /* Hardware Accelerated Layers */
 .museum-salon-wall,
 .tunnel-card,

@@ -15,8 +15,7 @@ import {
 import AntiquePaintingFrame from './museum/AntiquePaintingFrame';
 import MuseumArtworkModal from './museum/MuseumArtworkModal';
 import QuickFrameEditorModal from './museum/QuickFrameEditorModal';
-import { playGalleryMoveSound, stopGalleryMoveSound } from '../utils/galleryAudio';
-import { startGuitarMelody, stopGuitarMelody } from '../utils/guitarAudio';
+import { startGuitarMelody, stopGuitarMelody, playInteractiveGuitarString, pluckString } from '../utils/guitarAudio';
 import { playSound } from '../utils/audio';
 
 // Initial fallback archive pieces ensuring zero empty screen
@@ -285,9 +284,9 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       el.scrollLeft += e.deltaY * 1.25;
 
       const velocity = Math.abs(e.deltaY) / 100;
-      playGalleryMoveSound(soundEnabled, velocity);
+      playInteractiveGuitarString(velocity, soundEnabled);
     } else if (Math.abs(e.deltaX) > 0) {
-      playGalleryMoveSound(soundEnabled, Math.abs(e.deltaX) / 100);
+      playInteractiveGuitarString(Math.abs(e.deltaX) / 100, soundEnabled);
     }
   };
 
@@ -320,7 +319,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const dx = Math.abs(e.pageX - lastPosRef.current);
     const velocity = (dx / dt) * 10;
 
-    playGalleryMoveSound(soundEnabled, velocity);
+    playInteractiveGuitarString(velocity, soundEnabled);
 
     lastPosRef.current = e.pageX;
     lastMoveTimeRef.current = now;
@@ -329,7 +328,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   const handleMouseUpOrLeave = () => {
     if (isDraggingRef.current) {
       isDraggingRef.current = false;
-      stopGalleryMoveSound();
     }
   };
 
@@ -338,9 +336,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const el = wallScrollRef.current;
     if (!el) return;
     playSound('whoosh');
-    playGalleryMoveSound(soundEnabled, 1.5);
+    playInteractiveGuitarString(1.5, soundEnabled);
     el.scrollBy({ left: offset, behavior: 'smooth' });
-    setTimeout(() => stopGalleryMoveSound(), 500);
   };
 
   const handleToggleSound = () => {
@@ -349,11 +346,12 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     playSound(next ? 'toggle_on' : 'toggle_off');
     if (next) {
       startGuitarMelody();
-      playGalleryMoveSound(true, 1.2);
-      setTimeout(() => stopGalleryMoveSound(), 300);
+      // Realistic acoustic guitar welcome strum
+      pluckString(164.81, null, 2.5, 0.1);
+      setTimeout(() => pluckString(246.94, null, 2.2, 0.08), 80);
+      setTimeout(() => pluckString(329.63, null, 2.2, 0.09), 160);
     } else {
       stopGuitarMelody();
-      stopGalleryMoveSound();
     }
   };
 
@@ -361,7 +359,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   useEffect(() => {
     return () => {
       stopGuitarMelody();
-      stopGalleryMoveSound();
     };
   }, []);
 

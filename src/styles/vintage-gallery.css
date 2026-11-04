@@ -31,8 +31,7 @@
   background: 
     radial-gradient(ellipse at 25% 30%, rgba(255, 230, 175, 0.16) 0%, transparent 60%),
     radial-gradient(ellipse at 75% 35%, rgba(255, 225, 165, 0.14) 0%, transparent 55%),
-    linear-gradient(to bottom, #090103 0%, rgba(18, 3, 7, 0.12) 15%, rgba(18, 3, 7, 0.12) 85%, #090103 100%);
-  mix-blend-mode: multiply;
+    linear-gradient(to bottom, #090103 0%, rgba(18, 3, 7, 0.3) 15%, rgba(18, 3, 7, 0.3) 85%, #090103 100%);
 }
 
 /* Subtle aged textile weave overlay */
