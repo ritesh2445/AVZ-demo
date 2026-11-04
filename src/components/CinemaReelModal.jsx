@@ -86,7 +86,7 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
         {/* Bottom Bar */}
         <div className="relative z-20 px-6 py-3 bg-gradient-to-t from-black via-black/80 to-transparent flex items-center justify-between text-[11px] font-mono text-zinc-400">
           <span>STREAMING VIA VIMEO CLOUD</span>
-          <span className="text-pink">1080P MASTER STREAM</span>
+          <span className="text-pink">4K UHD MASTER STREAM</span>
         </div>
       </div>
     </div>
