@@ -42,7 +42,8 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
   }, []);
 
   const posterSrc = isMobileDevice ? '/assets/mobile_poster.jpg' : '/assets/desktop_poster.jpg';
-  const vimeoId = isMobileDevice ? '1239586843' : '1239586933';
+  const vimeoId = isMobileDevice ? '1239586843' : '1243094637';
+  const vimeoHash = isMobileDevice ? '' : 'f23215a874';
 
   // Helper to send postMessage commands to Vimeo Player iframe
   const postVimeoMessage = (method, value) => {
@@ -134,7 +135,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         <iframe
           ref={iframeRef}
           key={`hero-vimeo-${vimeoId}`}
-          src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=${isMuted ? 1 : 0}&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&dnt=1`}
+          src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=${isMuted ? 1 : 0}&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&dnt=1`}
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${
             videoLoaded ? 'opacity-100' : 'opacity-0'
           } ${

@@ -4,12 +4,13 @@ import { ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
 export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
-  const vimeoId = isMobile ? '1239586843' : '1239586933';
+  const vimeoId = isMobile ? '1239586843' : '1243094637';
+  const vimeoHash = isMobile ? '' : 'f23215a874';
   const activeVimeoUrl = isMobile
     ? (ASSET_MANIFEST.videos?.vimeoMobile || `https://vimeo.com/${vimeoId}`)
     : (ASSET_MANIFEST.videos?.vimeoDesktop || `https://vimeo.com/${vimeoId}`);
 
-  const vimeoEmbedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&title=0&byline=0&portrait=0`;
+  const vimeoEmbedUrl = `https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&title=0&byline=0&portrait=0`;
 
   useEffect(() => {
     if (!isOpen) return;
