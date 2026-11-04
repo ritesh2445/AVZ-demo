@@ -2,6 +2,39 @@
 
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 
+const GARDEN_COLOR_PALETTES = [
+  {
+    name: 'lavender-star',
+    gradient: 'linear-gradient(110deg, #ffffff 0%, #f5d5ff 22%, #d99af4 45%, #b96cdb 65%, #9650c6 85%, #ffffff 100%)',
+    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(189, 76, 232, 0.45)',
+    filter: 'drop-shadow(0 0 16px rgba(189, 76, 232, 0.35))',
+  },
+  {
+    name: 'leaf-azure-coral',
+    gradient: 'linear-gradient(110deg, #ffffff 0%, #70a9f4 20%, #426de9 45%, #f18b54 70%, #f04435 90%, #ffffff 100%)',
+    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(66, 109, 233, 0.45)',
+    filter: 'drop-shadow(0 0 16px rgba(241, 139, 84, 0.35))',
+  },
+  {
+    name: 'sunset-alt-flora',
+    gradient: 'linear-gradient(110deg, #ffffff 0%, #ffd1a5 20%, #f47c35 45%, #ec5a56 70%, #5b8ef0 90%, #ffffff 100%)',
+    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(244, 124, 53, 0.45)',
+    filter: 'drop-shadow(0 0 16px rgba(236, 90, 86, 0.35))',
+  },
+  {
+    name: 'botanical-emerald-vine',
+    gradient: 'linear-gradient(110deg, #ffffff 0%, #d1fae5 20%, #39a77b 45%, #d17d91 70%, #d4d98b 90%, #ffffff 100%)',
+    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(57, 167, 123, 0.45)',
+    filter: 'drop-shadow(0 0 16px rgba(209, 125, 145, 0.35))',
+  },
+  {
+    name: 'prismatic-garden',
+    gradient: 'linear-gradient(110deg, #ffffff 0%, #39a77b 18%, #426de9 36%, #d99af4 54%, #ec5a56 72%, #f47c35 90%, #ffffff 100%)',
+    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 50px rgba(217, 154, 244, 0.55)',
+    filter: 'drop-shadow(0 0 18px rgba(183, 122, 255, 0.45))',
+  },
+];
+
 function DhrisniGarden({ className = '' }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -9,6 +42,30 @@ function DhrisniGarden({ className = '' }) {
   const animFrameRef = useRef(null);
   const [inView, setInView] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
+  const [activeColorIdx, setActiveColorIdx] = useState(0);
+  const [nextColorIdx, setNextColorIdx] = useState(null);
+  const [isColorTransitioning, setIsColorTransitioning] = useState(false);
+
+  // Auto-cycle through the vibrant garden color palettes every 4.5s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveColorIdx((curr) => {
+        const next = (curr + 1) % GARDEN_COLOR_PALETTES.length;
+        setNextColorIdx(next);
+        setIsColorTransitioning(true);
+
+        setTimeout(() => {
+          setActiveColorIdx(next);
+          setNextColorIdx(null);
+          setIsColorTransitioning(false);
+        }, 1200);
+
+        return curr;
+      });
+    }, 4500);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Trigger entrance when scrolled into view
   useEffect(() => {
@@ -28,6 +85,7 @@ function DhrisniGarden({ className = '' }) {
   // Replay sequence silently without intrusive sounds
   const handleReplay = useCallback(() => {
     setAnimationKey((prev) => prev + 1);
+    setActiveColorIdx((curr) => (curr + 1) % GARDEN_COLOR_PALETTES.length);
   }, []);
 
   // Initialize and size stardust canvas with high DPI
@@ -183,27 +241,28 @@ function DhrisniGarden({ className = '' }) {
           font-weight: 600;
           letter-spacing: -0.045em;
           line-height: 1;
-          color: #f7f3ef;
           opacity: 0;
           transform: translateY(14px) scale(0.92);
-          text-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(189, 76, 232, 0.35);
-          background: linear-gradient(
-            110deg,
-            #ffffff 0%,
-            #ffffff 35%,
-            #f5d5ff 50%,
-            #ffffff 65%,
-            #e4afff 85%,
-            #ffffff 100%
-          );
-          background-size: 250% 100%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          display: inline-grid;
+          place-items: center;
         }
 
         .in-view .word {
-          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards,
-            wordShimmer 6s ease-in-out 1.8s infinite;
+          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
+        }
+
+        .word-layer {
+          grid-area: 1 / 1;
+          background-size: 250% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+          animation: wordShimmer 6s ease-in-out infinite;
+          transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s ease;
+          will-change: background-position, opacity;
+          display: inline-block;
+          user-select: none;
         }
 
         @keyframes wordReveal {
@@ -216,11 +275,9 @@ function DhrisniGarden({ className = '' }) {
         @keyframes wordShimmer {
           0%, 100% {
             background-position: 0% 50%;
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 40px rgba(189, 76, 232, 0.3);
           }
           50% {
             background-position: 100% 50%;
-            text-shadow: 0 0 35px rgba(255, 255, 255, 0.45), 0 0 65px rgba(217, 154, 244, 0.65);
           }
         }
 
@@ -464,9 +521,33 @@ function DhrisniGarden({ className = '' }) {
 
       {/* Main Exhibition Stage */}
       <div className={`dhrisni-stage ${inView ? 'in-view' : ''} relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center`}>
-        {/* Core Hero Wordmark */}
+        {/* Core Hero Wordmark with Garden Color Cycling */}
         <h1 className="word" aria-label="Dhrisni">
-          DHRISNI
+          <span
+            className="word-layer"
+            style={{
+              backgroundImage: GARDEN_COLOR_PALETTES[activeColorIdx].gradient,
+              textShadow: GARDEN_COLOR_PALETTES[activeColorIdx].shadow,
+              filter: GARDEN_COLOR_PALETTES[activeColorIdx].filter,
+              opacity: isColorTransitioning ? 0 : 1,
+            }}
+          >
+            DHRISNI
+          </span>
+          {nextColorIdx !== null && (
+            <span
+              className="word-layer incoming"
+              style={{
+                backgroundImage: GARDEN_COLOR_PALETTES[nextColorIdx].gradient,
+                textShadow: GARDEN_COLOR_PALETTES[nextColorIdx].shadow,
+                filter: GARDEN_COLOR_PALETTES[nextColorIdx].filter,
+                opacity: isColorTransitioning ? 1 : 0,
+              }}
+              aria-hidden="true"
+            >
+              DHRISNI
+            </span>
+          )}
         </h1>
 
         {/* High-Fidelity Botanical & Purple Flying Stars SVG Layer */}
