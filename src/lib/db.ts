@@ -53,24 +53,44 @@ function createInMemoryClient(): Client {
     { key: 'announcement_bar', value: JSON.stringify({ active: true, message: 'AVZ HANDMADE WEARABLE ART STUDIO' }) },
   ]);
 
-  // Pre-seed products
-  const productRows = PRODUCTS.map((p, idx) => ({
-    id: p.id,
-    sku: `AVZ-${p.id}`,
-    name: p.name,
-    tag: p.tag || '1 OF 1',
-    category: p.category || 'Studio',
-    price_inr: p.price || 0,
-    price_usd: Math.round((p.price || 0) / 85),
-    stock: p.stock || 1,
-    status: 'active',
-    images: JSON.stringify(p.images || [p.image]),
-    materials: JSON.stringify(p.materials || []),
-    sizes: JSON.stringify(p.sizes || ['One Size']),
-    story: p.story || p.description || '',
-    created_at: Date.now() - (idx * 86400000),
-    updated_at: Date.now()
-  }));
+  // Pre-seed products with full schema support
+  const productRows = PRODUCTS.map((p, idx) => {
+    const sku = p.sku || `AVZ-${p.id}`;
+    const stock = typeof p.stock === 'number' ? p.stock : 1;
+    const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size'];
+    return {
+      id: p.id,
+      slug: (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      title: p.name,
+      name: p.name,
+      description: p.description || p.story || '',
+      story: p.description || p.story || '',
+      price: p.price || 0,
+      price_inr: p.price || 0,
+      price_usd: Math.round((p.price || 0) / 85),
+      compare_at_price: p.compare_at_price || null,
+      sku: sku,
+      inventory_quantity: stock,
+      stock: stock,
+      category: p.category || 'Wearable Art',
+      materials: JSON.stringify(p.materials || []),
+      images: JSON.stringify(p.images && p.images.length > 0 ? p.images : [p.image || '/assets/editorial_hero_portrait.jpg']),
+      variants: JSON.stringify(
+        sizes.map(s => ({
+          size: s,
+          stock: stock > 1 ? Math.ceil(stock / sizes.length) : stock,
+          sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}`
+        }))
+      ),
+      sizes: JSON.stringify(sizes),
+      status: stock === 0 ? 'draft' : 'published',
+      is_featured: p.featured ? 1 : 0,
+      custom_made: p.customMade ? 1 : 0,
+      tag: p.tag || (stock === 1 ? 'ONE OF ONE' : 'SMALL RUN'),
+      created_at: Date.now() - (idx * 86400000),
+      updated_at: Date.now()
+    };
+  });
   store.set('products', productRows);
   // Pre-seed gallery_artworks
   store.set('gallery_artworks', [
@@ -1078,53 +1098,60 @@ async function performDatabaseInitialization(): Promise<void> {
     }
   }
 
-  // --- SEED INITIAL PRODUCTS FROM BRANDDATA ---
-  const existingProducts = await db.execute('SELECT COUNT(*) as count FROM products');
-  const count = Number(existingProducts.rows[0]?.count || 0);
-
-  if (count === 0 && Array.isArray(PRODUCTS) && PRODUCTS.length > 0) {
+  // --- SEED OR SYNC PRODUCTS FROM BRANDDATA ---
+  if (Array.isArray(PRODUCTS) && PRODUCTS.length > 0) {
     for (const p of PRODUCTS) {
-      const id = `prod_${p.id || Date.now()}_${Math.random().toString(36).substring(2, 5)}`;
-      const slug = (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      const price = typeof p.price === 'number' ? p.price : 2500;
-      const comparePrice = p.originalPrice || price * 1.25;
-      const sku = `AVZ-${p.category?.toUpperCase()?.slice(0, 3) || 'ART'}-${p.id || '01'}`;
-      const images = JSON.stringify([p.image || '/assets/editorial_hero_portrait.jpg']);
-      const materials = JSON.stringify(p.materials || ['Upcycled Hardware', 'Custom Metalwork']);
-      const variants = JSON.stringify([
-        { size: 'XS', stock: 1, sku: `${sku}-XS` },
-        { size: 'S', stock: 1, sku: `${sku}-S` },
-        { size: 'M', stock: 1, sku: `${sku}-M` },
-        { size: 'L', stock: 1, sku: `${sku}-L` },
-        { size: 'Custom', stock: 5, sku: `${sku}-CUST` }
-      ]);
-
-      await db.execute({
-        sql: `INSERT INTO products (
-          id, slug, title, description, price, compare_at_price, sku,
-          inventory_quantity, category, materials, images, variants,
-          status, is_featured, custom_made, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        args: [
-          id,
-          slug,
-          p.name || 'Custom Studio Piece',
-          p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni.',
-          price,
-          comparePrice,
-          sku,
-          p.inStock ? 3 : 0,
-          p.category || 'Wearable Art',
-          materials,
-          images,
-          variants,
-          'published',
-          p.featured ? 1 : 0,
-          p.customMade ? 1 : 0,
-          Date.now(),
-          Date.now()
-        ]
+      const sku = p.sku || `AVZ-${p.id}`;
+      const existing = await db.execute({
+        sql: 'SELECT id FROM products WHERE sku = ?',
+        args: [sku]
       });
+
+      if (existing.rows.length === 0) {
+        const id = `prod_${p.id || Date.now()}_${Math.random().toString(36).substring(2, 5)}`;
+        const slug = (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const price = typeof p.price === 'number' ? p.price : 2500;
+        const comparePrice = p.compare_at_price || null;
+        const stock = typeof p.stock === 'number' ? p.stock : 1;
+        const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size'];
+        const images = JSON.stringify(p.images && p.images.length > 0 ? p.images : [p.image || '/assets/editorial_hero_portrait.jpg']);
+        const materials = JSON.stringify(p.materials || ['Upcycled Hardware', 'Reclaimed Materials']);
+        const variants = JSON.stringify(
+          sizes.map(s => ({
+            size: s,
+            stock: stock > 1 ? Math.ceil(stock / sizes.length) : stock,
+            sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}`
+          }))
+        );
+        const status = stock === 0 ? 'draft' : 'published';
+
+        await db.execute({
+          sql: `INSERT INTO products (
+            id, slug, title, description, price, compare_at_price, sku,
+            inventory_quantity, category, materials, images, variants,
+            status, is_featured, custom_made, created_at, updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          args: [
+            id,
+            slug,
+            p.name || 'Custom Studio Piece',
+            p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni.',
+            price,
+            comparePrice,
+            sku,
+            stock,
+            p.category || 'Wearable Art',
+            materials,
+            images,
+            variants,
+            status,
+            p.featured ? 1 : 0,
+            p.customMade ? 1 : 0,
+            Date.now(),
+            Date.now()
+          ]
+        });
+      }
     }
   }
 
