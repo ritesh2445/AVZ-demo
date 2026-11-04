@@ -4,54 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
  * Ultra-Fast, 60fps-Smooth Stardust Materialization Headline
  * Fast, crisp cosmic dust grains rush in and assemble into the sharp letterforms
  * within ~0.6s. Zero lag, zero blur, subpixel-crisp vector typography handoff.
- *
- * Multi-palette color cycling inspired by DhrisniGarden botanical gradients.
- * Uses dual-layer crossfade for buttery smooth palette transitions.
  */
-
-/* ── Gradient Palettes ── */
-const COLOR_PALETTES = [
-  {
-    name: 'rose',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #fce7f3 12%, #f472b6 25%, #ec4899 40%, #be185d 55%, #ec4899 70%, #f472b6 82%, #fce7f3 92%, #ffffff 100%)',
-    glow: 'rgba(244, 114, 182, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#fce7f3'],[0.35,'#f472b6'],[0.55,'#ec4899'],[0.75,'#be185d'],[0.9,'#f472b6'],[1,'#ffffff']],
-  },
-  {
-    name: 'purple',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #f3e8ff 12%, #d8b4fe 25%, #a855f7 40%, #7e22ce 55%, #a855f7 70%, #d8b4fe 82%, #f3e8ff 92%, #ffffff 100%)',
-    glow: 'rgba(168, 85, 247, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#f3e8ff'],[0.35,'#d8b4fe'],[0.55,'#a855f7'],[0.75,'#7e22ce'],[0.9,'#d8b4fe'],[1,'#ffffff']],
-  },
-  {
-    name: 'ocean',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #dbeafe 12%, #60a5fa 25%, #3b82f6 40%, #1d4ed8 55%, #3b82f6 70%, #60a5fa 82%, #dbeafe 92%, #ffffff 100%)',
-    glow: 'rgba(59, 130, 246, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#dbeafe'],[0.35,'#60a5fa'],[0.55,'#3b82f6'],[0.75,'#1d4ed8'],[0.9,'#60a5fa'],[1,'#ffffff']],
-  },
-  {
-    name: 'emerald',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #d1fae5 12%, #34d399 25%, #10b981 40%, #047857 55%, #10b981 70%, #34d399 82%, #d1fae5 92%, #ffffff 100%)',
-    glow: 'rgba(16, 185, 129, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#d1fae5'],[0.35,'#34d399'],[0.55,'#10b981'],[0.75,'#047857'],[0.9,'#34d399'],[1,'#ffffff']],
-  },
-  {
-    name: 'amber',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #fef3c7 12%, #fbbf24 25%, #f59e0b 40%, #b45309 55%, #f59e0b 70%, #fbbf24 82%, #fef3c7 92%, #ffffff 100%)',
-    glow: 'rgba(245, 158, 11, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#fef3c7'],[0.35,'#fbbf24'],[0.55,'#f59e0b'],[0.75,'#b45309'],[0.9,'#fbbf24'],[1,'#ffffff']],
-  },
-  {
-    name: 'coral',
-    gradient: 'linear-gradient(120deg, #ffffff 0%, #ffe4e6 12%, #fb7185 25%, #f43f5e 40%, #be123c 55%, #f43f5e 70%, #fb7185 82%, #ffe4e6 92%, #ffffff 100%)',
-    glow: 'rgba(244, 63, 94, 0.35)',
-    canvasStops: [[0,'#ffffff'],[0.15,'#ffe4e6'],[0.35,'#fb7185'],[0.55,'#f43f5e'],[0.75,'#be123c'],[0.9,'#fb7185'],[1,'#ffffff']],
-  },
-];
-
-const CYCLE_INTERVAL = 5000; // 5s per color
-const FADE_DURATION = 1200;  // 1.2s crossfade
-
 export default function HeroDustHeadline({
   headline1 = 'WEARABLE ART.',
   headline2 = 'NOT MADE TO REPEAT.'
@@ -65,34 +18,6 @@ export default function HeroDustHeadline({
   const [showDomText, setShowDomText] = useState(true);
   const [isAssembled, setIsAssembled] = useState(true);
   const animFrameRef = useRef(null);
-
-  // ── Dual-layer crossfade state ──
-  const [activeIdx, setActiveIdx] = useState(0);   // currently visible palette index
-  const [nextIdx, setNextIdx] = useState(null);     // incoming palette index (fading in)
-  const [fading, setFading] = useState(false);      // is a crossfade in progress?
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setActiveIdx(prev => {
-        const upcoming = (prev + 1) % COLOR_PALETTES.length;
-        setNextIdx(upcoming);
-        setFading(true);
-
-        // After the fade completes, promote the incoming palette to active
-        setTimeout(() => {
-          setActiveIdx(upcoming);
-          setNextIdx(null);
-          setFading(false);
-        }, FADE_DURATION);
-
-        return prev; // don't change activeIdx yet
-      });
-    }, CYCLE_INTERVAL);
-    return () => clearInterval(id);
-  }, []);
-
-  const activePalette = COLOR_PALETTES[activeIdx];
-  const nextPalette = nextIdx !== null ? COLOR_PALETTES[nextIdx] : null;
 
   useEffect(() => {
     // Snappy 120ms start for immediate visual feedback without awkward lag
@@ -163,12 +88,15 @@ export default function HeroDustHeadline({
     offCtx.textAlign = 'center';
     offCtx.textBaseline = 'middle';
 
-    // Luxury Royal Gradient — uses initial rose palette for the dust assembly
-    const initialPalette = COLOR_PALETTES[0];
+    // Luxury Royal Gradient
     const textGrad = offCtx.createLinearGradient(marginX, 0, totalW - marginX, totalH);
-    for (const [stop, color] of initialPalette.canvasStops) {
-      textGrad.addColorStop(stop, color);
-    }
+    textGrad.addColorStop(0.0, '#ffffff');
+    textGrad.addColorStop(0.15, '#fce7f3');
+    textGrad.addColorStop(0.35, '#f472b6');
+    textGrad.addColorStop(0.55, '#ec4899');
+    textGrad.addColorStop(0.75, '#be185d');
+    textGrad.addColorStop(0.9, '#f472b6');
+    textGrad.addColorStop(1.0, '#ffffff');
 
     offCtx.fillStyle = textGrad;
 
@@ -298,54 +226,46 @@ export default function HeroDustHeadline({
     animFrameRef.current = requestAnimationFrame(render);
   };
 
-  /* ── Shared text gradient style builder ── */
-  const makeGradientStyle = (pal, opacity = 1) => ({
-    backgroundImage: pal.gradient,
-    backgroundSize: '280% 280%',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    color: 'transparent',
-    filter: `drop-shadow(0 4px 25px ${pal.glow})`,
-    opacity,
-    transition: `opacity ${FADE_DURATION}ms ease-in-out`,
-  });
-
-  /* ── Helper: render a text line with dual crossfade layers ── */
-  const renderLine = (text, ref, extraClass = '') => (
-    <span className={`relative inline-block ${extraClass}`} ref={ref}>
-      {/* Active (visible) layer */}
-      <span
-        className="royal-gradient-shimmer"
-        style={makeGradientStyle(activePalette, fading ? 0 : 1)}
-        aria-hidden={fading}
-      >
-        {text}
-      </span>
-      {/* Incoming (crossfading in) layer — overlaid on top */}
-      {nextPalette && (
-        <span
-          className="royal-gradient-shimmer absolute inset-0"
-          style={makeGradientStyle(nextPalette, fading ? 1 : 0)}
-          aria-hidden={!fading}
-        >
-          {text}
-        </span>
-      )}
-    </span>
-  );
-
   return (
     <div ref={containerRef} className="relative w-full flex flex-col items-center justify-center select-none">
       {/* 1. Permanent Shimmering Royal Headline (100% Crisp Vector Live Typography) */}
       <h1
-        className={`text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wide sm:tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] flex flex-col items-center justify-center text-center px-2 ${
+        className={`text-2xl min-[380px]:text-3xl sm:text-5xl md:text-6xl font-cinzel font-bold tracking-wide sm:tracking-wider uppercase leading-tight drop-shadow-[0_4px_35px_rgba(0,0,0,0.95)] transition-opacity duration-300 ease-out flex flex-col items-center justify-center text-center px-2 ${
           showDomText || isAssembled ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ transition: 'opacity 300ms ease-out' }}
       >
-        {renderLine(headline1, line1Ref)}
-        {headline2 && renderLine(headline2, line2Ref, 'mt-1 sm:mt-2')}
+        <span
+          ref={line1Ref}
+          className="royal-gradient-shimmer inline-block"
+          style={{
+            backgroundImage:
+              'linear-gradient(120deg, #ffffff 0%, #fce7f3 12%, #f472b6 25%, #ec4899 40%, #be185d 55%, #ec4899 70%, #f472b6 82%, #fce7f3 92%, #ffffff 100%)',
+            backgroundSize: '280% 280%',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            color: 'transparent'
+          }}
+        >
+          {headline1}
+        </span>
+        {headline2 && (
+          <span
+            ref={line2Ref}
+            className="royal-gradient-shimmer inline-block mt-1 sm:mt-2"
+            style={{
+              backgroundImage:
+                'linear-gradient(120deg, #ffffff 0%, #fce7f3 12%, #f472b6 25%, #ec4899 40%, #be185d 55%, #ec4899 70%, #f472b6 82%, #fce7f3 92%, #ffffff 100%)',
+              backgroundSize: '280% 280%',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent'
+            }}
+          >
+            {headline2}
+          </span>
+        )}
       </h1>
 
       {/* 2. Ultra-Fast Stardust Micro-Canvas Overlay */}

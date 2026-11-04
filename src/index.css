@@ -2580,7 +2580,18 @@ html.light-theme .contact-action-btn span.text-zinc-400 {
    Fluid, continuous luxury moving gradient through headline typography
    ========================================================================= */
 .royal-gradient-shimmer {
-  /* Gradient & filter now set via inline styles for multi-palette cycling */
+  background: linear-gradient(
+    120deg,
+    #ffffff 0%,
+    #fce7f3 12%,
+    #f472b6 25%,
+    #ec4899 40%,
+    #be185d 55%,
+    #ec4899 70%,
+    #f472b6 82%,
+    #fce7f3 92%,
+    #ffffff 100%
+  );
   background-size: 280% 280%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -2588,7 +2599,8 @@ html.light-theme .contact-action-btn span.text-zinc-400 {
   color: transparent !important;
   animation: royalShimmerFlow 7s ease-in-out infinite alternate;
   display: inline-block;
-  will-change: background-position, opacity;
+  will-change: background-position;
+  filter: drop-shadow(0 4px 25px rgba(244, 114, 182, 0.35));
 }
 
 @keyframes royalShimmerFlow {

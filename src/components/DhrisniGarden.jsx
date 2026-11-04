@@ -2,36 +2,226 @@
 
 import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 
-const GARDEN_COLOR_PALETTES = [
+/**
+ * High-Haute Botanical Dhrisni Garden
+ * Every click on the DHRISNI text or stage blooms a completely different
+ * chromatic set of flowers, leaves, vines, stars, and typography.
+ */
+export const GARDEN_COLOR_THEMES = [
   {
-    name: 'lavender-star',
-    gradient: 'linear-gradient(110deg, #ffffff 0%, #f5d5ff 22%, #d99af4 45%, #b96cdb 65%, #9650c6 85%, #ffffff 100%)',
-    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(189, 76, 232, 0.45)',
-    filter: 'drop-shadow(0 0 16px rgba(189, 76, 232, 0.35))',
+    id: 'cosmic-lavender',
+    name: 'Cosmic Lavender & Orchid',
+    wordGradient:
+      'linear-gradient(110deg, #ffffff 0%, #ffffff 32%, #f5d5ff 48%, #d99af4 65%, #b96cdb 85%, #ffffff 100%)',
+    wordShadow:
+      '0 0 25px rgba(255, 255, 255, 0.35), 0 0 45px rgba(189, 76, 232, 0.45)',
+    vine: [
+      { offset: '0%', color: '#39a77b' },
+      { offset: '48%', color: '#d17d91' },
+      { offset: '100%', color: '#d4d98b' },
+    ],
+    stemGlow: 'rgba(183, 122, 255, 0.55)',
+    leafA: [
+      { offset: '0%', color: '#426de9' },
+      { offset: '42%', color: '#70a9f4' },
+      { offset: '72%', color: '#f18b54' },
+      { offset: '100%', color: '#f04435' },
+    ],
+    leafAVein1: '#9bd9b4',
+    leafAVein2: '#b9c9ff',
+    leafB: [
+      { offset: '0%', color: '#f47c35' },
+      { offset: '48%', color: '#ec5a56' },
+      { offset: '100%', color: '#5b8ef0' },
+    ],
+    leafBVein: '#ffd1a5',
+    star: [
+      { offset: '0%', color: '#d99af4' },
+      { offset: '55%', color: '#b96cdb' },
+      { offset: '100%', color: '#9650c6' },
+    ],
+    starStroke: '#8d43b7',
+    starInnerStroke: '#e6b5ff',
+    starGlow: 'drop-shadow(0 0 9px #c77affdd) drop-shadow(0 0 24px #9b4bdcaa)',
+    flightFill: '#d9a1ff',
+    flightStroke: '#a65be0',
+    flightHighlight: '#f4dcff',
+    jumpStarFill: '#f0caff',
+    jumpStarGlow: '#d99aff',
+    stardustColors: ['#f5d5ff', '#bd78dc'],
+    flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #c476ff)',
   },
   {
-    name: 'leaf-azure-coral',
-    gradient: 'linear-gradient(110deg, #ffffff 0%, #70a9f4 20%, #426de9 45%, #f18b54 70%, #f04435 90%, #ffffff 100%)',
-    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(66, 109, 233, 0.45)',
-    filter: 'drop-shadow(0 0 16px rgba(241, 139, 84, 0.35))',
+    id: 'solar-gold',
+    name: 'Solar Gold & Crimson Rose',
+    wordGradient:
+      'linear-gradient(110deg, #ffffff 0%, #ffffff 32%, #fef08a 48%, #fbbf24 65%, #f59e0b 85%, #ffffff 100%)',
+    wordShadow:
+      '0 0 25px rgba(255, 255, 255, 0.35), 0 0 45px rgba(245, 158, 11, 0.5)',
+    vine: [
+      { offset: '0%', color: '#eab308' },
+      { offset: '48%', color: '#f43f5e' },
+      { offset: '100%', color: '#fb923c' },
+    ],
+    stemGlow: 'rgba(251, 191, 36, 0.55)',
+    leafA: [
+      { offset: '0%', color: '#fbbf24' },
+      { offset: '42%', color: '#f97316' },
+      { offset: '72%', color: '#ef4444' },
+      { offset: '100%', color: '#b91c1c' },
+    ],
+    leafAVein1: '#fde68a',
+    leafAVein2: '#fed7aa',
+    leafB: [
+      { offset: '0%', color: '#facc15' },
+      { offset: '48%', color: '#f87171' },
+      { offset: '100%', color: '#991b1b' },
+    ],
+    leafBVein: '#fef08a',
+    star: [
+      { offset: '0%', color: '#fde047' },
+      { offset: '55%', color: '#f59e0b' },
+      { offset: '100%', color: '#dc2626' },
+    ],
+    starStroke: '#b45309',
+    starInnerStroke: '#fef08a',
+    starGlow: 'drop-shadow(0 0 9px #fbbf24dd) drop-shadow(0 0 24px #ea580caa)',
+    flightFill: '#fde047',
+    flightStroke: '#d97706',
+    flightHighlight: '#fef9c3',
+    jumpStarFill: '#fef08a',
+    jumpStarGlow: '#f59e0b',
+    stardustColors: ['#fef08a', '#f59e0b'],
+    flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #f59e0b)',
   },
   {
-    name: 'sunset-alt-flora',
-    gradient: 'linear-gradient(110deg, #ffffff 0%, #ffd1a5 20%, #f47c35 45%, #ec5a56 70%, #5b8ef0 90%, #ffffff 100%)',
-    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(244, 124, 53, 0.45)',
-    filter: 'drop-shadow(0 0 16px rgba(236, 90, 86, 0.35))',
+    id: 'sakura-blossom',
+    name: 'Sakura Blossom & Rose Quartz',
+    wordGradient:
+      'linear-gradient(110deg, #ffffff 0%, #ffffff 32%, #fce7f3 48%, #f472b6 65%, #ec4899 85%, #ffffff 100%)',
+    wordShadow:
+      '0 0 25px rgba(255, 255, 255, 0.35), 0 0 45px rgba(244, 114, 182, 0.5)',
+    vine: [
+      { offset: '0%', color: '#f472b6' },
+      { offset: '48%', color: '#c084fc' },
+      { offset: '100%', color: '#fda4af' },
+    ],
+    stemGlow: 'rgba(244, 114, 182, 0.55)',
+    leafA: [
+      { offset: '0%', color: '#f472b6' },
+      { offset: '42%', color: '#fb7185' },
+      { offset: '72%', color: '#e11d48' },
+      { offset: '100%', color: '#9d174d' },
+    ],
+    leafAVein1: '#fbcfe8',
+    leafAVein2: '#fecdd3',
+    leafB: [
+      { offset: '0%', color: '#fb7185' },
+      { offset: '48%', color: '#e879f9' },
+      { offset: '100%', color: '#fda4af' },
+    ],
+    leafBVein: '#fdf2f8',
+    star: [
+      { offset: '0%', color: '#fbcfe8' },
+      { offset: '55%', color: '#f472b6' },
+      { offset: '100%', color: '#be185d' },
+    ],
+    starStroke: '#9d174d',
+    starInnerStroke: '#fdf2f8',
+    starGlow: 'drop-shadow(0 0 9px #f472b6dd) drop-shadow(0 0 24px #db2777aa)',
+    flightFill: '#fbcfe8',
+    flightStroke: '#ec4899',
+    flightHighlight: '#ffffff',
+    jumpStarFill: '#fce7f3',
+    jumpStarGlow: '#f472b6',
+    stardustColors: ['#fce7f3', '#f472b6'],
+    flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #ec4899)',
   },
   {
-    name: 'botanical-emerald-vine',
-    gradient: 'linear-gradient(110deg, #ffffff 0%, #d1fae5 20%, #39a77b 45%, #d17d91 70%, #d4d98b 90%, #ffffff 100%)',
-    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(57, 167, 123, 0.45)',
-    filter: 'drop-shadow(0 0 16px rgba(209, 125, 145, 0.35))',
+    id: 'cyber-emerald',
+    name: 'Cyber Emerald & Electric Cyan',
+    wordGradient:
+      'linear-gradient(110deg, #ffffff 0%, #ffffff 32%, #a7f3d0 48%, #34d399 65%, #06b6d4 85%, #ffffff 100%)',
+    wordShadow:
+      '0 0 25px rgba(255, 255, 255, 0.35), 0 0 45px rgba(52, 211, 153, 0.5)',
+    vine: [
+      { offset: '0%', color: '#10b981' },
+      { offset: '48%', color: '#06b6d4' },
+      { offset: '100%', color: '#a3e635' },
+    ],
+    stemGlow: 'rgba(52, 211, 153, 0.55)',
+    leafA: [
+      { offset: '0%', color: '#06b6d4' },
+      { offset: '42%', color: '#2dd4bf' },
+      { offset: '72%', color: '#10b981' },
+      { offset: '100%', color: '#047857' },
+    ],
+    leafAVein1: '#a7f3d0',
+    leafAVein2: '#cffafe',
+    leafB: [
+      { offset: '0%', color: '#84cc16' },
+      { offset: '48%', color: '#14b8a6' },
+      { offset: '100%', color: '#0284c7' },
+    ],
+    leafBVein: '#d9f99d',
+    star: [
+      { offset: '0%', color: '#67e8f9' },
+      { offset: '55%', color: '#2dd4bf' },
+      { offset: '100%', color: '#059669' },
+    ],
+    starStroke: '#065f46',
+    starInnerStroke: '#cffafe',
+    starGlow: 'drop-shadow(0 0 9px #2dd4bfdd) drop-shadow(0 0 24px #059669aa)',
+    flightFill: '#67e8f9',
+    flightStroke: '#0891b2',
+    flightHighlight: '#ecfeff',
+    jumpStarFill: '#a7f3d0',
+    jumpStarGlow: '#10b981',
+    stardustColors: ['#a7f3d0', '#2dd4bf'],
+    flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #2dd4bf)',
   },
   {
-    name: 'prismatic-garden',
-    gradient: 'linear-gradient(110deg, #ffffff 0%, #39a77b 18%, #426de9 36%, #d99af4 54%, #ec5a56 72%, #f47c35 90%, #ffffff 100%)',
-    shadow: '0 0 25px rgba(255, 255, 255, 0.25), 0 0 50px rgba(217, 154, 244, 0.55)',
-    filter: 'drop-shadow(0 0 18px rgba(183, 122, 255, 0.45))',
+    id: 'oceanic-indigo',
+    name: 'Oceanic Sapphire & Celestial Violet',
+    wordGradient:
+      'linear-gradient(110deg, #ffffff 0%, #ffffff 32%, #dbeafe 48%, #60a5fa 65%, #818cf8 85%, #ffffff 100%)',
+    wordShadow:
+      '0 0 25px rgba(255, 255, 255, 0.35), 0 0 45px rgba(96, 165, 250, 0.5)',
+    vine: [
+      { offset: '0%', color: '#3b82f6' },
+      { offset: '48%', color: '#8b5cf6' },
+      { offset: '100%', color: '#38bdf8' },
+    ],
+    stemGlow: 'rgba(96, 165, 250, 0.55)',
+    leafA: [
+      { offset: '0%', color: '#38bdf8' },
+      { offset: '42%', color: '#3b82f6' },
+      { offset: '72%', color: '#6366f1' },
+      { offset: '100%', color: '#312e81' },
+    ],
+    leafAVein1: '#bfdbfe',
+    leafAVein2: '#c7d2fe',
+    leafB: [
+      { offset: '0%', color: '#2563eb' },
+      { offset: '48%', color: '#7c3aed' },
+      { offset: '100%', color: '#06b6d4' },
+    ],
+    leafBVein: '#dbeafe',
+    star: [
+      { offset: '0%', color: '#93c5fd' },
+      { offset: '55%', color: '#6366f1' },
+      { offset: '100%', color: '#4338ca' },
+    ],
+    starStroke: '#1e1b4b',
+    starInnerStroke: '#e0e7ff',
+    starGlow: 'drop-shadow(0 0 9px #60a5fadd) drop-shadow(0 0 24px #4338caaa)',
+    flightFill: '#93c5fd',
+    flightStroke: '#2563eb',
+    flightHighlight: '#eff6ff',
+    jumpStarFill: '#dbeafe',
+    jumpStarGlow: '#3b82f6',
+    stardustColors: ['#dbeafe', '#60a5fa'],
+    flightTrailGlow: 'drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #3b82f6)',
   },
 ];
 
@@ -42,30 +232,9 @@ function DhrisniGarden({ className = '' }) {
   const animFrameRef = useRef(null);
   const [inView, setInView] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
-  const [activeColorIdx, setActiveColorIdx] = useState(0);
-  const [nextColorIdx, setNextColorIdx] = useState(null);
-  const [isColorTransitioning, setIsColorTransitioning] = useState(false);
+  const [themeIndex, setThemeIndex] = useState(0);
 
-  // Auto-cycle through the vibrant garden color palettes every 4.5s
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveColorIdx((curr) => {
-        const next = (curr + 1) % GARDEN_COLOR_PALETTES.length;
-        setNextColorIdx(next);
-        setIsColorTransitioning(true);
-
-        setTimeout(() => {
-          setActiveColorIdx(next);
-          setNextColorIdx(null);
-          setIsColorTransitioning(false);
-        }, 1200);
-
-        return curr;
-      });
-    }, 4500);
-
-    return () => clearInterval(timer);
-  }, []);
+  const currentTheme = GARDEN_COLOR_THEMES[themeIndex];
 
   // Trigger entrance when scrolled into view
   useEffect(() => {
@@ -82,10 +251,10 @@ function DhrisniGarden({ className = '' }) {
     return () => observer.disconnect();
   }, []);
 
-  // Replay sequence silently without intrusive sounds
+  // Cycle to next chromatic bloom set and replay the entrance sequence
   const handleReplay = useCallback(() => {
+    setThemeIndex((prev) => (prev + 1) % GARDEN_COLOR_THEMES.length);
     setAnimationKey((prev) => prev + 1);
-    setActiveColorIdx((curr) => (curr + 1) % GARDEN_COLOR_PALETTES.length);
   }, []);
 
   // Initialize and size stardust canvas with high DPI
@@ -103,7 +272,7 @@ function DhrisniGarden({ className = '' }) {
     return () => window.removeEventListener('resize', updateCanvasSize);
   }, []);
 
-  // Ultra-Smooth 120 FPS Stardust Loop (Zero React state updates, 100% consistent)
+  // Ultra-Smooth 120 FPS Stardust Loop
   const runStardustLoop = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -171,37 +340,39 @@ function DhrisniGarden({ className = '' }) {
     }
   }, []);
 
-  // Smooth, continuous cursor stardust spawner
-  const handleMouseMove = useCallback((e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  // Smooth cursor stardust spawner with active theme colors
+  const handleMouseMove = useCallback(
+    (e) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-    // Spawns 2 graceful, consistent stardust particles per move
-    for (let i = 0; i < 2; i++) {
-      particlesRef.current.push({
-        x: x + (Math.random() - 0.5) * 8,
-        y: y + (Math.random() - 0.5) * 8,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: (Math.random() - 0.5) * 1.2 - 0.4,
-        size: Math.random() * 3.5 + 2.5,
-        color: Math.random() > 0.45 ? '#f5d5ff' : '#bd78dc',
-        rotation: Math.random() * Math.PI,
-        rotSpeed: (Math.random() - 0.5) * 0.08,
-        life: 1.0,
-        decay: Math.random() * 0.025 + 0.02
-      });
-    }
+      const colors = currentTheme.stardustColors;
+      for (let i = 0; i < 2; i++) {
+        particlesRef.current.push({
+          x: x + (Math.random() - 0.5) * 8,
+          y: y + (Math.random() - 0.5) * 8,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2 - 0.4,
+          size: Math.random() * 3.5 + 2.5,
+          color: Math.random() > 0.45 ? colors[0] : colors[1],
+          rotation: Math.random() * Math.PI,
+          rotSpeed: (Math.random() - 0.5) * 0.08,
+          life: 1.0,
+          decay: Math.random() * 0.025 + 0.02,
+        });
+      }
 
-    // Keep memory clean: max 45 active stardust points
-    if (particlesRef.current.length > 45) {
-      particlesRef.current.splice(0, particlesRef.current.length - 45);
-    }
+      if (particlesRef.current.length > 45) {
+        particlesRef.current.splice(0, particlesRef.current.length - 45);
+      }
 
-    runStardustLoop();
-  }, [runStardustLoop]);
+      runStardustLoop();
+    },
+    [currentTheme, runStardustLoop]
+  );
 
   useEffect(() => {
     return () => {
@@ -214,11 +385,17 @@ function DhrisniGarden({ className = '' }) {
   return (
     <div
       ref={containerRef}
-      key={animationKey}
       className={`relative w-full max-w-[940px] mx-auto select-none overflow-visible group ${className}`}
       onMouseMove={handleMouseMove}
       onClick={handleReplay}
-      style={{ cursor: 'pointer' }}
+      style={{
+        cursor: 'pointer',
+        '--stem-glow': currentTheme.stemGlow,
+        '--star-glow': currentTheme.starGlow,
+        '--jump-glow': currentTheme.jumpStarGlow,
+        '--flight-trail-glow': currentTheme.flightTrailGlow,
+      }}
+      title="Click on DHRISNI to bloom in a new color theme"
     >
       <style jsx>{`
         .dhrisni-stage {
@@ -241,28 +418,25 @@ function DhrisniGarden({ className = '' }) {
           font-weight: 600;
           letter-spacing: -0.045em;
           line-height: 1;
+          color: #f7f3ef;
           opacity: 0;
           transform: translateY(14px) scale(0.92);
-          display: inline-grid;
-          place-items: center;
-        }
-
-        .in-view .word {
-          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
-        }
-
-        .word-layer {
-          grid-area: 1 / 1;
           background-size: 250% 100%;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          color: transparent;
-          animation: wordShimmer 6s ease-in-out infinite;
-          transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s ease;
-          will-change: background-position, opacity;
-          display: inline-block;
+          cursor: pointer;
+          transition: transform 0.25s ease, filter 0.3s ease;
           user-select: none;
+        }
+
+        .word:hover {
+          transform: translateY(12px) scale(0.94);
+        }
+
+        .in-view .word {
+          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards,
+            wordShimmer 6s ease-in-out 1.8s infinite;
         }
 
         @keyframes wordReveal {
@@ -301,7 +475,7 @@ function DhrisniGarden({ className = '' }) {
           stroke-linejoin: round;
           stroke-dasharray: 900;
           stroke-dashoffset: 900;
-          filter: drop-shadow(0 0 5px rgba(183, 122, 255, 0.55));
+          filter: drop-shadow(0 0 5px var(--stem-glow, rgba(183, 122, 255, 0.55)));
         }
 
         .in-view .stem {
@@ -324,11 +498,11 @@ function DhrisniGarden({ className = '' }) {
           opacity: 0;
           transform-box: fill-box;
           transform-origin: 50% 90%;
-          filter: drop-shadow(0 0 8px rgba(143, 91, 255, 0.65));
+          filter: drop-shadow(0 0 7px rgba(143, 91, 255, 0.45));
         }
 
         .in-view .leaf {
-          animation: leafOpen 0.75s cubic-bezier(0.2, 1.45, 0.35, 1) var(--t) forwards;
+          animation: leafOpen 0.65s cubic-bezier(0.2, 1.45, 0.35, 1) var(--t) forwards;
         }
 
         @keyframes leafOpen {
@@ -338,21 +512,60 @@ function DhrisniGarden({ className = '' }) {
           }
           75% {
             opacity: 1;
-            transform: scale(1.15) rotate(6deg);
+            transform: scale(1.12) rotate(5deg);
           }
           100% {
             opacity: 1;
-            transform: scale(1) rotate(0deg);
+            transform: scale(1) rotate(0);
           }
         }
 
-        /* Jumping stars */
-        .jump-star {
-          fill: #f0caff;
+        /* Bloom Stars */
+        .bloom-star {
           opacity: 0;
           transform-box: fill-box;
           transform-origin: center;
-          filter: drop-shadow(0 0 5px #d99aff) drop-shadow(0 0 12px #a94ee8);
+          filter: var(--star-glow);
+        }
+
+        .in-view .bloom-star {
+          animation: starBloom 0.9s cubic-bezier(0.18, 1.2, 0.3, 1) var(--t) forwards,
+            starGlow 3.2s ease-in-out calc(var(--t) + 0.9s) infinite;
+        }
+
+        @keyframes starBloom {
+          0% {
+            opacity: 0;
+            transform: scale(0.12) rotate(-18deg);
+          }
+          65% {
+            opacity: 1;
+            transform: scale(1.1) rotate(4deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0);
+          }
+        }
+
+        @keyframes starGlow {
+          0%, 100% {
+            filter: var(--star-glow);
+            opacity: 0.85;
+          }
+          50% {
+            filter: var(--star-glow);
+            opacity: 1;
+            transform: scale(1.05);
+          }
+        }
+
+        /* Jump Stars */
+        .jump-star {
+          opacity: 0;
+          transform-box: fill-box;
+          transform-origin: center;
+          filter: drop-shadow(0 0 4px var(--jump-glow)) drop-shadow(0 0 10px var(--jump-glow));
         }
 
         .in-view .jump-star {
@@ -367,7 +580,7 @@ function DhrisniGarden({ className = '' }) {
           }
           58% {
             opacity: 1;
-            transform: translateY(-9px) scale(1.22) rotate(8deg);
+            transform: translateY(-9px) scale(1.18) rotate(8deg);
           }
           78% {
             transform: translateY(3px) scale(0.92) rotate(-3deg);
@@ -380,65 +593,24 @@ function DhrisniGarden({ className = '' }) {
 
         @keyframes jumpGlow {
           0%, 100% {
-            filter: drop-shadow(0 0 5px #d99aff) drop-shadow(0 0 10px rgba(169, 78, 232, 0.7));
-            opacity: 0.82;
+            opacity: 0.78;
           }
           50% {
-            filter: drop-shadow(0 0 10px #f2d5ff) drop-shadow(0 0 22px #b65cff);
             opacity: 1;
+            transform: scale(1.12);
           }
         }
 
-        /* Blooming purple stars */
-        .bloom-star {
-          opacity: 0;
-          transform-box: fill-box;
-          transform-origin: center;
-          filter: drop-shadow(0 0 11px rgba(199, 122, 255, 0.9)) drop-shadow(0 0 28px rgba(155, 75, 220, 0.7));
-        }
-
-        .in-view .bloom-star {
-          animation: starBloom 0.9s cubic-bezier(0.18, 1.2, 0.3, 1) var(--t) forwards,
-            starGlow 3.2s ease-in-out calc(var(--t) + 0.9s) infinite;
-        }
-
-        @keyframes starBloom {
-          0% {
-            opacity: 0;
-            transform: scale(0.1) rotate(-20deg);
-          }
-          65% {
-            opacity: 1;
-            transform: scale(1.14) rotate(5deg);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-          }
-        }
-
-        @keyframes starGlow {
-          0%, 100% {
-            filter: drop-shadow(0 0 8px rgba(189, 120, 220, 0.75)) drop-shadow(0 0 18px rgba(155, 75, 220, 0.55));
-            transform: scale(1) rotate(0deg);
-          }
-          50% {
-            filter: drop-shadow(0 0 15px #e0b4ff) drop-shadow(0 0 32px rgba(169, 91, 236, 0.85));
-            transform: scale(1.06) rotate(3deg);
-          }
-        }
-
-        /* GPU-Composited Orbiting Flying Stars */
+        /* Flying Orbiting Stars */
         .flyers {
           pointer-events: none;
           overflow: visible;
         }
 
         .flyer-node {
+          opacity: 0.95;
           transform-box: fill-box;
           transform-origin: center;
-          filter: drop-shadow(0 0 7px #d9a1ff) drop-shadow(0 0 16px #a65be0);
-          will-change: transform, offset-distance;
         }
 
         .flyer-1 {
@@ -496,7 +668,7 @@ function DhrisniGarden({ className = '' }) {
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #c476ff);
+            filter: var(--flight-trail-glow);
           }
         }
 
@@ -520,37 +692,23 @@ function DhrisniGarden({ className = '' }) {
       `}</style>
 
       {/* Main Exhibition Stage */}
-      <div className={`dhrisni-stage ${inView ? 'in-view' : ''} relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center`}>
-        {/* Core Hero Wordmark with Garden Color Cycling */}
-        <h1 className="word" aria-label="Dhrisni">
-          <span
-            className="word-layer"
-            style={{
-              backgroundImage: GARDEN_COLOR_PALETTES[activeColorIdx].gradient,
-              textShadow: GARDEN_COLOR_PALETTES[activeColorIdx].shadow,
-              filter: GARDEN_COLOR_PALETTES[activeColorIdx].filter,
-              opacity: isColorTransitioning ? 0 : 1,
-            }}
-          >
-            DHRISNI
-          </span>
-          {nextColorIdx !== null && (
-            <span
-              className="word-layer incoming"
-              style={{
-                backgroundImage: GARDEN_COLOR_PALETTES[nextColorIdx].gradient,
-                textShadow: GARDEN_COLOR_PALETTES[nextColorIdx].shadow,
-                filter: GARDEN_COLOR_PALETTES[nextColorIdx].filter,
-                opacity: isColorTransitioning ? 1 : 0,
-              }}
-              aria-hidden="true"
-            >
-              DHRISNI
-            </span>
-          )}
+      <div
+        key={animationKey}
+        className={`dhrisni-stage ${inView ? 'in-view' : ''} relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center`}
+      >
+        {/* Core Hero Wordmark */}
+        <h1
+          className="word"
+          aria-label="Dhrisni"
+          style={{
+            backgroundImage: currentTheme.wordGradient,
+            textShadow: currentTheme.wordShadow,
+          }}
+        >
+          DHRISNI
         </h1>
 
-        {/* High-Fidelity Botanical & Purple Flying Stars SVG Layer */}
+        {/* High-Fidelity Botanical & Colored Flowers SVG Layer */}
         <svg
           className="botanical"
           viewBox="0 0 900 330"
@@ -558,30 +716,32 @@ function DhrisniGarden({ className = '' }) {
           aria-hidden="true"
         >
           <defs>
-            {/* Gradients */}
+            {/* Dynamic Vine Gradient */}
             <linearGradient id="vineGradient" x1="0" y1="0" x2="0.8" y2="1">
-              <stop stopColor="#39a77b" />
-              <stop offset="0.48" stopColor="#d17d91" />
-              <stop offset="1" stopColor="#d4d98b" />
+              {currentTheme.vine.map((stop, i) => (
+                <stop key={i} offset={stop.offset} stopColor={stop.color} />
+              ))}
             </linearGradient>
 
+            {/* Dynamic Leaf A Gradient */}
             <linearGradient id="leafGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop stopColor="#426de9" />
-              <stop offset="0.42" stopColor="#70a9f4" />
-              <stop offset="0.72" stopColor="#f18b54" />
-              <stop offset="1" stopColor="#f04435" />
+              {currentTheme.leafA.map((stop, i) => (
+                <stop key={i} offset={stop.offset} stopColor={stop.color} />
+              ))}
             </linearGradient>
 
+            {/* Dynamic Leaf B Gradient */}
             <linearGradient id="leafGradientAlt" x1="0" y1="1" x2="1" y2="0">
-              <stop stopColor="#f47c35" />
-              <stop offset="0.48" stopColor="#ec5a56" />
-              <stop offset="1" stopColor="#5b8ef0" />
+              {currentTheme.leafB.map((stop, i) => (
+                <stop key={i} offset={stop.offset} stopColor={stop.color} />
+              ))}
             </linearGradient>
 
+            {/* Dynamic Flower Star Gradient */}
             <linearGradient id="starGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop stopColor="#d99af4" />
-              <stop offset="0.55" stopColor="#b96cdb" />
-              <stop offset="1" stopColor="#9650c6" />
+              {currentTheme.star.map((stop, i) => (
+                <stop key={i} offset={stop.offset} stopColor={stop.color} />
+              ))}
             </linearGradient>
 
             {/* Botanical Leaf A */}
@@ -590,8 +750,20 @@ function DhrisniGarden({ className = '' }) {
                 d="M0 0 C-12 -12 -42 -15 -43 -39 C-45 -61 -20 -65 -5 -48 C2 -66 29 -65 34 -46 C42 -20 16 -8 0 0Z"
                 fill="url(#leafGradient)"
               />
-              <path d="M0 0 Q-4 -25 -7 -51" stroke="#9bd9b4" strokeWidth="1.4" fill="none" opacity="0.75" />
-              <path d="M-7 -33 Q-20 -43 -30 -45" stroke="#b9c9ff" strokeWidth="1" fill="none" opacity="0.65" />
+              <path
+                d="M0 0 Q-4 -25 -7 -51"
+                stroke={currentTheme.leafAVein1}
+                strokeWidth="1.4"
+                fill="none"
+                opacity="0.75"
+              />
+              <path
+                d="M-7 -33 Q-20 -43 -30 -45"
+                stroke={currentTheme.leafAVein2}
+                strokeWidth="1"
+                fill="none"
+                opacity="0.65"
+              />
             </g>
 
             {/* Botanical Leaf B */}
@@ -600,67 +772,73 @@ function DhrisniGarden({ className = '' }) {
                 d="M0 0 C-18 -8 -43 -1 -49 -21 C-57 -45 -31 -59 -12 -42 C-5 -64 22 -60 28 -40 C35 -19 15 -5 0 0Z"
                 fill="url(#leafGradientAlt)"
               />
-              <path d="M0 0 Q-8 -23 -16 -46" stroke="#ffd1a5" strokeWidth="1.4" fill="none" opacity="0.75" />
+              <path
+                d="M0 0 Q-8 -23 -16 -46"
+                stroke={currentTheme.leafBVein}
+                strokeWidth="1.4"
+                fill="none"
+                opacity="0.75"
+              />
             </g>
 
-            {/* High-Haute Purple Blooming Star Symbol */}
+            {/* Blooming Flower Star Symbol */}
             <g id="purpleStar">
               <path
                 d="M0 -48 C5 -12 12 -5 48 0 C12 5 5 12 0 48 C-5 12 -12 5 -48 0 C-12 -5 -5 -12 0 -48Z"
                 fill="url(#starGradient)"
-                stroke="#8d43b7"
+                stroke={currentTheme.starStroke}
                 strokeWidth="2.2"
                 strokeLinejoin="round"
               />
               <path
                 d="M0 -48 C5 -12 12 -5 48 0 C12 5 5 12 0 48 C-5 12 -12 5 -48 0 C-12 -5 -5 -12 0 -48Z"
                 fill="none"
-                stroke="#e6b5ff"
+                stroke={currentTheme.starInnerStroke}
                 strokeWidth="1"
                 opacity="0.32"
               />
               <path
                 d="M-8 -23 Q-2 -34 4 -31"
                 fill="none"
-                stroke="#e7baff"
+                stroke={currentTheme.starInnerStroke}
                 strokeWidth="5"
                 strokeLinecap="round"
                 opacity="0.7"
               />
-              <circle cx="-13" cy="-19" r="3.5" fill="#f0ceff" opacity="0.55" />
+              <circle cx="-13" cy="-19" r="3.5" fill={currentTheme.jumpStarFill} opacity="0.55" />
             </g>
 
             {/* Flight Star Symbol */}
             <g id="flightStar">
               <path
                 d="M0 -17 C2.2 -5.5 5.5 -2.2 17 0 C5.5 2.2 2.2 5.5 0 17 C-2.2 5.5 -5.5 2.2 -17 0 C-5.5 -2.2 -2.2 -5.5 0 -17Z"
-                fill="#d9a1ff"
-                stroke="#a65be0"
+                fill={currentTheme.flightFill}
+                stroke={currentTheme.flightStroke}
                 strokeWidth="1.5"
               />
               <path
                 d="M0 -14 C2 -5 5 -2 14 0 C5 2 2 5 0 14 C-2 5 -5 2 -14 0 C-5 -2 -2 -5 0 -14Z"
                 fill="none"
-                stroke="#f4dcff"
+                stroke={currentTheme.flightHighlight}
                 strokeWidth="1"
                 opacity="0.8"
               />
-              <circle cx="-4" cy="-5" r="2" fill="#fff0ff" opacity="0.9" />
+              <circle cx="-4" cy="-5" r="2" fill="#ffffff" opacity="0.9" />
             </g>
           </defs>
 
-          {/* Ambient Micro-Constellation Stars (Background Depth) */}
+          {/* Ambient Micro-Constellation Stars */}
           <g className="micro-constellation" opacity="0.65">
-            <circle cx="110" cy="70" r="1.5" fill="#f0caff" className="micro-twinkle" style={{ '--spd': '2.1s', '--dly': '0.1s' }} />
-            <circle cx="230" cy="50" r="1.2" fill="#e6b5ff" className="micro-twinkle" style={{ '--spd': '3.2s', '--dly': '0.7s' }} />
+            <circle cx="110" cy="70" r="1.5" fill={currentTheme.jumpStarFill} className="micro-twinkle" style={{ '--spd': '2.1s', '--dly': '0.1s' }} />
+            <circle cx="230" cy="50" r="1.2" fill={currentTheme.starInnerStroke} className="micro-twinkle" style={{ '--spd': '3.2s', '--dly': '0.7s' }} />
             <circle cx="410" cy="45" r="1.8" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '1.8s', '--dly': '1.2s' }} />
-            <circle cx="510" cy="55" r="1.4" fill="#d9a1ff" className="micro-twinkle" style={{ '--spd': '2.7s', '--dly': '0.4s' }} />
-            <circle cx="680" cy="45" r="1.6" fill="#f4dcff" className="micro-twinkle" style={{ '--spd': '3.5s', '--dly': '1.5s' }} />
+            <circle cx="510" cy="55" r="1.4" fill={currentTheme.flightFill} className="micro-twinkle" style={{ '--spd': '2.7s', '--dly': '0.4s' }} />
+            <circle cx="680" cy="45" r="1.6" fill={currentTheme.jumpStarFill} className="micro-twinkle" style={{ '--spd': '3.5s', '--dly': '1.5s' }} />
             <circle cx="820" cy="80" r="1.3" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '2.3s', '--dly': '0.9s' }} />
-            <circle cx="95" cy="285" r="1.5" fill="#e6b5ff" className="micro-twinkle" style={{ '--spd': '2.9s', '--dly': '1.1s' }} />
-            <circle cx="210" cy="290" r="1.2" fill="#f0caff" className="micro-twinkle" style={{ '--spd': '1.9s', '--dly': '0.3s' }} />
+            <circle cx="95" cy="285" r="1.5" fill={currentTheme.starInnerStroke} className="micro-twinkle" style={{ '--spd': '2.9s', '--dly': '1.1s' }} />
+            <circle cx="210" cy="290" r="1.2" fill={currentTheme.jumpStarFill} className="micro-twinkle" style={{ '--spd': '1.9s', '--dly': '0.3s' }} />
             <circle cx="490" cy="285" r="1.6" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '3.1s', '--dly': '1.7s' }} />
-            <circle cx="790" cy="290" r="1.4" fill="#d9a1ff" className="micro-twinkle" style={{ '--spd': '2.4s', '--dly': '0.6s' }} />
+            <circle cx="790" cy="290" r="1.4" fill={currentTheme.flightFill} className="micro-twinkle" style={{ '--spd': '2.4s', '--dly': '0.6s' }} />
           </g>
 
           {/* Stems: Architectural Organic Lines */}
@@ -694,29 +872,29 @@ function DhrisniGarden({ className = '' }) {
           </g>
 
           {/* Jumping Glint Stars */}
-          <g className="jump-star" style={{ '--t': '2.25s' }} transform="translate(225 205) scale(.42)">
+          <g className="jump-star" style={{ '--t': '2.25s', fill: currentTheme.jumpStarFill }} transform="translate(225 205) scale(.42)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '2.55s' }} transform="translate(340 190) scale(.32)">
+          <g className="jump-star" style={{ '--t': '2.55s', fill: currentTheme.jumpStarFill }} transform="translate(340 190) scale(.32)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '2.85s' }} transform="translate(470 218) scale(.38)">
+          <g className="jump-star" style={{ '--t': '2.85s', fill: currentTheme.jumpStarFill }} transform="translate(470 218) scale(.38)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '3.15s' }} transform="translate(575 190) scale(.3)">
+          <g className="jump-star" style={{ '--t': '3.15s', fill: currentTheme.jumpStarFill }} transform="translate(575 190) scale(.3)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '3.45s' }} transform="translate(690 207) scale(.4)">
+          <g className="jump-star" style={{ '--t': '3.45s', fill: currentTheme.jumpStarFill }} transform="translate(690 207) scale(.4)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '3.75s' }} transform="translate(285 94) scale(.26)">
+          <g className="jump-star" style={{ '--t': '3.75s', fill: currentTheme.jumpStarFill }} transform="translate(285 94) scale(.26)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
-          <g className="jump-star" style={{ '--t': '4.05s' }} transform="translate(640 96) scale(.28)">
+          <g className="jump-star" style={{ '--t': '4.05s', fill: currentTheme.jumpStarFill }} transform="translate(640 96) scale(.28)">
             <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
           </g>
 
-          {/* Blooming Purple Stars */}
+          {/* Blooming Flowers & Stars */}
           <g transform="translate(170 88) rotate(-8) scale(0.62)">
             <use href="#purpleStar" className="bloom-star" style={{ '--t': '2.4s' }} />
           </g>
@@ -733,7 +911,7 @@ function DhrisniGarden({ className = '' }) {
             <use href="#purpleStar" className="bloom-star" style={{ '--t': '4.0s' }} />
           </g>
 
-          {/* Orbiting Flying Lavender Stars */}
+          {/* Orbiting Flying Stars */}
           <g className="flyers" aria-hidden="true">
             <g className="flyer-node flyer-1">
               <use href="#flightStar" />
@@ -753,7 +931,7 @@ function DhrisniGarden({ className = '' }) {
           </g>
         </svg>
 
-        {/* 120 FPS High-Performance Canvas Stardust Trail (Zero React State, Consistent & Smooth) */}
+        {/* 120 FPS High-Performance Canvas Stardust Trail */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full pointer-events-none z-30"
