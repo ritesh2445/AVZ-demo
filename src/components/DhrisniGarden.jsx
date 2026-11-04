@@ -1,549 +1,611 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import gardenItems from '../data/dhrisniGardenData.json';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { playSound } from '../utils/audio';
 
-// Curated high-fashion dark-canvas palettes (including user's requested Red & Blue)
-export const GARDEN_PALETTES = [
-  {
-    id: 'rose-noir',
-    name: 'Rose Noir',
-    sub: 'Crimson Red & Royal Blue',
-    petal: '#FF1400',       // Vivid Crimson Red
-    petalAccent: '#FFB4A8', // Soft Rose Pink highlight
-    vine: '#2563EB',        // Electric Royal Blue
-    leaf: '#3B82F6',        // Cobalt Blue
-    vein: '#1D4ED8',        // Deep Indigo Blue
-    text: '#FFFFFF',
-    glow: 'rgba(255, 20, 0, 0.45)',
-    ambientGrad1: 'rgba(255, 20, 0, 0.14)',
-    ambientGrad2: 'rgba(37, 99, 235, 0.12)',
-    swatch: ['#FF1400', '#2563EB']
-  },
-  {
-    id: 'electric-sapphire',
-    name: 'Sapphire & Scarlet',
-    sub: 'Electric Blue & Scarlet Red',
-    petal: '#3B82F6',       // Vibrant Blue Roses
-    petalAccent: '#93C5FD', // Soft Sky Blue
-    vine: '#EF4444',        // Scarlet Red Vines
-    leaf: '#F43F5E',        // Rose Red Leaves
-    vein: '#9F1239',        // Deep Crimson
-    text: '#FFFFFF',
-    glow: 'rgba(59, 130, 246, 0.45)',
-    ambientGrad1: 'rgba(59, 130, 246, 0.14)',
-    ambientGrad2: 'rgba(239, 68, 68, 0.12)',
-    swatch: ['#3B82F6', '#EF4444']
-  },
-  {
-    id: 'orchid-bloom',
-    name: 'Orchid Bloom',
-    sub: 'Cyber Magenta & Emerald Teal',
-    petal: '#E63CFF',       // Neon Orchid Magenta
-    petalAccent: '#F9D1FF', // Lavender Pink
-    vine: '#2FB8A6',        // Emerald Teal
-    leaf: '#2FB8A6',        // Emerald
-    vein: '#0a3d34',        // Deep Forest
-    text: '#FFFFFF',
-    glow: 'rgba(230, 60, 255, 0.45)',
-    ambientGrad1: 'rgba(230, 60, 255, 0.12)',
-    ambientGrad2: 'rgba(47, 184, 166, 0.10)',
-    swatch: ['#E63CFF', '#2FB8A6']
-  },
-  {
-    id: 'midnight-azure',
-    name: 'Midnight Azure',
-    sub: 'Coral Flame & Neon Ice',
-    petal: '#FF5A4E',       // Electric Coral Red
-    petalAccent: '#FFD6CF', // Pale Coral
-    vine: '#60A5FA',        // Electric Ice Blue
-    leaf: '#38BDF8',        // Cyan Blue
-    vein: '#0284C7',        // Ocean Blue
-    text: '#FFFFFF',
-    glow: 'rgba(56, 189, 248, 0.45)',
-    ambientGrad1: 'rgba(255, 90, 78, 0.12)',
-    ambientGrad2: 'rgba(96, 165, 250, 0.12)',
-    swatch: ['#FF5A4E', '#60A5FA']
-  },
-  {
-    id: 'cyberpunk-neon',
-    name: 'Cyberpunk Neon',
-    sub: 'Electric Cyan & Acid Pink',
-    petal: '#00F0FF',       // Radiant Cyan
-    petalAccent: '#E0F7FA', // Icy White Cyan
-    vine: '#FF007F',        // Neon Hot Pink
-    leaf: '#EC4899',        // Hot Pink Leaves
-    vein: '#831843',        // Dark Plum
-    text: '#FFFFFF',
-    glow: 'rgba(0, 240, 255, 0.45)',
-    ambientGrad1: 'rgba(0, 240, 255, 0.12)',
-    ambientGrad2: 'rgba(255, 0, 127, 0.12)',
-    swatch: ['#00F0FF', '#FF007F']
-  },
-  {
-    id: 'citrus-aurora',
-    name: 'Citrus Aurora',
-    sub: 'Amber Flame & Electric Jade',
-    petal: '#FF8A00',       // Tangerine Flame
-    petalAccent: '#FFE2B8', // Warm Honey
-    vine: '#10B981',        // Electric Jade Green
-    leaf: '#059669',        // Emerald
-    vein: '#064E3B',        // Deep Forest
-    text: '#FFF6E8',
-    glow: 'rgba(255, 138, 0, 0.45)',
-    ambientGrad1: 'rgba(255, 138, 0, 0.12)',
-    ambientGrad2: 'rgba(16, 185, 129, 0.10)',
-    swatch: ['#FF8A00', '#10B981']
-  },
-  {
-    id: 'amethyst-gold',
-    name: 'Amethyst & Gold',
-    sub: 'Ultraviolet & Cyberpunk Gold',
-    petal: '#A855F7',       // Electric Purple
-    petalAccent: '#E9D5FF', // Lilac
-    vine: '#EAB308',        // Cyberpunk Gold
-    leaf: '#CA8A04',        // Rich Gold
-    vein: '#713F12',        // Bronze
-    text: '#FFFFFF',
-    glow: 'rgba(168, 85, 247, 0.45)',
-    ambientGrad1: 'rgba(168, 85, 247, 0.12)',
-    ambientGrad2: 'rgba(234, 179, 8, 0.10)',
-    swatch: ['#A855F7', '#EAB308']
-  }
-];
-
-const GROWTH_PATTERNS = [
-  { id: 'center-outward', name: 'Center Ripple' },
-  { id: 'left-to-right', name: 'Dawn Sweep' },
-  { id: 'right-to-left', name: 'Evening Gust' },
-  { id: 'organic-clusters', name: 'Constellation Burst' },
-  { id: 'superbloom', name: 'Wild Superbloom' }
-];
-
-function DhrisniGarden({ className = '', onPaletteChange }) {
+export default function DhrisniGarden({ className = '' }) {
   const containerRef = useRef(null);
-  const svgRef = useRef(null);
-  const cachedPathsRef = useRef([]);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [interactiveStars, setInteractiveStars] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const [paletteIdx, setPaletteIdx] = useState(0); // Starts on Rose Noir (Red & Blue)
-  const [patternIdx, setPatternIdx] = useState(0);
-  const [bloomProgress, setBloomProgress] = useState(1); // Default to fully bloomed for instant solid render
-  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 10000));
-  const [isLightMode, setIsLightMode] = useState(false);
-
-  useEffect(() => {
-    const checkTheme = () => {
-      const isLight =
-        typeof document !== 'undefined' &&
-        (document.documentElement.classList.contains('light-theme') ||
-          document.documentElement.getAttribute('data-theme') === 'light');
-      setIsLightMode(isLight);
-    };
-    checkTheme();
-    if (typeof document !== 'undefined') {
-      const observer = new MutationObserver(checkTheme);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'data-theme']
-      });
-      return () => observer.disconnect();
+  // Trigger complete replay sequence
+  const handleReplay = useCallback(() => {
+    try {
+      playSound?.('sparkle');
+    } catch {
+      // Audio fallback
     }
+    setAnimationKey((prev) => prev + 1);
   }, []);
 
-  const currentPalette = GARDEN_PALETTES[paletteIdx];
-  const currentPattern = GROWTH_PATTERNS[patternIdx];
-
-  // Random parameters seeded per regrowth
-  const seedParams = useMemo(() => {
-    const clusterOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].sort(() => Math.sin(seed + Math.random()) - 0.5);
-    const clusterDelays = {};
-    clusterOrder.forEach((cId, rank) => {
-      clusterDelays[cId] = rank * 0.08;
-    });
-
-    const springK = 6 + (seed % 4); // 6 to 9 stiffness
-    const springW = 14 + (seed % 6); // 14 to 19 frequency
-
-    return {
-      clusterDelays,
-      springK,
-      springW
-    };
-  }, [seed]);
-
-  // Spring formula from Type Garden: 1 - exp(-t*k) * cos(t*w)
-  const spr = useCallback((t, k = seedParams.springK, w = seedParams.springW) => {
-    if (t <= 0) return 0;
-    if (t >= 1) return 1;
-    return 1 - Math.exp(-t * k) * Math.cos(t * w);
-  }, [seedParams.springK, seedParams.springW]);
-
-  // Ease out cubic
-  const eo = (t) => {
-    if (t <= 0) return 0;
-    if (t >= 1) return 1;
-    return 1 - Math.pow(1 - t, 3);
-  };
-
-  // Trigger regrowth with optional new palette and new growth pattern
-  const triggerRegrowth = useCallback((newPalIdx = null) => {
-    playSound?.('sparkle');
-    setBloomProgress(0);
-    const nextSeed = Math.floor(Math.random() * 10000);
-    setSeed(nextSeed);
-
-    // Pick new growth pattern
-    setPatternIdx(prev => (prev + 1) % GROWTH_PATTERNS.length);
-
-    // Shift palette if requested or cycle to next
-    if (newPalIdx !== null) {
-      setPaletteIdx(newPalIdx);
-      if (onPaletteChange) onPaletteChange(GARDEN_PALETTES[newPalIdx]);
-    } else {
-      setPaletteIdx(prev => {
-        const next = (prev + 1) % GARDEN_PALETTES.length;
-        if (onPaletteChange) onPaletteChange(GARDEN_PALETTES[next]);
-        return next;
-      });
-    }
-
-    let start = performance.now();
-    const duration = 1800; // 1.8s blossom
-
-    function animate(now) {
-      const elapsed = now - start;
-      const p = Math.min(1, elapsed / duration);
-      setBloomProgress(p);
-      if (p < 1) {
-        requestAnimationFrame(animate);
-      }
-    }
-    requestAnimationFrame(animate);
-  }, [onPaletteChange]);
-
-  // Initial auto-bloom on mount and when scrolled into view
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    let triggered = false;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !triggered && !hasBloomedRef.current) {
-          triggered = true;
-          triggerRegrowth(0);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(el);
-
-    // Fallback trigger in case observer doesn't fire immediately
-    const fallbackTimer = setTimeout(() => {
-      if (!triggered) {
-        triggered = true;
-        triggerRegrowth(0);
-      }
-    }, 200);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(fallbackTimer);
-    };
-  }, [triggerRegrowth]);
-
-  // Cache interactive SVG nodes whenever bloom finishes
-  useEffect(() => {
-    if (!svgRef.current) return;
-    const nodes = [];
-    const elements = svgRef.current.querySelectorAll('.dhrisni-interactive-node');
-    elements.forEach((el) => {
-      const cx = parseFloat(el.getAttribute('data-cx') || '0');
-      const cy = parseFloat(el.getAttribute('data-cy') || '0');
-      nodes.push({ el, cx, cy, hasMoved: false });
-    });
-    cachedPathsRef.current = nodes;
-  }, [bloomProgress, seed]);
-
-  // Instantaneous hover reaction (0ms latency, zero re-render)
+  // Interactive cursor stardust trail
   const handleMouseMove = useCallback((e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const mx = ((e.clientX - rect.left) / rect.width) * 1085 + 215;
-    const my = ((e.clientY - rect.top) / rect.height) * 405 + 155;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    const nodes = cachedPathsRef.current;
-    const len = nodes.length;
+    // Throttle particle generation
+    if (Math.random() > 0.45) return;
 
-    for (let i = 0; i < len; i++) {
-      const node = nodes[i];
-      const dx = mx - node.cx;
-      const dy = my - node.cy;
+    const newStar = {
+      id: Math.random(),
+      x,
+      y,
+      size: Math.random() * 5 + 3,
+      color: Math.random() > 0.5 ? '#f4d5ff' : '#bd78dc',
+      rotation: Math.random() * 360,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: (Math.random() - 0.5) * 1.5 - 1
+    };
 
-      if (Math.abs(dx) > 220 || Math.abs(dy) > 220) {
-        if (node.hasMoved) {
-          node.el.style.transform = '';
-          node.hasMoved = false;
-        }
-        continue;
-      }
-
-      const dist = Math.hypot(dx, dy);
-      if (dist < 220 && dist > 1) {
-        const f = (1 - dist / 220) * 12;
-        const rx = (dx / dist) * f;
-        const ry = (dy / dist) * f;
-        node.el.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-        node.hasMoved = true;
-      } else if (node.hasMoved) {
-        node.el.style.transform = '';
-        node.hasMoved = false;
-      }
-    }
+    setInteractiveStars((prev) => [...prev.slice(-18), newStar]);
   }, []);
 
-  const handleTouchMove = useCallback((e) => {
-    if (!containerRef.current || !e.touches || !e.touches[0]) return;
-    const touch = e.touches[0];
-    const rect = containerRef.current.getBoundingClientRect();
-    const mx = ((touch.clientX - rect.left) / rect.width) * 1085 + 215;
-    const my = ((touch.clientY - rect.top) / rect.height) * 405 + 155;
-
-    const nodes = cachedPathsRef.current;
-    const len = nodes.length;
-
-    for (let i = 0; i < len; i++) {
-      const node = nodes[i];
-      const dx = mx - node.cx;
-      const dy = my - node.cy;
-
-      if (Math.abs(dx) > 220 || Math.abs(dy) > 220) {
-        if (node.hasMoved) {
-          node.el.style.transform = '';
-          node.hasMoved = false;
-        }
-        continue;
-      }
-
-      const dist = Math.hypot(dx, dy);
-      if (dist < 220 && dist > 1) {
-        const f = (1 - dist / 220) * 12;
-        const rx = (dx / dist) * f;
-        const ry = (dy / dist) * f;
-        node.el.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-        node.hasMoved = true;
-      } else if (node.hasMoved) {
-        node.el.style.transform = '';
-        node.hasMoved = false;
-      }
-    }
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    const nodes = cachedPathsRef.current;
-    const len = nodes.length;
-    for (let i = 0; i < len; i++) {
-      const node = nodes[i];
-      if (node.hasMoved) {
-        node.el.style.transform = '';
-        node.hasMoved = false;
-      }
-    }
-  }, []);
+  // Clean up interactive cursor sparkles
+  useEffect(() => {
+    if (interactiveStars.length === 0) return;
+    const timer = setTimeout(() => {
+      setInteractiveStars((prev) => prev.slice(1));
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [interactiveStars]);
 
   return (
-    <div className={`relative w-full flex flex-col items-center select-none ${className}`}>
-      {/* Dynamic Ambient Glow Behind Artwork */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-colors duration-1000 ease-out"
-        style={{
-          background: `radial-gradient(ellipse 70% 60% at 50% 45%, ${currentPalette.ambientGrad1}, transparent 70%), radial-gradient(ellipse 55% 45% at 50% 75%, ${currentPalette.ambientGrad2}, transparent 70%)`
-        }}
-      />
+    <div
+      ref={containerRef}
+      key={animationKey}
+      className={`relative w-full max-w-[940px] mx-auto select-none overflow-visible group ${className}`}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleReplay}
+      style={{ cursor: 'pointer' }}
+    >
+      <style jsx>{`
+        .dhrisni-stage {
+          position: relative;
+          width: 100%;
+          min-height: 260px;
+          display: grid;
+          place-items: center;
+          isolation: isolate;
+        }
 
-      {/* SVG Living Artwork Container */}
-      <div
-        ref={containerRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleMouseLeave}
-        onClick={() => triggerRegrowth()}
-        className="relative w-full cursor-pointer group"
-        style={{ touchAction: 'pan-y' }}
-      >
+        /* Hero wordmark typography */
+        .word {
+          position: relative;
+          z-index: 2;
+          margin: 0;
+          white-space: nowrap;
+          font-family: 'Bodoni 72', 'Didot', 'Cinzel', 'Playfair Display', 'Baskerville', 'Times New Roman', serif;
+          font-size: clamp(3.2rem, 9.5vw, 7.8rem);
+          font-weight: 600;
+          letter-spacing: -0.045em;
+          line-height: 1;
+          color: #f7f3ef;
+          opacity: 0;
+          transform: translateY(14px) scale(0.92);
+          text-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(189, 76, 232, 0.35);
+          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
+          background: linear-gradient(
+            110deg,
+            #ffffff 0%,
+            #ffffff 35%,
+            #f5d5ff 50%,
+            #ffffff 65%,
+            #e4afff 85%,
+            #ffffff 100%
+          );
+          background-size: 250% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards,
+            wordShimmer 6s ease-in-out 1.8s infinite;
+        }
+
+        @keyframes wordReveal {
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes wordShimmer {
+          0%, 100% {
+            background-position: 0% 50%;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 40px rgba(189, 76, 232, 0.3);
+          }
+          50% {
+            background-position: 100% 50%;
+            text-shadow: 0 0 35px rgba(255, 255, 255, 0.45), 0 0 65px rgba(217, 154, 244, 0.65);
+          }
+        }
+
+        .botanical {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          overflow: visible;
+          z-index: 3;
+          pointer-events: none;
+          display: block;
+        }
+
+        /* Stems */
+        .stem {
+          fill: none;
+          stroke: url(#vineGradient);
+          stroke-width: 3.2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-dasharray: 900;
+          stroke-dashoffset: 900;
+          filter: drop-shadow(0 0 5px rgba(183, 122, 255, 0.55));
+          animation: drawStem 2.4s cubic-bezier(0.3, 0.1, 0.2, 1) var(--t, 1.1s) forwards;
+        }
+
+        .stem.thin {
+          stroke-width: 1.8;
+          opacity: 0.88;
+        }
+
+        @keyframes drawStem {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        /* Leaves */
+        .leaf {
+          opacity: 0;
+          transform-box: fill-box;
+          transform-origin: 50% 90%;
+          animation: leafOpen 0.75s cubic-bezier(0.2, 1.45, 0.35, 1) var(--t) forwards;
+          filter: drop-shadow(0 0 8px rgba(143, 91, 255, 0.65));
+        }
+
+        @keyframes leafOpen {
+          0% {
+            opacity: 0;
+            transform: scale(0.08) rotate(-25deg);
+          }
+          75% {
+            opacity: 1;
+            transform: scale(1.15) rotate(6deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
+
+        /* Jumping stars */
+        .jump-star {
+          fill: #f0caff;
+          opacity: 0;
+          transform-box: fill-box;
+          transform-origin: center;
+          filter: drop-shadow(0 0 5px #d99aff) drop-shadow(0 0 12px #a94ee8);
+          animation: jumpIn 0.95s cubic-bezier(0.2, 1.65, 0.35, 1) var(--t) both,
+            jumpGlow 2.8s ease-in-out calc(var(--t) + 0.95s) infinite;
+        }
+
+        @keyframes jumpIn {
+          0% {
+            opacity: 0;
+            transform: translateY(24px) scale(0.12) rotate(-22deg);
+          }
+          58% {
+            opacity: 1;
+            transform: translateY(-9px) scale(1.22) rotate(8deg);
+          }
+          78% {
+            transform: translateY(3px) scale(0.92) rotate(-3deg);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(0);
+          }
+        }
+
+        @keyframes jumpGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 5px #d99aff) drop-shadow(0 0 10px rgba(169, 78, 232, 0.7));
+            opacity: 0.82;
+          }
+          50% {
+            filter: drop-shadow(0 0 10px #f2d5ff) drop-shadow(0 0 22px #b65cff);
+            opacity: 1;
+          }
+        }
+
+        /* Blooming purple stars */
+        .bloom-star {
+          opacity: 0;
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: starBloom 0.9s cubic-bezier(0.18, 1.2, 0.3, 1) var(--t) forwards,
+            starGlow 3.2s ease-in-out calc(var(--t) + 0.9s) infinite;
+          filter: drop-shadow(0 0 11px rgba(199, 122, 255, 0.9)) drop-shadow(0 0 28px rgba(155, 75, 220, 0.7));
+        }
+
+        @keyframes starBloom {
+          0% {
+            opacity: 0;
+            transform: scale(0.1) rotate(-20deg);
+          }
+          65% {
+            opacity: 1;
+            transform: scale(1.14) rotate(5deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
+
+        @keyframes starGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 8px rgba(189, 120, 220, 0.75)) drop-shadow(0 0 18px rgba(155, 75, 220, 0.55));
+            transform: scale(1) rotate(0deg);
+          }
+          50% {
+            filter: drop-shadow(0 0 15px #e0b4ff) drop-shadow(0 0 32px rgba(169, 91, 236, 0.85));
+            transform: scale(1.06) rotate(3deg);
+          }
+        }
+
+        /* Orbiting flyers */
+        .flyers {
+          pointer-events: none;
+          overflow: visible;
+        }
+
+        .flyer {
+          opacity: 0.95;
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: flightPulse 2.4s ease-in-out infinite;
+        }
+
+        .flyer.small {
+          opacity: 0.85;
+        }
+
+        .flyer.tiny {
+          opacity: 0.75;
+        }
+
+        .flyer.small use {
+          transform: scale(0.72);
+        }
+
+        .flyer.tiny use {
+          transform: scale(0.48);
+        }
+
+        @keyframes flightPulse {
+          0%, 100% {
+            opacity: 0.6;
+            filter: drop-shadow(0 0 6px #d9a1ff) drop-shadow(0 0 14px #a65be0);
+          }
+          50% {
+            opacity: 1;
+            filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 26px #c476ff);
+          }
+        }
+
+        /* Ambient Micro-Constellation Stars */
+        .micro-twinkle {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: twinkleBlink var(--spd, 2.5s) ease-in-out var(--dly, 0s) infinite;
+        }
+
+        @keyframes twinkleBlink {
+          0%, 100% {
+            opacity: 0.2;
+            transform: scale(0.65);
+          }
+          50% {
+            opacity: 0.95;
+            transform: scale(1.25);
+          }
+        }
+      `}</style>
+
+      {/* Main Exhibition Stage */}
+      <div className="dhrisni-stage relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center">
+        {/* Core Hero Wordmark */}
+        <h1 className="word" aria-label="Dhrisni">
+          DHRISNI
+        </h1>
+
+        {/* High-Fidelity Botanical & Purple Flying Stars SVG Layer */}
         <svg
-          ref={svgRef}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="215 155 1085 405"
-          className="w-full h-auto max-h-[190px] sm:max-h-[270px] md:max-h-[340px] object-contain transition-transform duration-200 ease-out group-hover:scale-[1.012]"
-          style={{
-            filter: `drop-shadow(0 12px 40px ${currentPalette.glow})`
-          }}
+          className="botanical"
+          viewBox="0 0 900 330"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
         >
           <defs>
-            <style>{`
-              .dhrisni-char {
-                font-family: var(--font-cinzel), 'Cinzel', Georgia, serif;
-                font-weight: 700;
-                letter-spacing: 0.02em;
-              }
-            `}</style>
+            {/* Gradients */}
+            <linearGradient id="vineGradient" x1="0" y1="0" x2="0.8" y2="1">
+              <stop stopColor="#39a77b" />
+              <stop offset="0.48" stopColor="#d17d91" />
+              <stop offset="1" stopColor="#d4d98b" />
+            </linearGradient>
 
-            {/* Glowing filter for blooming flower petals */}
-            <filter id="bloomGlowDynamic" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3.5" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            <linearGradient id="leafGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop stopColor="#426de9" />
+              <stop offset="0.42" stopColor="#70a9f4" />
+              <stop offset="0.72" stopColor="#f18b54" />
+              <stop offset="1" stopColor="#f04435" />
+            </linearGradient>
+
+            <linearGradient id="leafGradientAlt" x1="0" y1="1" x2="1" y2="0">
+              <stop stopColor="#f47c35" />
+              <stop offset="0.48" stopColor="#ec5a56" />
+              <stop offset="1" stopColor="#5b8ef0" />
+            </linearGradient>
+
+            <linearGradient id="starGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop stopColor="#d99af4" />
+              <stop offset="0.55" stopColor="#b96cdb" />
+              <stop offset="1" stopColor="#9650c6" />
+            </linearGradient>
+
+            {/* Botanical Leaf A */}
+            <g id="leafA">
+              <path
+                d="M0 0 C-12 -12 -42 -15 -43 -39 C-45 -61 -20 -65 -5 -48 C2 -66 29 -65 34 -46 C42 -20 16 -8 0 0Z"
+                fill="url(#leafGradient)"
+              />
+              <path d="M0 0 Q-4 -25 -7 -51" stroke="#9bd9b4" strokeWidth="1.4" fill="none" opacity="0.75" />
+              <path d="M-7 -33 Q-20 -43 -30 -45" stroke="#b9c9ff" strokeWidth="1" fill="none" opacity="0.65" />
+            </g>
+
+            {/* Botanical Leaf B */}
+            <g id="leafB">
+              <path
+                d="M0 0 C-18 -8 -43 -1 -49 -21 C-57 -45 -31 -59 -12 -42 C-5 -64 22 -60 28 -40 C35 -19 15 -5 0 0Z"
+                fill="url(#leafGradientAlt)"
+              />
+              <path d="M0 0 Q-8 -23 -16 -46" stroke="#ffd1a5" strokeWidth="1.4" fill="none" opacity="0.75" />
+            </g>
+
+            {/* High-Haute Purple Blooming Star Symbol */}
+            <g id="purpleStar">
+              <path
+                d="M0 -48 C5 -12 12 -5 48 0 C12 5 5 12 0 48 C-5 12 -12 5 -48 0 C-12 -5 -5 -12 0 -48Z"
+                fill="url(#starGradient)"
+                stroke="#8d43b7"
+                strokeWidth="2.2"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M0 -48 C5 -12 12 -5 48 0 C12 5 5 12 0 48 C-5 12 -12 5 -48 0 C-12 -5 -5 -12 0 -48Z"
+                fill="none"
+                stroke="#e6b5ff"
+                strokeWidth="1"
+                opacity="0.32"
+              />
+              <path
+                d="M-8 -23 Q-2 -34 4 -31"
+                fill="none"
+                stroke="#e7baff"
+                strokeWidth="5"
+                strokeLinecap="round"
+                opacity="0.7"
+              />
+              <circle cx="-13" cy="-19" r="3.5" fill="#f0ceff" opacity="0.55" />
+            </g>
+
+            {/* Flight Star Symbol */}
+            <g id="flightStar">
+              <path
+                d="M0 -17 C2.2 -5.5 5.5 -2.2 17 0 C5.5 2.2 2.2 5.5 0 17 C-2.2 5.5 -5.5 2.2 -17 0 C-5.5 -2.2 -2.2 -5.5 0 -17Z"
+                fill="#d9a1ff"
+                stroke="#a65be0"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M0 -14 C2 -5 5 -2 14 0 C5 2 2 5 0 14 C-2 5 -5 2 -14 0 C-5 -2 -2 -5 0 -14Z"
+                fill="none"
+                stroke="#f4dcff"
+                strokeWidth="1"
+                opacity="0.8"
+              />
+              <circle cx="-4" cy="-5" r="2" fill="#fff0ff" opacity="0.9" />
+            </g>
+
+            {/* Flight Glow Filter */}
+            <filter id="flightGlow" x="-250%" y="-250%" width="600%" height="600%">
+              <feGaussianBlur stdDeviation="5" result="blur" />
+              <feColorMatrix
+                in="blur"
+                type="matrix"
+                values="0.8 0 0 0 .25  0 .45 0 0 .05  0 0 1 0 .5  0 0 0 1 0"
+                result="violet"
+              />
+              <feMerge>
+                <feMergeNode in="violet" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
 
-          {gardenItems.map((item, i) => {
-            if (item.type === 'text') {
-              // Letters fade in with crisp luminance during the first 35% of bloom
-              const textDelay = 0.04 * (i - 135);
-              const textT = Math.max(0, Math.min(1, (bloomProgress - textDelay) / 0.35));
-              const textOpacity = eo(textT);
-              const textYOffset = (1 - textOpacity) * 14;
+          {/* Ambient Micro-Constellation Stars (Background Depth) */}
+          <g className="micro-constellation" opacity="0.65">
+            <circle cx="110" cy="70" r="1.5" fill="#f0caff" className="micro-twinkle" style={{ '--spd': '2.1s', '--dly': '0.1s' }} />
+            <circle cx="230" cy="50" r="1.2" fill="#e6b5ff" className="micro-twinkle" style={{ '--spd': '3.2s', '--dly': '0.7s' }} />
+            <circle cx="410" cy="45" r="1.8" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '1.8s', '--dly': '1.2s' }} />
+            <circle cx="510" cy="55" r="1.4" fill="#d9a1ff" className="micro-twinkle" style={{ '--spd': '2.7s', '--dly': '0.4s' }} />
+            <circle cx="680" cy="45" r="1.6" fill="#f4dcff" className="micro-twinkle" style={{ '--spd': '3.5s', '--dly': '1.5s' }} />
+            <circle cx="820" cy="80" r="1.3" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '2.3s', '--dly': '0.9s' }} />
+            <circle cx="95" cy="285" r="1.5" fill="#e6b5ff" className="micro-twinkle" style={{ '--spd': '2.9s', '--dly': '1.1s' }} />
+            <circle cx="210" cy="290" r="1.2" fill="#f0caff" className="micro-twinkle" style={{ '--spd': '1.9s', '--dly': '0.3s' }} />
+            <circle cx="490" cy="285" r="1.6" fill="#ffffff" className="micro-twinkle" style={{ '--spd': '3.1s', '--dly': '1.7s' }} />
+            <circle cx="790" cy="290" r="1.4" fill="#d9a1ff" className="micro-twinkle" style={{ '--spd': '2.4s', '--dly': '0.6s' }} />
+          </g>
 
-              return (
-                <text
-                  key={`txt-${item.id}-${i}`}
-                  id={item.id}
-                  x={item.x}
-                  y={parseFloat(item.y) + textYOffset}
-                  textAnchor="middle"
-                  fontSize={item.fontSize}
-                  className="dhrisni-char"
-                  fill={isLightMode ? "#09090b" : currentPalette.text}
-                  opacity={textOpacity}
-                  style={{
-                    filter: 'drop-shadow(0 2px 14px rgba(255,255,255,0.28))'
-                  }}
-                >
-                  {item.char}
-                </text>
-              );
-            }
+          {/* Stems: Architectural Organic Lines */}
+          <path className="stem" style={{ '--t': '1.1s' }} d="M145 245 C118 207 126 170 158 142 C181 122 180 96 163 78" />
+          <path className="stem" style={{ '--t': '1.35s' }} d="M285 250 C260 211 273 176 299 148 C320 125 318 100 302 82" />
+          <path className="stem" style={{ '--t': '1.6s' }} d="M615 250 C640 211 627 176 601 148 C580 125 582 100 598 82" />
+          <path className="stem" style={{ '--t': '1.85s' }} d="M755 245 C782 207 774 170 742 142 C719 122 720 96 737 78" />
 
-            // Path roles: vine, leaf, petal, accent, vein
-            const isVine = item.role === 'vine';
-            const isLeaf = item.role === 'leaf';
-            const isPetal = item.role === 'petal';
-            const isAccent = item.role === 'accent';
-            const isVein = item.role === 'vein';
+          {/* Stems: Thin Accent Curls */}
+          <path className="stem thin" style={{ '--t': '2.0s' }} d="M170 177 C211 191 235 182 248 151 C260 124 246 111 232 119" />
+          <path className="stem thin" style={{ '--t': '2.2s' }} d="M730 177 C689 191 665 182 652 151 C640 124 654 111 668 119" />
 
-            // Normalized position coords
-            const normX = Math.max(0, Math.min(1, (item.cx - 215) / 1085));
-            const distFromCenter = Math.abs(item.cx - 750) / 540; // 0 (center) to 1 (edges)
+          {/* Colourful Unfurling Leaves */}
+          <g transform="translate(158 142) rotate(-15) scale(.78)">
+            <use href="#leafA" className="leaf" style={{ '--t': '2.2s' }} />
+          </g>
+          <g transform="translate(163 78) rotate(10) scale(.72)">
+            <use href="#leafB" className="leaf" style={{ '--t': '2.5s' }} />
+          </g>
+          <g transform="translate(299 148) rotate(-18) scale(.86)">
+            <use href="#leafB" className="leaf" style={{ '--t': '2.8s' }} />
+          </g>
+          <g transform="translate(598 82) rotate(-12) scale(.78)">
+            <use href="#leafA" className="leaf" style={{ '--t': '3.1s' }} />
+          </g>
+          <g transform="translate(601 148) rotate(-30) scale(.85)">
+            <use href="#leafB" className="leaf" style={{ '--t': '3.4s' }} />
+          </g>
+          <g transform="translate(742 142) rotate(15) scale(.78)">
+            <use href="#leafA" className="leaf" style={{ '--t': '3.7s' }} />
+          </g>
 
-            // DYNAMIC GROWTH PATTERNS CALCULATION:
-            let sproutDelay = 0;
-            switch (currentPattern.id) {
-              case 'center-outward':
-                sproutDelay = 0.05 + distFromCenter * 0.4;
-                break;
-              case 'right-to-left':
-                sproutDelay = 0.05 + (1 - normX) * 0.4;
-                break;
-              case 'organic-clusters':
-                const clusterKey = Math.floor(normX * 10);
-                sproutDelay = 0.05 + (seedParams.clusterDelays[clusterKey] || 0.2);
-                break;
-              case 'superbloom':
-                sproutDelay = 0.05 + ((Math.sin(i * 1.7 + seed) * 0.5 + 0.5) * 0.25);
-                break;
-              case 'left-to-right':
-              default:
-                sproutDelay = 0.05 + normX * 0.4;
-                break;
-            }
+          {/* Jumping Glint Stars */}
+          <g className="jump-star" style={{ '--t': '2.25s' }} transform="translate(225 205) scale(.42)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '2.55s' }} transform="translate(340 190) scale(.32)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '2.85s' }} transform="translate(470 218) scale(.38)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '3.15s' }} transform="translate(575 190) scale(.3)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '3.45s' }} transform="translate(690 207) scale(.4)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '3.75s' }} transform="translate(285 94) scale(.26)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
+          <g className="jump-star" style={{ '--t': '4.05s' }} transform="translate(640 96) scale(.28)">
+            <path d="M0 -18 L4 -4 L18 0 L4 4 L0 18 L-4 4 L-18 0 L-4 -4Z" />
+          </g>
 
-            let scale = 1;
-            let opacity = 1;
-            let pathOffset = 0;
+          {/* Blooming Purple Stars */}
+          <g transform="translate(170 88) rotate(-8) scale(0.62)">
+            <use href="#purpleStar" className="bloom-star" style={{ '--t': '2.4s' }} />
+          </g>
+          <g transform="translate(365 76) rotate(18) scale(0.48)">
+            <use href="#purpleStar" className="bloom-star" style={{ '--t': '2.8s' }} />
+          </g>
+          <g transform="translate(540 78) rotate(-12) scale(0.58)">
+            <use href="#purpleStar" className="bloom-star" style={{ '--t': '3.2s' }} />
+          </g>
+          <g transform="translate(730 90) rotate(10) scale(0.52)">
+            <use href="#purpleStar" className="bloom-star" style={{ '--t': '3.6s' }} />
+          </g>
+          <g transform="translate(770 218) rotate(-7) scale(0.55)">
+            <use href="#purpleStar" className="bloom-star" style={{ '--t': '4.0s' }} />
+          </g>
 
-            if (isVine) {
-              const vineT = Math.max(0, Math.min(1, (bloomProgress - sproutDelay) / 0.45));
-              const growth = eo(vineT);
-              opacity = growth > 0.01 ? 1 : 0;
-              pathOffset = (1 - growth) * 110;
-            } else if (isPetal || isAccent || isLeaf || isVein) {
-              const petalDelay = sproutDelay + 0.15;
-              const bloomT = Math.max(0, Math.min(1, (bloomProgress - petalDelay) / 0.4));
-              scale = spr(bloomT);
-              opacity = bloomT > 0.01 ? 1 : 0;
-            }
-
-            // Dynamic Palette Colors:
-            let fill = 'none';
-            let stroke = 'none';
-            if (isVine) {
-              stroke = currentPalette.vine;
-            } else if (isLeaf) {
-              fill = currentPalette.leaf;
-            } else if (isPetal) {
-              fill = currentPalette.petal;
-            } else if (isAccent) {
-              stroke = currentPalette.petalAccent;
-            } else if (isVein) {
-              stroke = currentPalette.vein;
-            }
-
-            const isTransformable = isPetal || isLeaf || isAccent || isVein;
-            const transformStr = isTransformable
-              ? `translate(${item.cx}, ${item.cy}) scale(${scale}) translate(-${item.cx}, -${item.cy})`
-              : undefined;
-
-            return (
-              <path
-                key={`path-${i}`}
-                d={item.d}
-                fill={fill}
-                stroke={stroke}
-                strokeWidth={item.strokeWidth || undefined}
-                strokeLinecap={item.strokeLinecap || undefined}
-                strokeLinejoin={item.strokeLinejoin || undefined}
-                opacity={opacity}
-                transform={transformStr}
-                data-cx={item.cx}
-                data-cy={item.cy}
-                data-scale={scale}
-                className="dhrisni-interactive-node"
-                style={{
-                  transformOrigin: `${item.cx}px ${item.cy}px`,
-                  transition: 'fill 0.35s ease, stroke 0.35s ease, opacity 0.2s ease',
-                  strokeDasharray: isVine ? '120 120' : undefined,
-                  strokeDashoffset: isVine ? pathOffset : undefined,
-                  filter: isPetal ? 'url(#bloomGlowDynamic)' : undefined
-                }}
+          {/* Orbiting Flying Lavender Stars with Dynamic animateMotion */}
+          <g className="flyers" aria-hidden="true">
+            {/* Flyer 1: Grand Outer Loop */}
+            <g className="flyer" filter="url(#flightGlow)">
+              <use href="#flightStar" />
+              <animateMotion
+                dur="6.8s"
+                begin="2.2s"
+                repeatCount="indefinite"
+                rotate="auto"
+                path="M105 205 C170 110 240 65 330 105 S470 255 570 195 S730 70 810 155 S730 285 615 260 S365 280 250 220 S140 125 105 205"
               />
-            );
-          })}
+            </g>
+
+            {/* Flyer 2: High Figure-8 Pass */}
+            <g className="flyer small" filter="url(#flightGlow)">
+              <use href="#flightStar" />
+              <animateMotion
+                dur="8.2s"
+                begin="3.0s"
+                repeatCount="indefinite"
+                rotate="auto"
+                path="M780 95 C690 45 585 55 520 115 S405 245 305 225 S160 155 115 185 S250 295 385 270 S670 190 780 95"
+              />
+            </g>
+
+            {/* Flyer 3: Quick Lower Orbit */}
+            <g className="flyer tiny" filter="url(#flightGlow)">
+              <use href="#flightStar" />
+              <animateMotion
+                dur="5.7s"
+                begin="4.1s"
+                repeatCount="indefinite"
+                rotate="auto"
+                path="M190 265 C250 205 270 115 360 90 S530 105 590 155 S700 255 770 220"
+              />
+            </g>
+
+            {/* Flyer 4: Counter-Orbital Wave */}
+            <g className="flyer small" filter="url(#flightGlow)">
+              <use href="#flightStar" />
+              <animateMotion
+                dur="7.4s"
+                begin="5.0s"
+                repeatCount="indefinite"
+                rotate="auto"
+                path="M730 275 C650 300 560 280 500 225 S390 95 300 105 S175 180 150 245"
+              />
+            </g>
+          </g>
         </svg>
 
-        {/* Ambient floating pollen / cyber-garden fireflies matching palette */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(6)].map((_, i) => (
-            <span
-              key={i}
-              className="absolute w-1.5 h-1.5 rounded-full blur-[1px] animate-pulse pointer-events-none transition-colors duration-700"
-              style={{
-                left: `${18 + i * 13}%`,
-                top: `${25 + (i % 3) * 22}%`,
-                backgroundColor: i % 2 === 0 ? currentPalette.petal : currentPalette.vine,
-                animationDuration: `${2.8 + i * 0.6}s`,
-                animationDelay: `${i * 0.4}s`,
-                boxShadow: `0 0 14px ${i % 2 === 0 ? currentPalette.petal : currentPalette.vine}`
-              }}
-            />
-          ))}
-        </div>
+        {/* Interactive Mouse Stardust Particles */}
+        {interactiveStars.map((s) => (
+          <div
+            key={s.id}
+            className="pointer-events-none absolute z-30 transition-all duration-700 ease-out"
+            style={{
+              left: `${s.x}px`,
+              top: `${s.y}px`,
+              width: `${s.size}px`,
+              height: `${s.size}px`,
+              backgroundColor: s.color,
+              boxShadow: `0 0 10px ${s.color}, 0 0 20px #c14cff`,
+              borderRadius: '50%',
+              transform: `translate(-50%, -50%) rotate(${s.rotation}deg) scale(0)`,
+              animation: 'starParticleBurst 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+            }}
+          />
+        ))}
       </div>
+
+      <style jsx global>{`
+        @keyframes starParticleBurst {
+          0% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.4);
+          }
+          100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) translateY(-18px) scale(0.2);
+          }
+        }
+      `}</style>
     </div>
   );
 }
-
-
-export default React.memo(DhrisniGarden);
