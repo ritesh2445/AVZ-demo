@@ -225,6 +225,34 @@ export const GARDEN_COLOR_THEMES = [
   },
 ];
 
+/**
+ * Full-spectrum chromatic stardust palette.
+ * Particles following the mouse spawn in every vibrant cosmic color.
+ */
+export const ALL_STARDUST_COLORS = [
+  '#f472b6', // Sakura Pink
+  '#ec4899', // Hot Pink
+  '#fb7185', // Coral Rose
+  '#f87171', // Soft Crimson
+  '#fb923c', // Tangerine Orange
+  '#f59e0b', // Radiant Amber
+  '#fbbf24', // Pure Gold
+  '#fde047', // Solar Yellow
+  '#a3e635', // Chartreuse / Lime
+  '#34d399', // Mint Green
+  '#10b981', // Emerald Green
+  '#2dd4bf', // Aquamarine
+  '#06b6d4', // Electric Cyan
+  '#38bdf8', // Sky Blue
+  '#60a5fa', // Cobalt Sapphire
+  '#818cf8', // Celestial Indigo
+  '#a855f7', // Royal Purple
+  '#c084fc', // Orchid Lilac
+  '#d99af4', // Lavender
+  '#f5d5ff', // Starlight Violet
+  '#ffffff', // Diamond White
+];
+
 function DhrisniGarden({ className = '' }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -340,7 +368,7 @@ function DhrisniGarden({ className = '' }) {
     }
   }, []);
 
-  // Smooth cursor stardust spawner with active theme colors
+  // Smooth cursor stardust spawner with multi-colored particles in every color
   const handleMouseMove = useCallback(
     (e) => {
       const canvas = canvasRef.current;
@@ -349,29 +377,32 @@ function DhrisniGarden({ className = '' }) {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      const colors = currentTheme.stardustColors;
+      // Spawns vibrant stardust grains picking randomly across the entire spectrum
       for (let i = 0; i < 2; i++) {
+        const randomColor =
+          ALL_STARDUST_COLORS[Math.floor(Math.random() * ALL_STARDUST_COLORS.length)];
         particlesRef.current.push({
           x: x + (Math.random() - 0.5) * 8,
           y: y + (Math.random() - 0.5) * 8,
-          vx: (Math.random() - 0.5) * 1.2,
-          vy: (Math.random() - 0.5) * 1.2 - 0.4,
+          vx: (Math.random() - 0.5) * 1.3,
+          vy: (Math.random() - 0.5) * 1.3 - 0.45,
           size: Math.random() * 3.5 + 2.5,
-          color: Math.random() > 0.45 ? colors[0] : colors[1],
+          color: randomColor,
           rotation: Math.random() * Math.PI,
           rotSpeed: (Math.random() - 0.5) * 0.08,
           life: 1.0,
-          decay: Math.random() * 0.025 + 0.02,
+          decay: Math.random() * 0.024 + 0.018,
         });
       }
 
-      if (particlesRef.current.length > 45) {
-        particlesRef.current.splice(0, particlesRef.current.length - 45);
+      // Keep up to 60 sparkling particles alive for fluid, dense trails
+      if (particlesRef.current.length > 60) {
+        particlesRef.current.splice(0, particlesRef.current.length - 60);
       }
 
       runStardustLoop();
     },
-    [currentTheme, runStardustLoop]
+    [runStardustLoop]
   );
 
   useEffect(() => {
