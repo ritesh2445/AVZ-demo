@@ -269,36 +269,30 @@ function DhrisniGarden({ className = '' }) {
 
   // Cycle to next chromatic bloom set and replay the entrance sequence
   const handleReplay = useCallback(() => {
-    setThemeIndex((prev) => {
-      const next = (prev + 1) % GARDEN_COLOR_THEMES.length;
-      if (next === 0) {
-        // Returned to default: stop and clear all active stardust immediately
-        particlesRef.current = [];
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-      }
-      return next;
-    });
+    setThemeIndex((prev) => (prev + 1) % GARDEN_COLOR_THEMES.length);
     setAnimationKey((prev) => prev + 1);
   }, []);
 
-  // Initialize and size stardust canvas with high DPI
-  useEffect(() => {
+  // Dynamically sync canvas internal resolution with its DOM layout size
+  const syncCanvasDimensions = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const updateCanvasSize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-    };
-    updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
-    return () => window.removeEventListener('resize', updateCanvasSize);
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetW = Math.round(rect.width * dpr);
+    const targetH = Math.round(rect.height * dpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
   }, []);
+
+  useEffect(() => {
+    syncCanvasDimensions();
+    window.addEventListener('resize', syncCanvasDimensions);
+    return () => window.removeEventListener('resize', syncCanvasDimensions);
+  }, [syncCanvasDimensions]);
 
   // Ultra-Smooth 120 FPS Stardust Loop
   const runStardustLoop = useCallback(() => {
@@ -323,7 +317,7 @@ function DhrisniGarden({ className = '' }) {
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy -= 0.02; // subtle cosmic upward drift
+        p.vy -= 0.03; // cosmic upward drift
         p.life -= p.decay;
         p.rotation += p.rotSpeed;
 
@@ -341,19 +335,24 @@ function DhrisniGarden({ className = '' }) {
         ctx.rotate(p.rotation);
         ctx.globalAlpha = Math.max(0, p.life);
 
+        // Radiant glow
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8 * dpr;
+
         // Core star glint (4-pointed diamond)
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.moveTo(0, -size * 1.8);
-        ctx.quadraticCurveTo(size * 0.2, 0, size * 1.8, 0);
-        ctx.quadraticCurveTo(size * 0.2, 0, 0, size * 1.8);
-        ctx.quadraticCurveTo(-size * 0.2, 0, -size * 1.8, 0);
-        ctx.quadraticCurveTo(-size * 0.2, 0, 0, -size * 1.8);
+        ctx.moveTo(0, -size * 2);
+        ctx.quadraticCurveTo(size * 0.25, 0, size * 2, 0);
+        ctx.quadraticCurveTo(size * 0.25, 0, 0, size * 2);
+        ctx.quadraticCurveTo(-size * 0.25, 0, -size * 2, 0);
+        ctx.quadraticCurveTo(-size * 0.25, 0, 0, -size * 2);
         ctx.fill();
 
-        // Soft starlight halo center
+        // Glowing center core
+        ctx.shadowBlur = 0;
         ctx.beginPath();
-        ctx.arc(0, 0, size * 0.65, 0, Math.PI * 2);
+        ctx.arc(0, 0, size * 0.75, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.fill();
 
@@ -368,48 +367,47 @@ function DhrisniGarden({ className = '' }) {
     }
   }, []);
 
-  // Cursor stardust spawner:
-  // - Default theme (themeIndex === 0): STARDUST STOPS COMING COMPLETELY
-  // - Clicked themes (themeIndex !== 0): Stardust comes from mouse in all 5 theme colors!
+  // Cursor stardust spawner: Active in ALL 5 themes (including default theme)
+  // Spawns vibrant stardust in all 5 signature garden botanical colors
   const handleMouseMove = useCallback(
     (e) => {
-      // When on the default theme (or returned to default), stardust stops coming
-      if (themeIndex === 0) return;
-
       const canvas = canvasRef.current;
       if (!canvas) return;
+
+      syncCanvasDimensions();
+
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Spawns vibrant stardust grains picking from all 5 botanical colors
-      for (let i = 0; i < 2; i++) {
+      // Spawn 2-3 radiant particles per mouse movement in all 5 theme colors
+      for (let i = 0; i < 3; i++) {
         const randomColor =
           FIVE_THEME_STARDUST_COLORS[
             Math.floor(Math.random() * FIVE_THEME_STARDUST_COLORS.length)
           ];
         particlesRef.current.push({
-          x: x + (Math.random() - 0.5) * 8,
-          y: y + (Math.random() - 0.5) * 8,
-          vx: (Math.random() - 0.5) * 1.3,
-          vy: (Math.random() - 0.5) * 1.3 - 0.45,
-          size: Math.random() * 3.5 + 2.5,
+          x: x + (Math.random() - 0.5) * 12,
+          y: y + (Math.random() - 0.5) * 12,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5 - 0.5,
+          size: Math.random() * 3.5 + 3.0,
           color: randomColor,
           rotation: Math.random() * Math.PI,
-          rotSpeed: (Math.random() - 0.5) * 0.08,
+          rotSpeed: (Math.random() - 0.5) * 0.1,
           life: 1.0,
-          decay: Math.random() * 0.024 + 0.018,
+          decay: Math.random() * 0.02 + 0.015, // lasts ~0.8s
         });
       }
 
-      // Keep up to 50 sparkling particles alive for fluid, dense trails
-      if (particlesRef.current.length > 50) {
-        particlesRef.current.splice(0, particlesRef.current.length - 50);
+      // Keep up to 70 sparkling particles alive for dense, fluid trails
+      if (particlesRef.current.length > 70) {
+        particlesRef.current.splice(0, particlesRef.current.length - 70);
       }
 
       runStardustLoop();
     },
-    [themeIndex, runStardustLoop]
+    [syncCanvasDimensions, runStardustLoop]
   );
 
   useEffect(() => {
@@ -969,13 +967,14 @@ function DhrisniGarden({ className = '' }) {
           </g>
         </svg>
 
-        {/* 120 FPS High-Performance Canvas Stardust Trail */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full pointer-events-none z-30"
-          style={{ imageRendering: 'auto' }}
-        />
       </div>
+
+      {/* 120 FPS Persistent Canvas - outside key={animationKey} so it NEVER resets or loses buffer */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-30"
+        style={{ imageRendering: 'auto' }}
+      />
     </div>
   );
 }
