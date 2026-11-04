@@ -129,7 +129,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           src={posterSrc}
           alt="AVZ Hero Master Visual"
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-            videoLoaded ? 'opacity-20 pointer-events-none' : 'opacity-100'
+            videoLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
           style={{ objectFit: 'cover' }}
         />
@@ -141,14 +141,16 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&api=1&dnt=1`}
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${
             videoLoaded ? 'opacity-100' : 'opacity-0'
-          } ${
-            isMobileDevice
-              ? 'min-h-[100dvh] min-w-[56.25vh] w-[100vw] h-[177.78vw]'
-              : 'min-w-[100vw] min-h-[100dvh] w-[177.78vh] h-[56.25vw]'
           }`}
+          style={{
+            border: 0,
+            width: isMobileDevice ? '100vw' : '177.78vh',
+            height: isMobileDevice ? '177.78vw' : '56.25vw',
+            minWidth: isMobileDevice ? '56.25vh' : '100vw',
+            minHeight: '100dvh'
+          }}
           allow="autoplay; fullscreen; picture-in-picture"
           title="AVZ Hero Runway Stream"
-          style={{ border: 0 }}
           onLoad={() => {
             setTimeout(() => setVideoLoaded(true), 350);
           }}

@@ -211,7 +211,7 @@ export const PRODUCTS = [
     tag: "UNDER ₹1K",
     stock: 30,
     materials: ["Metal Spikes & Chains", "Upcycled Hardware"],
-    images: ["/assets/prod_motherboard_cuff.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_spike_arm_cuffs.jpg", "/assets/prod_spike_arm_cuffs_dual.jpg", "/assets/prod_apex_cuffs.jpg"],
     description: "Arm cuffs with spikes — wrist and forearm cuffs loaded with hand-set metallic spikes. The ultimate punk accessory for festival and editorial looks.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -295,7 +295,7 @@ export const PRODUCTS = [
     tag: "HAND-BUILT",
     stock: 3,
     materials: ["Metal Spikes & Chains", "Upcycled Hardware"],
-    images: ["/assets/product_spike_bra.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_spike_tube_top.jpg", "/assets/prod_spike_tube_top_model.jpg"],
     description: "Tube top in rexine black with spikes forming a cross pattern — a sleek black rexine-based tube top with individually placed metallic spikes arranged in a dramatic cross motif across the chest.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -316,7 +316,7 @@ export const PRODUCTS = [
     tag: "ONE OF ONE",
     stock: 1,
     materials: ["Upcycled Hardware"],
-    images: ["/assets/product_diva_top.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_purple_jibaro_top.jpg", "/assets/prod_purple_jibaro_top_outdoor.jpg", "/assets/prod_purple_jibaro_top_close.jpg"],
     description: "Cross top halter purple with gold and red embellishment — a dramatic halter-neck cross-top in deep purple, lavishly embellished with gold threadwork and blood-red accent gems. Inspired by the Jibaro aesthetic.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -337,7 +337,7 @@ export const PRODUCTS = [
     tag: "HAND-BUILT",
     stock: 50,
     materials: ["Chainmail", "Metal Spikes & Chains"],
-    images: ["/assets/look_chainmail_armor.jpg", "/assets/product_beaded_bralette.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_spiral_body_chainmail.jpg", "/assets/look_chainmail_armor.jpg"],
     description: "Bra made out of chain links — a full-coverage bra constructed entirely from hand-linked stainless steel chain rings. Over 800 individual links woven ring-by-ring. Fluid metallic armor.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -379,7 +379,7 @@ export const PRODUCTS = [
     tag: "UNDER ₹1K",
     stock: 10,
     materials: ["Metal Spikes & Chains", "Upcycled Hardware"],
-    images: ["/assets/prod_motherboard_cuff.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_apex_cuffs.jpg", "/assets/prod_apex_cuffs_model.jpg"],
     description: "Hand cuffs with spikes — a dramatic pair of wrist cuffs adorned with sharp metallic spikes. The Apex Cuffs are statement accessories designed for editorial and performance.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -484,7 +484,7 @@ export const PRODUCTS = [
     tag: "SOLD OUT",
     stock: 0,
     materials: ["Metal Spikes & Chains", "Upcycled Hardware"],
-    images: ["/assets/product_spike_bra.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_silver_cross_charm_top.jpg", "/assets/prod_spiral_body_chainmail.jpg"],
     description: "Cross shape halter top with black butterfly choker and silver elements — a sculptural halter top cut in a cross silhouette, paired with a matching black butterfly choker and draped silver chain elements.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -505,7 +505,7 @@ export const PRODUCTS = [
     tag: "SMALL RUN",
     stock: 6,
     materials: ["Upcycled Hardware"],
-    images: ["/assets/product_archive_bralette.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_flowery_crochet_top.jpg", "/assets/prod_flowery_crochet_top_studio.jpg"],
     description: "Crocheted top with flowers multi colored — a hand-crocheted crop top blooming with multi-colored floral motifs. Each stitch is a small act of rebellion against the mass-produced and the mundane.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -526,7 +526,7 @@ export const PRODUCTS = [
     tag: "HAND-BUILT",
     stock: 12,
     materials: ["Upcycled Hardware"],
-    images: ["/assets/product_beaded_bralette.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_pearlite_crochet_top.jpg", "/assets/prod_pearlite_crochet_top_model.jpg", "/assets/prod_pearlite_crochet_top_back.jpg"],
     description: "White pearls crocheted on bikini top — a delicate yet bold bikini-style crop top with genuine freshwater pearls hand-crocheted into the construction. Mermaidcore meets punk maximalism.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -568,7 +568,7 @@ export const PRODUCTS = [
     tag: "ONE OF ONE",
     stock: 1,
     materials: ["Chainmail", "Industrial Wire", "Metal Spikes & Chains"],
-    images: ["/assets/look_chainmail_armor.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_spiral_body_chainmail.jpg", "/assets/prod_spiral_body_chainmail_detail.jpg", "/assets/prod_silver_cross_charm_top.jpg"],
     description: "Spiral wired chained top in silver — an architectural silver-tone body top constructed with spiral-wired chainmail in a sculptural drape over the torso. Structural and otherworldly.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -610,7 +610,7 @@ export const PRODUCTS = [
     tag: "ONE OF ONE",
     stock: 1,
     materials: ["Metal Spikes & Chains", "Upcycled Hardware"],
-    images: ["/assets/product_spike_bra.jpg", "/assets/product_spike_top.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_spike_grey_blouse.jpg", "/assets/prod_spike_grey_blouse_detail.jpg", "/assets/prod_spike_grey_blouse_portrait.jpg"],
     description: "Blouse with spikes — a structured grey blouse with metallic spike embellishments arranged in precise formations. Statement ready-to-wear for the maximalist wardrobe.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",
@@ -631,7 +631,7 @@ export const PRODUCTS = [
     tag: "ONE OF ONE",
     stock: 1,
     materials: ["Upcycled Hardware", "Reclaimed Denim"],
-    images: ["/assets/look_spike_bodice.jpg", "/assets/product_coord_set.jpg", "/assets/editorial_hero_portrait.jpg"],
+    images: ["/assets/prod_silver_shoe_corset.jpg", "/assets/prod_silver_shoe_corset_full.jpg", "/assets/prod_silver_shoe_corset_recline.jpg", "/assets/prod_silver_shoe_corset_detail.jpg"],
     description: "Corset in silver color made out of shoe and brown fur, with a matching skirt — a truly one-of-a-kind set where shoes are deconstructed and rebuilt into a sculptural silver corset, paired with a brown fur skirt.",
     details: [
       "Hand-crafted by Dhrisni in the Guwahati studio",

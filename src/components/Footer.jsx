@@ -3,7 +3,7 @@ import { Instagram, Mail, Phone, MapPin, Sparkles, ArrowUp } from 'lucide-react'
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-function Footer({ onScrollToSection, cmsFooter }) {
+function Footer({ onScrollToSection, cmsFooter, onOpenLegalModal }) {
   const scrollToTop = () => {
     playSound('pip');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -12,6 +12,11 @@ function Footer({ onScrollToSection, cmsFooter }) {
   const handleNav = (id) => {
     playSound('pip');
     onScrollToSection(id);
+  };
+
+  const handleLegal = (tab) => {
+    playSound('snap');
+    onOpenLegalModal?.(tab);
   };
 
   return (
@@ -94,6 +99,15 @@ function Footer({ onScrollToSection, cmsFooter }) {
               </button>
               <button onClick={() => handleNav('contact')} className="text-left text-xs font-montserrat hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer text-silver">
                 Contact & Support
+              </button>
+              <button onClick={() => handleLegal('privacy')} className="text-left text-xs font-montserrat text-pink hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer">
+                Privacy (DPDP Act)
+              </button>
+              <button onClick={() => handleLegal('terms')} className="text-left text-xs font-montserrat text-pink hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer">
+                Terms & Conditions
+              </button>
+              <button onClick={() => handleLegal('refund')} className="text-left text-xs font-montserrat text-pink hover:text-pink-300 transition-colors bg-transparent border-none p-0 cursor-pointer">
+                Refund Policy
               </button>
             </div>
           </div>

@@ -263,10 +263,64 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     checkAdminStatus();
   }, [fetchArtworks, checkAdminStatus]);
 
+  // Ref to track user interaction and auto-drift state
+  const isUserInteractingRef = useRef(false);
+  const userInteractionTimeoutRef = useRef(null);
+  const driftDirectionRef = useRef(1); // 1 = slide right, -1 = slide left
+  const autoDriftRafRef = useRef(null);
+
+  const notifyUserInteraction = useCallback(() => {
+    isUserInteractingRef.current = true;
+    if (userInteractionTimeoutRef.current) {
+      clearTimeout(userInteractionTimeoutRef.current);
+    }
+    // Resume gentle auto-drift 1.2s after user ceases active interaction
+    userInteractionTimeoutRef.current = setTimeout(() => {
+      isUserInteractingRef.current = false;
+    }, 1200);
+  }, []);
+
+  // Continuous slow horizontal auto-drift from one end to another
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const driftLoop = (currentTime) => {
+      const dt = currentTime - lastTime;
+      lastTime = currentTime;
+
+      const el = wallScrollRef.current;
+      if (el && !isUserInteractingRef.current && !isDraggingRef.current) {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (maxScroll > 50) {
+          // Slow, elegant gallery glide (~32 pixels per second)
+          const step = (dt / 1000) * 32 * driftDirectionRef.current;
+          el.scrollLeft += step;
+
+          // Gently reverse when reaching boundaries so it glides back and forth
+          if (el.scrollLeft >= maxScroll - 2) {
+            driftDirectionRef.current = -1;
+          } else if (el.scrollLeft <= 2) {
+            driftDirectionRef.current = 1;
+          }
+        }
+      }
+
+      autoDriftRafRef.current = requestAnimationFrame(driftLoop);
+    };
+
+    autoDriftRafRef.current = requestAnimationFrame(driftLoop);
+
+    return () => {
+      if (autoDriftRafRef.current) cancelAnimationFrame(autoDriftRafRef.current);
+      if (userInteractionTimeoutRef.current) clearTimeout(userInteractionTimeoutRef.current);
+    };
+  }, []);
+
   // 3. Horizontal Wheel Navigation (Translates vertical mouse wheel to horizontal glide + fast acoustic melody queue)
   const handleWheel = (e) => {
     const el = wallScrollRef.current;
     if (!el) return;
+    notifyUserInteraction();
 
     // Only intercept if horizontal movement is dominant or shift key is pressed or cursor is directly over gallery
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && !e.shiftKey) {
@@ -289,6 +343,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     if (e.target.closest('button') || e.target.closest('input')) return;
     const el = wallScrollRef.current;
     if (!el) return;
+    notifyUserInteraction();
 
     isDraggingRef.current = true;
     startXRef.current = e.pageX - el.offsetLeft;
@@ -301,6 +356,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     if (!isDraggingRef.current) return;
     const el = wallScrollRef.current;
     if (!el) return;
+    notifyUserInteraction();
 
     e.preventDefault();
     const x = e.pageX - el.offsetLeft;
@@ -315,11 +371,13 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   const handleMouseUpOrLeave = () => {
     if (isDraggingRef.current) {
       isDraggingRef.current = false;
+      notifyUserInteraction();
     }
   };
 
   // 5. Continuous Scroll Listener (For trackpads, touch gestures, and inertial gliding)
   const handleTrackScroll = useCallback(() => {
+    notifyUserInteraction();
     const el = wallScrollRef.current;
     if (!el) return;
 
@@ -330,12 +388,13 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
     lastScrollLeftRef.current = currentLeft;
     lastScrollTimeRef.current = now;
-  }, []);
+  }, [notifyUserInteraction]);
 
   // 6. Arrow Key and Button Navigation
   const scrollByAmount = (offset) => {
     const el = wallScrollRef.current;
     if (!el) return;
+    notifyUserInteraction();
     playSound('whoosh');
     el.scrollBy({ left: offset, behavior: 'smooth' });
   };

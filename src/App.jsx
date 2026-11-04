@@ -21,6 +21,8 @@ import WishlistDrawer from './components/WishlistDrawer';
 import OrderTrackingModal from './components/OrderTrackingModal';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
+import LegalPoliciesModal from './components/LegalPoliciesModal';
+import DPDPConsentBanner from './components/DPDPConsentBanner';
 import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
 import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
@@ -74,6 +76,12 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   // 6. Live D2C Order Tracking state
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalModalTab, setLegalModalTab] = useState('privacy');
+  const handleOpenLegalModal = useCallback((tab = 'privacy') => {
+    setLegalModalTab(tab);
+    setLegalModalOpen(true);
+  }, []);
 
   // 7. Global currency preference
   const [currency, setCurrency] = useState('INR');
@@ -413,7 +421,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
         {/* Section 9: Packaging & Logistics */}
         <section id="specs" className="w-full">
-          <ShippingPackagingReturns />
+          <ShippingPackagingReturns onOpenLegalModal={handleOpenLegalModal} />
         </section>
 
         {/* Section 9.5: Customer Testimonials (What People Say) */}
@@ -520,7 +528,21 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
       />
 
       {/* Global Full-Width Footer */}
-      <Footer onScrollToSection={scrollToSection} cmsFooter={cmsContent?.footer} />
+      <Footer
+        onScrollToSection={scrollToSection}
+        cmsFooter={cmsContent?.footer}
+        onOpenLegalModal={handleOpenLegalModal}
+      />
+
+      {/* DPDP Act 2023 Explicit Consent Banner */}
+      <DPDPConsentBanner onOpenPrivacyModal={handleOpenLegalModal} />
+
+      {/* Official Legal & Policies Modal */}
+      <LegalPoliciesModal
+        isOpen={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        initialTab={legalModalTab}
+      />
     </div>
   );
 }

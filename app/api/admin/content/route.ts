@@ -62,6 +62,35 @@ export async function GET() {
           })
         },
         {
+          section_key: 'policies',
+          title: 'Official Policies & DPDP Compliance',
+          data: JSON.stringify({
+            unboxing_video_hours: '48 hours',
+            sizing_exchange_days: '7 days',
+            concierge_whatsapp: '+91 73042 64901',
+            compliance_email: 'orders@avzvaganza.com',
+            registered_studio: 'Aveezah Vaganza Studio, Guwahati, Assam, India',
+            refund_terms: 'Approved damage claims refunded via original payment method in 5-7 banking days.'
+          })
+        },
+        {
+          section_key: 'care_guide',
+          title: 'Garment & Hardware Care Guide',
+          data: JSON.stringify({
+            motherboard_care: 'Do not soak in water. Clean with dry microfiber lens cloth.',
+            spikes_care: 'Wipe with jewelry cloth after wearing. Store flat in dust bag.',
+            denim_care: 'Spot clean or cold hand wash. Never tumble dry or machine spin.'
+          })
+        },
+        {
+          section_key: 'announcement',
+          title: 'Storefront Announcement Bar',
+          data: JSON.stringify({
+            active: true,
+            message: 'AVZ VAGANZA • HANDCRAFTED WEARABLE ART • COMPLIMENTARY EXPRESS SHIPPING OVER ₹5,000'
+          })
+        },
+        {
           section_key: 'footer',
           title: 'Global Footer & Policies',
           data: JSON.stringify({

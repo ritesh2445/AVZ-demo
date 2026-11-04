@@ -278,7 +278,7 @@ export function ContactSection() {
   );
 }
 
-export function ShippingPackagingReturns() {
+export function ShippingPackagingReturns({ onOpenLegalModal }) {
   return (
     <section id="specs" className="w-full py-8 sm:py-12 px-4 sm:px-12 lg:px-20 bg-pitch-black select-none border-t border-white/5">
       <div className="mb-10 sm:mb-14 pb-6 sm:pb-8 border-b border-white/10 text-left">
@@ -336,8 +336,8 @@ export function ShippingPackagingReturns() {
             <h3 className="text-xl font-spartan font-bold uppercase text-white mb-3">RETURNS & EXCHANGES</h3>
             <ul className="text-xs sm:text-sm font-montserrat text-silver/80 space-y-3 leading-relaxed">
               <li>• Returns accepted for visible product damage.</li>
-              <li>• Free size replacement available for sizing issues.</li>
-              <li>• <strong className="text-pink">IMPORTANT:</strong> For damage claims, an uncut unboxing video must be sent to our WhatsApp within 48 hours.</li>
+              <li>• Free size replacement available for sizing issues within 7 days.</li>
+              <li>• <strong className="text-pink">IMPORTANT:</strong> For damage claims, an uncut 360-degree unboxing video must be sent to our WhatsApp (+91 73042 64901) within 48 hours.</li>
             </ul>
           </div>
         </div>
@@ -364,12 +364,34 @@ export function ShippingPackagingReturns() {
         </div>
       </div>
 
-      {/* Legal Status Notice */}
-      <div className="mt-8 p-6 rounded-2xl bg-black/60 border border-white/10 flex items-start gap-4">
-        <ShieldAlert className="w-6 h-6 text-lavender flex-shrink-0 mt-0.5" />
-        <div className="text-xs font-mono text-silver/70 leading-relaxed">
-          <span className="text-white font-bold block mb-1">LEGAL STATUS NOTICE:</span>
-          As noted in the client questionnaire, the complete formal Privacy Policy and Terms & Conditions are currently being drafted for final sign-off. These guidelines represent the authentic operational terms of AVZ Vaganza.
+      {/* Authentic Legal Compliance Panel */}
+      <div className="mt-8 p-6 rounded-2xl bg-black/60 border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 text-left">
+        <div className="flex items-start gap-3.5">
+          <ShieldAlert className="w-5 h-5 text-pink flex-shrink-0 mt-0.5" />
+          <div className="text-xs font-mono text-silver/80 leading-relaxed">
+            <span className="text-white font-bold block mb-1">AUTHENTIC LEGAL COMPLIANCE & POLICIES:</span>
+            Operating in complete compliance with India's Digital Personal Data Protection Act, 2023 (DPDP Act), RBI-authorized payment security, and our bespoke couture guarantee.
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full md:w-auto">
+          <button
+            onClick={() => onOpenLegalModal?.('privacy')}
+            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-[11px] font-mono uppercase text-white cursor-pointer transition-all"
+          >
+            PRIVACY (DPDP)
+          </button>
+          <button
+            onClick={() => onOpenLegalModal?.('terms')}
+            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-[11px] font-mono uppercase text-white cursor-pointer transition-all"
+          >
+            TERMS
+          </button>
+          <button
+            onClick={() => onOpenLegalModal?.('refund')}
+            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-[11px] font-mono uppercase text-white cursor-pointer transition-all"
+          >
+            REFUNDS
+          </button>
         </div>
       </div>
     </section>

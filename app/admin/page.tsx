@@ -2647,29 +2647,48 @@ export default function AdminDashboardPage() {
                   const category = (document.getElementById('p_category') as HTMLSelectElement)?.value;
                   const price = Number((document.getElementById('p_price') as HTMLInputElement)?.value);
                   const inventory_quantity = Number((document.getElementById('p_stock') as HTMLInputElement)?.value);
-                  const image = (document.getElementById('p_image') as HTMLInputElement)?.value || '/assets/editorial_hero_portrait.jpg';
+                  const imageRaw = (document.getElementById('p_image') as HTMLInputElement)?.value?.trim() || '';
                   const status = (document.getElementById('p_status') as HTMLSelectElement)?.value || 'published';
                   const is_featured = (document.getElementById('p_featured') as HTMLInputElement)?.checked ?? false;
-                  const description = (document.getElementById('p_description') as HTMLTextAreaElement)?.value;
-                  const images = [image];
+                  const description = (document.getElementById('p_description') as HTMLTextAreaElement)?.value || '1-of-1 wearable art hand-sculpted by Dhrisni.';
+                  const images = imageRaw.includes(',')
+                    ? imageRaw.split(',').map((s) => s.trim()).filter(Boolean)
+                    : [imageRaw || '/assets/editorial_hero_portrait.jpg'];
 
-                  if (selectedProduct) {
-                    await fetch(`/api/admin/products/${selectedProduct.id}`, {
-                      method: 'PUT',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
-                    });
-                    showNotification('Product updated successfully');
-                  } else {
-                    await fetch('/api/admin/products', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
-                    });
-                    showNotification('Product created successfully');
+                  if (!title || !sku || isNaN(price)) {
+                    showNotification('Title, SKU, and Price are required.', 'error');
+                    return;
                   }
-                  setProductModalOpen(false);
-                  fetchData();
+
+                  try {
+                    if (selectedProduct) {
+                      const res = await fetch(`/api/admin/products/${selectedProduct.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
+                      });
+                      if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.error || 'Failed to update product');
+                      }
+                      showNotification('Product updated successfully');
+                    } else {
+                      const res = await fetch('/api/admin/products', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, sku, category, price, inventory_quantity, description, images, status, is_featured })
+                      });
+                      if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.error || 'Failed to create product');
+                      }
+                      showNotification('Product created successfully');
+                    }
+                    setProductModalOpen(false);
+                    fetchData();
+                  } catch (err: any) {
+                    showNotification(err.message || 'Error saving product', 'error');
+                  }
                 }}
                 className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] text-black font-bold text-xs font-mono uppercase"
               >

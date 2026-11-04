@@ -221,6 +221,13 @@ function KeyArchiveCarousel({
                       1 OF 1
                     </span>
                   </div>
+                ) : item.stock <= 3 ? (
+                  <div className="absolute top-3 left-3 z-20">
+                    <span className="px-2 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-amber-400" />
+                      FEW REMAINING
+                    </span>
+                  </div>
                 ) : null}
 
                 
@@ -352,6 +359,12 @@ function MobileCompactProductCard({
           <div className="absolute top-2 left-2 z-10">
             <span className="px-1.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[8px] font-mono tracking-wider uppercase backdrop-blur-md">
               1 OF 1
+            </span>
+          </div>
+        ) : product.stock <= 3 ? (
+          <div className="absolute top-2 left-2 z-10">
+            <span className="px-1.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[8px] font-mono tracking-wider uppercase backdrop-blur-md">
+              FEW REMAINING
             </span>
           </div>
         ) : null}
@@ -795,6 +808,13 @@ function ShopCatalogue({
                       <div className="absolute top-3 left-3 z-20">
                         <span className="px-2.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md">
                           1 OF 1
+                        </span>
+                      </div>
+                    ) : product.stock <= 3 ? (
+                      <div className="absolute top-3 left-3 z-20">
+                        <span className="px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          FEW REMAINING
                         </span>
                       </div>
                     ) : null}

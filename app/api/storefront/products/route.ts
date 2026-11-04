@@ -84,7 +84,7 @@ export async function GET(request: Request) {
         stock: stockNum,
         inventory_quantity: stockNum,
         inStock: stockNum > 0,
-        tag: stockNum === 0 ? 'SOLD OUT' : stockNum === 1 ? 'ONE OF ONE' : 'SMALL RUN',
+        tag: stockNum === 0 ? 'SOLD OUT' : stockNum === 1 ? '1 OF 1' : stockNum <= 3 ? 'FEW REMAINING' : 'AVAILABLE',
         category: String(row.category),
         image: parsedImages[0] || '/assets/editorial_hero_portrait.jpg',
         images: parsedImages,

@@ -65,6 +65,23 @@ export default function CartDrawer({
       }));
     }
   }, [currentUser, isOpen]);
+  // Body scroll lock prevents background page scrolling when cart drawer is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    const prevTouchAction = document.body.style.touchAction;
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+
+    // Preload Razorpay script immediately when cart opens so checkout is instant and smooth
+    loadRazorpayScript();
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouchAction;
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e) => {
@@ -324,11 +341,14 @@ export default function CartDrawer({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99997] bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-fade-in"
+      className="fixed inset-0 z-[99997] bg-black/85 backdrop-blur-sm sm:backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-fade-in overscroll-contain select-none"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        role="dialog" aria-modal="true" data-surface="dark" className="cart-drawer modal-card w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative text-left"
+        role="dialog"
+        aria-modal="true"
+        data-surface="dark"
+        className="cart-drawer modal-card w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative text-left will-change-transform transform-gpu overscroll-contain"
       >
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between gap-3 bg-black/40 shrink-0">
@@ -680,7 +700,7 @@ export default function CartDrawer({
                     <Tag className="w-3.5 h-3.5 text-silver/40 absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      placeholder="Promo Code (AVZ10 / ARCHIVE15 / FREESHIP)"
+                      placeholder="PROMO CODE"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                       className="w-full bg-black/80 border border-white/15 pl-9 pr-3 py-2 rounded-xl text-xs text-white font-mono uppercase outline-none focus:border-white/50"

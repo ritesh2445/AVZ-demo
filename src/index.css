@@ -3287,13 +3287,12 @@ html[data-theme="light"] .rotunda-guide {
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Fast Scroll & Zero-Lag Compositor Acceleration */
-#hero, #vault, #lookbook, #shop, #reels, #about, #specs, #faq, #contact {
+/* Fast Scroll & Zero-Lag Compositor Acceleration (Hero uses fluid viewport-relative rendering without compositor containment) */
+#vault, #lookbook, #shop, #reels, #about, #specs, #faq, #contact {
   contain: layout style;
   transform: translateZ(0);
 }
 
-img, video, iframe {
-  transform: translateZ(0);
+img, video {
   backface-visibility: hidden;
 }

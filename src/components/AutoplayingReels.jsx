@@ -5,9 +5,8 @@ import { Volume2, VolumeX, Maximize2, ChevronRight, ChevronLeft, Film, ExternalL
 import DataRain from '@/components/ui/data-rain';
 import { playSound } from '../utils/audio';
 
-export function parseVimeoEmbed(url, muted = true) {
+export function parseVimeoEmbed(url) {
   if (!url) return null;
-  const isMuted = muted ? '1' : '0';
 
   // Direct MP4 or video file
   if (url.endsWith('.mp4') || url.endsWith('.webm') || url.startsWith('/assets/')) {
@@ -32,13 +31,13 @@ export function parseVimeoEmbed(url, muted = true) {
     hashParam = `&h=${slashHashMatch[2]}`;
   }
 
-  // Already player.vimeo.com URL
+  // Already player.vimeo.com URL - always fixed muted=1&api=1 to prevent reloads on mute toggle
   if (url.includes('player.vimeo.com/video/')) {
     const idMatch = url.match(/player\.vimeo\.com\/video\/(\d+)/);
     if (idMatch) {
       return {
         type: 'vimeo',
-        src: `https://player.vimeo.com/video/${idMatch[1]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${hashParam}${timeHash}`
+        src: `https://player.vimeo.com/video/${idMatch[1]}?autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&api=1${hashParam}${timeHash}`
       };
     }
   }
@@ -48,7 +47,7 @@ export function parseVimeoEmbed(url, muted = true) {
   if (match && match[3]) {
     return {
       type: 'vimeo',
-      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=${isMuted}&background=1&autopause=0&controls=0${hashParam}${timeHash}`
+      src: `https://player.vimeo.com/video/${match[3]}?autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&api=1${hashParam}${timeHash}`
     };
   }
 
@@ -107,10 +106,14 @@ const DEFAULT_REELS = [
 
 function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScrollToSection }) {
   const containerRef = useRef(null);
+  const iframeRefs = useRef({});
+  const videoRefs = useRef({});
   const [reels, setReels] = useState(DEFAULT_REELS);
   const [headline, setHeadline] = useState('SEE THEM MOVE');
   const [subheadline, setSubheadline] = useState('Real videos of our handmade pieces. Tap any video to watch.');
-  const [mutedStates, setMutedStates] = useState({});
+  // Single active audio reel ensures ONLY ONE reel ever plays sound at a time
+  const [activeAudioReelId, setActiveAudioReelId] = useState(null);
+  const [loadedReels, setLoadedReels] = useState({});
   const [activeReelModal, setActiveReelModal] = useState(null);
   const [isReelsInView, setIsReelsInView] = useState(false);
   const sectionRef = useRef(null);
@@ -145,13 +148,53 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
     }
   }, [cmsReels]);
 
+  // Seamless in-place audio toggle with strict mutual audio exclusion (only 1 audio at a time)
   const toggleMute = (reelId, e) => {
     e.stopPropagation();
     playSound('snap');
-    setMutedStates((prev) => ({
-      ...prev,
-      [reelId]: !prev[reelId]
-    }));
+
+    const isCurrentlyActive = activeAudioReelId === reelId;
+
+    if (isCurrentlyActive) {
+      // Mute active reel
+      const ifr = iframeRefs.current[reelId];
+      if (ifr?.contentWindow) {
+        try {
+          ifr.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0 }), '*');
+          ifr.contentWindow.postMessage(JSON.stringify({ method: 'setMuted', value: true }), '*');
+        } catch (err) {}
+      }
+      const vid = videoRefs.current[reelId];
+      if (vid) vid.muted = true;
+
+      setActiveAudioReelId(null);
+    } else {
+      // 1. Mute any previously active reel first
+      if (activeAudioReelId) {
+        const prevIfr = iframeRefs.current[activeAudioReelId];
+        if (prevIfr?.contentWindow) {
+          try {
+            prevIfr.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0 }), '*');
+            prevIfr.contentWindow.postMessage(JSON.stringify({ method: 'setMuted', value: true }), '*');
+          } catch (err) {}
+        }
+        const prevVid = videoRefs.current[activeAudioReelId];
+        if (prevVid) prevVid.muted = true;
+      }
+
+      // 2. Unmute newly selected reel
+      const targetIfr = iframeRefs.current[reelId];
+      if (targetIfr?.contentWindow) {
+        try {
+          targetIfr.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 1 }), '*');
+          targetIfr.contentWindow.postMessage(JSON.stringify({ method: 'setMuted', value: false }), '*');
+        } catch (err) {}
+      }
+      const targetVid = videoRefs.current[reelId];
+      if (targetVid) targetVid.muted = false;
+
+      setActiveAudioReelId(reelId);
+    }
   };
 
   const scrollRail = (direction) => {
@@ -163,8 +206,8 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
 
   return (
     <section ref={sectionRef} id="reels" className="relative w-full bg-[#050508] py-16 sm:py-24 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden select-none">
-      {/* Background Cyber Rain Sparkles Layer */}
-      <div className="absolute inset-0 pointer-events-none opacity-55 z-0">
+      {/* Background Cyber Rain Sparkles Layer with enhanced atmospheric intensity */}
+      <div className="absolute inset-0 pointer-events-none opacity-70 z-0">
         <DataRain
           fullscreen={false}
           count={240}
@@ -219,8 +262,9 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {reels.map((reel, idx) => {
-            const isMuted = mutedStates[reel.id] ?? true;
-            const parsed = parseVimeoEmbed(reel.vimeo_url || reel.fallback_video, isMuted);
+            const hasAudioActive = activeAudioReelId === reel.id;
+            const parsed = parseVimeoEmbed(reel.vimeo_url || reel.fallback_video);
+            const isLoaded = loadedReels[reel.id];
 
             return (
               <div
@@ -242,32 +286,48 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
 
                 {/* Frameless Floating Video Player / Vimeo Embed */}
                 <div className="absolute inset-0 w-full h-full bg-black overflow-hidden pointer-events-none">
-                  {/* Always keep high-res poster behind so video area never flashes black */}
+                  {/* Poster smoothly fades away once video is loaded - NEVER flashes during mute toggle */}
                   {reel.poster && (
                     <img
                       src={reel.poster}
                       alt={reel.title}
                       decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                      className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700 ${
+                        isLoaded ? 'opacity-0' : 'opacity-100'
+                      }`}
                     />
                   )}
                   {isReelsInView && parsed?.type === 'vimeo' ? (
                     <iframe
+                      ref={(el) => {
+                        iframeRefs.current[reel.id] = el;
+                      }}
                       src={parsed.src}
                       loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none border-0 scale-[1.05]"
                       allow="autoplay; fullscreen; picture-in-picture"
                       title={reel.title}
+                      onLoad={() => {
+                        setTimeout(() => {
+                          setLoadedReels((prev) => ({ ...prev, [reel.id]: true }));
+                        }, 300);
+                      }}
                     />
                   ) : isReelsInView ? (
                     <video
+                      ref={(el) => {
+                        videoRefs.current[reel.id] = el;
+                      }}
                       src={reel.fallback_video || parsed?.src}
                       poster={reel.poster}
                       autoPlay
                       loop
-                      muted={isMuted}
+                      muted={!hasAudioActive}
                       playsInline
                       className="w-full h-full object-cover"
+                      onLoadedData={() => {
+                        setLoadedReels((prev) => ({ ...prev, [reel.id]: true }));
+                      }}
                     />
                   ) : null}
                 </div>
@@ -282,10 +342,14 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                   </span>
                   <button
                     onClick={(e) => toggleMute(reel.id, e)}
-                    className="w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-white hover:text-pink hover:border-pink flex items-center justify-center transition-all cursor-pointer shadow-md"
-                    title={isMuted ? 'Sound on' : 'Sound off'}
+                    className={`w-8 h-8 rounded-full backdrop-blur-md border flex items-center justify-center transition-all cursor-pointer shadow-md ${
+                      hasAudioActive
+                        ? 'bg-pink border-pink text-black ring-2 ring-pink/50 scale-105'
+                        : 'bg-black/70 border-white/20 text-white hover:text-pink hover:border-pink'
+                    }`}
+                    title={hasAudioActive ? 'Sound off' : 'Sound on'}
                   >
-                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-pink" />}
+                    {hasAudioActive ? <Volume2 className="w-3.5 h-3.5 text-black" /> : <VolumeX className="w-3.5 h-3.5" />}
                   </button>
                 </div>
 
