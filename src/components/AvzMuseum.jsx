@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-  Volume2,
-  VolumeX,
   ChevronLeft,
   ChevronRight,
   Sparkles,
@@ -15,14 +13,6 @@ import {
 import AntiquePaintingFrame from './museum/AntiquePaintingFrame';
 import MuseumArtworkModal from './museum/MuseumArtworkModal';
 import QuickFrameEditorModal from './museum/QuickFrameEditorModal';
-import {
-  startGuitarMelody,
-  stopGuitarMelody,
-  playInteractiveGuitarString,
-  pluckString,
-  queueGuitarScrollMelody,
-  playFrameGuitarString
-} from '../utils/guitarAudio';
 import { playSound } from '../utils/audio';
 
 // Initial fallback archive pieces ensuring zero empty screen
@@ -226,7 +216,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
   const [loading, setLoading] = useState(true);
   const [selectedArtwork, setSelectedArtwork] = useState(null);
   const [editingArtwork, setEditingArtwork] = useState(null);
-  const [soundEnabled, setSoundEnabled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const wallScrollRef = useRef(null);
@@ -291,14 +280,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
       e.preventDefault();
       el.scrollLeft += e.deltaY * 1.25;
-
-      const velocity = Math.abs(e.deltaY) / 60;
-      const dir = e.deltaY > 0 ? 1 : -1;
-      queueGuitarScrollMelody(velocity, dir, true);
     } else if (Math.abs(e.deltaX) > 0) {
-      const velocity = Math.abs(e.deltaX) / 60;
-      const dir = e.deltaX > 0 ? 1 : -1;
-      queueGuitarScrollMelody(velocity, dir, true);
     }
   };
 
@@ -324,15 +306,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const x = e.pageX - el.offsetLeft;
     const walk = (x - startXRef.current) * 1.5;
     el.scrollLeft = scrollLeftRef.current - walk;
-
-    // Calculate velocity and direction for realistic guitar pluck queue
     const now = Date.now();
-    const dt = Math.max(1, now - lastMoveTimeRef.current);
-    const dx = e.pageX - lastPosRef.current;
-    const velocity = (Math.abs(dx) / dt) * 12;
-    const dir = dx < 0 ? 1 : -1;
-
-    queueGuitarScrollMelody(velocity, dir, true);
 
     lastPosRef.current = e.pageX;
     lastMoveTimeRef.current = now;
@@ -354,12 +328,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const dt = Math.max(1, now - (lastScrollTimeRef.current || now));
     const delta = currentLeft - (lastScrollLeftRef.current || currentLeft);
 
-    if (Math.abs(delta) > 2) {
-      const velocity = (Math.abs(delta) / dt) * 4;
-      const dir = delta > 0 ? 1 : -1;
-      queueGuitarScrollMelody(velocity, dir, true);
-    }
-
     lastScrollLeftRef.current = currentLeft;
     lastScrollTimeRef.current = now;
   }, []);
@@ -369,33 +337,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     const el = wallScrollRef.current;
     if (!el) return;
     playSound('whoosh');
-    const dir = offset > 0 ? 1 : -1;
-    queueGuitarScrollMelody(1.8, dir, true);
     el.scrollBy({ left: offset, behavior: 'smooth' });
   };
-
-  const handleToggleSound = () => {
-    const next = !soundEnabled;
-    setSoundEnabled(next);
-    playSound(next ? 'toggle_on' : 'toggle_off');
-    if (next) {
-      startGuitarMelody();
-      // Realistic acoustic guitar welcome strum
-      pluckString(164.81, null, 2.5, 0.1);
-      setTimeout(() => pluckString(246.94, null, 2.2, 0.08), 80);
-      setTimeout(() => pluckString(329.63, null, 2.2, 0.09), 160);
-    } else {
-      stopGuitarMelody();
-    }
-  };
-
-  // Clean up audio if user leaves the page or unmounts
-  useEffect(() => {
-    return () => {
-      stopGuitarMelody();
-    };
-  }, []);
-
   // Callback after an admin modifies or dismounts a frame in real time
   const handleArtworkSaved = (updatedArt) => {
     setArtworks((prev) =>
@@ -451,30 +394,6 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
               <span>STUDIO CURATOR ACTIVE</span>
             </div>
           )}
-
-          {/* Sound Toggle Button */}
-          <button
-            onClick={handleToggleSound}
-            className={`px-3.5 py-2 border transition-all text-xs font-mono tracking-widest uppercase flex items-center gap-2 cursor-pointer shadow-md ${
-              soundEnabled
-                ? 'bg-[#d4af37] text-black border-[#fae596] font-bold shadow-[0_0_15px_rgba(212,175,55,0.4)]'
-                : 'bg-[#150307]/80 text-[#d4af37] border-[#d4af37]/40 hover:border-[#d4af37]'
-            }`}
-            title={soundEnabled ? 'Mute Acoustic Guitar Melody' : 'Play Acoustic Guitar Melody'}
-            aria-label={soundEnabled ? 'Sound On' : 'Sound Off'}
-          >
-            {soundEnabled ? (
-              <>
-                <Volume2 className="w-3.5 h-3.5 text-black" />
-                <span>GUITAR MELODY ON</span>
-              </>
-            ) : (
-              <>
-                <VolumeX className="w-3.5 h-3.5 text-[#d4af37]" />
-                <span>GUITAR MELODY OFF</span>
-              </>
-            )}
-          </button>
 
           {/* Navigation Arrows */}
           <div className="flex items-center gap-2">
