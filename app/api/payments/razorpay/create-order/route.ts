@@ -177,7 +177,10 @@ export async function POST(request: Request) {
     const orderNumber = `AVZ-${Math.floor(10000 + Math.random() * 90000)}`;
     const grandTotalPaise = Math.round(grandTotal * 100);
     const isProduction = process.env.NODE_ENV === 'production';
-    const isCOD = paymentMethod === 'Cash on Delivery (COD Verified)' || paymentMethod === 'COD';
+    const isCOD = paymentMethod === 'Cash on Delivery (COD Verified)' || 
+                  paymentMethod === 'COD' || 
+                  paymentMethod === 'Cash on Delivery' || 
+                  /cash on delivery/i.test(paymentMethod || '');
 
     // Handle Cash on Delivery directly: persist to DB immediately without calling Razorpay
     if (isCOD) {
