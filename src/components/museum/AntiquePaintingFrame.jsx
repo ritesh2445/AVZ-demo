@@ -82,7 +82,7 @@ export default function AntiquePaintingFrame({
   isAdmin = false
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(true);
 
   const frameClass = FRAME_CLASSES[artwork.frame_style] || FRAME_CLASSES.ornate_baroque;
   const aspectClass = ASPECT_RATIO_STYLES[artwork.aspect_ratio] || 'aspect-[3/4]';
@@ -203,7 +203,7 @@ export default function AntiquePaintingFrame({
           <img
             src={artwork.image_url}
             alt={artwork.title}
-            loading={index < 4 ? 'eager' : 'lazy'}
+            decoding="async"
             onLoad={() => setImgLoaded(true)}
             className={`w-full h-full object-cover transition-all duration-700 ${
               imgLoaded ? 'opacity-100' : 'opacity-0'

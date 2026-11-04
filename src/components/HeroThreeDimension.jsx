@@ -51,6 +51,8 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
       if (iframeRef.current && iframeRef.current.contentWindow) {
         const payload = value !== undefined ? { method, value } : { method };
         iframeRef.current.contentWindow.postMessage(JSON.stringify(payload), '*');
+        // Also post raw object for modern Vimeo Player API listeners
+        iframeRef.current.contentWindow.postMessage(payload, '*');
       }
     } catch (e) {
       console.warn('[VIMEO POSTMESSAGE]:', e);
@@ -98,6 +100,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     const newMuted = !isMuted;
     setIsMuted(newMuted);
     playSound(newMuted ? 'toggle_off' : 'toggle_on');
+    // Seamless in-place audio cutoff or un-mute without reloading iframe or restarting video
     postVimeoMessage('setVolume', newMuted ? 0 : 1);
     postVimeoMessage('setMuted', newMuted);
     if (!newMuted && !isPlaying) {
@@ -126,7 +129,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           src={posterSrc}
           alt="AVZ Hero Master Visual"
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-            videoLoaded ? 'opacity-0' : 'opacity-100'
+            videoLoaded ? 'opacity-20 pointer-events-none' : 'opacity-100'
           }`}
           style={{ objectFit: 'cover' }}
         />
@@ -135,7 +138,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         <iframe
           ref={iframeRef}
           key={`hero-vimeo-${vimeoId}`}
-          src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=${isMuted ? 1 : 0}&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&dnt=1`}
+          src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&api=1&dnt=1`}
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${
             videoLoaded ? 'opacity-100' : 'opacity-0'
           } ${

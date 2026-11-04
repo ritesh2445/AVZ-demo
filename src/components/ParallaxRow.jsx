@@ -262,8 +262,6 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             const isCenter = diff === 0;
             const isVisible = Math.abs(diff) <= 2;
 
-            if (!isVisible) return null;
-
             const isMobile = screenWidth < 640;
             const isTablet = screenWidth >= 640 && screenWidth < 1024;
             const spacing = isMobile ? 250 : isTablet ? 340 : 420;
@@ -303,7 +301,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   <img
                     src={item.image}
                     alt={item.title}
-                    loading={isCenter ? 'eager' : 'lazy'}
+                    decoding="async"
                     className={`w-full h-full object-cover transition-transform duration-700 ${
                       isCenter ? 'scale-105 brightness-100' : 'scale-100 brightness-85'
                     }`}

@@ -3286,3 +3286,14 @@ html[data-theme="light"] .rotunda-guide {
   color: #09090b !important;
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
 }
+
+/* Fast Scroll & Zero-Lag Compositor Acceleration */
+#hero, #vault, #lookbook, #shop, #reels, #about, #specs, #faq, #contact {
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+img, video, iframe {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

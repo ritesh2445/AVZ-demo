@@ -202,7 +202,7 @@ function KeyArchiveCarousel({
                 <img
                   src={item.images ? item.images[0] : item.image}
                   alt={item.name}
-                  loading="lazy"
+                  decoding="async"
                   draggable={false} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity pointer-events-none" />
@@ -336,7 +336,7 @@ function MobileCompactProductCard({
         <img
           src={product.images ? product.images[0] : product.image}
           alt={product.name}
-          loading="lazy"
+          decoding="async"
           draggable={false} className="w-full h-full object-cover filter brightness-95 pointer-events-none"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
@@ -776,7 +776,7 @@ function ShopCatalogue({
                     <img
                       src={product.images ? product.images[0] : product.image}
                       alt={product.name}
-                      loading="lazy"
+                      decoding="async"
                       draggable={false} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
                     />
 

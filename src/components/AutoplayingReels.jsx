@@ -112,6 +112,22 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
   const [subheadline, setSubheadline] = useState('Real videos of our handmade pieces. Tap any video to watch.');
   const [mutedStates, setMutedStates] = useState({});
   const [activeReelModal, setActiveReelModal] = useState(null);
+  const [isReelsInView, setIsReelsInView] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Mount video decoders only when within 350px of viewport
+        setIsReelsInView(entry.isIntersecting);
+      },
+      { rootMargin: '350px 0px 350px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // Sync CMS Data if available from Admin Panel
   useEffect(() => {
@@ -146,12 +162,12 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
   };
 
   return (
-    <section id="reels" className="relative w-full bg-[#050508] py-16 sm:py-24 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden select-none">
+    <section ref={sectionRef} id="reels" className="relative w-full bg-[#050508] py-16 sm:py-24 px-4 sm:px-8 lg:px-12 border-t border-white/10 overflow-hidden select-none">
       {/* Background Cyber Rain Sparkles Layer */}
-      <div className="absolute inset-0 pointer-events-none opacity-25 z-0">
+      <div className="absolute inset-0 pointer-events-none opacity-55 z-0">
         <DataRain
           fullscreen={false}
-          count={180}
+          count={240}
           flowSpeed={0.8}
           palette={{
             calm: '#22e6ff',
@@ -226,14 +242,24 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
 
                 {/* Frameless Floating Video Player / Vimeo Embed */}
                 <div className="absolute inset-0 w-full h-full bg-black overflow-hidden pointer-events-none">
-                  {parsed?.type === 'vimeo' ? (
+                  {/* Always keep high-res poster behind so video area never flashes black */}
+                  {reel.poster && (
+                    <img
+                      src={reel.poster}
+                      alt={reel.title}
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    />
+                  )}
+                  {isReelsInView && parsed?.type === 'vimeo' ? (
                     <iframe
                       src={parsed.src}
+                      loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none border-0 scale-[1.05]"
                       allow="autoplay; fullscreen; picture-in-picture"
                       title={reel.title}
                     />
-                  ) : (
+                  ) : isReelsInView ? (
                     <video
                       src={reel.fallback_video || parsed?.src}
                       poster={reel.poster}
@@ -243,7 +269,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                       playsInline
                       className="w-full h-full object-cover"
                     />
-                  )}
+                  ) : null}
                 </div>
 
                 {/* Glassmorphic Gradient Overlay */}

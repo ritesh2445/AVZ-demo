@@ -337,7 +337,7 @@ export default function SocialCards({ cards, onCardClick }: SocialCardsProps) {
               <div className="relative w-full h-full overflow-hidden rounded-2xl border border-white/20 shadow-2xl group bg-[#09090b]">
                 <img
                   src={card.imgUrl}
-                  loading="lazy"
+                  decoding="async"
                   alt={card.alt || `Card ${index}`}
                   className="absolute inset-0 w-full h-full object-cover z-10 transition-transform duration-500 group-hover:scale-105"
                 />
