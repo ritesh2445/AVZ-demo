@@ -1,15 +1,30 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { playSound } from '../utils/audio';
 
-export default function DhrisniGarden({ className = '' }) {
+function DhrisniGarden({ className = '' }) {
   const containerRef = useRef(null);
+  const [inView, setInView] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [interactiveStars, setInteractiveStars] = useState([]);
-  const [isHovered, setIsHovered] = useState(false);
 
-  // Trigger complete replay sequence
+  // Trigger entrance when scrolled into view
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Click to replay sequence
   const handleReplay = useCallback(() => {
     try {
       playSound?.('sparkle');
@@ -26,7 +41,6 @@ export default function DhrisniGarden({ className = '' }) {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Throttle particle generation
     if (Math.random() > 0.45) return;
 
     const newStar = {
@@ -35,20 +49,18 @@ export default function DhrisniGarden({ className = '' }) {
       y,
       size: Math.random() * 5 + 3,
       color: Math.random() > 0.5 ? '#f4d5ff' : '#bd78dc',
-      rotation: Math.random() * 360,
-      vx: (Math.random() - 0.5) * 1.5,
-      vy: (Math.random() - 0.5) * 1.5 - 1
+      rotation: Math.random() * 360
     };
 
-    setInteractiveStars((prev) => [...prev.slice(-18), newStar]);
+    setInteractiveStars((prev) => [...prev.slice(-12), newStar]);
   }, []);
 
-  // Clean up interactive cursor sparkles
+  // Fade out interactive sparkles
   useEffect(() => {
     if (interactiveStars.length === 0) return;
     const timer = setTimeout(() => {
       setInteractiveStars((prev) => prev.slice(1));
-    }, 700);
+    }, 600);
     return () => clearTimeout(timer);
   }, [interactiveStars]);
 
@@ -58,8 +70,6 @@ export default function DhrisniGarden({ className = '' }) {
       key={animationKey}
       className={`relative w-full max-w-[940px] mx-auto select-none overflow-visible group ${className}`}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={handleReplay}
       style={{ cursor: 'pointer' }}
     >
@@ -88,7 +98,6 @@ export default function DhrisniGarden({ className = '' }) {
           opacity: 0;
           transform: translateY(14px) scale(0.92);
           text-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 0 45px rgba(189, 76, 232, 0.35);
-          animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
           background: linear-gradient(
             110deg,
             #ffffff 0%,
@@ -101,6 +110,9 @@ export default function DhrisniGarden({ className = '' }) {
           background-size: 250% 100%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+        }
+
+        .in-view .word {
           animation: wordReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards,
             wordShimmer 6s ease-in-out 1.8s infinite;
         }
@@ -144,6 +156,9 @@ export default function DhrisniGarden({ className = '' }) {
           stroke-dasharray: 900;
           stroke-dashoffset: 900;
           filter: drop-shadow(0 0 5px rgba(183, 122, 255, 0.55));
+        }
+
+        .in-view .stem {
           animation: drawStem 2.4s cubic-bezier(0.3, 0.1, 0.2, 1) var(--t, 1.1s) forwards;
         }
 
@@ -163,8 +178,11 @@ export default function DhrisniGarden({ className = '' }) {
           opacity: 0;
           transform-box: fill-box;
           transform-origin: 50% 90%;
-          animation: leafOpen 0.75s cubic-bezier(0.2, 1.45, 0.35, 1) var(--t) forwards;
           filter: drop-shadow(0 0 8px rgba(143, 91, 255, 0.65));
+        }
+
+        .in-view .leaf {
+          animation: leafOpen 0.75s cubic-bezier(0.2, 1.45, 0.35, 1) var(--t) forwards;
         }
 
         @keyframes leafOpen {
@@ -189,6 +207,9 @@ export default function DhrisniGarden({ className = '' }) {
           transform-box: fill-box;
           transform-origin: center;
           filter: drop-shadow(0 0 5px #d99aff) drop-shadow(0 0 12px #a94ee8);
+        }
+
+        .in-view .jump-star {
           animation: jumpIn 0.95s cubic-bezier(0.2, 1.65, 0.35, 1) var(--t) both,
             jumpGlow 2.8s ease-in-out calc(var(--t) + 0.95s) infinite;
         }
@@ -227,9 +248,12 @@ export default function DhrisniGarden({ className = '' }) {
           opacity: 0;
           transform-box: fill-box;
           transform-origin: center;
+          filter: drop-shadow(0 0 11px rgba(199, 122, 255, 0.9)) drop-shadow(0 0 28px rgba(155, 75, 220, 0.7));
+        }
+
+        .in-view .bloom-star {
           animation: starBloom 0.9s cubic-bezier(0.18, 1.2, 0.3, 1) var(--t) forwards,
             starGlow 3.2s ease-in-out calc(var(--t) + 0.9s) infinite;
-          filter: drop-shadow(0 0 11px rgba(199, 122, 255, 0.9)) drop-shadow(0 0 28px rgba(155, 75, 220, 0.7));
         }
 
         @keyframes starBloom {
@@ -258,43 +282,75 @@ export default function DhrisniGarden({ className = '' }) {
           }
         }
 
-        /* Orbiting flyers */
+        /* GPU-Composited Orbiting Flying Stars (NEVER stops during scroll) */
         .flyers {
           pointer-events: none;
           overflow: visible;
         }
 
-        .flyer {
-          opacity: 0.95;
+        .flyer-node {
           transform-box: fill-box;
           transform-origin: center;
-          animation: flightPulse 2.4s ease-in-out infinite;
+          filter: drop-shadow(0 0 7px #d9a1ff) drop-shadow(0 0 16px #a65be0);
+          will-change: transform, offset-distance;
         }
 
-        .flyer.small {
+        .flyer-1 {
+          offset-path: path('M105 205 C170 110 240 65 330 105 S470 255 570 195 S730 70 810 155 S730 285 615 260 S365 280 250 220 S140 125 105 205');
+          offset-rotate: auto;
+          animation: orbitMotion 6.8s linear infinite, flightPulse 2.4s ease-in-out infinite;
+          animation-delay: 1.2s, 0s;
+        }
+
+        .flyer-2 {
+          offset-path: path('M780 95 C690 45 585 55 520 115 S405 245 305 225 S160 155 115 185 S250 295 385 270 S670 190 780 95');
+          offset-rotate: auto;
+          animation: orbitMotion 8.2s linear infinite, flightPulse 2.4s ease-in-out infinite;
+          animation-delay: 1.8s, 0s;
           opacity: 0.85;
         }
-
-        .flyer.tiny {
-          opacity: 0.75;
-        }
-
-        .flyer.small use {
+        .flyer-2 use {
           transform: scale(0.72);
         }
 
-        .flyer.tiny use {
+        .flyer-3 {
+          offset-path: path('M190 265 C250 205 270 115 360 90 S530 105 590 155 S700 255 770 220');
+          offset-rotate: auto;
+          animation: orbitMotion 5.7s linear infinite, flightPulse 2.4s ease-in-out infinite;
+          animation-delay: 2.2s, 0s;
+          opacity: 0.75;
+        }
+        .flyer-3 use {
           transform: scale(0.48);
+        }
+
+        .flyer-4 {
+          offset-path: path('M730 275 C650 300 560 280 500 225 S390 95 300 105 S175 180 150 245');
+          offset-rotate: auto;
+          animation: orbitMotion 7.4s linear infinite, flightPulse 2.4s ease-in-out infinite;
+          animation-delay: 2.6s, 0s;
+          opacity: 0.85;
+        }
+        .flyer-4 use {
+          transform: scale(0.72);
+        }
+
+        @keyframes orbitMotion {
+          0% {
+            offset-distance: 0%;
+          }
+          100% {
+            offset-distance: 100%;
+          }
         }
 
         @keyframes flightPulse {
           0%, 100% {
-            opacity: 0.6;
-            filter: drop-shadow(0 0 6px #d9a1ff) drop-shadow(0 0 14px #a65be0);
+            opacity: 0.65;
           }
           50% {
             opacity: 1;
-            filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 26px #c476ff);
+            filter: drop-shadow(0 0 11px #ffffff) drop-shadow(0 0 24px #c476ff);
           }
         }
 
@@ -318,7 +374,7 @@ export default function DhrisniGarden({ className = '' }) {
       `}</style>
 
       {/* Main Exhibition Stage */}
-      <div className="dhrisni-stage relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center">
+      <div className={`dhrisni-stage ${inView ? 'in-view' : ''} relative w-full h-[clamp(210px,28vw,320px)] flex items-center justify-center`}>
         {/* Core Hero Wordmark */}
         <h1 className="word" aria-label="Dhrisni">
           DHRISNI
@@ -421,21 +477,6 @@ export default function DhrisniGarden({ className = '' }) {
               />
               <circle cx="-4" cy="-5" r="2" fill="#fff0ff" opacity="0.9" />
             </g>
-
-            {/* Flight Glow Filter */}
-            <filter id="flightGlow" x="-250%" y="-250%" width="600%" height="600%">
-              <feGaussianBlur stdDeviation="5" result="blur" />
-              <feColorMatrix
-                in="blur"
-                type="matrix"
-                values="0.8 0 0 0 .25  0 .45 0 0 .05  0 0 1 0 .5  0 0 0 1 0"
-                result="violet"
-              />
-              <feMerge>
-                <feMergeNode in="violet" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
           </defs>
 
           {/* Ambient Micro-Constellation Stars (Background Depth) */}
@@ -522,50 +563,46 @@ export default function DhrisniGarden({ className = '' }) {
             <use href="#purpleStar" className="bloom-star" style={{ '--t': '4.0s' }} />
           </g>
 
-          {/* Orbiting Flying Lavender Stars with Dynamic animateMotion */}
+          {/* Orbiting Flying Lavender Stars (Compositor-driven: both CSS Motion Path and SMIL fallback) */}
           <g className="flyers" aria-hidden="true">
-            {/* Flyer 1: Grand Outer Loop */}
-            <g className="flyer" filter="url(#flightGlow)">
+            <g className="flyer-node flyer-1">
               <use href="#flightStar" />
               <animateMotion
                 dur="6.8s"
-                begin="2.2s"
+                begin="1.2s"
                 repeatCount="indefinite"
                 rotate="auto"
                 path="M105 205 C170 110 240 65 330 105 S470 255 570 195 S730 70 810 155 S730 285 615 260 S365 280 250 220 S140 125 105 205"
               />
             </g>
 
-            {/* Flyer 2: High Figure-8 Pass */}
-            <g className="flyer small" filter="url(#flightGlow)">
+            <g className="flyer-node flyer-2">
               <use href="#flightStar" />
               <animateMotion
                 dur="8.2s"
-                begin="3.0s"
+                begin="1.8s"
                 repeatCount="indefinite"
                 rotate="auto"
                 path="M780 95 C690 45 585 55 520 115 S405 245 305 225 S160 155 115 185 S250 295 385 270 S670 190 780 95"
               />
             </g>
 
-            {/* Flyer 3: Quick Lower Orbit */}
-            <g className="flyer tiny" filter="url(#flightGlow)">
+            <g className="flyer-node flyer-3">
               <use href="#flightStar" />
               <animateMotion
                 dur="5.7s"
-                begin="4.1s"
+                begin="2.2s"
                 repeatCount="indefinite"
                 rotate="auto"
                 path="M190 265 C250 205 270 115 360 90 S530 105 590 155 S700 255 770 220"
               />
             </g>
 
-            {/* Flyer 4: Counter-Orbital Wave */}
-            <g className="flyer small" filter="url(#flightGlow)">
+            <g className="flyer-node flyer-4">
               <use href="#flightStar" />
               <animateMotion
                 dur="7.4s"
-                begin="5.0s"
+                begin="2.6s"
                 repeatCount="indefinite"
                 rotate="auto"
                 path="M730 275 C650 300 560 280 500 225 S390 95 300 105 S175 180 150 245"
@@ -588,7 +625,7 @@ export default function DhrisniGarden({ className = '' }) {
               boxShadow: `0 0 10px ${s.color}, 0 0 20px #c14cff`,
               borderRadius: '50%',
               transform: `translate(-50%, -50%) rotate(${s.rotation}deg) scale(0)`,
-              animation: 'starParticleBurst 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+              animation: 'starParticleBurst 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
             }}
           />
         ))}
@@ -609,3 +646,5 @@ export default function DhrisniGarden({ className = '' }) {
     </div>
   );
 }
+
+export default memo(DhrisniGarden);
