@@ -130,11 +130,20 @@ export default function LoadingExperience({ onComplete }) {
     scene.add(particles);
 
     // GUARANTEED NON-SKIPPING DISCRETE STEPPER: 00 to 100
-    // Exactly 100 increments. 42ms per step = 4,200ms total + 350ms triumph hold = ~4.55 seconds
+    // Synchronized with background Vimeo hero video buffering:
+    // Paces gracefully (~1.6s) while Vimeo loads in the background;
+    // as soon as Vimeo buffers & plays, accelerates swiftly straight to 100%!
     let animId;
     let currentCount = 0;
     let lastStepTime = performance.now();
-    const stepDuration = 3; // ms per count: ultra-fast ~300ms counter
+    const startTime = performance.now();
+    let videoIsReady = typeof window !== 'undefined' ? Boolean(window.__avzHeroVideoReady) : false;
+
+    if (typeof window !== 'undefined') {
+      window.__onHeroVideoReady = () => {
+        videoIsReady = true;
+      };
+    }
 
     const triggerFinish = () => {
       if (hasFinishedRef.current) return;
@@ -157,7 +166,18 @@ export default function LoadingExperience({ onComplete }) {
 
       // Strictly sequential 00 to 100 counter (NEVER skips any integer)
       if (currentCount < 100) {
-        if (time - lastStepTime >= stepDuration) {
+        // Dynamic pacing synchronized with background video readiness:
+        // - While video buffers: smooth ~18ms per tick (~1.6s total)
+        // - Once video signals it is playing (or after 2.2s max safety cap): accelerates at 3ms per tick
+        const elapsed = time - startTime;
+        let dynamicStepDuration = 18;
+        if (videoIsReady || elapsed > 2200) {
+          dynamicStepDuration = 3;
+        } else if (currentCount > 85) {
+          dynamicStepDuration = 26;
+        }
+
+        if (time - lastStepTime >= dynamicStepDuration) {
           currentCount++;
           lastStepTime = time;
 
@@ -250,6 +270,9 @@ export default function LoadingExperience({ onComplete }) {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animId);
+      if (typeof window !== 'undefined' && window.__onHeroVideoReady) {
+        window.__onHeroVideoReady = null;
+      }
 
       // Clean GPU memory
       ring1Geom.dispose();

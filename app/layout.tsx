@@ -212,6 +212,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Vimeo Video Stream Preconnect & DNS-Prefetch for Instant Parallel Loading */}
+        <link rel="preconnect" href="https://player.vimeo.com" />
+        <link rel="preconnect" href="https://f.vimeocdn.com" />
+        <link rel="preconnect" href="https://i.vimeocdn.com" />
+        <link rel="dns-prefetch" href="https://player.vimeo.com" />
+        <link rel="dns-prefetch" href="https://f.vimeocdn.com" />
+
         {/* Google Fonts: League Spartan, Montserrat, Cinzel, Reenie Beanie, Space Grotesk, Syne */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
