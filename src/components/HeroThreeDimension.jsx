@@ -14,7 +14,7 @@ import { playSound } from '../utils/audio';
 function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, onOpenTunnel, cmsHero }) {
   const sectionRef = useRef(null);
   const iframeRef = useRef(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(true);
 
   const [isMobileDevice, setIsMobileDevice] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -51,7 +51,6 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
       if (iframeRef.current && iframeRef.current.contentWindow) {
         const payload = value !== undefined ? { method, value } : { method };
         iframeRef.current.contentWindow.postMessage(JSON.stringify(payload), '*');
-        // Also post raw object for modern Vimeo Player API listeners
         iframeRef.current.contentWindow.postMessage(payload, '*');
       }
     } catch (e) {
@@ -59,22 +58,27 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     }
   };
 
-  // Listen to Vimeo Player ready and playback events to smoothly reveal video once frames are rendering
+  // Listen to Vimeo Player events to ensure playback begins immediately
   useEffect(() => {
     const handleVimeoMessage = (event) => {
       if (!event.origin.includes('vimeo.com')) return;
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-        if (data.event === 'play' || data.event === 'timeupdate') {
+        if (data.event === 'ready') {
+          postVimeoMessage('play');
+          postVimeoMessage('setVolume', isMuted ? 0 : 1);
+          postVimeoMessage('setMuted', isMuted);
+          setVideoLoaded(true);
+        } else if (data.event === 'play' || data.event === 'timeupdate') {
           setVideoLoaded(true);
         }
       } catch (e) {
-        // ignore parse error for non-json postMessages
+        // ignore parse error
       }
     };
     window.addEventListener('message', handleVimeoMessage);
     return () => window.removeEventListener('message', handleVimeoMessage);
-  }, []);
+  }, [isMuted]);
 
   // Sync play state with Vimeo Player
   useEffect(() => {
@@ -124,7 +128,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Permanent first-frame poster canvas: prevents any black voids during fast scroll or video buffering */}
+        {/* Permanent first-frame poster canvas: visible instantly on load & during rapid scroll */}
         <img
           src={posterSrc}
           alt="AVZ Hero Master Visual"
@@ -134,15 +138,13 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           style={{ objectFit: 'cover' }}
         />
 
-        {/* Vimeo Background Video Stream layered on top */}
+        {/* Vimeo Background Video Stream layered directly on top */}
         <iframe
           ref={iframeRef}
           key={`hero-vimeo-${vimeoId}`}
           loading="eager"
           src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&api=1&dnt=1`}
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 z-[1] ${
-            videoLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[1] opacity-100"
           style={{
             border: 0,
             width: isMobileDevice ? '100vw' : '177.78vh',
@@ -152,6 +154,10 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           }}
           allow="autoplay; fullscreen; picture-in-picture"
           title="AVZ Hero Runway Stream"
+          onLoad={() => {
+            setVideoLoaded(true);
+            postVimeoMessage('play');
+          }}
         />
       </div>
 
