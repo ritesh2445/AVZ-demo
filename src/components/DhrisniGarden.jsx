@@ -444,6 +444,7 @@ function DhrisniGarden({ className = '' }) {
 
         /* Hero wordmark typography */
         .word {
+          font-style: normal !important;
           position: relative;
           z-index: 2;
           display: inline-block;
@@ -738,9 +739,10 @@ function DhrisniGarden({ className = '' }) {
       >
         {/* Core Hero Wordmark */}
         <h1
-          className="word"
+          className="word not-italic"
           aria-label="Dhrisni"
           style={{
+            fontStyle: 'normal',
             backgroundImage: currentTheme.wordGradient,
             textShadow: currentTheme.wordShadow,
           }}

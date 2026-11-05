@@ -74,7 +74,7 @@ export default function DhristroyerAnimatedHeading() {
         {/* Main Modern Typography - Strictly Single Line with Fluid Responsive Clamp */}
         <h2 className="font-syne font-extrabold uppercase leading-none whitespace-nowrap inline-flex items-baseline gap-x-2 sm:gap-x-3.5 my-1">
           {/* Primary Name: Crisp Titanium White */}
-          <span className="text-white text-[clamp(1.5rem,4.2vw,5.5rem)] tracking-tight drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]">
+          <span className="text-white text-[clamp(1.5rem,4.2vw,5.5rem)] tracking-tight not-italic drop-shadow-[0_2px_12px_rgba(255,255,255,0.15)]" style={{ fontStyle: "normal" }}>
             DHRISNI
           </span>
 
