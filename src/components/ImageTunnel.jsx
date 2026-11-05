@@ -1,9 +1,11 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Play, Pause, Zap, Compass } from 'lucide-react';
 import { playSound } from '../utils/audio';
 import { ASSET_MANIFEST } from '../data/brandData';
 
 export default function ImageTunnel({ isOpen, onClose }) {
+  useModalScrollLock(isOpen);
   const [isPaused, setIsPaused] = useState(false);
   const [isAccelerating, setIsAccelerating] = useState(false);
 

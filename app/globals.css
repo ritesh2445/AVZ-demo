@@ -77,6 +77,15 @@
 }
 
 /* Instant, Zero-Lag High-Speed Fluid Scrolling */
+/* Universal Modal Scroll Lock & Background Stabilization */
+html.modal-scroll-locked,
+body.modal-scroll-locked {
+  overflow: hidden !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+  -webkit-overflow-scrolling: auto !important;
+}
+
 html {
   scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;

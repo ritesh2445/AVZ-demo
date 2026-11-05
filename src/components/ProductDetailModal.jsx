@@ -95,7 +95,7 @@ export default function ProductDetailModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99995] bg-black/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-6 overflow-y-auto animate-fade-in"
+      className="fixed inset-0 z-[99995] bg-black/92 backdrop-blur-xl flex items-center justify-center p-2 sm:p-6 overflow-y-auto overscroll-contain animate-fade-in"
     >
       <div
         onClick={(e) => e.stopPropagation()}

@@ -1,9 +1,11 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import React, { useEffect } from 'react';
 import { X, ExternalLink } from 'lucide-react';
 import { ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
 export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
+  useModalScrollLock(isOpen);
   const vimeoId = isMobile ? '1239586843' : '1243094637';
   const vimeoHash = isMobile ? '' : 'f23215a874';
   const activeVimeoUrl = isMobile
@@ -26,7 +28,7 @@ export default function CinemaReelModal({ isOpen, onClose, isMobile = false }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-3xl animate-in fade-in duration-300 p-2 sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-3xl overscroll-contain animate-in fade-in duration-300 p-2 sm:p-6">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-radial-gradient from-[#301934]/30 via-black to-black pointer-events-none" />
 

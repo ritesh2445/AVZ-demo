@@ -1,3 +1,4 @@
+import { useModalScrollLock } from '../../utils/modalScrollLock';
 'use client';
 
 import React, { useEffect } from 'react';
@@ -24,7 +25,7 @@ export default function MuseumArtworkModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99999] bg-black/92 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 md:p-10 animate-fade-in select-none"
+      className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-2xl overscroll-contain flex items-center justify-center p-3 sm:p-6 md:p-10 animate-fade-in select-none"
     >
       {/* Background Museum Salon Ambience */}
       <div className="absolute inset-0 bg-radial-gradient from-[#2e0912]/40 via-black to-black pointer-events-none" />

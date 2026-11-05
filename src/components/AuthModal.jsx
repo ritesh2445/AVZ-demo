@@ -1,3 +1,4 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import React, { useState, useEffect } from 'react';
 import {
   X,
@@ -330,7 +331,7 @@ export default function AuthModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99998] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in select-none overflow-y-auto"
+      className="fixed inset-0 z-[99998] bg-black/92 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-fade-in select-none overflow-y-auto overscroll-contain"
     >
       <div
         onClick={(e) => e.stopPropagation()}

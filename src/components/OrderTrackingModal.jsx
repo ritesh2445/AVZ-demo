@@ -35,7 +35,7 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99996] bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-y-auto"
+      className="fixed inset-0 z-[99996] bg-black/92 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-fade-in overflow-y-auto overscroll-contain"
     >
       <div
         onClick={(e) => e.stopPropagation()}

@@ -1,3 +1,4 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -115,6 +116,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
   const [activeAudioReelId, setActiveAudioReelId] = useState(null);
   const [loadedReels, setLoadedReels] = useState({});
   const [activeReelModal, setActiveReelModal] = useState(null);
+  useModalScrollLock(Boolean(activeReelModal));
   const sectionRef = useRef(null);
 
   // Sync CMS Data if available from Admin Panel
@@ -369,7 +371,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
       {/* Frameless Floating Reel Modal */}
       {activeReelModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-2xl p-4 sm:p-6 animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-2xl p-4 sm:p-6 animate-fade-in overscroll-contain"
           onClick={() => setActiveReelModal(null)}
         >
           <div

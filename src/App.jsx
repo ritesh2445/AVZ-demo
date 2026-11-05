@@ -22,6 +22,7 @@ import OrderTrackingModal from './components/OrderTrackingModal';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import LegalPoliciesModal from './components/LegalPoliciesModal';
+import { useModalScrollLock } from './utils/modalScrollLock';
 import DPDPConsentBanner from './components/DPDPConsentBanner';
 import GroupOrderModal from './components/GroupOrderModal';
 import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
@@ -350,6 +351,22 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   const handleInquirySubmitted = useCallback((formData) => {
     setCustomInquiryConfirm(formData);
   }, []);
+
+  // Centralized Modal Lock: guarantees background is 100% stable & scroll-locked when ANY popup is open
+  const isAnyModalOpen = Boolean(
+    cartOpen ||
+    searchOpen ||
+    tunnelOpen ||
+    squadModalOpen ||
+    wishlistOpen ||
+    trackingModalOpen ||
+    legalModalOpen ||
+    authModalOpen ||
+    groupOrderModalOpen ||
+    activeProduct ||
+    customInquiryConfirm
+  );
+  useModalScrollLock(isAnyModalOpen);
 
   // Cart total count
   const cartTotalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);

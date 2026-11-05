@@ -290,7 +290,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
       lastTime = currentTime;
 
       const el = wallScrollRef.current;
-      if (el && !isUserInteractingRef.current && !isDraggingRef.current) {
+      const isModalLocked = typeof document !== 'undefined' && document.body.classList.contains('modal-scroll-locked');
+      if (el && !isUserInteractingRef.current && !isDraggingRef.current && !isModalLocked) {
         const maxScroll = el.scrollWidth - el.clientWidth;
         if (maxScroll > 15) {
           // Keep float position synced if DOM position drifted or user manually navigated

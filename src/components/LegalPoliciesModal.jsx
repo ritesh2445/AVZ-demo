@@ -13,7 +13,7 @@ export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'priv
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in overscroll-contain select-none"
+      className="fixed inset-0 z-[99999] bg-black/92 backdrop-blur-xl flex items-center justify-center overscroll-contain p-3 sm:p-6 animate-fade-in overscroll-contain select-none"
     >
       <div
         onClick={(e) => e.stopPropagation()}

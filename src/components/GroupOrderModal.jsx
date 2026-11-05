@@ -1,3 +1,4 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -29,6 +30,8 @@ export default function GroupOrderModal({
   onGroupCartCreated,
   currency = 'INR'
 }) {
+  useModalScrollLock(isOpen);
+
   const [copied, setCopied] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [activeGroup, setActiveGroup] = useState(groupCart);
@@ -196,7 +199,7 @@ export default function GroupOrderModal({
   return (
     <div
       onClick={onClose}
-      className="avz-storefront-root italic fixed inset-0 z-[99998] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fade-in select-none"
+      className="avz-storefront-root italic fixed inset-0 z-[99998] bg-black/92 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-fade-in select-none overscroll-contain"
     >
       <div
         onClick={(e) => e.stopPropagation()}

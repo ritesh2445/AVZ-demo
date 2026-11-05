@@ -1,3 +1,4 @@
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import React, { useState, useEffect } from 'react';
 import {
   X,
@@ -66,21 +67,12 @@ export default function CartDrawer({
       }));
     }
   }, [currentUser, isOpen]);
-  // Body scroll lock prevents background page scrolling when cart drawer is open
+  // Universal background stability & scroll lock
+  useModalScrollLock(isOpen);
+
   useEffect(() => {
     if (!isOpen) return;
-    const prevOverflow = document.body.style.overflow;
-    const prevTouchAction = document.body.style.touchAction;
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-
-    // Preload Razorpay script immediately when cart opens so checkout is instant and smooth
     loadRazorpayScript();
-
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      document.body.style.touchAction = prevTouchAction;
-    };
   }, [isOpen]);
 
   useEffect(() => {
