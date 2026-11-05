@@ -87,64 +87,10 @@ export async function POST(request: Request) {
       console.warn('Database promotion lookup warning:', dbErr);
     }
 
-    // 2. Built-in legacy fallbacks
-    if (rawCode === 'AVZ10' || rawCode === 'BADDIE10') {
-      const percent = 10;
-      return NextResponse.json({
-        valid: true,
-        code: rawCode,
-        discount_type: 'percentage',
-        discount_value: percent,
-        percent,
-        offInr: Math.round((subtotal * percent) / 100)
-      });
-    }
-
-    if (rawCode === 'ARCHIVE15' || rawCode === 'SLAY') {
-      if (subtotal < 3000) {
-        return NextResponse.json({
-          valid: false,
-          error: `${rawCode} code requires a minimum order value of â‚¹3,000.`
-        }, { status: 400 });
-      }
-      const percent = 15;
-      return NextResponse.json({
-        valid: true,
-        code: rawCode,
-        discount_type: 'percentage',
-        discount_value: percent,
-        percent,
-        offInr: Math.round((subtotal * percent) / 100)
-      });
-    }
-
-    if (rawCode === 'SQUAD') {
-      const percent = 15;
-      return NextResponse.json({
-        valid: true,
-        code: rawCode,
-        discount_type: 'percentage',
-        discount_value: percent,
-        percent,
-        offInr: Math.round((subtotal * percent) / 100)
-      });
-    }
-
-    if (rawCode === 'FREESHIP') {
-      return NextResponse.json({
-        valid: true,
-        code: rawCode,
-        discount_type: 'fixed',
-        discount_value: 0,
-        percent: 0,
-        offInr: 0,
-        freeShipping: true
-      });
-    }
-
+    // 2. No hardcoded or mock promo codes - promotions are strictly created & controlled via Admin Panel
     return NextResponse.json({
       valid: false,
-      error: 'Invalid promotional code. Please check and try again.'
+      error: 'Invalid promotional code. No active promotions match this code.'
     }, { status: 404 });
   } catch (err: any) {
     return NextResponse.json({ valid: false, error: err.message || 'Error verifying promo code' }, { status: 500 });

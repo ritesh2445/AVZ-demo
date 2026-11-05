@@ -142,14 +142,8 @@ export default function CartDrawer({
         setPromoError(data.error || 'Invalid promotional code. Please check and try again.');
       }
     } catch (err) {
-      // Fallback
-      if (code === 'AVZ10' || code === 'BADDIE10') {
-        setAppliedPromo({ code, percent: 10 });
-        setPromoError('');
-      } else {
-        playSound('glitch');
-        setPromoError('Unable to verify promotion code. Please check your internet connection.');
-      }
+      playSound('glitch');
+      setPromoError('Unable to verify promotion code. Please check your connection.');
     }
   };
 
@@ -341,7 +335,7 @@ export default function CartDrawer({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[99997] bg-black/85 backdrop-blur-sm sm:backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-fade-in overscroll-contain select-none"
+      className="avz-storefront-root italic fixed inset-0 z-[99997] bg-black/85 backdrop-blur-sm sm:backdrop-blur-md flex items-center justify-center p-2 sm:p-6 animate-fade-in overscroll-contain select-none"
     >
       <div
         onClick={(e) => e.stopPropagation()}

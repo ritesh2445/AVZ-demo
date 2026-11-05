@@ -29,6 +29,19 @@
 }
 
 /* AVZ VAGANZA — THE OTHER DIMENSION DESIGN SYSTEM */
+/* Storefront Universal Italic Typography (Excludes Admin Panel) */
+.avz-storefront-root,
+.avz-storefront-root *,
+.avz-storefront-root *::before,
+.avz-storefront-root *::after,
+.avz-storefront-root input,
+.avz-storefront-root button,
+.avz-storefront-root select,
+.avz-storefront-root textarea,
+.avz-storefront-root ::placeholder {
+  font-style: italic !important;
+}
+
 :root {
   --pitch-black: #000000;
   --dark-purple: #1a0520;

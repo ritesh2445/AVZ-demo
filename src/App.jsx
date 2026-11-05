@@ -293,7 +293,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   const cartTotalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen w-full bg-pitch-black text-silver relative overflow-x-clip selection:bg-pink selection:text-black">
+    <div className="avz-storefront-root italic min-h-screen w-full bg-pitch-black text-silver relative overflow-x-clip selection:bg-pink selection:text-black">
       {/* Cinematic Pitch-black Loading Experience */}
       {isLoading && (
         <LoadingExperience onComplete={handleLoadingComplete} />

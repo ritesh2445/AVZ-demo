@@ -82,3 +82,4 @@ export default function DPDPConsentBanner({ onOpenPrivacyModal }) {
     </div>
   );
 }
+

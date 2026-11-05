@@ -265,6 +265,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
   // Ref to track user interaction and auto-drift state
   const isUserInteractingRef = useRef(false);
+  const isAutoDriftingRef = useRef(false);
   const userInteractionTimeoutRef = useRef(null);
   const driftDirectionRef = useRef(1); // 1 = slide right, -1 = slide left
   const autoDriftRafRef = useRef(null);
@@ -285,15 +286,16 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     let lastTime = performance.now();
 
     const driftLoop = (currentTime) => {
-      const dt = currentTime - lastTime;
+      const dt = Math.min(currentTime - lastTime, 100);
       lastTime = currentTime;
 
       const el = wallScrollRef.current;
       if (el && !isUserInteractingRef.current && !isDraggingRef.current) {
         const maxScroll = el.scrollWidth - el.clientWidth;
-        if (maxScroll > 50) {
-          // Slow, elegant gallery glide (~32 pixels per second)
-          const step = (dt / 1000) * 32 * driftDirectionRef.current;
+        if (maxScroll > 10) {
+          // Slow, elegant gallery glide (~26 pixels per second)
+          const step = (dt / 1000) * 26 * driftDirectionRef.current;
+          isAutoDriftingRef.current = true;
           el.scrollLeft += step;
 
           // Gently reverse when reaching boundaries so it glides back and forth
@@ -316,26 +318,13 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     };
   }, []);
 
-  // 3. Horizontal Wheel Navigation (Translates vertical mouse wheel to horizontal glide + fast acoustic melody queue)
+  // 3. Trackpad & Wheel: never hijack vertical page scroll
   const handleWheel = (e) => {
-    const el = wallScrollRef.current;
-    if (!el) return;
-    notifyUserInteraction();
-
-    // Only intercept if horizontal movement is dominant or shift key is pressed or cursor is directly over gallery
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && !e.shiftKey) {
-      // Allow slight wheel translation smoothly without full scroll-jacking
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      const atStart = el.scrollLeft <= 0 && e.deltaY < 0;
-      const atEnd = el.scrollLeft >= maxScroll && e.deltaY > 0;
-
-      // If at boundary, let normal vertical page scroll take over
-      if (atStart || atEnd) return;
-
-      e.preventDefault();
-      el.scrollLeft += e.deltaY * 1.25;
-    } else if (Math.abs(e.deltaX) > 0) {
+    // Only detect intentional horizontal trackpad gestures
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      notifyUserInteraction();
     }
+    // Vertical scrolling (deltaY) is NEVER hijacked so users can scroll past unimpeded
   };
 
   // 4. Click-and-Drag / Pointer Movement Physics for Natural Inertia
@@ -377,6 +366,10 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
   // 5. Continuous Scroll Listener (For trackpads, touch gestures, and inertial gliding)
   const handleTrackScroll = useCallback(() => {
+    if (isAutoDriftingRef.current) {
+      isAutoDriftingRef.current = false;
+      return; // Do not pause auto-drift for programmatic movements!
+    }
     notifyUserInteraction();
     const el = wallScrollRef.current;
     if (!el) return;
@@ -485,7 +478,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
         onScroll={handleTrackScroll}
-        className="w-full overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none relative z-10 py-8 px-4 sm:px-12 scroll-smooth touch-pan-x"
+        className="w-full overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none relative z-10 py-8 px-4 sm:px-12 touch-pan-x"
         style={{
           minHeight: '620px'
         }}

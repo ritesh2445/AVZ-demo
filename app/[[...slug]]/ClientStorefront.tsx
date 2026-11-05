@@ -153,7 +153,9 @@ export default function ClientStorefront() {
       )}
 
       {/* Main Storefront */}
-      <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} />
+      <div className="avz-storefront-root italic">
+        <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} />
+      </div>
     </>
   );
 }

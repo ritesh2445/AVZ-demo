@@ -270,3 +270,4 @@ export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'priv
     </div>
   );
 }
+

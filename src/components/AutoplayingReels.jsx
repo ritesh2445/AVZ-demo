@@ -115,22 +115,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
   const [activeAudioReelId, setActiveAudioReelId] = useState(null);
   const [loadedReels, setLoadedReels] = useState({});
   const [activeReelModal, setActiveReelModal] = useState(null);
-  const [isReelsInView, setIsReelsInView] = useState(false);
   const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Mount video decoders only when within 350px of viewport
-        setIsReelsInView(entry.isIntersecting);
-      },
-      { rootMargin: '350px 0px 350px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   // Sync CMS Data if available from Admin Panel
   useEffect(() => {
@@ -297,13 +282,13 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                       }`}
                     />
                   )}
-                  {isReelsInView && parsed?.type === 'vimeo' ? (
+                  {parsed?.type === 'vimeo' ? (
                     <iframe
                       ref={(el) => {
                         iframeRefs.current[reel.id] = el;
                       }}
                       src={parsed.src}
-                      loading="lazy"
+                      loading="eager"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none border-0 scale-[1.05]"
                       allow="autoplay; fullscreen; picture-in-picture"
                       title={reel.title}
@@ -313,7 +298,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                         }, 300);
                       }}
                     />
-                  ) : isReelsInView ? (
+                  ) : (
                     <video
                       ref={(el) => {
                         videoRefs.current[reel.id] = el;
@@ -329,7 +314,7 @@ function AutoplayingReels({ cmsReels, onSelectProduct, onRequestCustom, onScroll
                         setLoadedReels((prev) => ({ ...prev, [reel.id]: true }));
                       }}
                     />
-                  ) : null}
+                  )}
                 </div>
 
                 {/* Glassmorphic Gradient Overlay */}
