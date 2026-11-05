@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb, initializeDatabase } from '@/src/lib/db';
+import { getDb, initializeDatabase, ensureGroupCartsTable } from '@/src/lib/db';
 
 export async function POST(request: Request) {
   try {
@@ -12,6 +12,7 @@ export async function POST(request: Request) {
 
     await initializeDatabase();
     const db = getDb();
+    await ensureGroupCartsTable(db);
 
     // Generate unique short share code, e.g. grp-948a3c
     const id = `grp_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
@@ -53,3 +54,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: err.message || 'Failed to create group cart' }, { status: 500 });
   }
 }
+

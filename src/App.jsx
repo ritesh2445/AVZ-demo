@@ -233,8 +233,47 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   }, []);
 
   const handleAddToCart = useCallback((product) => {
+    // If visitor is viewing a shared squad link without being logged in
+    if (activeGroupCart && !currentUser) {
+      playSound('pip');
+      setAuthModalOpen(true);
+      return;
+    }
+
+    const targetSize = product.selectedSize || 'Standard';
+
+    // If logged in under an active collaborative squad cart, sync piece to backend group cart
+    if (activeGroupCart && currentUser) {
+      const itemPayload = {
+        id: product.id,
+        name: product.title || product.name,
+        price: Number(product.price || 0),
+        images: product.images || (product.image ? [product.image] : []),
+        selectedSize: targetSize,
+        quantity: 1
+      };
+
+      fetch(`/api/storefront/group-cart/${activeGroupCart.id}/add-item`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: currentUser.id || `user_${Date.now()}`,
+          userName: currentUser.name || 'Squad Member',
+          userEmail: currentUser.email || 'member@aveezahvaganza.com',
+          item: itemPayload
+        })
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.groupCart) {
+            setActiveGroupCart(data.groupCart);
+            setGroupOrderModalOpen(true);
+          }
+        })
+        .catch(() => {});
+    }
+
     setCartItems((prev) => {
-      const targetSize = product.selectedSize || 'Standard';
       const existingIndex = prev.findIndex(
         (i) => String(i.id) === String(product.id) && (i.selectedSize || 'Standard') === targetSize
       );
@@ -255,8 +294,10 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     });
 
     setActiveProduct(null);
-    setCartOpen(true);
-  }, []);
+    if (!activeGroupCart) {
+      setCartOpen(true);
+    }
+  }, [activeGroupCart, currentUser]);
 
   const handleUpdateQuantity = useCallback((id, size, newQty) => {
     setCartItems((prev) => {
@@ -508,6 +549,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         cartItems={cartItems}
         currentUser={currentUser}
         onOpenAuthModal={() => setAuthModalOpen(true)}
+        onGroupCartCreated={(grp) => setActiveGroupCart(grp)}
         onCheckoutGroup={(grp) => {
           setCartOpen(true);
         }}

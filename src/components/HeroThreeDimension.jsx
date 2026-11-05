@@ -59,13 +59,13 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
     }
   };
 
-  // Listen to Vimeo Player ready and playback events to smoothly reveal video
+  // Listen to Vimeo Player ready and playback events to smoothly reveal video once frames are rendering
   useEffect(() => {
     const handleVimeoMessage = (event) => {
       if (!event.origin.includes('vimeo.com')) return;
       try {
         const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-        if (data.event === 'ready' || data.event === 'play' || data.event === 'timeupdate') {
+        if (data.event === 'play' || data.event === 'timeupdate') {
           setVideoLoaded(true);
         }
       } catch (e) {
@@ -119,27 +119,28 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
         background: '#000000'
       }}
     >
-      {/* 1. Vimeo Adaptive Bitrate Video Stream (Instant Loading & Dynamic Quality Scaling) */}
+      {/* 1. Vimeo Adaptive Bitrate Video Stream with Permanent Poster Canvas Backing */}
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
         style={{ backgroundColor: '#000000' }}
       >
-        {/* Instant first-frame high-resolution poster while first video frames stream */}
+        {/* Permanent first-frame poster canvas: prevents any black voids during fast scroll or video buffering */}
         <img
           src={posterSrc}
           alt="AVZ Hero Master Visual"
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 pointer-events-none ${
-            videoLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
-          }`}
+          fetchPriority="high"
+          loading="eager"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
           style={{ objectFit: 'cover' }}
         />
 
-        {/* Vimeo Background Video Stream */}
+        {/* Vimeo Background Video Stream layered on top */}
         <iframe
           ref={iframeRef}
           key={`hero-vimeo-${vimeoId}`}
+          loading="eager"
           src={`https://player.vimeo.com/video/${vimeoId}?${vimeoHash ? `h=${vimeoHash}&` : ''}autoplay=1&loop=1&muted=1&background=1&autopause=0&controls=0&playsinline=1&title=0&byline=0&portrait=0&api=1&dnt=1`}
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 ${
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity duration-700 z-[1] ${
             videoLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
@@ -151,9 +152,6 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           }}
           allow="autoplay; fullscreen; picture-in-picture"
           title="AVZ Hero Runway Stream"
-          onLoad={() => {
-            setTimeout(() => setVideoLoaded(true), 350);
-          }}
         />
       </div>
 
@@ -163,136 +161,53 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
       {/* 2. Hero Editorial Typography & Actions */}
       <div className="relative z-[5] max-w-4xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center justify-center space-y-4 sm:space-y-6 pt-10 sm:pt-0 pointer-events-auto">
         <HeroDustHeadline
-          headline1={cmsHero?.headline_line1 || 'WEARABLE ART.'}
-          headline2={cmsHero?.headline_line2 || 'NOT MADE TO REPEAT.'}
+          brandTitle={cmsHero?.title || BRAND_INFO.name}
+          cityLabel={BRAND_INFO.city}
+          subtitle={cmsHero?.tagline || "Where Industrial Steel Encounters Haute Couture"}
         />
 
-        {cmsHero?.subheadline && (
-          <p className="max-w-xl text-xs sm:text-sm md:text-base font-montserrat font-bold text-white leading-relaxed drop-shadow-[0_2px_20px_rgba(0,0,0,0.95)]" style={{ color: "#ffffff", fontWeight: 700 }}>
-            {cmsHero.subheadline}
-          </p>
-        )}
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+        {/* Minimalist Action Controls */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pt-2">
           <button
-            type="button"
-            onClick={() => {
-              playSound('snap');
-              if (onExploreCatalogue) {
-                onExploreCatalogue();
-              } else if (onScrollToSection) {
-                onScrollToSection('shop');
-              } else {
-                const el = document.getElementById('shop');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="px-7 py-3 rounded-full bg-gradient-to-r from-pink via-purple-300 to-pink hover:opacity-90 text-black font-mono font-bold text-xs tracking-widest uppercase transition-all shadow-[0_0_25px_rgba(244,114,182,0.45)] hover:scale-105 active:scale-95 cursor-pointer"
+            onClick={onExploreCatalogue}
+            className="w-full sm:w-auto px-7 py-3 rounded-full bg-white text-black hover:bg-pink font-mono text-xs uppercase tracking-widest transition-all duration-300 font-bold active:scale-95 shadow-xl cursor-pointer"
           >
-            {cmsHero?.primary_cta_text || 'EXPLORE VAULT'}
+            {cmsHero?.cta_primary_label || "EXPLORE THE ARCHIVE"}
           </button>
+
           <button
-            type="button"
             onClick={() => {
               playSound('snap');
-              if (onScrollToSection) {
-                onScrollToSection('custom');
-              } else {
-                const el = document.getElementById('custom');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }
+              setIsCinemaOpen(true);
             }}
-            className="btn-hero-custom px-7 py-3 rounded-full border-2 border-pink/80 bg-black/75 hover:bg-pink text-white hover:text-black font-mono font-bold text-xs tracking-widest uppercase transition-all backdrop-blur-xl shadow-[0_0_25px_rgba(244,114,182,0.35)] hover:shadow-[0_0_35px_rgba(244,114,182,0.65)] hover:scale-105 active:scale-95 cursor-pointer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase tracking-widest border border-white/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 cursor-pointer backdrop-blur-sm"
           >
-            {cmsHero?.secondary_cta_text || 'CUSTOM ORDERS'}
+            <Film className="w-3.5 h-3.5 text-pink" />
+            <span>{cmsHero?.cta_secondary_label || "CINEMA THEATRE"}</span>
           </button>
         </div>
       </div>
 
-      {/* 3. Video & Audio Controls HUD (Bottom-Left - Crisp Pure White Icons & Typography) */}
-      <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
-        {/* Play/Pause Button */}
+      {/* 3. Bottom Playback & Audio Controls */}
+      <div className="absolute bottom-6 left-6 z-[6] flex items-center gap-2">
         <button
           onClick={handleTogglePlay}
-          className="hero-hud-btn shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 flex items-center justify-center transition-all backdrop-blur-md cursor-pointer shadow-lg active:scale-95 hover:scale-105"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
-            borderColor: 'rgba(255, 255, 255, 0.5)',
-            color: '#ffffff'
-          }}
-          title={isPlaying ? 'Pause Video' : 'Play Video'}
-          aria-label={isPlaying ? 'Pause Video' : 'Play Video'}
+          aria-label={isPlaying ? 'Pause Runway Stream' : 'Play Runway Stream'}
+          className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer backdrop-blur-md active:scale-90"
         >
-          {isPlaying ? (
-            <Pause className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
-          ) : (
-            <Play className="w-3.5 h-3.5 fill-white" style={{ color: '#ffffff', fill: '#ffffff' }} />
-          )}
+          {isPlaying ? <Pause className="w-4 h-4 text-pink" /> : <Play className="w-4 h-4 text-pink fill-pink ml-0.5" />}
         </button>
 
-        {/* Sound Toggle Button (Crystal Clear, Always Visible, High Contrast in all states & themes) */}
         <button
           onClick={handleToggleMute}
-          className="hero-sound-toggle-btn shrink-0 px-3 sm:px-3.5 h-9 sm:h-10 rounded-full border border-white/40 flex items-center gap-2 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105"
-          style={{
-            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.85)' : 'rgba(244, 114, 182, 0.22)',
-            borderColor: isMuted ? 'rgba(255, 255, 255, 0.5)' : '#f472b6',
-            boxShadow: isMuted ? '0 4px 14px rgba(0,0,0,0.6)' : '0 0 20px rgba(244, 114, 182, 0.55)',
-            color: '#ffffff'
-          }}
-          title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
-          aria-label={isMuted ? 'Sound Off - Tap to Unmute' : 'Sound On - Tap to Mute'}
+          aria-label={isMuted ? 'Unmute Runway Audio' : 'Mute Runway Audio'}
+          className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer backdrop-blur-md active:scale-90"
         >
-          {isMuted ? (
-            <>
-              <VolumeX className="w-3.5 h-3.5 text-zinc-300 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
-              <span
-                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
-                style={{ color: '#ffffff' }}
-              >
-                SOUND OFF
-              </span>
-            </>
-          ) : (
-            <>
-              <Volume2 className="w-3.5 h-3.5 text-pink shrink-0 animate-pulse" style={{ color: '#f472b6', stroke: '#f472b6' }} />
-              <span
-                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
-                style={{ color: '#ffffff' }}
-              >
-                SOUND ON
-              </span>
-            </>
-          )}
-        </button>
-
-        {/* Full Cinema Reel Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            playSound('pip');
-            setIsCinemaOpen(true);
-          }}
-          className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-white/40 inline-flex items-center gap-1.5 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase font-bold"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
-            borderColor: 'rgba(255, 255, 255, 0.5)',
-            color: '#ffffff'
-          }}
-          title="Open Cinema Master Reel Modal"
-        >
-          <Film className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
-          <span className="hidden sm:inline" style={{ color: '#ffffff' }}>FULL CINEMA REEL</span>
-          <span className="sm:hidden" style={{ color: '#ffffff' }}>CINEMA</span>
+          {isMuted ? <VolumeX className="w-4 h-4 text-silver/80" /> : <Volume2 className="w-4 h-4 text-pink" />}
         </button>
       </div>
 
-      {/* 3. Minimalist Scroll Guide */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center pointer-events-none z-[10] opacity-60">
-        <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
-      </div>
-
-      {/* 4. Dedicated Cinema Reel Modal */}
+      {/* 4. Fullscreen Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}

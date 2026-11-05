@@ -13,7 +13,8 @@ import {
   ShieldCheck,
   Lock,
   MessageCircle,
-  ExternalLink
+  Truck,
+  CheckCircle2
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 import { formatPrice } from '../data/brandData';
@@ -25,7 +26,7 @@ export default function GroupOrderModal({
   cartItems = [],
   currentUser,
   onOpenAuthModal,
-  onCheckoutGroup,
+  onGroupCartCreated,
   currency = 'INR'
 }) {
   const [copied, setCopied] = useState(false);
@@ -33,6 +34,20 @@ export default function GroupOrderModal({
   const [activeGroup, setActiveGroup] = useState(groupCart);
   const [creatorInputName, setCreatorInputName] = useState(currentUser?.name || '');
   const [creatorInputEmail, setCreatorInputEmail] = useState(currentUser?.email || '');
+
+  // Checkout flow state inside group buy modal
+  const [isCheckoutStep, setIsCheckoutStep] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [orderConfirmed, setOrderConfirmed] = useState(null);
+  const [shippingData, setShippingData] = useState({
+    fullName: currentUser?.name || '',
+    email: currentUser?.email || '',
+    phone: '',
+    address: '',
+    city: '',
+    state: 'Assam',
+    pincode: ''
+  });
 
   useEffect(() => {
     setActiveGroup(groupCart);
@@ -42,6 +57,11 @@ export default function GroupOrderModal({
     if (currentUser) {
       if (!creatorInputName) setCreatorInputName(currentUser.name || '');
       if (!creatorInputEmail) setCreatorInputEmail(currentUser.email || '');
+      setShippingData((prev) => ({
+        ...prev,
+        fullName: prev.fullName || currentUser.name || '',
+        email: prev.email || currentUser.email || ''
+      }));
     }
   }, [currentUser]);
 
@@ -63,7 +83,7 @@ export default function GroupOrderModal({
     if (!shareUrl) return;
     playSound('snap');
     const text = encodeURIComponent(
-      `Hey! I've started a shared Group Order for AVZ Vaganza Wearable Art. Tap this link to add your favorite pieces to our combined box so we can ship together:\n\n${shareUrl}`
+      `Hey! I've started a shared Group Order for AVZ Vaganza Wearable Art. Tap this link to add your favorite pieces to our combined order:\n\n${shareUrl}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
@@ -92,6 +112,7 @@ export default function GroupOrderModal({
         const fetchData = await fetchRes.json();
         if (fetchData.groupCart) {
           setActiveGroup(fetchData.groupCart);
+          if (onGroupCartCreated) onGroupCartCreated(fetchData.groupCart);
         }
       } else {
         alert(data.error || 'Failed to initialize group buy session.');
@@ -114,6 +135,51 @@ export default function GroupOrderModal({
       totalAmount += Number(item.price || 0) * qty;
     });
   });
+
+  const squadDiscountAmount = Math.round(totalAmount * 0.1);
+  const payableAmount = totalAmount - squadDiscountAmount;
+
+  const handlePlaceGroupOrder = async (e) => {
+    e.preventDefault();
+    if (!shippingData.fullName || !shippingData.email || !shippingData.address || !shippingData.pincode) {
+      alert('Please fill all delivery address fields');
+      return;
+    }
+
+    setIsPlacingOrder(true);
+    playSound('warp');
+
+    try {
+      const res = await fetch(`/api/storefront/group-cart/${activeGroup.id}/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyerName: shippingData.fullName,
+          buyerEmail: shippingData.email,
+          buyerPhone: shippingData.phone || '+91 9876543210',
+          shippingAddress: {
+            address_line1: shippingData.address,
+            city: shippingData.city || 'Guwahati',
+            state: shippingData.state || 'Assam',
+            pincode: shippingData.pincode
+          },
+          paymentMethod: 'Cash on Delivery / UPI'
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        playSound('chord');
+        setOrderConfirmed(data);
+      } else {
+        alert(data.error || 'Failed to complete squad order.');
+      }
+    } catch (err) {
+      alert('Connection error during order placement. Please check your internet.');
+    } finally {
+      setIsPlacingOrder(false);
+    }
+  };
 
   return (
     <div
@@ -143,7 +209,11 @@ export default function GroupOrderModal({
           </div>
 
           <h3 className="text-xl sm:text-2xl font-mono font-medium uppercase text-white leading-tight">
-            {activeGroup ? (
+            {orderConfirmed ? (
+              <span className="text-green-400 font-bold">SQUAD ORDER CONFIRMED!</span>
+            ) : isCheckoutStep ? (
+              <span>SQUAD <strong className="text-pink font-bold">DELIVERY CHECKOUT</strong></span>
+            ) : activeGroup ? (
               <span>GROUP CART: <strong className="text-pink font-bold">{activeGroup.creatorName}&apos;S SQUAD</strong></span>
             ) : (
               <span>CREATE A <strong className="text-pink font-bold">GROUP ORDER</strong></span>
@@ -151,14 +221,155 @@ export default function GroupOrderModal({
           </h3>
 
           <p className="text-xs text-zinc-400 font-montserrat mt-1 leading-relaxed">
-            Invite friends to add their desired pieces into one combined cart. Everyone sees who added which piece, and all participants receive live order updates!
+            {orderConfirmed
+              ? 'Your combined order is confirmed! All squad participants can view this order in their account profiles.'
+              : isCheckoutStep
+              ? 'Complete shipping details for the collective order. All members will be linked to this order.'
+              : 'Invite friends to add their desired pieces into one combined cart. Everyone sees who added which piece, and all participants receive live order updates!'}
           </p>
         </div>
 
         {/* Content Body */}
         <div className="overflow-y-auto no-scrollbar space-y-5 flex-1 pr-1">
-          {/* If No Active Group Cart Yet: Initialization Form */}
-          {!activeGroup ? (
+          {/* Confirmed Order View */}
+          {orderConfirmed ? (
+            <div className="py-6 space-y-5 text-center">
+              <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 mx-auto flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+
+              <div>
+                <span className="text-xs font-mono uppercase text-zinc-400">ORDER NUMBER</span>
+                <h4 className="text-2xl font-mono font-bold text-white mt-1">{orderConfirmed.orderNumber}</h4>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs font-mono text-zinc-300 space-y-2 text-left">
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Total Pieces:</span>
+                  <span className="text-white font-bold">{totalItemsCount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Collective Total:</span>
+                  <span className="text-pink font-bold">{formatPrice(orderConfirmed.grandTotal, currency)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-zinc-400">Linked Accounts:</span>
+                  <span className="text-green-400">{orderConfirmed.participantEmails?.length || 1} squad members</span>
+                </div>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="w-full py-3.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95 cursor-pointer"
+              >
+                RETURN TO ATELIER
+              </button>
+            </div>
+          ) : isCheckoutStep ? (
+            /* Checkout Shipping Form for Group Buy */
+            <form onSubmit={handlePlaceGroupOrder} className="space-y-4 pt-2">
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                <span className="text-[11px] font-mono text-zinc-300 uppercase tracking-wider block font-semibold">
+                  DELIVERY DESTINATION (COMBINED SQUAD SHIPMENT)
+                </span>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Recipient Name *</label>
+                    <input
+                      required
+                      type="text"
+                      value={shippingData.fullName}
+                      onChange={(e) => setShippingData({ ...shippingData, fullName: e.target.value })}
+                      placeholder="e.g. Maya Baruah"
+                      className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Recipient Email *</label>
+                      <input
+                        required
+                        type="email"
+                        value={shippingData.email}
+                        onChange={(e) => setShippingData({ ...shippingData, email: e.target.value })}
+                        placeholder="e.g. maya@gmail.com"
+                        className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Phone Number (For Courier) *</label>
+                      <input
+                        required
+                        type="tel"
+                        value={shippingData.phone}
+                        onChange={(e) => setShippingData({ ...shippingData, phone: e.target.value })}
+                        placeholder="e.g. 9876543210"
+                        className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Street Address *</label>
+                    <input
+                      required
+                      type="text"
+                      value={shippingData.address}
+                      onChange={(e) => setShippingData({ ...shippingData, address: e.target.value })}
+                      placeholder="House/Apartment, Street name, Locality"
+                      className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">City *</label>
+                      <input
+                        required
+                        type="text"
+                        value={shippingData.city}
+                        onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
+                        placeholder="e.g. Guwahati"
+                        className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Pincode *</label>
+                      <input
+                        required
+                        type="text"
+                        value={shippingData.pincode}
+                        onChange={(e) => setShippingData({ ...shippingData, pincode: e.target.value })}
+                        placeholder="e.g. 781006"
+                        className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsCheckoutStep(false)}
+                  className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase cursor-pointer"
+                >
+                  ← BACK
+                </button>
+                <button
+                  type="submit"
+                  disabled={isPlacingOrder}
+                  className="flex-1 py-3.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>{isPlacingOrder ? 'CONFIRMING ORDER...' : `CONFIRM SQUAD ORDER • ${formatPrice(payableAmount, currency)}`}</span>
+                </button>
+              </div>
+            </form>
+          ) : !activeGroup ? (
+            /* If No Active Group Cart Yet: Initialization Form */
             <form onSubmit={handleCreateGroupSession} className="space-y-4 pt-2">
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
                 <span className="text-[11px] font-mono text-zinc-300 uppercase tracking-wider block font-semibold">
@@ -340,7 +551,7 @@ export default function GroupOrderModal({
         </div>
 
         {/* Modal Footer / Checkout Action */}
-        {activeGroup && (
+        {activeGroup && !orderConfirmed && !isCheckoutStep && (
           <div className="pt-4 border-t border-white/10 mt-auto shrink-0 space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-zinc-400 uppercase">COLLECTIVE SUB-TOTAL:</span>
@@ -351,19 +562,16 @@ export default function GroupOrderModal({
 
             <div className="flex items-center justify-between text-[11px] font-mono text-green-400">
               <span>SQUAD BENEFIT (10% COLLECTIVE DISCOUNT):</span>
-              <span>-{formatPrice(Math.round(totalAmount * 0.1), currency)}</span>
+              <span>-{formatPrice(squadDiscountAmount, currency)}</span>
             </div>
 
             <button
-              onClick={() => {
-                onClose();
-                onCheckoutGroup?.(activeGroup);
-              }}
+              onClick={() => setIsCheckoutStep(true)}
               disabled={totalItemsCount === 0}
               className="w-full py-3.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40"
             >
               <Lock className="w-4 h-4" />
-              <span>PROCEED TO SQUAD CHECKOUT • {formatPrice(totalAmount - Math.round(totalAmount * 0.1), currency)}</span>
+              <span>PROCEED TO SQUAD CHECKOUT • {formatPrice(payableAmount, currency)}</span>
               <ArrowRight className="w-4 h-4 ml-1" />
             </button>
           </div>

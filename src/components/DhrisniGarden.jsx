@@ -451,6 +451,8 @@ function DhrisniGarden({ className = '' }) {
           white-space: nowrap;
           padding: 0 0.6em 0 0.15em;
           overflow: visible;
+          padding: 0 0.35em 0 0.05em;
+          overflow: visible;
           font-family: 'Bodoni 72', 'Didot', 'Cinzel', 'Playfair Display', 'Baskerville', 'Times New Roman', serif;
           font-size: clamp(3.2rem, 9.5vw, 7.8rem);
           font-weight: 600;

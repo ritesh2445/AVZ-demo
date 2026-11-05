@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb, initializeDatabase } from '@/src/lib/db';
+import { getDb, initializeDatabase, ensureGroupCartsTable } from '@/src/lib/db';
 
 export async function POST(
   request: Request,
@@ -23,6 +23,7 @@ export async function POST(
 
     await initializeDatabase();
     const db = getDb();
+    await ensureGroupCartsTable(db);
 
     const res = await db.execute({
       sql: 'SELECT * FROM group_carts WHERE id = ? OR share_code = ?',
@@ -89,3 +90,4 @@ export async function POST(
     return NextResponse.json({ error: err.message || 'Error updating group cart' }, { status: 500 });
   }
 }
+

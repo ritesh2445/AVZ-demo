@@ -454,6 +454,25 @@ async function ensureDatabaseInitialized(): Promise<void> {
     await performDatabaseInitialization();
   }
 }
+
+export async function ensureGroupCartsTable(db?: Client): Promise<void> {
+  const targetDb = db || getDb();
+  await targetDb.execute(`
+    CREATE TABLE IF NOT EXISTS group_carts (
+      id TEXT PRIMARY KEY,
+      share_code TEXT UNIQUE NOT NULL,
+      creator_name TEXT NOT NULL,
+      creator_email TEXT NOT NULL,
+      creator_user_id TEXT,
+      members_data TEXT NOT NULL,
+      order_id TEXT,
+      status TEXT NOT NULL DEFAULT 'open',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+}
+
 export async function bootstrapDatabaseSchema(): Promise<void> {
   await performDatabaseInitialization();
 }

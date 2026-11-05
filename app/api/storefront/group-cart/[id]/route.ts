@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getDb, initializeDatabase } from '@/src/lib/db';
+import { getDb, initializeDatabase, ensureGroupCartsTable } from '@/src/lib/db';
 
 export async function GET(
   request: Request,
@@ -13,6 +13,7 @@ export async function GET(
 
     await initializeDatabase();
     const db = getDb();
+    await ensureGroupCartsTable(db);
 
     const res = await db.execute({
       sql: 'SELECT * FROM group_carts WHERE id = ? OR share_code = ?',
@@ -44,3 +45,4 @@ export async function GET(
     return NextResponse.json({ error: err.message || 'Error fetching group cart' }, { status: 500 });
   }
 }
+
