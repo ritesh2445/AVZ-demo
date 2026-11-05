@@ -27,6 +27,7 @@ export default function CartDrawer({
   onClearCart,
   currency = 'INR',
   onCheckoutComplete,
+  onOpenGroupOrder,
   squadDiscount = null, // { squadCode, discountPercent, memberCount }
   onOpenSquadModal,
   currentUser = null,
@@ -777,16 +778,31 @@ export default function CartDrawer({
               </span>
             </div>
 
-            <button
-              onClick={() => {
-                playSound('snap');
-                setIsCheckingOut(true);
-              }}
-              className="w-full py-3.5 px-6 rounded-full bg-white text-black hover:bg-zinc-200 text-xs font-mono font-semibold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 mt-1 transition-all active:scale-[0.99]"
-            >
-              <span>PROCEED TO CHECKOUT ↗</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 mt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  playSound('snap');
+                  onOpenGroupOrder?.();
+                }}
+                className="py-3 px-4 rounded-full border border-pink/40 bg-pink/10 hover:bg-pink/20 text-pink text-[11px] font-mono font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 active:scale-[0.99] cursor-pointer"
+                title="Create a collaborative shared order with friends"
+              >
+                <Users className="w-3.5 h-3.5 text-pink" />
+                <span>ORDER TOGETHER 👥</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  playSound('snap');
+                  setIsCheckingOut(true);
+                }}
+                className="flex-1 py-3.5 px-6 rounded-full bg-white text-black hover:bg-pink text-xs font-mono font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
+              >
+                <span>PROCEED TO CHECKOUT ↗</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -25,14 +25,16 @@ export async function GET(req: NextRequest) {
 
     const db = getDb();
 
-    // Query customer order count if available
+    // Query customer order count and orders list (including group orders)
     let orderCount = 0;
+    let orders: any[] = [];
     try {
       const orderRes = await db.execute({
-        sql: 'SELECT COUNT(*) as count FROM orders WHERE customer_email = ?',
-        args: [session.user.email],
+        sql: 'SELECT * FROM orders WHERE customer_email = ? OR internal_notes LIKE ? ORDER BY created_at DESC',
+        args: [session.user.email, `%"${session.user.email}"%`],
       });
-      orderCount = Number(orderRes.rows[0]?.count || 0);
+      orders = orderRes.rows;
+      orderCount = orders.length;
     } catch {}
 
     return NextResponse.json({
@@ -53,6 +55,7 @@ export async function GET(req: NextRequest) {
         orderCount,
         tier: 'Archive VIP Member',
       },
+      orders,
     });
   } catch (err: any) {
     return NextResponse.json(

@@ -265,20 +265,20 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
   // Ref to track user interaction and auto-drift state
   const isUserInteractingRef = useRef(false);
-  const isAutoDriftingRef = useRef(false);
   const userInteractionTimeoutRef = useRef(null);
   const driftDirectionRef = useRef(1); // 1 = slide right, -1 = slide left
   const autoDriftRafRef = useRef(null);
+  const floatScrollPosRef = useRef(0);
 
   const notifyUserInteraction = useCallback(() => {
     isUserInteractingRef.current = true;
     if (userInteractionTimeoutRef.current) {
       clearTimeout(userInteractionTimeoutRef.current);
     }
-    // Resume gentle auto-drift 1.2s after user ceases active interaction
+    // Resume gentle auto-drift 1.5s after user ceases active interaction
     userInteractionTimeoutRef.current = setTimeout(() => {
       isUserInteractingRef.current = false;
-    }, 1200);
+    }, 1500);
   }, []);
 
   // Continuous slow horizontal auto-drift from one end to another
@@ -286,24 +286,32 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     let lastTime = performance.now();
 
     const driftLoop = (currentTime) => {
-      const dt = Math.min(currentTime - lastTime, 100);
+      const dt = Math.min(currentTime - lastTime, 80);
       lastTime = currentTime;
 
       const el = wallScrollRef.current;
       if (el && !isUserInteractingRef.current && !isDraggingRef.current) {
         const maxScroll = el.scrollWidth - el.clientWidth;
-        if (maxScroll > 10) {
-          // Slow, elegant gallery glide (~26 pixels per second)
-          const step = (dt / 1000) * 26 * driftDirectionRef.current;
-          isAutoDriftingRef.current = true;
-          el.scrollLeft += step;
+        if (maxScroll > 15) {
+          // Keep float position synced if DOM position drifted or user manually navigated
+          if (Math.abs(el.scrollLeft - floatScrollPosRef.current) > 3) {
+            floatScrollPosRef.current = el.scrollLeft;
+          }
+
+          // Slow, elegant gallery glide (~30 pixels per second)
+          const step = (dt / 1000) * 40 * driftDirectionRef.current;
+          floatScrollPosRef.current += step;
 
           // Gently reverse when reaching boundaries so it glides back and forth
-          if (el.scrollLeft >= maxScroll - 2) {
+          if (floatScrollPosRef.current >= maxScroll - 1) {
+            floatScrollPosRef.current = maxScroll - 1;
             driftDirectionRef.current = -1;
-          } else if (el.scrollLeft <= 2) {
+          } else if (floatScrollPosRef.current <= 1) {
+            floatScrollPosRef.current = 1;
             driftDirectionRef.current = 1;
           }
+
+          el.scrollLeft = floatScrollPosRef.current;
         }
       }
 
@@ -364,24 +372,16 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     }
   };
 
-  // 5. Continuous Scroll Listener (For trackpads, touch gestures, and inertial gliding)
+  // 5. Continuous Scroll Listener (Passive velocity tracking; does NOT trigger pause)
   const handleTrackScroll = useCallback(() => {
-    if (isAutoDriftingRef.current) {
-      isAutoDriftingRef.current = false;
-      return; // Do not pause auto-drift for programmatic movements!
-    }
-    notifyUserInteraction();
     const el = wallScrollRef.current;
     if (!el) return;
 
     const currentLeft = el.scrollLeft;
     const now = Date.now();
-    const dt = Math.max(1, now - (lastScrollTimeRef.current || now));
-    const delta = currentLeft - (lastScrollLeftRef.current || currentLeft);
-
     lastScrollLeftRef.current = currentLeft;
     lastScrollTimeRef.current = now;
-  }, [notifyUserInteraction]);
+  }, []);
 
   // 6. Arrow Key and Button Navigation
   const scrollByAmount = (offset) => {
@@ -477,10 +477,13 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
+        onTouchStart={() => { isUserInteractingRef.current = true; }}
+        onTouchEnd={() => { notifyUserInteraction(); }}
         onScroll={handleTrackScroll}
         className="w-full overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing select-none relative z-10 py-8 px-4 sm:px-12 touch-pan-x"
         style={{
-          minHeight: '620px'
+          minHeight: '620px',
+          scrollBehavior: 'auto'
         }}
       >
         {/* Salon Wall Composition: Paintings Staggered Asymmetrically across the Long Continuous Wall */}

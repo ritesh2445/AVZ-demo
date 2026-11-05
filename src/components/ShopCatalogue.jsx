@@ -64,7 +64,10 @@ function KeyArchiveCarousel({
   onAddToCart,
   currency = 'INR',
   onToggleWishlist,
-  wishlistIds = []
+  wishlistIds = [],
+  currentUser,
+  onOpenAuthModal,
+  onRequestCustom
 }) {
   const trackRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -277,29 +280,46 @@ function KeyArchiveCarousel({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {onAddToCart && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playSound('snap');
-                          onAddToCart({
-                            ...item,
-                            selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
-                          });
-                        }}
-                        title="Add to Bag"
-                        aria-label="Add to Bag"
-                        className="p-1.5 flex items-center justify-center text-white/80 hover:text-pink transition-all cursor-pointer active:scale-125 group/bag"
-                      >
-                        <ShoppingBag className="w-4 h-4 text-white group-hover/bag:text-pink transition-colors stroke-[2]" />
-                      </button>
-                    )}
-
                     <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white flex items-center gap-0.5">
                       <ArrowUpRight className="w-4 h-4" />
                     </span>
                   </div>
                 </div>
+
+                {/* Shopify / Flipkart Style Full Action Button */}
+                {item.stock === 0 ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playSound('snap');
+                      if (!currentUser) {
+                        alert('Please sign in or create an account to request an archival commission.');
+                        onOpenAuthModal?.();
+                      } else {
+                        onRequestCustom?.(item.name);
+                      }
+                    }}
+                    className="w-full mt-2.5 py-2 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-red-300" />
+                    <span>REQUEST PIECE</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playSound('snap');
+                      onAddToCart?.({
+                        ...item,
+                        selectedSize: item.sizes ? item.sizes[0] : 'Free Size'
+                      });
+                    }}
+                    className="w-full mt-2.5 py-2 px-3 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>ADD TO CART</span>
+                  </button>
+                )}
               </div>
             </article>
           );
@@ -328,7 +348,10 @@ function MobileCompactProductCard({
   onAddToCart,
   currency = 'INR',
   onToggleWishlist,
-  isWishlisted = false
+  isWishlisted = false,
+  currentUser,
+  onOpenAuthModal,
+  onRequestCustom
 }) {
   return (
     <article
@@ -404,20 +427,36 @@ function MobileCompactProductCard({
             {formatPrice(product.price, currency)}
           </span>
 
-          {onAddToCart && (
+          {product.stock === 0 ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 playSound('snap');
-                onAddToCart({
+                if (!currentUser) {
+                  alert('Please sign in to request an archival commission.');
+                  onOpenAuthModal?.();
+                } else {
+                  onRequestCustom?.(product.name);
+                }
+              }}
+              className="px-2 py-1 rounded-full bg-red-950/70 border border-red-500/60 text-red-200 text-[9px] font-mono font-bold uppercase"
+            >
+              REQUEST
+            </button>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                playSound('snap');
+                onAddToCart?.({
                   ...product,
                   selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
                 });
               }}
-              title="Quick Add"
-              className="px-2 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[9px] font-mono font-semibold uppercase flex items-center gap-1 active:scale-95 cursor-pointer"
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-[9px] uppercase flex items-center gap-1 active:scale-95 cursor-pointer"
             >
-              <span>+</span>
+              <ShoppingBag className="w-2.5 h-2.5 stroke-[2.5]" />
+              <span>ADD</span>
             </button>
           )}
         </div>
@@ -434,7 +473,10 @@ function ShopCatalogue({
   initialCategory = 'All',
   onToggleWishlist,
   wishlistIds = [],
-  onOpenSquadModal
+  onOpenSquadModal,
+  currentUser,
+  onOpenAuthModal,
+  onRequestCustom
 }) {
   const activeProducts = Array.isArray(initialProducts) && initialProducts.length > 0 ? initialProducts : PRODUCTS;
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -867,30 +909,47 @@ function ShopCatalogue({
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        {onAddToCart && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              playSound('snap');
-                              onAddToCart({
-                                ...product,
-                                selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
-                              });
-                            }}
-                            title="Add to Bag"
-                            aria-label="Add to Bag"
-                            className="p-1.5 flex items-center justify-center text-white/80 hover:text-pink transition-all cursor-pointer active:scale-125 group/bag"
-                          >
-                            <ShoppingBag className="w-4 h-4 text-white group-hover/bag:text-pink transition-colors stroke-[2]" />
-                          </button>
-                        )}
-
                         <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white flex items-center gap-0.5">
-                          <span>VIEW</span>
+                          <span>DETAILS</span>
                           <ArrowUpRight className="w-3 h-3" />
                         </span>
                       </div>
                     </div>
+
+                    {/* Shopify / Flipkart Style Full Action Button */}
+                    {product.stock === 0 ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playSound('snap');
+                          if (!currentUser) {
+                            alert('Please sign in or create an account to request an archival commission.');
+                            onOpenAuthModal?.();
+                          } else {
+                            onRequestCustom?.(product.name);
+                          }
+                        }}
+                        className="w-full mt-3 py-2.5 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-red-300" />
+                        <span>REQUEST PIECE</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playSound('snap');
+                          onAddToCart?.({
+                            ...product,
+                            selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
+                          });
+                        }}
+                        className="w-full mt-3 py-2.5 px-3 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <span>ADD TO CART</span>
+                      </button>
+                    )}
                   </div>
                 </article>
               );

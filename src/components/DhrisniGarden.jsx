@@ -446,12 +446,15 @@ function DhrisniGarden({ className = '' }) {
         .word {
           position: relative;
           z-index: 2;
+          display: inline-block;
           margin: 0;
           white-space: nowrap;
+          padding: 0 0.6em 0 0.15em;
+          overflow: visible;
           font-family: 'Bodoni 72', 'Didot', 'Cinzel', 'Playfair Display', 'Baskerville', 'Times New Roman', serif;
           font-size: clamp(3.2rem, 9.5vw, 7.8rem);
           font-weight: 600;
-          letter-spacing: -0.045em;
+          letter-spacing: -0.02em;
           line-height: 1;
           color: #f7f3ef;
           opacity: 0;

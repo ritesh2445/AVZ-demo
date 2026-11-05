@@ -76,9 +76,9 @@
   --dr-bloom-opacity: 0.7;
 }
 
-/* Global Hardware-Accelerated Smooth Scrolling */
+/* Instant, Zero-Lag High-Speed Fluid Scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -3136,7 +3136,7 @@ body {
 .touch-scroll-x,
 .overflow-x-auto {
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 .no-scrollbar::-webkit-scrollbar,

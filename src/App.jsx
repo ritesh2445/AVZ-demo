@@ -23,6 +23,7 @@ import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import LegalPoliciesModal from './components/LegalPoliciesModal';
 import DPDPConsentBanner from './components/DPDPConsentBanner';
+import GroupOrderModal from './components/GroupOrderModal';
 import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
 import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
@@ -101,6 +102,26 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   // 10. Client Auth & Guest Explorer state with persistence
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [groupOrderModalOpen, setGroupOrderModalOpen] = useState(false);
+  const [activeGroupCart, setActiveGroupCart] = useState(null);
+
+  // Check for ?groupCart=... collaborative invite link
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const grpId = params.get('groupCart');
+    if (grpId) {
+      fetch(`/api/storefront/group-cart/${grpId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.groupCart) {
+            setActiveGroupCart(data.groupCart);
+            setGroupOrderModalOpen(true);
+          }
+        })
+        .catch(() => {});
+    }
+  }, []);
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const stored = localStorage.getItem('avz_user');
@@ -385,6 +406,9 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
             onToggleWishlist={handleToggleWishlist}
             wishlistIds={wishlistItems.map((p) => p.id)}
             onOpenSquadModal={handleOpenSquadModal}
+            currentUser={currentUser}
+            onOpenAuthModal={() => setAuthModalOpen(true)}
+            onRequestCustom={handleRequestCustom}
           />
         </section>
 
@@ -452,6 +476,9 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         onOpenSquadModal={handleOpenSquadModal}
         isWishlisted={wishlistItems.some((p) => p.id === activeProduct?.id)}
         onToggleWishlist={handleToggleWishlist}
+        currentUser={currentUser}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
+        onOpenCart={() => setCartOpen(true)}
       />
 
       <CartDrawer
@@ -467,9 +494,24 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         }}
         squadDiscount={squadDiscount}
         onOpenSquadModal={handleOpenSquadModal}
+        onOpenGroupOrder={() => setGroupOrderModalOpen(true)}
         currentUser={currentUser}
         purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
         purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
+      />
+
+      {/* Group Buying / Shared Order Together Modal */}
+      <GroupOrderModal
+        isOpen={groupOrderModalOpen}
+        onClose={() => setGroupOrderModalOpen(false)}
+        groupCart={activeGroupCart}
+        cartItems={cartItems}
+        currentUser={currentUser}
+        onOpenAuthModal={() => setAuthModalOpen(true)}
+        onCheckoutGroup={(grp) => {
+          setCartOpen(true);
+        }}
+        currency={currency}
       />
 
       <WishlistDrawer

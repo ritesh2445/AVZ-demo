@@ -27,7 +27,10 @@ export default function ProductDetailModal({
   onRequestCustom,
   onOpenSquadModal,
   isWishlisted = false,
-  onToggleWishlist
+  onToggleWishlist,
+  currentUser,
+  onOpenAuthModal,
+  onOpenCart
 }) {
   if (!product) return null;
 
@@ -309,28 +312,48 @@ export default function ProductDetailModal({
             )}
           </div>
 
-          {/* Action Buttons: Add to Bag */}
+          {/* Action Buttons: Shopify / Flipkart Style Add to Cart & Buy Now */}
           <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
-            <button
-              onClick={handleAdd}
-              disabled={isSoldOut || (product.stock === 1 && isAlreadyInCart)}
-              className={`w-full py-3.5 px-6 rounded-full text-xs font-mono font-semibold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all ${
-                isSoldOut
-                  ? 'opacity-60 cursor-not-allowed bg-red-950/40 text-red-300 border border-red-500/50'
-                  : product.stock === 1 && isAlreadyInCart
-                  ? 'opacity-50 cursor-not-allowed bg-zinc-800 text-zinc-500 border border-zinc-700'
-                  : 'btn-add-bag bg-white text-black hover:bg-zinc-200 active:scale-[0.99] shadow-md'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>
-                {isSoldOut
-                  ? 'SOLD OUT · PIECE ARCHIVED'
-                  : product.stock === 1 && isAlreadyInCart
-                  ? 'ALREADY RESERVED IN BAG (1 OF 1)'
-                  : 'ACQUIRE PIECE ↗'}
-              </span>
-            </button>
+            {isSoldOut ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playSound('snap');
+                  if (!currentUser) {
+                    alert('Please sign in or create an account to request an archival piece remake.');
+                    onOpenAuthModal?.();
+                  } else {
+                    onClose();
+                    onRequestCustom?.(product.name);
+                  }
+                }}
+                className="w-full py-3.5 px-6 rounded-full bg-red-950/80 hover:bg-red-900 border border-red-500/70 text-red-100 text-xs font-mono font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+              >
+                <Sparkles className="w-4 h-4 text-red-300" />
+                <span>REQUEST ARCHIVAL PIECE (MADE TO ORDER) ↗</span>
+              </button>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-2.5">
+                <button
+                  onClick={handleAdd}
+                  disabled={product.stock === 1 && isAlreadyInCart}
+                  className="flex-1 py-3.5 px-6 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-40"
+                >
+                  <ShoppingBag className="w-4 h-4" />
+                  <span>{product.stock === 1 && isAlreadyInCart ? 'IN BAG (1 OF 1)' : 'ADD TO CART'}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    handleAdd();
+                    onOpenCart?.();
+                  }}
+                  disabled={product.stock === 1 && isAlreadyInCart}
+                  className="flex-1 py-3.5 px-6 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg disabled:opacity-40"
+                >
+                  <span>BUY NOW ↗</span>
+                </button>
+              </div>
+            )}
 
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-2">
               <button

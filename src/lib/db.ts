@@ -633,6 +633,22 @@ async function performDatabaseInitialization(): Promise<void> {
     );
   `);
 
+  // 10.1 Collaborative Group Order Carts
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS group_carts (
+      id TEXT PRIMARY KEY,
+      share_code TEXT UNIQUE NOT NULL,
+      creator_name TEXT NOT NULL,
+      creator_email TEXT NOT NULL,
+      creator_user_id TEXT,
+      members_data TEXT NOT NULL DEFAULT '[]',
+      order_id TEXT,
+      status TEXT NOT NULL DEFAULT 'open',
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+
   // 11. Activity Log
   await db.execute(`
     CREATE TABLE IF NOT EXISTS activity_logs (
@@ -1155,151 +1171,7 @@ async function performDatabaseInitialization(): Promise<void> {
     }
   }
 
-  // --- SEED INITIAL DEMO ORDERS (if empty) ---
-  const existingOrders = await db.execute('SELECT COUNT(*) as count FROM orders');
-  if (Number(existingOrders.rows[0]?.count || 0) === 0) {
-    const demoOrders = [
-      {
-        order_number: 'AVZ-10029',
-        customer_name: 'Ananya Sharma',
-        customer_email: 'ananya.s@gmail.com',
-        customer_phone: '+91 98201 54321',
-        shipping_address: JSON.stringify({
-          address_line1: 'B-402, Lotus Grandeur, Veera Desai Road',
-          city: 'Mumbai',
-          state: 'Maharashtra',
-          pincode: '400053',
-          country: 'India'
-        }),
-        items: JSON.stringify([
-          { title: 'The Dhristroyer Spike Bodice Top', sku: 'AVZ-TOP-01-S', quantity: 1, price: 4200 }
-        ]),
-        subtotal: 4200,
-        discount: 0,
-        shipping_fee: 0,
-        grand_total: 4200,
-        payment_status: 'paid',
-        payment_method: 'Razorpay UPI',
-        razorpay_order_id: 'order_RZP901284',
-        razorpay_payment_id: 'pay_RZP8877123',
-        fulfillment_status: 'unfulfilled',
-        customer_notes: 'Please add birthday card for Dhrisni fan!'
-      },
-      {
-        order_number: 'AVZ-10028',
-        customer_name: 'Rohan Mehra',
-        customer_email: 'rohan.m@fashiontech.in',
-        customer_phone: '+91 97110 88231',
-        shipping_address: JSON.stringify({
-          address_line1: '12 Indiranagar 100ft Road',
-          city: 'Bengaluru',
-          state: 'Karnataka',
-          pincode: '560038',
-          country: 'India'
-        }),
-        items: JSON.stringify([
-          { title: 'Cyber Motherboard Arm Cuff Relic', sku: 'AVZ-ARM-02-CUST', quantity: 1, price: 1850 },
-          { title: 'Industrial Keycap Choker', sku: 'AVZ-NECK-05-STD', quantity: 1, price: 950 }
-        ]),
-        subtotal: 2800,
-        discount: 280,
-        shipping_fee: 150,
-        grand_total: 2670,
-        payment_status: 'paid',
-        payment_method: 'Razorpay NetBanking',
-        razorpay_order_id: 'order_RZP901244',
-        razorpay_payment_id: 'pay_RZP8877199',
-        fulfillment_status: 'shipped',
-        carrier: 'Delhivery Surface',
-        tracking_number: 'DEL882039128IN',
-        dispatch_date: Date.now() - 86400000,
-        customer_notes: ''
-      },
-      {
-        order_number: 'AVZ-10027',
-        customer_name: 'Mira Sen',
-        customer_email: 'mira.sen@gmail.com',
-        customer_phone: '+91 94350 22119',
-        shipping_address: JSON.stringify({
-          address_line1: '7A Southern Avenue',
-          city: 'Kolkata',
-          state: 'West Bengal',
-          pincode: '700029',
-          country: 'India'
-        }),
-        items: JSON.stringify([
-          { title: 'Archival Reworked Denim Armour Jacket', sku: 'AVZ-JAC-03-M', quantity: 1, price: 7800 }
-        ]),
-        subtotal: 7800,
-        discount: 0,
-        shipping_fee: 0,
-        grand_total: 7800,
-        payment_status: 'paid',
-        payment_method: 'Razorpay Cards',
-        razorpay_order_id: 'order_RZP901198',
-        razorpay_payment_id: 'pay_RZP8876541',
-        fulfillment_status: 'delivered',
-        carrier: 'BlueDart Express',
-        tracking_number: 'BLU773019284',
-        dispatch_date: Date.now() - 345600000
-      }
-    ];
-
-    for (const ord of demoOrders) {
-      await db.execute({
-        sql: `INSERT INTO orders (
-          id, order_number, customer_name, customer_email, customer_phone,
-          shipping_address, items, subtotal, discount, shipping_fee, tax,
-          grand_total, currency, payment_status, payment_method,
-          razorpay_order_id, razorpay_payment_id, fulfillment_status,
-          carrier, tracking_number, dispatch_date, customer_notes,
-          created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        args: [
-          `ord_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-          ord.order_number,
-          ord.customer_name,
-          ord.customer_email,
-          ord.customer_phone,
-          ord.shipping_address,
-          ord.items,
-          ord.subtotal,
-          ord.discount,
-          ord.shipping_fee,
-          0,
-          ord.grand_total,
-          'INR',
-          ord.payment_status,
-          ord.payment_method,
-          ord.razorpay_order_id,
-          ord.razorpay_payment_id,
-          ord.fulfillment_status,
-          ord.carrier || null,
-          ord.tracking_number || null,
-          ord.dispatch_date || null,
-          ord.customer_notes || null,
-          Date.now() - 172800000,
-          Date.now()
-        ]
-      });
-
-      // Seed customers from orders
-      await db.execute({
-        sql: `INSERT OR REPLACE INTO customers (id, email, name, phone, address, total_orders, total_spent, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?)`,
-        args: [
-          `cust_${Math.random().toString(36).substring(2, 7)}`,
-          ord.customer_email,
-          ord.customer_name,
-          ord.customer_phone,
-          ord.shipping_address,
-          ord.grand_total,
-          Date.now() - 172800000,
-          Date.now()
-        ]
-      });
-    }
-  }
+  // Orders and customers are strictly populated by real customer transactions (zero mock seed data)
 
   // --- SEED INITIAL PROMOTIONS ---
   const existingPromos = await db.execute('SELECT COUNT(*) as count FROM promotions');

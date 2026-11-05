@@ -75,9 +75,9 @@
   --dr-bloom-opacity: 0.7;
 }
 
-/* Global Hardware-Accelerated Smooth Scrolling */
+/* Instant, Zero-Lag High-Speed Fluid Scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -3300,10 +3300,9 @@ html[data-theme="light"] .rotunda-guide {
   border: 1px solid rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Fast Scroll & Zero-Lag Compositor Acceleration (Hero uses fluid viewport-relative rendering without compositor containment) */
+/* Lightweight Document Flow (Zero GPU compositor layer splitting for instant high-speed scrolling) */
 #vault, #lookbook, #shop, #reels, #about, #specs, #faq, #contact {
-  contain: layout style;
-  transform: translateZ(0);
+  contain: none;
 }
 
 img, video {
