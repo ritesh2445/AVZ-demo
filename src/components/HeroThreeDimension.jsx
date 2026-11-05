@@ -172,7 +172,7 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           subtitle={cmsHero?.tagline || "Where Industrial Steel Encounters Haute Couture"}
         />
 
-        {/* Minimalist Action Controls */}
+        {/* Minimalist Action Controls: EXPLORE THE ARCHIVE & CUSTOM ORDERS */}
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 pt-2">
           <button
             onClick={onExploreCatalogue}
@@ -184,36 +184,100 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           <button
             onClick={() => {
               playSound('snap');
-              setIsCinemaOpen(true);
+              if (onOpenTunnel) onOpenTunnel();
+              else if (onScrollToSection) onScrollToSection('custom');
             }}
-            className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase tracking-widest border border-white/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 cursor-pointer backdrop-blur-sm"
+            className="btn-hero-custom w-full sm:w-auto px-7 py-3 rounded-full border-2 border-pink/80 bg-black/75 hover:bg-pink text-white hover:text-black font-mono font-bold text-xs tracking-widest uppercase transition-all backdrop-blur-xl shadow-[0_0_25px_rgba(244,114,182,0.35)] hover:shadow-[0_0_35px_rgba(244,114,182,0.65)] hover:scale-105 active:scale-95 cursor-pointer"
           >
-            <Film className="w-3.5 h-3.5 text-pink" />
-            <span>{cmsHero?.cta_secondary_label || "CINEMA THEATRE"}</span>
+            {cmsHero?.secondary_cta_text || 'CUSTOM ORDERS'}
           </button>
         </div>
       </div>
 
-      {/* 3. Bottom Playback & Audio Controls */}
-      <div className="absolute bottom-6 left-6 z-[6] flex items-center gap-2">
+      {/* 3. Video & Audio Controls HUD (Bottom-Left - Crisp Pure White Icons, Sound Toggle & Full Cinema Reel) */}
+      <div className="absolute bottom-6 left-4 sm:left-8 z-[10] flex items-center gap-2">
+        {/* Play/Pause Button */}
         <button
           onClick={handleTogglePlay}
-          aria-label={isPlaying ? 'Pause Runway Stream' : 'Play Runway Stream'}
-          className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer backdrop-blur-md active:scale-90"
+          className="hero-hud-btn shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-white/40 flex items-center justify-center transition-all backdrop-blur-md cursor-pointer shadow-lg active:scale-95 hover:scale-105"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            color: '#ffffff'
+          }}
+          title={isPlaying ? 'Pause Video' : 'Play Video'}
+          aria-label={isPlaying ? 'Pause Video' : 'Play Video'}
         >
-          {isPlaying ? <Pause className="w-4 h-4 text-pink" /> : <Play className="w-4 h-4 text-pink fill-pink ml-0.5" />}
+          {isPlaying ? (
+            <Pause className="w-3.5 h-3.5" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+          ) : (
+            <Play className="w-3.5 h-3.5 fill-white" style={{ color: '#ffffff', fill: '#ffffff' }} />
+          )}
         </button>
 
+        {/* Sound Toggle Button (Crystal Clear, Always Visible, High Contrast) */}
         <button
           onClick={handleToggleMute}
-          aria-label={isMuted ? 'Unmute Runway Audio' : 'Mute Runway Audio'}
-          className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer backdrop-blur-md active:scale-90"
+          className="hero-sound-toggle-btn shrink-0 px-3 sm:px-3.5 h-9 sm:h-10 rounded-full border border-white/40 flex items-center gap-2 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105"
+          style={{
+            backgroundColor: isMuted ? 'rgba(0, 0, 0, 0.85)' : 'rgba(244, 114, 182, 0.22)',
+            borderColor: isMuted ? 'rgba(255, 255, 255, 0.5)' : '#f472b6',
+            boxShadow: isMuted ? '0 4px 14px rgba(0,0,0,0.6)' : '0 0 20px rgba(244, 114, 182, 0.55)',
+            color: '#ffffff'
+          }}
+          title={isMuted ? 'Unmute Audio Soundtrack' : 'Mute Audio Soundtrack'}
+          aria-label={isMuted ? 'Sound Off - Tap to Unmute' : 'Sound On - Tap to Mute'}
         >
-          {isMuted ? <VolumeX className="w-4 h-4 text-silver/80" /> : <Volume2 className="w-4 h-4 text-pink" />}
+          {isMuted ? (
+            <>
+              <VolumeX className="w-3.5 h-3.5 text-zinc-300 shrink-0" style={{ color: '#ffffff', stroke: '#ffffff' }} />
+              <span
+                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
+                style={{ color: '#ffffff' }}
+              >
+                SOUND OFF
+              </span>
+            </>
+          ) : (
+            <>
+              <Volume2 className="w-3.5 h-3.5 text-pink shrink-0 animate-pulse" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+              <span
+                className="hero-sound-label text-[10px] sm:text-[11px] font-mono tracking-widest font-bold uppercase whitespace-nowrap"
+                style={{ color: '#ffffff' }}
+              >
+                SOUND ON
+              </span>
+            </>
+          )}
+        </button>
+
+        {/* Full Cinema Reel Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            playSound('pip');
+            setIsCinemaOpen(true);
+          }}
+          className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full border border-white/40 inline-flex items-center gap-1.5 text-white transition-all cursor-pointer shadow-lg active:scale-95 hover:scale-105 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase font-bold"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            borderColor: 'rgba(255, 255, 255, 0.5)',
+            color: '#ffffff'
+          }}
+          title="Open Cinema Master Reel Modal"
+        >
+          <Film className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
+          <span className="hidden sm:inline" style={{ color: '#ffffff' }}>FULL CINEMA REEL</span>
+          <span className="sm:hidden" style={{ color: '#ffffff' }}>CINEMA</span>
         </button>
       </div>
 
-      {/* 4. Fullscreen Cinema Reel Modal */}
+      {/* 4. Minimalist Scroll Guide */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center pointer-events-none z-[10] opacity-60">
+        <div className="w-[1px] h-9 bg-gradient-to-b from-transparent via-pink to-transparent animate-pulse" />
+      </div>
+
+      {/* 5. Fullscreen Cinema Reel Modal */}
       <CinemaReelModal
         isOpen={isCinemaOpen}
         onClose={() => setIsCinemaOpen(false)}

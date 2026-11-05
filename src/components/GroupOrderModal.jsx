@@ -124,6 +124,18 @@ export default function GroupOrderModal({
     }
   };
 
+  // Check if current user is the creator/organizer of this squad cart
+  const isCreator = Boolean(
+    activeGroup && (
+      (currentUser && (
+        (currentUser.id && currentUser.id === activeGroup.creatorUserId) ||
+        (currentUser.email && currentUser.email.toLowerCase() === activeGroup.creatorEmail?.toLowerCase()) ||
+        (currentUser.name && currentUser.name.toLowerCase() === activeGroup.creatorName?.toLowerCase())
+      )) ||
+      (!currentUser && creatorInputEmail && creatorInputEmail.toLowerCase() === activeGroup.creatorEmail?.toLowerCase())
+    )
+  );
+
   // Compute all items count & total
   const members = activeGroup?.membersData || [];
   let totalItemsCount = 0;
@@ -520,32 +532,25 @@ export default function GroupOrderModal({
                 ))}
               </div>
 
-              {/* Add My Piece CTA for Visiting Friends */}
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
-                <div className="text-left">
-                  <span className="text-xs font-mono font-bold text-white block">
-                    WANT TO ADD YOUR PIECE TO THIS ORDER?
-                  </span>
-                  <span className="text-[10px] font-mono text-zinc-400 block">
-                    Browse the runway vault and click Add to Cart to contribute.
-                  </span>
-                </div>
-                {!currentUser ? (
+              {/* Add My Piece CTA: Strictly for visiting friends who are NOT logged in yet (never shown to creator, never shown if logged in) */}
+              {!isCreator && !currentUser && (
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
+                  <div className="text-left">
+                    <span className="text-xs font-mono font-bold text-white block">
+                      WANT TO ADD YOUR PIECE TO THIS ORDER?
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-400 block">
+                      Browse the runway vault and click Add to Cart to contribute.
+                    </span>
+                  </div>
                   <button
                     onClick={() => onOpenAuthModal?.()}
                     className="px-4 py-2 rounded-full bg-pink/20 hover:bg-pink/30 border border-pink/40 text-pink text-xs font-mono font-bold uppercase transition-all shrink-0 cursor-pointer active:scale-95"
                   >
                     SIGN IN TO ADD
                   </button>
-                ) : (
-                  <button
-                    onClick={onClose}
-                    className="px-4 py-2 rounded-full bg-white text-black hover:bg-pink text-xs font-mono font-bold uppercase transition-all shrink-0 cursor-pointer active:scale-95"
-                  >
-                    BROWSE RUNWAY ↗
-                  </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </div>
