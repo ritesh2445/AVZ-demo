@@ -9,7 +9,7 @@ const LegacyApp = dynamic(() => import('@/src/App'), {
   loading: () => null,
 });
 
-export default function ClientStorefront() {
+export default function ClientStorefront({ initialSlug }: { initialSlug?: string[] }) {
   const [storefrontData, setStorefrontData] = useState<{
     settings: any;
     sections: any;
@@ -154,7 +154,7 @@ export default function ClientStorefront() {
 
       {/* Main Storefront */}
       <div className="avz-storefront-root italic">
-        <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} />
+        <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} initialSlug={initialSlug} />
       </div>
     </>
   );

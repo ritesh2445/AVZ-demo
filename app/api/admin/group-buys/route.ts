@@ -9,8 +9,15 @@ export async function GET() {
   try {
     await initializeDatabase();
     const db = getDb();
-    const res = await db.execute('SELECT * FROM group_buys ORDER BY created_at DESC');
-    return NextResponse.json({ success: true, group_buys: res.rows });
+    const [resBuys, resCarts] = await Promise.all([
+      db.execute('SELECT * FROM group_buys ORDER BY created_at DESC'),
+      db.execute('SELECT * FROM group_carts ORDER BY created_at DESC')
+    ]);
+    return NextResponse.json({
+      success: true,
+      group_buys: resBuys.rows,
+      group_carts: resCarts.rows
+    });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

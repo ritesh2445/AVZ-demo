@@ -31,7 +31,7 @@ import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
 import { authClient } from './lib/auth-client';
 
-export default function App({ storefrontConfig, cmsContent, products: liveProducts }) {
+export default function App({ storefrontConfig, cmsContent, products: liveProducts, initialSlug }) {
   // Live catalog products from database with fallback to brand data
   const catalogProducts = Array.isArray(liveProducts) && liveProducts.length > 0 ? liveProducts : PRODUCTS;
 
@@ -182,14 +182,106 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   }, []);
 
   // Scroll to section handler (memoized for zero child re-renders)
-  const scrollToSection = useCallback((id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -75; // compensate for sleek fixed navbar
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, []);
+  // Deep-linking route handler: resolves URLs like /custom, /shop, /vault, /lookbook, /cart, /wishlist, /privacy, etc.
+  useEffect(() => {
+    if (!initialSlug) return;
+    const slugStr = Array.isArray(initialSlug)
+      ? initialSlug.join('/')
+      : String(initialSlug || '');
+    const cleanSlug = slugStr.toLowerCase().trim().replace(/^\/+|\/+$/g, '');
+    if (!cleanSlug) return;
+
+    const timer = setTimeout(() => {
+      // 1. Modals & Drawers
+      if (cleanSlug === 'cart' || cleanSlug === 'bag') {
+        setCartOpen(true);
+        return;
+      }
+      if (cleanSlug === 'wishlist' || cleanSlug === 'stash') {
+        setWishlistOpen(true);
+        return;
+      }
+      if (cleanSlug === 'tracking' || cleanSlug === 'orders' || cleanSlug === 'order-status') {
+        setTrackingModalOpen(true);
+        return;
+      }
+      if (cleanSlug === 'privacy' || cleanSlug === 'privacy-policy') {
+        handleOpenLegalModal('privacy');
+        return;
+      }
+      if (cleanSlug === 'terms' || cleanSlug === 'terms-of-service') {
+        handleOpenLegalModal('terms');
+        return;
+      }
+      if (cleanSlug === 'refund' || cleanSlug === 'returns' || cleanSlug === 'refund-policy') {
+        handleOpenLegalModal('refund');
+        return;
+      }
+      if (cleanSlug === 'shipping' || cleanSlug === 'shipping-policy') {
+        handleOpenLegalModal('shipping');
+        return;
+      }
+      if (cleanSlug === 'squad' || cleanSlug === 'group-buy' || cleanSlug === 'group-order') {
+        setSquadModalOpen(true);
+        return;
+      }
+
+      // 2. Product Detail deep link (/product/:id or /shop/:id)
+      const prodSlug = cleanSlug.startsWith('product/')
+        ? cleanSlug.replace('product/', '')
+        : (cleanSlug.startsWith('shop/') ? cleanSlug.replace('shop/', '') : cleanSlug);
+      
+      const foundProduct = catalogProducts.find(
+        (p) =>
+          String(p.id).toLowerCase() === prodSlug ||
+          String(p.slug || '').toLowerCase() === prodSlug ||
+          String(p.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') === prodSlug
+      );
+      if (foundProduct && (cleanSlug.startsWith('product/') || cleanSlug.startsWith('shop/') || foundProduct.slug === cleanSlug)) {
+        setActiveProduct(foundProduct);
+        return;
+      }
+
+      // 3. Section Scroll Mapping
+      const sectionMap = {
+        custom: 'custom',
+        'custom-order': 'custom',
+        'custom-orders': 'custom',
+        bespoke: 'custom',
+        shop: 'shop',
+        collection: 'shop',
+        products: 'shop',
+        vault: 'vault',
+        archive: 'vault',
+        lookbook: 'lookbook',
+        campaign: 'lookbook',
+        museum: 'museum',
+        exhibit: 'museum',
+        gallery: 'museum',
+        about: 'about',
+        founders: 'about',
+        specs: 'specs',
+        craft: 'specs',
+        craftsmanship: 'specs',
+        testimonials: 'testimonials',
+        reviews: 'testimonials',
+        faq: 'faq',
+        faqs: 'faq',
+        contact: 'contact'
+      };
+
+      const targetSection = sectionMap[cleanSlug];
+      if (targetSection) {
+        scrollToSection(targetSection);
+        if (targetSection === 'custom') {
+          const formInput = document.querySelector('#custom input, #custom textarea');
+          if (formInput) formInput.focus();
+        }
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [initialSlug, catalogProducts, scrollToSection, handleOpenLegalModal]);
 
 
 
@@ -460,7 +552,6 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         <section id="hero" className="w-full">
           <HeroThreeDimension
             isReady={!isLoading}
-            onOpenTunnel={() => setTunnelOpen(true)}
             onExploreCatalogue={() => scrollToSection('shop')}
             onScrollToSection={scrollToSection}
             cmsHero={cmsContent?.hero}

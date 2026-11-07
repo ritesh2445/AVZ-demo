@@ -45,6 +45,7 @@ export default function AdminDashboardPage() {
   const [mediaAssets, setMediaAssets] = useState<any[]>([]);
   const [promotions, setPromotions] = useState<any[]>([]);
   const [groupBuys, setGroupBuys] = useState<any[]>([]);
+  const [groupCarts, setGroupCarts] = useState<any[]>([]);
   const [activityLogs, setActivityLogs] = useState<any[]>([]);
   const [adminUsersList, setAdminUsersList] = useState<any[]>([]);
   const [collections, setCollections] = useState<any[]>([]);
@@ -373,11 +374,12 @@ export default function AdminDashboardPage() {
         setPromotions(promoData.promotions || []);
       }
 
-      // Group Buys
+      // Group Buys & Collaborative Group Carts
       const gbRes = await fetch('/api/admin/group-buys');
       if (gbRes.ok) {
         const gbData = await gbRes.json();
         setGroupBuys(gbData.group_buys || []);
+        setGroupCarts(gbData.group_carts || []);
       }
 
       // Activity Logs
@@ -1778,8 +1780,8 @@ export default function AdminDashboardPage() {
           {activeTab === 'payments' && (
             <div className="space-y-6 max-w-7xl mx-auto">
               <div>
-                <h2 className="text-xl font-cinzel font-bold text-white">Razorpay Payments & Reconciliation</h2>
-                <p className="text-xs text-neutral-400 mt-1 font-mono">Server-side HMAC-SHA256 signature verification and live settlement log.</p>
+                <h2 className="text-xl font-cinzel font-bold text-white uppercase">Razorpay Payments & Reconciliation Ledger</h2>
+                <p className="text-xs text-neutral-400 mt-1 font-mono">Server-side HMAC-SHA256 signature verification, live settlement log, and idempotent refund controls.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1818,9 +1820,83 @@ export default function AdminDashboardPage() {
                       <Check className="w-4 h-4" /> Net Banking (50+ Indian Banks)
                     </div>
                     <div className="flex items-center gap-2 text-emerald-400">
-                      <Check className="w-4 h-4" /> International Cards (USD, EUR, GBP Currency Conversions)
+                      <Check className="w-4 h-4" /> Cash on Delivery (COD with Admin Toggle)
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Live Payment & Settlement Ledger */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-sm font-bold text-white font-cinzel uppercase">Live Transaction Settlement Ledger</h3>
+                  <span className="text-xs font-mono text-neutral-400">{orders.length} Total Transactions</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-neutral-800 text-neutral-500 font-mono uppercase text-[11px]">
+                        <th className="py-3 px-3">Order #</th>
+                        <th className="py-3 px-3">Customer</th>
+                        <th className="py-3 px-3">Amount</th>
+                        <th className="py-3 px-3">Payment Method</th>
+                        <th className="py-3 px-3">Gateway Ref</th>
+                        <th className="py-3 px-3">Status</th>
+                        <th className="py-3 px-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-800/60">
+                      {orders.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="py-6 text-center text-neutral-500 font-mono">
+                            No transactions recorded yet.
+                          </td>
+                        </tr>
+                      ) : (
+                        orders.map((ord) => (
+                          <tr key={ord.id} className="hover:bg-[#181222] transition-colors">
+                            <td className="py-3 px-3 font-mono font-bold text-white">{ord.order_number}</td>
+                            <td className="py-3 px-3">
+                              <span className="text-white block">{ord.customer_name}</span>
+                              <span className="text-neutral-500 text-[11px] font-mono">{ord.customer_email}</span>
+                            </td>
+                            <td className="py-3 px-3 font-mono font-bold text-white">₹{ord.grand_total}</td>
+                            <td className="py-3 px-3 font-mono text-neutral-300">{ord.payment_method || 'Razorpay'}</td>
+                            <td className="py-3 px-3 font-mono text-neutral-400 text-[11px]">
+                              {ord.razorpay_payment_id || ord.razorpay_order_id || 'N/A'}
+                            </td>
+                            <td className="py-3 px-3">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
+                                ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                ord.payment_status === 'refunded' ? 'bg-purple-500/10 text-purple-300 border border-purple-500/20' :
+                                'bg-amber-500/10 text-amber-400'
+                              }`}>
+                                {ord.payment_status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-right">
+                              {ord.payment_status === 'paid' ? (
+                                <button
+                                  onClick={() => {
+                                    setRefundOrderTarget(ord);
+                                    setRefundAmount(Number(ord.grand_total));
+                                    setRefundModalOpen(true);
+                                  }}
+                                  className="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900 border border-red-800/80 text-red-200 text-[11px] font-mono cursor-pointer"
+                                >
+                                  Refund & Restock
+                                </button>
+                              ) : ord.payment_status === 'refunded' ? (
+                                <span className="text-[10px] font-mono text-neutral-500">Restocked</span>
+                              ) : (
+                                <span className="text-[10px] font-mono text-neutral-500">—</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -2000,73 +2076,80 @@ export default function AdminDashboardPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
 
-          {/* MODULE: PAYMENTS & REFUNDS */}
-          {activeTab === 'payments' && (
-            <div className="space-y-6 max-w-7xl mx-auto">
-              <div>
-                <h2 className="text-xl font-cinzel font-bold text-white uppercase">Payment & Transaction Ledger</h2>
-                <p className="text-xs text-neutral-400 mt-1 font-mono">Live payment settlement audit trail, Razorpay references, and idempotent refund controls.</p>
-              </div>
+              {/* Collaborative Squad Carts (Live Multi-User Shopping Sessions) */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6 mt-6">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-white font-cinzel uppercase">Live Collaborative Squad Carts</h3>
+                    <p className="text-xs text-neutral-400 font-mono mt-0.5">Real-time group shopping sessions initiated by visitors with shareable invites.</p>
+                  </div>
+                  <span className="text-xs font-mono text-neutral-400">{groupCarts.length} Active Sessions</span>
+                </div>
 
-              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead>
                       <tr className="border-b border-neutral-800 text-neutral-500 font-mono uppercase text-[11px]">
-                        <th className="py-3 px-3">Order #</th>
-                        <th className="py-3 px-3">Customer</th>
-                        <th className="py-3 px-3">Amount</th>
-                        <th className="py-3 px-3">Payment Method</th>
-                        <th className="py-3 px-3">Gateway Ref</th>
+                        <th className="py-3 px-3">Share Code</th>
+                        <th className="py-3 px-3">Creator / Host</th>
+                        <th className="py-3 px-3">Participants & Items</th>
                         <th className="py-3 px-3">Status</th>
-                        <th className="py-3 px-3 text-right">Actions</th>
+                        <th className="py-3 px-3">Created</th>
+                        <th className="py-3 px-3 text-right">Order Ref</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-neutral-800/60">
-                      {orders.map((ord) => (
-                        <tr key={ord.id} className="hover:bg-[#181222] transition-colors">
-                          <td className="py-3 px-3 font-mono font-bold text-white">{ord.order_number}</td>
-                          <td className="py-3 px-3">
-                            <span className="text-white block">{ord.customer_name}</span>
-                            <span className="text-neutral-500 text-[11px] font-mono">{ord.customer_email}</span>
-                          </td>
-                          <td className="py-3 px-3 font-mono font-bold text-white">₹{ord.grand_total}</td>
-                          <td className="py-3 px-3 font-mono text-neutral-300">{ord.payment_method || 'Razorpay'}</td>
-                          <td className="py-3 px-3 font-mono text-neutral-400 text-[11px]">
-                            {ord.razorpay_payment_id || ord.razorpay_order_id || 'N/A'}
-                          </td>
-                          <td className="py-3 px-3">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                              ord.payment_status === 'refunded' ? 'bg-purple-500/10 text-purple-300 border border-purple-500/20' :
-                              'bg-amber-500/10 text-amber-400'
-                            }`}>
-                              {ord.payment_status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-3 text-right">
-                            {ord.payment_status === 'paid' ? (
-                              <button
-                                onClick={() => {
-                                  setRefundOrderTarget(ord);
-                                  setRefundAmount(Number(ord.grand_total));
-                                  setRefundModalOpen(true);
-                                }}
-                                className="px-2.5 py-1 rounded bg-red-950/60 hover:bg-red-900 border border-red-800/80 text-red-200 text-[11px] font-mono cursor-pointer"
-                              >
-                                Refund & Restock
-                              </button>
-                            ) : ord.payment_status === 'refunded' ? (
-                              <span className="text-[10px] font-mono text-neutral-500">Restocked</span>
-                            ) : (
-                              <span className="text-[10px] font-mono text-neutral-500">—</span>
-                            )}
+                    <tbody className="divide-y divide-neutral-800/60 font-mono">
+                      {groupCarts.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="py-6 text-center text-neutral-500 font-mono">
+                            No collaborative squad carts created yet.
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        groupCarts.map((gc) => {
+                          const members = (() => {
+                            try {
+                              return typeof gc.members_data === 'string' ? JSON.parse(gc.members_data) : (gc.members_data || []);
+                            } catch {
+                              return [];
+                            }
+                          })();
+                          const totalPieces = members.reduce((sum: number, m: any) => sum + (Array.isArray(m.items) ? m.items.length : 0), 0);
+
+                          return (
+                            <tr key={gc.id} className="hover:bg-[#181222] transition-colors">
+                              <td className="py-3 px-3 font-bold text-[#F4C2C2]">{gc.share_code}</td>
+                              <td className="py-3 px-3">
+                                <span className="text-white block font-sans font-medium">{gc.creator_name}</span>
+                                <span className="text-neutral-500 text-[11px]">{gc.creator_email}</span>
+                              </td>
+                              <td className="py-3 px-3 text-neutral-300">
+                                {members.length} {members.length === 1 ? 'member' : 'members'} · {totalPieces} {totalPieces === 1 ? 'piece' : 'pieces'}
+                              </td>
+                              <td className="py-3 px-3">
+                                <span className={`px-2 py-0.5 rounded text-[10px] uppercase ${
+                                  gc.status === 'open' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                  gc.status === 'completed' ? 'bg-purple-500/10 text-purple-300 border border-purple-500/20' :
+                                  'bg-amber-500/10 text-amber-400'
+                                }`}>
+                                  {gc.status}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-neutral-400 text-[11px]">
+                                {new Date(Number(gc.created_at)).toLocaleDateString()}
+                              </td>
+                              <td className="py-3 px-3 text-right">
+                                {gc.order_id ? (
+                                  <span className="text-emerald-400 font-bold">{gc.order_id}</span>
+                                ) : (
+                                  <span className="text-neutral-500">In Cart</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
