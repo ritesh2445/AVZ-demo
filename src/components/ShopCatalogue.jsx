@@ -292,12 +292,7 @@ function KeyArchiveCarousel({
                     onClick={(e) => {
                       e.stopPropagation();
                       playSound('snap');
-                      if (!currentUser) {
-                        alert('Please sign in or create an account to request an archival commission.');
-                        onOpenAuthModal?.();
-                      } else {
-                        onRequestCustom?.(item.name);
-                      }
+                      onRequestCustom?.(item.name);
                     }}
                     className="w-full mt-2.5 py-2 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
                   >
@@ -432,12 +427,7 @@ function MobileCompactProductCard({
               onClick={(e) => {
                 e.stopPropagation();
                 playSound('snap');
-                if (!currentUser) {
-                  alert('Please sign in to request an archival commission.');
-                  onOpenAuthModal?.();
-                } else {
-                  onRequestCustom?.(product.name);
-                }
+                onRequestCustom?.(product.name);
               }}
               className="px-2 py-1 rounded-full bg-red-950/70 border border-red-500/60 text-red-200 text-[9px] font-mono font-bold uppercase"
             >
@@ -922,12 +912,7 @@ function ShopCatalogue({
                         onClick={(e) => {
                           e.stopPropagation();
                           playSound('snap');
-                          if (!currentUser) {
-                            alert('Please sign in or create an account to request an archival commission.');
-                            onOpenAuthModal?.();
-                          } else {
-                            onRequestCustom?.(product.name);
-                          }
+                          onRequestCustom?.(product.name);
                         }}
                         className="w-full mt-3 py-2.5 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
                       >

@@ -322,13 +322,8 @@ export default function ProductDetailModal({
                 onClick={(e) => {
                   e.stopPropagation();
                   playSound('snap');
-                  if (!currentUser) {
-                    alert('Please sign in or create an account to request an archival piece remake.');
-                    onOpenAuthModal?.();
-                  } else {
-                    onClose();
-                    onRequestCustom?.(product.name);
-                  }
+                  onClose();
+                  onRequestCustom?.(product.name);
                 }}
                 className="w-full py-3.5 px-6 rounded-full bg-red-950/80 hover:bg-red-900 border border-red-500/70 text-red-100 text-xs font-mono font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
               >
