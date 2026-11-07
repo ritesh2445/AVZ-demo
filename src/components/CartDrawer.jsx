@@ -102,9 +102,12 @@ export default function CartDrawer({
   }
 
   const discountedSubtotal = Math.max(0, subtotalInr - discountInr);
-  const freeShippingThreshold = BRAND_INFO.shipping.freeThreshold;
-  const isFreeShipping = discountedSubtotal >= freeShippingThreshold || discountedSubtotal === 0 || appliedPromo?.code === 'FREESHIP';
-  const shippingCostInr = isFreeShipping ? 0 : 250;
+  const expressFee = typeof shippingRates?.express_courier_fee === 'number' ? shippingRates.express_courier_fee : 250;
+  const freeShippingThreshold = typeof shippingRates?.free_threshold === 'number' ? shippingRates.free_threshold : (BRAND_INFO.shipping.freeThreshold || 5000);
+  const freeShippingEnabled = typeof shippingRates?.free_threshold_enabled === 'boolean' ? shippingRates.free_threshold_enabled : true;
+
+  const isFreeShipping = (freeShippingEnabled && discountedSubtotal >= freeShippingThreshold) || discountedSubtotal === 0 || appliedPromo?.code === 'FREESHIP';
+  const shippingCostInr = isFreeShipping ? 0 : expressFee;
   const totalInr = discountedSubtotal + shippingCostInr;
 
   const handleApplyPromo = async (e) => {

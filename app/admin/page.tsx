@@ -54,6 +54,43 @@ export default function AdminDashboardPage() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [isUploadingR2, setIsUploadingR2] = useState(false);
+  const [shippingRates, setShippingRates] = useState<{
+    express_courier_fee: number;
+    free_threshold_enabled: boolean;
+    free_threshold: number;
+    courier_partner_label?: string;
+  }>({
+    express_courier_fee: 250,
+    free_threshold_enabled: true,
+    free_threshold: 5000,
+    courier_partner_label: 'Blue Dart / Delhivery Express Air'
+  });
+  const [isSavingShipping, setIsSavingShipping] = useState(false);
+
+  const handleSaveShippingRates = async (newRates?: any) => {
+    const payload = newRates || shippingRates;
+    setIsSavingShipping(true);
+    try {
+      const res = await fetch('/api/admin/storefront/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: 'shipping_rates',
+          value: payload
+        })
+      });
+      if (res.ok) {
+        setShippingRates(payload);
+        showNotification('✅ Express Courier charges & free shipping rules saved successfully.', 'success');
+      } else {
+        showNotification('Failed to save courier charges.', 'error');
+      }
+    } catch {
+      showNotification('Network error saving shipping rates.', 'error');
+    } finally {
+      setIsSavingShipping(false);
+    }
+  };
   const [productImagePreview, setProductImagePreview] = useState<string>('');
 
   const handleUploadImageFile = async (e: React.ChangeEvent<HTMLInputElement>, targetFieldId = 'p_image') => {
@@ -194,6 +231,9 @@ export default function AdminDashboardPage() {
           announcement: data.settings?.announcement?.data || storefrontSettings.announcement,
           purchases_enabled: data.settings?.purchases_enabled?.data || storefrontSettings.purchases_enabled
         });
+        if (data.settings?.shipping_rates?.data) {
+          setShippingRates(data.settings.shipping_rates.data);
+        }
       }
     } catch {}
   };
@@ -1373,6 +1413,117 @@ export default function AdminDashboardPage() {
                     <Download className="w-4 h-4" />
                     Download Unfulfilled Courier CSV
                   </a>
+                </div>
+              </div>
+
+              {/* EXPRESS COURIER CHARGES & PRICING CONFIGURATION */}
+              <div className="bg-[#140e1c] border border-pink/30 rounded-2xl p-5 shadow-xl">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-4 border-b border-white/10">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Truck className="w-4 h-4 text-pink" />
+                      <h3 className="text-sm font-bold text-white font-cinzel">Express Courier Delivery Charges & Rules</h3>
+                    </div>
+                    <p className="text-[11px] text-neutral-400 mt-1 font-mono">
+                      Configure standard express courier delivery fees across India and complimentary shipping thresholds shown in customer carts.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleSaveShippingRates()}
+                    disabled={isSavingShipping}
+                    className="px-4 py-2 rounded-xl bg-pink hover:bg-pink/90 text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all shrink-0 active:scale-95 cursor-pointer disabled:opacity-50"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isSavingShipping ? 'Saving Rates...' : 'Save Courier Charges'}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+                  <div>
+                    <label className="block text-neutral-300 mb-1 font-bold">Standard Express Courier Fee (₹)</label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-neutral-500">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="10"
+                        value={shippingRates.express_courier_fee}
+                        onChange={(e) => setShippingRates({
+                          ...shippingRates,
+                          express_courier_fee: Math.max(0, Number(e.target.value) || 0)
+                        })}
+                        className="w-full bg-[#181122] border border-neutral-700 rounded-lg pl-7 pr-3 py-2 text-white font-mono focus:border-pink outline-none"
+                      />
+                    </div>
+                    <span className="text-[10px] text-neutral-500 mt-1 block">
+                      Charged on orders when free shipping criteria is not met.
+                    </span>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-neutral-300 font-bold">Complimentary Shipping</label>
+                      <input
+                        type="checkbox"
+                        id="chk_free_ship"
+                        checked={shippingRates.free_threshold_enabled}
+                        onChange={(e) => setShippingRates({
+                          ...shippingRates,
+                          free_threshold_enabled: e.target.checked
+                        })}
+                        className="w-4 h-4 accent-pink cursor-pointer"
+                      />
+                    </div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2.5 text-neutral-500">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="100"
+                        disabled={!shippingRates.free_threshold_enabled}
+                        value={shippingRates.free_threshold}
+                        onChange={(e) => setShippingRates({
+                          ...shippingRates,
+                          free_threshold: Math.max(0, Number(e.target.value) || 0)
+                        })}
+                        className="w-full bg-[#181122] border border-neutral-700 rounded-lg pl-7 pr-3 py-2 text-white font-mono focus:border-pink outline-none disabled:opacity-40"
+                      />
+                    </div>
+                    <span className="text-[10px] text-neutral-500 mt-1 block">
+                      Orders of this value or higher unlock free express delivery.
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-neutral-300 mb-1 font-bold">Primary Courier Partners</label>
+                    <input
+                      type="text"
+                      value={shippingRates.courier_partner_label || ''}
+                      onChange={(e) => setShippingRates({
+                        ...shippingRates,
+                        courier_partner_label: e.target.value
+                      })}
+                      placeholder="e.g. Blue Dart / Delhivery Express Air"
+                      className="w-full bg-[#181122] border border-neutral-700 rounded-lg px-3 py-2 text-white font-mono focus:border-pink outline-none"
+                    />
+                    <span className="text-[10px] text-neutral-500 mt-1 block">
+                      Displayed on shipping manifests and customer notices.
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-black/40 rounded-xl border border-white/5 flex items-center justify-between text-xs font-mono">
+                  <span className="text-neutral-400">
+                    Live Rule Preview: {shippingRates.free_threshold_enabled ? (
+                      <span className="text-white">
+                        Orders under <strong className="text-pink">₹{shippingRates.free_threshold.toLocaleString('en-IN')}</strong> will incur a <strong className="text-pink">₹{shippingRates.express_courier_fee}</strong> courier charge. Orders above will be <strong className="text-emerald-400">COMPLIMENTARY</strong>.
+                      </span>
+                    ) : (
+                      <span className="text-white">
+                        All orders will incur a flat <strong className="text-pink">₹{shippingRates.express_courier_fee}</strong> express courier delivery charge.
+                      </span>
+                    )}
+                  </span>
                 </div>
               </div>
 

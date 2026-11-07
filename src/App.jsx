@@ -543,6 +543,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         isOpen={cartOpen}
         onClose={() => setCartOpen(false)}
         items={cartItems}
+        shippingRates={storefrontConfig?.shipping_rates}
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}

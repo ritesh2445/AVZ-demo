@@ -169,8 +169,24 @@ export async function POST(request: Request) {
     }
 
     // 4. Shipping Calculation: Free above â‚¹5000, else flat â‚¹250 domestic
-    const freeShippingThreshold = 5000;
-    const shippingFee = (calculatedSubtotal - discountAmount) >= freeShippingThreshold ? 0 : 250;
+    // 4. Shipping Calculation: Dynamic from storefront_settings (Express Courier configuration)
+    let expressFee = 250;
+    let freeThreshold = 5000;
+    let freeThresholdEnabled = true;
+
+    try {
+      const shipSetting = await db.execute("SELECT value FROM storefront_settings WHERE key = 'shipping_rates'");
+      if (shipSetting.rows.length > 0) {
+        const parsed = JSON.parse(String(shipSetting.rows[0].value));
+        if (typeof parsed.express_courier_fee === 'number') expressFee = parsed.express_courier_fee;
+        if (typeof parsed.free_threshold === 'number') freeThreshold = parsed.free_threshold;
+        if (typeof parsed.free_threshold_enabled === 'boolean') freeThresholdEnabled = parsed.free_threshold_enabled;
+      }
+    } catch (e) {
+      console.warn('[SHIPPING RATES DB FETCH WARN]:', e);
+    }
+
+    const shippingFee = (freeThresholdEnabled && (calculatedSubtotal - discountAmount) >= freeThreshold) ? 0 : expressFee;
     const grandTotal = Math.max(0, calculatedSubtotal - discountAmount + shippingFee);
 
     // 5. Generate Order Identifiers
