@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { Star, MessageSquarePlus, ShieldCheck, User, Sparkles, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
@@ -39,6 +40,7 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
   const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS);
   const [modalOpen, setModalOpen] = useState(false);
   const [authPromptOpen, setAuthPromptOpen] = useState(false);
+  useModalScrollLock(Boolean(modalOpen || authPromptOpen));
 
   // Review Form States
   const [rating, setRating] = useState(5);

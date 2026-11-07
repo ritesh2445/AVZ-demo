@@ -3,6 +3,9 @@ import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase, bootstrapDatabaseSchema } from '@/src/lib/db';
 import { INITIAL_GALLERY_ARTWORKS } from '@/src/data/initialGalleryArtworks';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   const session = await getAdminSession();
   if (!session) {

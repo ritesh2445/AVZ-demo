@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { X, Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, MessageCircle, Sparkles } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
 export default function OrderTrackingModal({ isOpen, onClose }) {
+  useModalScrollLock(Boolean(isOpen));
   const [query, setQuery] = useState('');
   const [orderStatus, setOrderStatus] = useState(null);
 

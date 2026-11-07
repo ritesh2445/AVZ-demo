@@ -121,3 +121,52 @@ export async function PATCH(
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (session.role !== 'owner') {
+    return NextResponse.json({ error: 'Only owners can delete orders' }, { status: 403 });
+  }
+
+  const { id } = await params;
+
+  try {
+    await initializeDatabase();
+    const db = getDb();
+
+    const existing = await db.execute({
+      sql: 'SELECT id, order_number FROM orders WHERE id = ? OR order_number = ?',
+      args: [id, id]
+    });
+
+    if (existing.rows.length === 0) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+
+    const orderId = String(existing.rows[0].id);
+    const orderNumber = String(existing.rows[0].order_number);
+
+    await db.execute({
+      sql: 'DELETE FROM refunds WHERE order_id = ?',
+      args: [orderId]
+    });
+
+    await db.execute({
+      sql: 'DELETE FROM orders WHERE id = ?',
+      args: [orderId]
+    });
+
+    await logAdminActivity(session.email, 'DELETE_ORDER', 'orders', orderId, { order_number: orderNumber });
+
+    return NextResponse.json({ success: true, message: `Order ${orderNumber} deleted successfully` });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}

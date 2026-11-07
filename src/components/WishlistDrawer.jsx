@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { X, Heart, ShoppingBag, ArrowRight, Trash2, Share2, Sparkles } from 'lucide-react';
 import { formatPrice } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -12,6 +13,8 @@ export default function WishlistDrawer({
   currency = 'INR',
   onOpenSquadModal
 }) {
+  useModalScrollLock(Boolean(isOpen));
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e) => {

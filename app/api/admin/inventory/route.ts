@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   const session = await getAdminSession();
   if (!session) {

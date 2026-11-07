@@ -241,6 +241,31 @@ export default function AdminDashboardPage() {
     setTimeout(() => setNotification(null), 4000);
   };
 
+  // Lock background scroll when any modal is open in the admin panel
+  const hasActiveAdminModal = Boolean(
+    selectedOrder ||
+    contentEditSection ||
+    (inventoryModalOpen && inventoryTarget) ||
+    productModalOpen ||
+    newCollectionModalOpen ||
+    newPromoModalOpen ||
+    newSquadModalOpen ||
+    newUserModalOpen ||
+    (refundModalOpen && refundOrderTarget)
+  );
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (hasActiveAdminModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [hasActiveAdminModal]);
+
   // 1. Initial Authentication Check
   useEffect(() => {
     const checkAuth = async () => {
@@ -2490,6 +2515,33 @@ export default function AdminDashboardPage() {
                 </span>
               )}
             </div>
+
+            {/* Owner Delete Order Option */}
+            {adminUser?.role === 'owner' && (
+              <div className="pt-2 flex justify-end">
+                <button
+                  onClick={async () => {
+                    if (!confirm(`Are you sure you want to permanently delete order ${selectedOrder.order_number}?`)) return;
+                    try {
+                      const res = await fetch(`/api/admin/orders/${selectedOrder.id}`, { method: 'DELETE' });
+                      if (res.ok) {
+                        showNotification(`Order ${selectedOrder.order_number} deleted successfully`, 'success');
+                        setSelectedOrder(null);
+                        fetchData();
+                      } else {
+                        showNotification('Failed to delete order', 'error');
+                      }
+                    } catch {
+                      showNotification('Error deleting order', 'error');
+                    }
+                  }}
+                  className="text-xs font-mono text-red-400 hover:text-red-300 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/30 hover:bg-red-500/10 cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Delete Order Record
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

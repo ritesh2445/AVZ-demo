@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import {
   Users,
   X,
@@ -19,6 +20,8 @@ export default function SquadBuyModal({
   onApplySquadDiscount,
   activeProduct = null
 }) {
+  useModalScrollLock(Boolean(isOpen));
+
   const [squadCode, setSquadCode] = useState('AVZ-GROUP-24');
   const [copied, setCopied] = useState(false);
   const [memberCount, setMemberCount] = useState(2);

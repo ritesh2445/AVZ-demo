@@ -3,6 +3,9 @@ import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
 import { isValidMediaUrl, sanitizeText } from '@/src/lib/security';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   const session = await getAdminSession();
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

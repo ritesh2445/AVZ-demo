@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import {
   X,
   ShoppingBag,
@@ -32,6 +33,8 @@ export default function ProductDetailModal({
   onOpenAuthModal,
   onOpenCart
 }) {
+  useModalScrollLock(Boolean(product));
+
   if (!product) return null;
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);

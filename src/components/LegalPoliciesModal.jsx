@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { X, ShieldCheck, FileText, RefreshCw, Lock, Scale, AlertCircle } from 'lucide-react';
 import { BRAND_INFO } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
 export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'privacy' }) {
+  useModalScrollLock(Boolean(isOpen));
   const [activeTab, setActiveTab] = useState(initialTab);
 
   if (!isOpen) return null;

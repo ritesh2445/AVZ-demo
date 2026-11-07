@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import {
   Maximize2,
   X,
@@ -14,6 +15,7 @@ import { playSound } from '../utils/audio';
 
 export default function ParallaxRow({ entries = [], onCommissionLook }) {
   const [activeLook, setActiveLook] = useState(null);
+  useModalScrollLock(Boolean(activeLook));
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHoveringStage, setIsHoveringStage] = useState(false);
   const [screenWidth, setScreenWidth] = useState(1200);

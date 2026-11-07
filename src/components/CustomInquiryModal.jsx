@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { CheckCircle2, MessageCircle, X } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
 export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
+  useModalScrollLock(Boolean(isOpen && inquiryData));
+
   // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;

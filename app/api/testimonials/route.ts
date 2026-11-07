@@ -3,6 +3,9 @@ import { getDb, initializeDatabase } from '@/src/lib/db';
 import { auth } from '@/src/lib/auth-better';
 import { getClientIp, checkRateLimit, sanitizeText, containsSpamPatterns, isValidEmail } from '@/src/lib/security';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const DEFAULT_SEED_TESTIMONIALS = [
   {
     id: 'test-01',

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useModalScrollLock } from '../../utils/modalScrollLock';
 import { X, Save, Trash2, Image, Layers, Sparkles, Check, RefreshCw } from 'lucide-react';
 import { playSound } from '../../utils/audio';
 
@@ -28,6 +29,7 @@ export default function QuickFrameEditorModal({
   onSaveSuccess,
   onDeleteSuccess
 }) {
+  useModalScrollLock(Boolean(artwork));
   const [formData, setFormData] = useState({
     title: artwork.title || '',
     artist: artwork.artist || '',

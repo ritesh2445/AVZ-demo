@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { useModalScrollLock } from '../utils/modalScrollLock';
 import { Search, X, ArrowUpRight, Sparkles, SlidersHorizontal, ArrowRight } from 'lucide-react';
 import { PRODUCTS, MUSEUM_ITEMS, formatPrice } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -22,6 +23,7 @@ const TRENDING_SEARCHES = [
 ];
 
 export default function SearchModal({ isOpen, onClose, onSelectProduct, currency = 'INR', products = [] }) {
+  useModalScrollLock(Boolean(isOpen));
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const inputRef = useRef(null);

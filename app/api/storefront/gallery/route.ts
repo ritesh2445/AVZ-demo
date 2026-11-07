@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { getDb, initializeDatabase, bootstrapDatabaseSchema } from '@/src/lib/db';
 import { INITIAL_GALLERY_ARTWORKS } from '@/src/data/initialGalleryArtworks';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     await initializeDatabase();
