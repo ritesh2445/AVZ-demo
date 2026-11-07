@@ -33,9 +33,11 @@ export default function CartDrawer({
   squadDiscount = null, // { squadCode, discountPercent, memberCount }
   onOpenSquadModal,
   currentUser = null,
+  onOpenAuthModal,
   purchasesEnabled = true,
   purchasesDisabledMessage = ''
 }) {
+  const isAuthenticated = Boolean(currentUser && !currentUser.isGuest && currentUser.email);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [appliedPromo, setAppliedPromo] = useState(null); // { code, percent, offInr }
@@ -179,6 +181,11 @@ export default function CartDrawer({
 
   const handleCheckoutSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      playSound('glitch');
+      onOpenAuthModal?.();
+      return;
+    }
     if (isSubmitting) return;
     setIsSubmitting(true);
     playSound('warp');
@@ -439,6 +446,44 @@ export default function CartDrawer({
                 RETURN TO RUNWAY
               </button>
             </div>
+          ) : isCheckingOut && !isAuthenticated ? (
+            /* Authentication Gate for Checkout */
+            <div className="py-8 px-4 text-center flex flex-col items-center justify-center gap-4 my-auto">
+              <div className="w-14 h-14 rounded-2xl bg-pink/10 border border-pink/40 text-pink flex items-center justify-center shadow-[0_0_25px_rgba(244,114,182,0.25)]">
+                <Lock className="w-7 h-7 text-[#f472b6]" />
+              </div>
+              <div className="space-y-1.5 max-w-sm">
+                <h3 className="text-base font-mono font-bold uppercase tracking-wider text-white">
+                  Patron Account Required
+                </h3>
+                <p className="text-xs font-mono text-zinc-400 leading-relaxed">
+                  You are free to explore all pieces and the archive for free. To reserve and complete your wearable art order, please sign in or create an account.
+                </p>
+              </div>
+              <div className="pt-2 flex flex-col gap-2.5 w-full max-w-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound('snap');
+                    onOpenAuthModal?.();
+                  }}
+                  className="w-full py-3 px-6 rounded-full bg-pink text-white hover:bg-pink-600 text-xs font-mono font-bold tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(244,114,182,0.4)] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>SIGN IN / CREATE ACCOUNT</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound('pip');
+                    setIsCheckingOut(false);
+                  }}
+                  className="text-xs font-mono text-zinc-400 hover:text-white transition-colors py-1 cursor-pointer"
+                >
+                  ← Return to Shopping Bag
+                </button>
+              </div>
+            </div>
           ) : isCheckingOut ? (
             /* Checkout Form */
             <form onSubmit={handleCheckoutSubmit} className="flex flex-col gap-3.5 text-left">
@@ -537,15 +582,40 @@ export default function CartDrawer({
                 <label className="block text-[10px] font-mono uppercase text-silver/70 mb-2">Select Payment Method</label>
                 <div className="flex flex-col gap-2">
                   {['UPI / Instant QR Code (GPay, PhonePe)', 'Credit / Debit Cards (Razorpay)', 'Cash on Delivery (COD Verified)'].map((m) => (
-                    <label key={m} className="flex items-center gap-2 p-2.5 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:border-pink">
+                    <label
+                      key={m}
+                      className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
+                        checkoutData.paymentMethod === m
+                          ? 'bg-pink/20 border-[#f472b6] shadow-[0_0_15px_rgba(244,114,182,0.3)]'
+                          : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="paymentMethod"
                         checked={checkoutData.paymentMethod === m}
-                        onChange={() => setCheckoutData({ ...checkoutData, paymentMethod: m })}
-                        className="accent-pink"
+                        onChange={() => {
+                          playSound('pip');
+                          setCheckoutData({ ...checkoutData, paymentMethod: m });
+                        }}
+                        className="sr-only"
                       />
-                      <span className="text-xs font-mono text-white">{m}</span>
+                      <div
+                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
+                          checkoutData.paymentMethod === m
+                            ? 'border-[#f472b6] bg-[#be185d]/40 shadow-[0_0_10px_#f472b6]'
+                            : 'border-white/40 bg-transparent'
+                        }`}
+                      >
+                        {checkoutData.paymentMethod === m && (
+                          <div className="w-2 h-2 rounded-full bg-[#f472b6] shadow-[0_0_8px_#f472b6]" />
+                        )}
+                      </div>
+                      <span className={`text-xs font-mono font-medium transition-colors ${
+                        checkoutData.paymentMethod === m ? 'text-white font-bold' : 'text-zinc-300'
+                      }`}>
+                        {m}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -774,30 +844,43 @@ export default function CartDrawer({
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 mt-1">
-              <button
-                type="button"
-                onClick={() => {
-                  playSound('snap');
-                  onOpenGroupOrder?.();
-                }}
-                className="py-3 px-4 rounded-full border border-pink/40 bg-pink/10 hover:bg-pink/20 text-pink text-[11px] font-mono font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 active:scale-[0.99] cursor-pointer"
-                title="Create a collaborative shared order with friends"
-              >
-                <Users className="w-3.5 h-3.5 text-pink" />
-                <span>ORDER TOGETHER 👥</span>
-              </button>
+            <div className="flex flex-col gap-2 mt-1">
+              {!isAuthenticated && (
+                <div className="flex items-center justify-center gap-1.5 text-[11px] font-mono text-[#f472b6] bg-pink/10 py-1.5 px-3 rounded-xl border border-pink/20">
+                  <Lock className="w-3.5 h-3.5 shrink-0 text-[#f472b6]" />
+                  <span>Patron account required to complete checkout</span>
+                </div>
+              )}
 
-              <button
-                onClick={() => {
-                  playSound('snap');
-                  setIsCheckingOut(true);
-                }}
-                className="flex-1 py-3.5 px-6 rounded-full bg-white text-black hover:bg-pink text-xs font-mono font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
-              >
-                <span>PROCEED TO CHECKOUT ↗</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playSound('snap');
+                    onOpenGroupOrder?.();
+                  }}
+                  className="py-3 px-4 rounded-full border border-pink/40 bg-pink/10 hover:bg-pink/20 text-pink text-[11px] font-mono font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 active:scale-[0.99] cursor-pointer"
+                  title="Create a collaborative shared order with friends"
+                >
+                  <Users className="w-3.5 h-3.5 text-pink" />
+                  <span>ORDER TOGETHER 👥</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    playSound('snap');
+                    if (!isAuthenticated) {
+                      onOpenAuthModal?.();
+                      return;
+                    }
+                    setIsCheckingOut(true);
+                  }}
+                  className="flex-1 py-3.5 px-6 rounded-full bg-white text-black hover:bg-pink text-xs font-mono font-bold tracking-widest uppercase cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-[0.99]"
+                >
+                  <span>{isAuthenticated ? 'PROCEED TO CHECKOUT ↗' : 'SIGN IN TO CHECKOUT 🔒'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         )}

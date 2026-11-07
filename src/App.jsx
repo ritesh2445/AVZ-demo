@@ -557,6 +557,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           onOpenSquadModal={handleOpenSquadModal}
           onOpenGroupOrder={() => setGroupOrderModalOpen(true)}
           currentUser={currentUser}
+          onOpenAuthModal={() => setAuthModalOpen(true)}
           purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
           purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
         />
