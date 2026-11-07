@@ -207,15 +207,45 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     });
   }, [isLoading]);
 
-  // Wishlist toggle handler (memoized)
-  const handleToggleWishlist = useCallback((product) => {
+  // Wishlist removal handler (memoized, handles item ID string, slug, or product object)
+  const handleRemoveFromWishlist = useCallback((productOrId) => {
+    if (!productOrId) return;
+    const targetId = typeof productOrId === 'object' && productOrId !== null
+      ? (productOrId.id || productOrId.slug || productOrId.name)
+      : productOrId;
+
     setWishlistItems((prev) => {
-      const exists = prev.some((p) => p.id === product.id);
+      const updated = prev.filter((p) => {
+        const pId = typeof p === 'object' && p !== null ? (p.id || p.slug || p.name) : p;
+        return String(pId) !== String(targetId);
+      });
+      try {
+        localStorage.setItem('avz_vault_stash', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  }, []);
+
+  // Wishlist toggle handler (memoized, handles both object and string ID)
+  const handleToggleWishlist = useCallback((product) => {
+    if (!product) return;
+    const targetId = typeof product === 'object' && product !== null
+      ? (product.id || product.slug || product.name)
+      : product;
+
+    setWishlistItems((prev) => {
+      const exists = prev.some((p) => {
+        const pId = typeof p === 'object' && p !== null ? (p.id || p.slug || p.name) : p;
+        return String(pId) === String(targetId);
+      });
       let updated;
       if (exists) {
-        updated = prev.filter((p) => p.id !== product.id);
+        updated = prev.filter((p) => {
+          const pId = typeof p === 'object' && p !== null ? (p.id || p.slug || p.name) : p;
+          return String(pId) !== String(targetId);
+        });
       } else {
-        updated = [...prev, product];
+        updated = [...prev, typeof product === 'object' ? product : { id: product }];
       }
       try {
         localStorage.setItem('avz_vault_stash', JSON.stringify(updated));
@@ -582,7 +612,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         isOpen={wishlistOpen}
         onClose={() => setWishlistOpen(false)}
         items={wishlistItems}
-        onRemoveFromWishlist={handleToggleWishlist}
+        onRemoveFromWishlist={handleRemoveFromWishlist}
         onAddToCart={handleAddToCart}
         currency={currency}
         onOpenSquadModal={handleOpenSquadModal}

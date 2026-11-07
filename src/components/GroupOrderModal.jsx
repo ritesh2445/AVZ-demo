@@ -15,7 +15,8 @@ import {
   Lock,
   MessageCircle,
   Truck,
-  CheckCircle2
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 import { formatPrice } from '../data/brandData';
@@ -42,6 +43,7 @@ export default function GroupOrderModal({
   const [isCheckoutStep, setIsCheckoutStep] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(null);
+  const [statusError, setStatusError] = useState('');
   const [shippingData, setShippingData] = useState({
     fullName: currentUser?.name || '',
     email: currentUser?.email || '',
@@ -108,20 +110,22 @@ export default function GroupOrderModal({
           items: cartItems
         })
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
         // Fetch full group cart details
         const fetchRes = await fetch(`/api/storefront/group-cart/${data.groupCartId}`);
-        const fetchData = await fetchRes.json();
+        const fetchData = await fetchRes.json().catch(() => ({}));
         if (fetchData.groupCart) {
           setActiveGroup(fetchData.groupCart);
           if (onGroupCartCreated) onGroupCartCreated(fetchData.groupCart);
         }
       } else {
-        alert(data.error || 'Failed to initialize group buy session.');
+        setStatusError(data.error || 'Failed to initialize group buy session.');
+        playSound('glitch');
       }
     } catch (err) {
-      alert('Unable to initialize group cart. Please check your connection.');
+      setStatusError('Unable to initialize group cart. Please check your connection.');
+      playSound('glitch');
     } finally {
       setIsCreating(false);
     }
@@ -156,8 +160,10 @@ export default function GroupOrderModal({
 
   const handlePlaceGroupOrder = async (e) => {
     e.preventDefault();
+    setStatusError('');
     if (!shippingData.fullName || !shippingData.email || !shippingData.address || !shippingData.pincode) {
-      alert('Please fill all delivery address fields');
+      setStatusError('Please fill all required delivery address fields (Name, Email, Address, Pincode).');
+      playSound('glitch');
       return;
     }
 
@@ -182,15 +188,17 @@ export default function GroupOrderModal({
         })
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
         playSound('chord');
         setOrderConfirmed(data);
       } else {
-        alert(data.error || 'Failed to complete squad order.');
+        setStatusError(data.error || 'Failed to complete squad order.');
+        playSound('glitch');
       }
     } catch (err) {
-      alert('Connection error during order placement. Please check your internet.');
+      setStatusError('Connection error during order placement. Please check your internet connection.');
+      playSound('glitch');
     } finally {
       setIsPlacingOrder(false);
     }
@@ -242,6 +250,13 @@ export default function GroupOrderModal({
               ? 'Complete shipping details for the collective order. All members will be linked to this order.'
               : 'Invite friends to add their desired pieces into one combined cart. Everyone sees who added which piece, and all participants receive live order updates!'}
           </p>
+
+          {statusError && (
+            <div className="mt-3 p-3 bg-red-950/80 border border-red-500/70 rounded-xl text-red-100 text-xs font-mono flex items-center gap-2 animate-fade-in text-left">
+              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <span>{statusError}</span>
+            </div>
+          )}
         </div>
 
         {/* Content Body */}

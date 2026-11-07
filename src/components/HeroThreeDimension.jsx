@@ -206,8 +206,8 @@ function HeroThreeDimension({ onExploreCatalogue, onScrollToSection, isReady, on
           <button
             onClick={() => {
               playSound('snap');
-              if (onOpenTunnel) onOpenTunnel();
-              else if (onScrollToSection) onScrollToSection('custom');
+              if (onScrollToSection) onScrollToSection('custom');
+              else if (onOpenTunnel) onOpenTunnel();
             }}
             className="btn-hero-custom w-full sm:w-auto px-7 py-3 rounded-full border-2 border-pink/80 bg-black/75 hover:bg-pink text-white hover:text-black font-mono font-bold text-xs tracking-widest uppercase transition-all backdrop-blur-xl shadow-[0_0_25px_rgba(244,114,182,0.35)] hover:shadow-[0_0_35px_rgba(244,114,182,0.65)] hover:scale-105 active:scale-95 cursor-pointer"
           >

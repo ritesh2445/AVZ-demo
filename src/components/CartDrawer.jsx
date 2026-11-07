@@ -14,7 +14,8 @@ import {
   Users,
   MessageCircle,
   Truck,
-  Gift
+  Gift,
+  AlertCircle
 } from 'lucide-react';
 import { BRAND_INFO, formatPrice, CURRENCIES } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -58,6 +59,12 @@ export default function CartDrawer({
   const [orderComplete, setOrderComplete] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
+
+  const showError = (msg) => {
+    setCheckoutError(msg);
+    playSound('glitch');
+  };
 
   // Auto-prefill if user is logged in
   useEffect(() => {
@@ -187,6 +194,7 @@ export default function CartDrawer({
       return;
     }
     if (isSubmitting) return;
+    setCheckoutError('');
     setIsSubmitting(true);
     playSound('warp');
 
@@ -220,8 +228,8 @@ export default function CartDrawer({
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || 'Purchases temporarily paused or unavailable.');
+        const err = await res.json().catch(() => ({}));
+        showError(err.error || 'Purchases temporarily paused or unavailable.');
         setIsSubmitting(false);
         return;
       }
@@ -246,7 +254,7 @@ export default function CartDrawer({
       }
 
       if (!orderData || !orderData.orderNumber || !orderData.razorpayOrderId) {
-        alert(orderData?.error || 'Failed to initialize payment gateway order. Please reach out on WhatsApp.');
+        showError(orderData?.error || 'Failed to initialize payment gateway order. Please reach out on WhatsApp.');
         setIsSubmitting(false);
         return;
       }
@@ -256,13 +264,13 @@ export default function CartDrawer({
       const hasRealRazorpayKey = Boolean(orderData.keyId && !orderData.keyId.includes('placeholder'));
 
       if (!scriptLoaded || !window.Razorpay) {
-        alert('Payment gateway could not be loaded. Please check your internet connection or ad-blocker, or message us on WhatsApp to complete your order.');
+        showError('Payment gateway could not be loaded. Please check your internet connection or ad-blocker, or message us on WhatsApp.');
         setIsSubmitting(false);
         return;
       }
 
       if (!hasRealRazorpayKey) {
-        alert('Online payment gateway is temporarily unconfigured. Please complete your reservation directly with our team on WhatsApp.');
+        showError('Online payment gateway is temporarily unconfigured. Please complete your reservation directly with our team on WhatsApp.');
         setIsSubmitting(false);
         return;
       }
@@ -308,10 +316,10 @@ export default function CartDrawer({
                 squadDiscount
               });
             } else {
-              alert(verifyData.error || `Payment verification failed. If your account was debited, please message us on WhatsApp immediately with Payment ID: ${response.razorpay_payment_id}`);
+              showError(verifyData.error || `Payment verification failed. If your account was debited, message us with Payment ID: ${response.razorpay_payment_id}`);
             }
           } catch (err) {
-            alert(`Error verifying payment. If your account was debited, please message our support team with Payment ID: ${response.razorpay_payment_id}`);
+            showError(`Error verifying payment. If debited, please contact us with Payment ID: ${response.razorpay_payment_id}`);
           } finally {
             setIsSubmitting(false);
           }
@@ -325,13 +333,13 @@ export default function CartDrawer({
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', function (resp) {
-        alert(`Payment failed: ${resp.error?.description || 'Transaction declined by issuer'}. Your cart has been preserved.`);
+        showError(`Payment failed: ${resp.error?.description || 'Transaction declined by issuer'}. Your cart has been preserved.`);
         setIsSubmitting(false);
       });
       rzp.open();
     } catch (err) {
       console.error('Checkout submission error:', err);
-      alert('Unable to process order at this time. Please try again or reach out on WhatsApp.');
+      showError('Unable to process order at this time. Please try again or reach out on WhatsApp.');
       setIsSubmitting(false);
     }
   };
@@ -626,6 +634,13 @@ export default function CartDrawer({
                 <ShieldCheck className="w-3.5 h-3.5 text-pink inline mr-1" />
                 <span>Return & Damage Policy: An uncut continuous unboxing video sent to our WhatsApp within 48h is required for damage replacement claims.</span>
               </div>
+
+              {checkoutError && (
+                <div className="p-3.5 bg-red-950/80 border border-red-500/70 rounded-xl text-red-100 text-xs font-mono flex items-center gap-2.5 shadow-lg animate-fade-in">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span className="leading-relaxed">{checkoutError}</span>
+                </div>
+              )}
 
               {purchasesEnabled === false && (
                 <div className="p-3 bg-red-950/60 border border-red-800/80 rounded-xl text-red-200 text-xs font-mono">

@@ -131,7 +131,7 @@ export default function QuickFrameEditorModal({
       onDeleteSuccess?.(artwork.id);
       onClose();
     } catch (err) {
-      alert(err.message);
+      setError(err?.message || 'Failed to delete piece');
     } finally {
       setDeleting(false);
     }

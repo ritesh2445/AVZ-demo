@@ -12,6 +12,36 @@ export interface UploadResult {
 }
 
 /**
+ * Determine MIME content-type from file extension
+ */
+export function getMimeTypeFromExt(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase();
+  switch (ext) {
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'png':
+      return 'image/png';
+    case 'webp':
+      return 'image/webp';
+    case 'gif':
+      return 'image/gif';
+    case 'avif':
+      return 'image/avif';
+    case 'svg':
+      return 'image/svg+xml';
+    case 'mp4':
+      return 'video/mp4';
+    case 'webm':
+      return 'video/webm';
+    case 'mov':
+      return 'video/quicktime';
+    default:
+      return 'application/octet-stream';
+  }
+}
+
+/**
  * Access the Cloudflare R2 bucket binding
  */
 export async function getR2Bucket(): Promise<any | null> {
@@ -120,21 +150,28 @@ export async function getFromR2(key: string): Promise<{ body: any; contentType: 
 
     return {
       body: object.body,
-      contentType: object.httpMetadata?.contentType || 'application/octet-stream',
+      contentType: object.httpMetadata?.contentType || getMimeTypeFromExt(cleanKey),
       size: object.size
     };
   }
 
-  // Local fallback
+  // Local fallback (checks public/uploads, public/assets, and public root)
   try {
-    const localPath = path.join(process.cwd(), 'public', 'uploads', cleanKey);
-    if (fs.existsSync(localPath)) {
-      const fileBuffer = fs.readFileSync(localPath);
-      return {
-        body: fileBuffer,
-        contentType: 'application/octet-stream',
-        size: fileBuffer.length
-      };
+    const localCandidates = [
+      path.join(process.cwd(), 'public', 'uploads', cleanKey),
+      path.join(process.cwd(), 'public', 'assets', cleanKey),
+      path.join(process.cwd(), 'public', cleanKey)
+    ];
+
+    for (const localPath of localCandidates) {
+      if (fs.existsSync(/*turbopackIgnore: true*/ localPath)) {
+        const fileBuffer = fs.readFileSync(/*turbopackIgnore: true*/ localPath);
+        return {
+          body: fileBuffer,
+          contentType: getMimeTypeFromExt(cleanKey),
+          size: fileBuffer.length
+        };
+      }
     }
   } catch {}
 

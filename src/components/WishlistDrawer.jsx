@@ -26,6 +26,22 @@ export default function WishlistDrawer({
 
   if (!isOpen) return null;
 
+  // Normalize incoming wishlist items and ensure resilient structure
+  const normalizedItems = (items || []).filter(Boolean).map((item) => {
+    if (typeof item === 'string') {
+      return {
+        id: item,
+        name: 'Archival Vault Piece',
+        title: 'Archival Vault Piece',
+        price: null,
+        images: ['/assets/editorial_hero_portrait.jpg'],
+        image: '/assets/editorial_hero_portrait.jpg',
+        tag: 'ARCHIVE 1-OF-1'
+      };
+    }
+    return item;
+  });
+
   const handleShareWishlist = () => {
     playSound('snap');
     const msg = encodeURIComponent(
@@ -50,24 +66,38 @@ export default function WishlistDrawer({
             <h2 className="text-xs sm:text-sm md:text-base font-mono font-medium uppercase text-white tracking-wider truncate">
               CURATED WISHLIST
             </h2>
-            <span className="text-xs font-mono text-zinc-500 shrink-0">({items.length})</span>
+            <span className="text-xs font-mono text-zinc-500 shrink-0">({normalizedItems.length})</span>
           </div>
 
-          <button
-            onClick={() => {
-              playSound('pip');
-              onClose();
-            }}
-            aria-label="Close wishlist"
-            className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer shrink-0 active:scale-95"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            {normalizedItems.length > 0 && (
+              <button
+                onClick={() => {
+                  playSound('trash');
+                  normalizedItems.forEach((it) => onRemoveFromWishlist?.(it.id || it));
+                }}
+                className="text-[10px] font-mono text-zinc-400 hover:text-red-400 px-2 py-1 rounded border border-white/10 hover:border-red-500/40 transition-colors cursor-pointer"
+              >
+                CLEAR ALL
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                playSound('pip');
+                onClose();
+              }}
+              aria-label="Close wishlist"
+              className="w-8 h-8 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-all cursor-pointer shrink-0 active:scale-95"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Wishlist Items List */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
-          {items.length === 0 ? (
+          {normalizedItems.length === 0 ? (
             <div className="py-16 text-center space-y-4">
               <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-zinc-500">
                 <Heart className="w-6 h-6" />
@@ -80,7 +110,7 @@ export default function WishlistDrawer({
               </p>
             </div>
           ) : (
-            items.map((item) => (
+            normalizedItems.map((item) => (
               <div
                 key={item.id}
                 className="p-3.5 rounded-xl bg-black/60 border border-white/10 hover:border-white/25 flex items-center gap-4 transition-all"
@@ -112,11 +142,11 @@ export default function WishlistDrawer({
                   <button
                     onClick={() => {
                       playSound('click');
-                      onAddToCart({
+                      onAddToCart?.({
                         ...item,
                         selectedSize: item.selectedSize || (item.sizes ? item.sizes[0] : 'Standard')
                       });
-                      onRemoveFromWishlist(item.id);
+                      onRemoveFromWishlist?.(item.id || item);
                     }}
                     title="Move to Bag"
                     aria-label="Move to Bag"
@@ -128,7 +158,7 @@ export default function WishlistDrawer({
                   <button
                     onClick={() => {
                       playSound('trash');
-                      onRemoveFromWishlist(item.id);
+                      onRemoveFromWishlist?.(item.id || item);
                     }}
                     className="text-zinc-500 hover:text-red-400 text-[10px] font-mono flex items-center justify-center gap-1 transition-colors cursor-pointer"
                   >
@@ -142,7 +172,7 @@ export default function WishlistDrawer({
         </div>
 
         {/* Bottom Bar */}
-        {items.length > 0 && (
+        {normalizedItems.length > 0 && (
           <div className="p-4 sm:p-5 border-t border-white/10 bg-black/40">
             <button
               onClick={handleShareWishlist}
