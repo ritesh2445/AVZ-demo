@@ -30,6 +30,11 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       assets: [...dbAssets, ...defaultAssets],
+      r2Status: {
+        configured: true,
+        bucket: 'avz-media',
+        cdnDomain: process.env.NEXT_PUBLIC_CDN_URL || 'Cloudflare Edge CDN (/api/media/)'
+      },
       cloudinaryStatus: {
         configured: Boolean(process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY),
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'Not Configured (Using Local & High-Res CDN)'

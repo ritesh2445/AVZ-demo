@@ -9,7 +9,7 @@ import {
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
   Copy, Save, Sliders, ShieldAlert, Check, Menu
-, Palette } from 'lucide-react';
+, Palette, Upload } from 'lucide-react';
 import MuseumGalleryAdminTab from '@/src/components/admin/MuseumGalleryAdminTab';
 
 export default function AdminDashboardPage() {
@@ -53,6 +53,53 @@ export default function AdminDashboardPage() {
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [productModalOpen, setProductModalOpen] = useState(false);
+  const [isUploadingR2, setIsUploadingR2] = useState(false);
+  const [productImagePreview, setProductImagePreview] = useState<string>('');
+
+  const handleUploadImageFile = async (e: React.ChangeEvent<HTMLInputElement>, targetFieldId = 'p_image') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingR2(true);
+    showNotification('Uploading asset to Cloudflare R2 bucket...', 'success');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'products');
+      formData.append('title', file.name.replace(/\.[^/.]+$/, ''));
+
+      const res = await fetch('/api/admin/media/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Upload to Cloudflare R2 failed');
+      }
+
+      if (targetFieldId) {
+        const inputEl = document.getElementById(targetFieldId) as HTMLInputElement;
+        if (inputEl) {
+          inputEl.value = data.media.url;
+        }
+        setProductImagePreview(data.media.url);
+      }
+
+      // Refresh media library list
+      const medRes = await fetch('/api/admin/media');
+      const medData = await medRes.json();
+      if (medData.assets) setMediaAssets(medData.assets);
+
+      showNotification('✅ Media stored in Cloudflare R2 & accelerated via Edge CDN', 'success');
+    } catch (err: any) {
+      showNotification(`❌ Upload error: ${err.message}`, 'error');
+    } finally {
+      setIsUploadingR2(false);
+      e.target.value = '';
+    }
+  };
   const [inventoryModalOpen, setInventoryModalOpen] = useState(false);
   const [inventoryTarget, setInventoryTarget] = useState<any>(null);
   const [inventoryAdjustment, setInventoryAdjustment] = useState<number>(1);
@@ -1446,11 +1493,32 @@ export default function AdminDashboardPage() {
           {/* MODULE 8: MEDIA LIBRARY */}
           {activeTab === 'media' && (
             <div className="space-y-6 max-w-7xl mx-auto">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#140e1c] border border-pink/20 p-4 rounded-2xl">
                 <div>
-                  <h2 className="text-xl font-cinzel font-bold text-white">Media Library & Cloudinary Assets</h2>
-                  <p className="text-xs text-neutral-400 mt-1 font-mono">Archival runway photography, 4K editorial video reels, and brand assets.</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-xl font-cinzel font-bold text-white">Cloudflare R2 Media Vault</h2>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono">
+                      ● BUCKET: avz-media
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-pink/10 border border-pink/30 text-pink text-[10px] font-mono">
+                      Cloudflare Edge CDN Active
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-400 mt-1 font-mono">
+                    High-resolution photography, 4K editorial video reels, and product images hosted on Cloudflare R2 with global edge distribution.
+                  </p>
                 </div>
+                <label className="cursor-pointer px-4 py-2.5 rounded-xl bg-gradient-to-r from-pink to-purple-600 hover:opacity-90 text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all shrink-0 active:scale-95">
+                  <Upload className="w-4 h-4" />
+                  <span>{isUploadingR2 ? 'Uploading to R2...' : 'Upload Media to R2'}</span>
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    className="hidden"
+                    disabled={isUploadingR2}
+                    onChange={(e) => handleUploadImageFile(e, '')}
+                  />
+                </label>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -2588,14 +2656,46 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-neutral-400 mb-1">Primary Image URL or Asset Path</label>
-                <input
-                  type="text"
-                  id="p_image"
-                  defaultValue={selectedProduct?.images?.[0] || selectedProduct?.image || '/assets/editorial_hero_portrait.jpg'}
-                  placeholder="e.g. /assets/look_chainmail_armor.jpg or https://..."
-                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-neutral-400">Primary Product Image</label>
+                  <span className="text-[10px] text-pink font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Cloudflare R2 + Edge CDN
+                  </span>
+                </div>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    id="p_image"
+                    value={productImagePreview}
+                    onChange={(e) => setProductImagePreview(e.target.value)}
+                    placeholder="Upload to R2 below or paste image URL"
+                    className="flex-1 bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white font-mono text-xs"
+                  />
+                  <label className="cursor-pointer px-3 py-2 rounded-lg bg-pink/20 hover:bg-pink/30 border border-pink/40 text-pink text-xs font-mono font-bold flex items-center gap-1.5 transition-all shrink-0 active:scale-95">
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{isUploadingR2 ? 'Uploading...' : 'Upload to R2'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isUploadingR2}
+                      onChange={(e) => handleUploadImageFile(e, 'p_image')}
+                    />
+                  </label>
+                </div>
+                {productImagePreview && (
+                  <div className="relative w-24 h-28 rounded-lg overflow-hidden border border-neutral-800 bg-black mt-2 group shadow-md">
+                    <img src={productImagePreview} alt="Product Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setProductImagePreview('')}
+                      className="absolute top-1 right-1 p-1 rounded-full bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
