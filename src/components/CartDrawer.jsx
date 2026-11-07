@@ -27,6 +27,7 @@ export default function CartDrawer({
   onRemoveItem,
   onClearCart,
   currency = 'INR',
+  shippingRates = null,
   onCheckoutComplete,
   onOpenGroupOrder,
   squadDiscount = null, // { squadCode, discountPercent, memberCount }

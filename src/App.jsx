@@ -22,6 +22,7 @@ import OrderTrackingModal from './components/OrderTrackingModal';
 import AuthModal from './components/AuthModal';
 import Footer from './components/Footer';
 import LegalPoliciesModal from './components/LegalPoliciesModal';
+import ErrorBoundary from './components/ErrorBoundary';
 import { useModalScrollLock } from './utils/modalScrollLock';
 import DPDPConsentBanner from './components/DPDPConsentBanner';
 import GroupOrderModal from './components/GroupOrderModal';
@@ -539,25 +540,27 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         onOpenCart={() => setCartOpen(true)}
       />
 
-      <CartDrawer
-        isOpen={cartOpen}
-        onClose={() => setCartOpen(false)}
-        items={cartItems}
-        shippingRates={storefrontConfig?.shipping_rates}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onClearCart={handleClearCart}
-        currency={currency}
-        onCheckoutComplete={(order) => {
-          console.log("Order logged:", order);
-        }}
-        squadDiscount={squadDiscount}
-        onOpenSquadModal={handleOpenSquadModal}
-        onOpenGroupOrder={() => setGroupOrderModalOpen(true)}
-        currentUser={currentUser}
-        purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
-        purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
-      />
+      <ErrorBoundary>
+        <CartDrawer
+          isOpen={cartOpen}
+          onClose={() => setCartOpen(false)}
+          items={cartItems}
+          shippingRates={storefrontConfig?.shipping_rates}
+          onUpdateQuantity={handleUpdateQuantity}
+          onRemoveItem={handleRemoveItem}
+          onClearCart={handleClearCart}
+          currency={currency}
+          onCheckoutComplete={(order) => {
+            console.log("Order logged:", order);
+          }}
+          squadDiscount={squadDiscount}
+          onOpenSquadModal={handleOpenSquadModal}
+          onOpenGroupOrder={() => setGroupOrderModalOpen(true)}
+          currentUser={currentUser}
+          purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
+          purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
+        />
+      </ErrorBoundary>
 
       {/* Group Buying / Shared Order Together Modal */}
       <GroupOrderModal
