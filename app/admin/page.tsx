@@ -66,6 +66,47 @@ export default function AdminDashboardPage() {
     courier_partner_label: 'Blue Dart / Delhivery Express Air'
   });
   const [isSavingShipping, setIsSavingShipping] = useState(false);
+  const [storeProfile, setStoreProfile] = useState<{
+    whatsapp: string;
+    email: string;
+    phone: string;
+    instagram: string;
+    studio_city: string;
+    cod_enabled: boolean;
+  }>({
+    whatsapp: '917304264901',
+    email: 'aveezahstore@gmail.com',
+    phone: '+91 73042 64901',
+    instagram: '@dhristroyer',
+    studio_city: 'Guwahati, Assam',
+    cod_enabled: true
+  });
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+
+  const handleSaveStoreProfile = async (newProfile?: any) => {
+    const payload = newProfile || storeProfile;
+    setIsSavingProfile(true);
+    try {
+      const res = await fetch('/api/admin/storefront/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: 'store_profile',
+          value: payload
+        })
+      });
+      if (res.ok) {
+        setStoreProfile(payload);
+        showNotification('✅ Store identity & payment settings saved successfully.', 'success');
+      } else {
+        showNotification('Failed to save store profile.', 'error');
+      }
+    } catch {
+      showNotification('Error saving store profile.', 'error');
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
 
   const handleSaveShippingRates = async (newRates?: any) => {
     const payload = newRates || shippingRates;
@@ -233,6 +274,9 @@ export default function AdminDashboardPage() {
         });
         if (data.settings?.shipping_rates?.data) {
           setShippingRates(data.settings.shipping_rates.data);
+        }
+        if (data.settings?.store_profile?.data) {
+          setStoreProfile(data.settings.store_profile.data);
         }
       }
     } catch {}
