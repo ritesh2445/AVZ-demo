@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   category: 'Fashion & Wearable Art',
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'google-site-verification-avz-vaganza',
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 'a1e44ba7053273f9',
   },
 };
 

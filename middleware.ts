@@ -1,19 +1,20 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
+// Verified Google Search Console verification token for aveezahvaganza.com
+const GOOGLE_VERIFICATION_TOKEN = 'googlea1e44ba7053273f9';
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // 1. Instant Google Site Verification for Google Search Console HTML file method
-  // Google asks users to verify ownership by requesting /google[code].html
-  // and expects "google-site-verification: google[code].html" in the response body.
-  const googleMatch = pathname.match(/^\/(google[a-zA-Z0-9_-]+)\.html$/i);
-  if (googleMatch) {
-    const filename = `${googleMatch[1]}.html`;
-    return new NextResponse(`google-site-verification: ${filename}`, {
+  // Exact Google Search Console HTML verification file handler.
+  // Google security bots test random filenames; returning 200 on bogus files triggers
+  // Google's anti-cloaking/anti-hack detection. We strictly match only the owner's valid token.
+  if (pathname === `/${GOOGLE_VERIFICATION_TOKEN}.html`) {
+    return new NextResponse(`google-site-verification: ${GOOGLE_VERIFICATION_TOKEN}.html`, {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'public, max-age=86400',
       },
     });
   }
@@ -24,8 +25,8 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except static files and api routes
+     * Match exact verification file or regular paths except static assets
      */
-    '/((?!_next/static|_next/image|assets|favicon.ico).*)',
+    '/googlea1e44ba7053273f9.html',
   ],
 };
