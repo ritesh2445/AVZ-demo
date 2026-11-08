@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://aveezahvaganza.com';
   const now = new Date();
 
-  // Core Landing & Section Routes
+  // Core Landing & Section Routes (Clean canonical paths compliant with Google Sitemap Protocol)
   const coreRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -19,55 +19,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ],
     },
     {
-      url: `${baseUrl}/#vault`,
+      url: `${baseUrl}/vault`,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 0.95,
     },
     {
-      url: `${baseUrl}/#shop`,
+      url: `${baseUrl}/shop`,
       lastModified: now,
       changeFrequency: 'daily',
       priority: 0.95,
     },
     {
-      url: `${baseUrl}/#museum`,
+      url: `${baseUrl}/museum`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/#custom`,
+      url: `${baseUrl}/custom`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/#about`,
+      url: `${baseUrl}/about`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.85,
     },
     {
-      url: `${baseUrl}/#lookbook`,
+      url: `${baseUrl}/lookbook`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#specs`,
+      url: `${baseUrl}/specs`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.75,
     },
     {
-      url: `${baseUrl}/#faq`,
+      url: `${baseUrl}/faq`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/#contact`,
+      url: `${baseUrl}/contact`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.7,
@@ -76,7 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Specific Product Entries for Google Product Discovery
   const productRoutes: MetadataRoute.Sitemap = PRODUCTS.map((prod) => ({
-    url: `${baseUrl}/#shop?product=${encodeURIComponent(prod.id)}`,
+    url: `${baseUrl}/shop?product=${encodeURIComponent(prod.id)}`,
     lastModified: now,
     changeFrequency: 'weekly',
     priority: 0.85,
@@ -89,7 +89,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Museum Archival Specimens
   const museumRoutes: MetadataRoute.Sitemap = MUSEUM_ITEMS.map((item) => ({
-    url: `${baseUrl}/#museum?piece=${encodeURIComponent(item.id)}`,
+    url: `${baseUrl}/museum?piece=${encodeURIComponent(item.id)}`,
     lastModified: now,
     changeFrequency: 'monthly',
     priority: 0.8,
@@ -98,4 +98,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...coreRoutes, ...productRoutes, ...museumRoutes];
 }
-
