@@ -64,6 +64,15 @@ export default function AuthModal({
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phoneDigits, setPhoneDigits] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [stateName, setStateName] = useState('Assam');
+  const [pincode, setPincode] = useState('');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileSuccessMsg, setProfileSuccessMsg] = useState('');
   const [forgotEmail, setForgotEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
@@ -79,6 +88,42 @@ export default function AuthModal({
   const [cancelReason, setCancelReason] = useState('Change of mind');
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancelSuccessMsg, setCancelSuccessMsg] = useState('');
+
+  // Load user profile delivery details when VIP profile opens
+  useEffect(() => {
+    if (user && !user.isGuest && user.email) {
+      if (user.phone) {
+        const raw = String(user.phone);
+        const digits = raw.replace(/\D/g, '');
+        const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+        setPhoneDigits(clean.slice(0, 10));
+      }
+      if (user.address) setAddress(user.address);
+      if (user.city) setCity(user.city);
+      if (user.state) setStateName(user.state);
+      if (user.pincode) setPincode(user.pincode);
+
+      fetch(`/api/storefront/user-profile?email=${encodeURIComponent(user.email)}`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data?.success && data.profile) {
+            const p = data.profile;
+            if (p.name && !name) setName(p.name);
+            if (p.phone) {
+              const digits = p.phone.replace(/\D/g, '');
+              const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+              setPhoneDigits(clean.slice(0, 10));
+              setPhone(p.phone);
+            }
+            if (p.address) setAddress(p.address);
+            if (p.city) setCity(p.city);
+            if (p.state) setStateName(p.state);
+            if (p.pincode) setPincode(p.pincode);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user, isOpen]);
 
   // Fetch 6-month order history when modal opens for a logged-in non-guest user
   useEffect(() => {
@@ -197,7 +242,7 @@ export default function AuthModal({
     setStatusMessage(null);
 
     try {
-      const callbackURL = typeof window !== 'undefined' ? window.location.origin : '/';
+      const callbackURL = typeof window !== 'undefined' ? window.location.href : 'https://aveezahvaganza.com';
       const res = await authClient.signIn.social({
         provider: 'google',
         callbackURL,
@@ -298,6 +343,11 @@ export default function AuthModal({
       setStatusMessage({ type: 'error', text: 'Password must be at least 6 characters.' });
       return;
     }
+    if (phoneDigits && phoneDigits.length !== 10) {
+      playSound('metal');
+      setStatusMessage({ type: 'error', text: 'WhatsApp / Phone number must be strictly 10 digits.' });
+      return;
+    }
 
     setLoading(true);
     setStatusMessage(null);
@@ -322,18 +372,38 @@ export default function AuthModal({
       }
 
       playSound('snap');
+      const fullPhone = phoneDigits ? `${countryCode} ${phoneDigits}` : '';
       const newUser = {
         id: res.data?.user?.id || ('client_' + Date.now().toString(36)),
         name: res.data?.user?.name || name.trim(),
         email: res.data?.user?.email || email.trim(),
         image: res.data?.user?.image,
         emailVerified: res.data?.user?.emailVerified || false,
-        phone: phone.trim(),
+        phone: fullPhone,
+        address: address.trim(),
+        city: city.trim(),
+        state: stateName.trim(),
+        pincode: pincode.trim(),
         isGuest: false,
         tier: 'Archive VIP Member',
         vipAlerts,
         loginTime: new Date().toISOString()
       };
+
+      // Persist profile to server
+      fetch('/api/storefront/user-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim(),
+          name: name.trim(),
+          phone: fullPhone,
+          address: address.trim(),
+          city: city.trim(),
+          state: stateName.trim(),
+          pincode: pincode.trim()
+        })
+      }).catch(() => {});
 
       onLogin?.(newUser);
       setStatusMessage({
@@ -351,6 +421,66 @@ export default function AuthModal({
         text: err?.message || 'Account creation encountered an error.'
       });
       setLoading(false);
+    }
+  };
+
+  // Save profile updates
+  const handleSaveProfileDetails = async (e) => {
+    e.preventDefault();
+    if (!user || !user.email) return;
+
+    if (phoneDigits && phoneDigits.length !== 10) {
+      playSound('metal');
+      setStatusMessage({ type: 'error', text: 'Phone number must be strictly 10 digits.' });
+      return;
+    }
+
+    setSavingProfile(true);
+    setProfileSuccessMsg('');
+
+    try {
+      const fullPhone = phoneDigits ? `${countryCode} ${phoneDigits}` : phone;
+      const res = await fetch('/api/storefront/user-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: user.email,
+          name: name || user.name,
+          phone: fullPhone,
+          address,
+          city,
+          state: stateName,
+          pincode
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        playSound('sparkle');
+        setProfileSuccessMsg('Profile delivery details saved successfully!');
+        setIsEditingProfile(false);
+        const updated = {
+          ...user,
+          name: name || user.name,
+          phone: fullPhone,
+          address,
+          city,
+          state: stateName,
+          pincode
+        };
+        onLogin?.(updated);
+        try {
+          localStorage.setItem('avz_user', JSON.stringify(updated));
+        } catch {}
+      } else {
+        playSound('metal');
+        setStatusMessage({ type: 'error', text: data.error || 'Failed to update profile.' });
+      }
+    } catch {
+      playSound('metal');
+      setStatusMessage({ type: 'error', text: 'Error saving profile details.' });
+    } finally {
+      setSavingProfile(false);
     }
   };
 
@@ -789,10 +919,20 @@ export default function AuthModal({
                     </span>
                   </div>
 
-                  <div className="text-xs font-montserrat text-zinc-300 border-t border-white/10 pt-2.5 space-y-1">
+                  <div className="text-xs font-montserrat text-zinc-300 border-t border-white/10 pt-2.5 space-y-1.5">
                     <p className="text-[11px] text-zinc-400">
                       Email: <span className="text-white font-mono">{user.email}</span>
                     </p>
+                    {user.phone && (
+                      <p className="text-[11px] text-zinc-400">
+                        Phone: <span className="text-white font-mono">{user.phone}</span>
+                      </p>
+                    )}
+                    {user.address && (
+                      <p className="text-[11px] text-zinc-400">
+                        Address: <span className="text-white">{user.address}, {user.city} {user.pincode}</span>
+                      </p>
+                    )}
                     {user.isGuest && (
                       <p className="text-[11px] text-pink-300/90 leading-relaxed">
                         You are browsing with temporary Guest status. Your cart items and saved favorites are stored on this device.
@@ -800,6 +940,109 @@ export default function AuthModal({
                     )}
                   </div>
                 </div>
+
+                {/* EDITABLE DELIVERY ADDRESS SECTION */}
+                {!user.isGuest && (
+                  <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold uppercase text-white tracking-wider flex items-center gap-1.5">
+                        <Truck className="w-3.5 h-3.5 text-pink" />
+                        <span>Saved Delivery & Contact Details</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingProfile(!isEditingProfile)}
+                        className="text-[11px] font-mono text-pink hover:underline cursor-pointer"
+                      >
+                        {isEditingProfile ? 'Cancel' : 'Edit Details ✏️'}
+                      </button>
+                    </div>
+
+                    {profileSuccessMsg && (
+                      <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
+                        {profileSuccessMsg}
+                      </div>
+                    )}
+
+                    {isEditingProfile ? (
+                      <form onSubmit={handleSaveProfileDetails} className="space-y-3 pt-1 text-xs font-mono">
+                        <div>
+                          <label className="block text-[10px] uppercase text-zinc-400 mb-1">Full Name</label>
+                          <input
+                            type="text"
+                            value={name || user.name || ''}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Full name"
+                            className="w-full bg-black/70 border border-white/15 px-3 py-2 rounded-xl text-white outline-none focus:border-pink"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase text-zinc-400 mb-1">WhatsApp / Phone (Strictly 10 Digits)</label>
+                          <div className="flex gap-2">
+                            <div className="shrink-0 bg-black/70 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-pink font-bold">
+                              {countryCode}
+                            </div>
+                            <input
+                              type="tel"
+                              value={phoneDigits}
+                              onChange={(e) => setPhoneDigits(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                              placeholder="10-digit number"
+                              maxLength={10}
+                              className="flex-1 bg-black/70 border border-white/15 px-3 py-2 rounded-xl text-white outline-none focus:border-pink"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase text-zinc-400 mb-1">Street Address</label>
+                          <input
+                            type="text"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="House/Apartment, Street"
+                            className="w-full bg-black/70 border border-white/15 px-3 py-2 rounded-xl text-white outline-none focus:border-pink"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-[10px] uppercase text-zinc-400 mb-1">City</label>
+                            <input
+                              type="text"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                              placeholder="City"
+                              className="w-full bg-black/70 border border-white/15 px-3 py-2 rounded-xl text-white outline-none focus:border-pink"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase text-zinc-400 mb-1">Pincode</label>
+                            <input
+                              type="text"
+                              value={pincode}
+                              onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                              placeholder="Pincode"
+                              maxLength={6}
+                              className="w-full bg-black/70 border border-white/15 px-3 py-2 rounded-xl text-white outline-none focus:border-pink"
+                            />
+                          </div>
+                        </div>
+                        <div className="pt-2 flex justify-end">
+                          <button
+                            type="submit"
+                            disabled={savingProfile}
+                            className="px-4 py-2 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md disabled:opacity-50"
+                          >
+                            {savingProfile ? 'Saving...' : 'Save Profile Details'}
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="text-[11px] font-mono text-zinc-300 space-y-1">
+                        <p><span className="text-zinc-500">Contact:</span> {phoneDigits ? `${countryCode} ${phoneDigits}` : user.phone || 'Not set'}</p>
+                        <p><span className="text-zinc-500">Destination:</span> {address ? `${address}, ${city} ${pincode}` : 'No saved address'}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="flex flex-col gap-2.5">
                   {user.isGuest && (
@@ -1055,15 +1298,77 @@ export default function AuthModal({
 
                 <div>
                   <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                    Phone / WhatsApp (Optional)
+                    WhatsApp / Phone Number *
+                  </label>
+                  <div className="flex gap-2">
+                    <div className="shrink-0 bg-black/60 border border-white/15 rounded-xl px-2.5 py-2.5 text-xs text-pink font-mono font-bold flex items-center gap-1">
+                      <span>🇮🇳</span>
+                      <select
+                        value={countryCode}
+                        onChange={(e) => setCountryCode(e.target.value)}
+                        className="bg-transparent text-pink outline-none cursor-pointer text-xs"
+                      >
+                        <option value="+91" className="bg-[#12091c] text-white">+91 (IN)</option>
+                        <option value="+1" className="bg-[#12091c] text-white">+1 (US)</option>
+                        <option value="+44" className="bg-[#12091c] text-white">+44 (UK)</option>
+                        <option value="+971" className="bg-[#12091c] text-white">+971 (AE)</option>
+                        <option value="+65" className="bg-[#12091c] text-white">+65 (SG)</option>
+                      </select>
+                    </div>
+                    <input
+                      type="tel"
+                      required
+                      value={phoneDigits}
+                      onChange={(e) => setPhoneDigits(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10-digit number"
+                      maxLength={10}
+                      className="flex-1 bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-500 block mt-1">
+                    Strictly 10 digits ({phoneDigits.length}/10 entered)
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                    Delivery Address (For Faster Checkout)
                   </label>
                   <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Phone or WhatsApp number"
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="House / Flat / Street Name"
                     className="w-full bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
                   />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="e.g. Guwahati / Pune"
+                      className="w-full bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
+                      Pincode
+                    </label>
+                    <input
+                      type="text"
+                      value={pincode}
+                      onChange={(e) => setPincode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      placeholder="e.g. 781006"
+                      maxLength={6}
+                      className="w-full bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
+                    />
+                  </div>
                 </div>
 
                 <div>

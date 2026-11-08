@@ -29,6 +29,7 @@ export default function GroupOrderModal({
   currentUser,
   onOpenAuthModal,
   onGroupCartCreated,
+  onBrowseCatalog,
   currency = 'INR'
 }) {
   useModalScrollLock(isOpen);
@@ -44,6 +45,10 @@ export default function GroupOrderModal({
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [orderConfirmed, setOrderConfirmed] = useState(null);
   const [statusError, setStatusError] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phoneDigits, setPhoneDigits] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('UPI / Instant QR Code (GPay, PhonePe)');
+  const [squadOffers, setSquadOffers] = useState([]);
   const [shippingData, setShippingData] = useState({
     fullName: currentUser?.name || '',
     email: currentUser?.email || '',
@@ -58,6 +63,18 @@ export default function GroupOrderModal({
     setActiveGroup(groupCart);
   }, [groupCart]);
 
+  // Load admin-configured squad offers
+  useEffect(() => {
+    fetch('/api/storefront/group-offers')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.success && Array.isArray(data.offers)) {
+          setSquadOffers(data.offers);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (currentUser) {
       if (!creatorInputName) setCreatorInputName(currentUser.name || '');
@@ -65,8 +82,43 @@ export default function GroupOrderModal({
       setShippingData((prev) => ({
         ...prev,
         fullName: prev.fullName || currentUser.name || '',
-        email: prev.email || currentUser.email || ''
+        email: prev.email || currentUser.email || '',
+        address: prev.address || currentUser.address || '',
+        city: prev.city || currentUser.city || '',
+        state: prev.state || currentUser.state || 'Assam',
+        pincode: prev.pincode || currentUser.pincode || ''
       }));
+
+      if (currentUser.phone) {
+        const raw = String(currentUser.phone);
+        const digits = raw.replace(/\D/g, '');
+        const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+        setPhoneDigits(clean.slice(0, 10));
+      }
+
+      if (currentUser.email) {
+        fetch(`/api/storefront/user-profile?email=${encodeURIComponent(currentUser.email)}`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (data?.success && data.profile) {
+              const p = data.profile;
+              setShippingData((prev) => ({
+                ...prev,
+                fullName: prev.fullName || p.name || '',
+                address: prev.address || p.address || '',
+                city: prev.city || p.city || '',
+                state: prev.state || p.state || 'Assam',
+                pincode: prev.pincode || p.pincode || ''
+              }));
+              if (p.phone) {
+                const digits = p.phone.replace(/\D/g, '');
+                const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+                setPhoneDigits(clean.slice(0, 10));
+              }
+            }
+          })
+          .catch(() => {});
+      }
     }
   }, [currentUser]);
 
@@ -155,14 +207,36 @@ export default function GroupOrderModal({
     });
   });
 
-  const squadDiscountAmount = Math.round(totalAmount * 0.1);
+  // Find qualifying admin squad offer or default to 10%
+  let activeSquadOffer = null;
+  let highestDiscount = 0;
+  for (const offer of squadOffers) {
+    const minMembers = Number(offer.min_members || 2);
+    const minCart = Number(offer.min_cart_amount || 0);
+    if (members.length >= minMembers && totalAmount >= minCart) {
+      if (Number(offer.discount_percent) > highestDiscount) {
+        highestDiscount = Number(offer.discount_percent);
+        activeSquadOffer = offer;
+      }
+    }
+  }
+
+  const effectiveDiscountPercent = activeSquadOffer ? highestDiscount : (members.length >= 2 ? 10 : 0);
+  const squadDiscountAmount = Math.round(totalAmount * (effectiveDiscountPercent / 100));
   const payableAmount = totalAmount - squadDiscountAmount;
 
   const handlePlaceGroupOrder = async (e) => {
     e.preventDefault();
     setStatusError('');
+
     if (!shippingData.fullName || !shippingData.email || !shippingData.address || !shippingData.pincode) {
       setStatusError('Please fill all required delivery address fields (Name, Email, Address, Pincode).');
+      playSound('glitch');
+      return;
+    }
+
+    if (phoneDigits.length !== 10) {
+      setStatusError('Phone number must be strictly 10 digits.');
       playSound('glitch');
       return;
     }
@@ -170,6 +244,127 @@ export default function GroupOrderModal({
     setIsPlacingOrder(true);
     playSound('warp');
 
+    const fullPhone = `${countryCode} ${phoneDigits}`;
+    const isOnline = paymentMethod.includes('UPI') || paymentMethod.includes('Razorpay') || paymentMethod.includes('Cards');
+
+    // Online Razorpay Payment Flow
+    if (isOnline) {
+      try {
+        const orderRes = await fetch('/api/payments/razorpay/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: members.flatMap(m => (m.items || []).map(i => ({
+              id: i.id,
+              title: i.name,
+              price: i.price,
+              quantity: i.quantity || 1,
+              size: i.selectedSize || 'Standard'
+            }))),
+            customer: {
+              name: shippingData.fullName,
+              email: shippingData.email,
+              phone: fullPhone,
+              address: {
+                address_line1: shippingData.address,
+                city: shippingData.city,
+                state: shippingData.state,
+                pincode: shippingData.pincode
+              }
+            },
+            paymentMethod,
+            discountAmount: squadDiscountAmount
+          })
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderRes.ok || !orderData.razorpayOrderId) {
+          setStatusError(orderData.error || 'Failed to initialize payment gateway.');
+          setIsPlacingOrder(false);
+          return;
+        }
+
+        if (typeof window !== 'undefined' && window.Razorpay) {
+          const rzp = new window.Razorpay({
+            key: orderData.keyId,
+            amount: orderData.amount,
+            currency: 'INR',
+            name: 'AVZ VAGANZA',
+            description: `Squad Order ${orderData.orderNumber}`,
+            order_id: orderData.razorpayOrderId,
+            prefill: {
+              name: shippingData.fullName,
+              email: shippingData.email,
+              contact: fullPhone
+            },
+            theme: { color: '#120D1A' },
+            handler: async function (response) {
+              try {
+                // Verify payment signature
+                const verifyRes = await fetch('/api/payments/razorpay/verify', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    orderNumber: orderData.orderNumber,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature
+                  })
+                });
+
+                const verifyData = await verifyRes.json();
+                if (verifyRes.ok && verifyData.success) {
+                  // Finalize squad checkout in database
+                  const chkRes = await fetch(`/api/storefront/group-cart/${activeGroup.id}/checkout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      buyerName: shippingData.fullName,
+                      buyerEmail: shippingData.email,
+                      buyerPhone: fullPhone,
+                      shippingAddress: {
+                        address_line1: shippingData.address,
+                        city: shippingData.city,
+                        state: shippingData.state,
+                        pincode: shippingData.pincode
+                      },
+                      paymentMethod,
+                      razorpayOrderId: response.razorpay_order_id,
+                      razorpayPaymentId: response.razorpay_payment_id
+                    })
+                  });
+
+                  const chkData = await chkRes.json();
+                  playSound('chord');
+                  setOrderConfirmed(chkData);
+                } else {
+                  setStatusError('Payment verification failed.');
+                }
+              } catch {
+                setStatusError('Error recording verified payment.');
+              } finally {
+                setIsPlacingOrder(false);
+              }
+            },
+            modal: {
+              ondismiss: function () {
+                setIsPlacingOrder(false);
+              }
+            }
+          });
+          rzp.open();
+        } else {
+          setStatusError('Payment gateway script not loaded. Please check your connection.');
+          setIsPlacingOrder(false);
+        }
+      } catch {
+        setStatusError('Error connecting to payment provider.');
+        setIsPlacingOrder(false);
+      }
+      return;
+    }
+
+    // Cash on Delivery Flow
     try {
       const res = await fetch(`/api/storefront/group-cart/${activeGroup.id}/checkout`, {
         method: 'POST',
@@ -177,14 +372,14 @@ export default function GroupOrderModal({
         body: JSON.stringify({
           buyerName: shippingData.fullName,
           buyerEmail: shippingData.email,
-          buyerPhone: shippingData.phone || '+91 9876543210',
+          buyerPhone: fullPhone,
           shippingAddress: {
             address_line1: shippingData.address,
             city: shippingData.city || 'Guwahati',
             state: shippingData.state || 'Assam',
             pincode: shippingData.pincode
           },
-          paymentMethod: 'Cash on Delivery / UPI'
+          paymentMethod: 'Cash on Delivery (COD Verified)'
         })
       });
 
@@ -196,7 +391,7 @@ export default function GroupOrderModal({
         setStatusError(data.error || 'Failed to complete squad order.');
         playSound('glitch');
       }
-    } catch (err) {
+    } catch {
       setStatusError('Connection error during order placement. Please check your internet connection.');
       playSound('glitch');
     } finally {
@@ -329,15 +524,38 @@ export default function GroupOrderModal({
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Phone Number (For Courier) *</label>
-                      <input
-                        required
-                        type="tel"
-                        value={shippingData.phone}
-                        onChange={(e) => setShippingData({ ...shippingData, phone: e.target.value })}
-                        placeholder="e.g. 9876543210"
-                        className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
-                      />
+                      <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">WhatsApp / Phone *</label>
+                      <div className="flex gap-2">
+                        <div className="shrink-0 bg-black/80 border border-white/20 rounded-xl px-2.5 py-2 text-xs text-pink font-mono font-bold flex items-center gap-1">
+                          <span>🇮🇳</span>
+                          <select
+                            value={countryCode}
+                            onChange={(e) => setCountryCode(e.target.value)}
+                            className="bg-transparent text-pink outline-none cursor-pointer text-xs"
+                          >
+                            <option value="+91" className="bg-[#12091c] text-white">+91 (IN)</option>
+                            <option value="+1" className="bg-[#12091c] text-white">+1 (US)</option>
+                            <option value="+44" className="bg-[#12091c] text-white">+44 (UK)</option>
+                            <option value="+971" className="bg-[#12091c] text-white">+971 (AE)</option>
+                            <option value="+65" className="bg-[#12091c] text-white">+65 (SG)</option>
+                          </select>
+                        </div>
+                        <input
+                          required
+                          type="tel"
+                          value={phoneDigits}
+                          onChange={(e) => {
+                            const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            setPhoneDigits(digits);
+                          }}
+                          placeholder="10-digit number"
+                          maxLength={10}
+                          className="flex-1 bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                        />
+                      </div>
+                      <span className="text-[9px] font-mono text-zinc-500 block mt-1">
+                        Strictly 10 digits required ({phoneDigits.length}/10)
+                      </span>
                     </div>
                   </div>
 
@@ -375,6 +593,33 @@ export default function GroupOrderModal({
                         placeholder="e.g. 781006"
                         className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
                       />
+                    </div>
+                  </div>
+
+                  {/* Payment Method Selector */}
+                  <div className="pt-2">
+                    <label className="block text-[10px] font-mono uppercase text-silver/70 mb-2">Select Payment Method</label>
+                    <div className="flex flex-col gap-2">
+                      {['UPI / Instant QR Code (GPay, PhonePe)', 'Credit / Debit Cards (Razorpay)', 'Cash on Delivery (COD Verified)'].map((m) => (
+                        <label
+                          key={m}
+                          onClick={() => setPaymentMethod(m)}
+                          className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
+                            paymentMethod === m
+                              ? 'bg-pink/20 border-[#f472b6] shadow-[0_0_15px_rgba(244,114,182,0.3)]'
+                              : 'bg-black/60 border-white/10 hover:border-white/25'
+                          }`}
+                        >
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${
+                            paymentMethod === m ? 'border-[#f472b6] bg-pink/20' : 'border-white/30'
+                          }`}>
+                            {paymentMethod === m && <div className="w-2 h-2 rounded-full bg-[#f472b6]" />}
+                          </div>
+                          <span className={`text-xs font-mono font-medium ${paymentMethod === m ? 'text-white font-bold' : 'text-zinc-300'}`}>
+                            {m}
+                          </span>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -588,15 +833,30 @@ export default function GroupOrderModal({
               <span>-{formatPrice(squadDiscountAmount, currency)}</span>
             </div>
 
-            <button
-              onClick={() => setIsCheckoutStep(true)}
-              disabled={totalItemsCount === 0}
-              className="w-full py-3.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40"
-            >
-              <Lock className="w-4 h-4" />
-              <span>PROCEED TO SQUAD CHECKOUT • {formatPrice(payableAmount, currency)}</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  playSound('snap');
+                  onClose();
+                  if (onBrowseCatalog) onBrowseCatalog();
+                }}
+                className="flex-1 py-3 px-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <ShoppingBag className="w-4 h-4 text-pink" />
+                <span>+ ADD PIECES (BROWSE CATALOG)</span>
+              </button>
+
+              <button
+                onClick={() => setIsCheckoutStep(true)}
+                disabled={totalItemsCount === 0}
+                className="flex-1 py-3 px-4 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-xl active:scale-95 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-40"
+              >
+                <Lock className="w-4 h-4" />
+                <span>PROCEED TO CHECKOUT • {formatPrice(payableAmount, currency)}</span>
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
           </div>
         )}
       </div>

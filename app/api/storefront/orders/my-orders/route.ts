@@ -100,3 +100,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: e.message || 'Failed to retrieve order history' }, { status: 500 });
   }
 }
+

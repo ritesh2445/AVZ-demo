@@ -639,6 +639,63 @@ async function ensureDatabaseInitialized(): Promise<void> {
         await db.execute('ALTER TABLE orders ADD COLUMN cancelled_at INTEGER;');
       } catch {}
     }
+    // Ensure piece_requests table exists
+    try {
+      await db.execute('SELECT id FROM piece_requests LIMIT 1');
+    } catch {
+      try {
+        await db.execute(`
+          CREATE TABLE IF NOT EXISTS piece_requests (
+            id TEXT PRIMARY KEY,
+            piece_id TEXT,
+            piece_title TEXT NOT NULL,
+            piece_image TEXT,
+            piece_price REAL,
+            customer_name TEXT NOT NULL,
+            customer_phone TEXT NOT NULL,
+            customer_email TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending',
+            notes TEXT,
+            created_at INTEGER NOT NULL
+          );
+        `);
+      } catch {}
+    }
+    // Ensure admin_users password_hash exists
+    try {
+      await db.execute('SELECT password_hash FROM admin_users LIMIT 1');
+    } catch {
+      try {
+        await db.execute('ALTER TABLE admin_users ADD COLUMN password_hash TEXT;');
+      } catch {}
+    }
+    // Ensure group_buys min_cart_amount exists
+    try {
+      await db.execute('SELECT min_cart_amount FROM group_buys LIMIT 1');
+    } catch {
+      try {
+        await db.execute('ALTER TABLE group_buys ADD COLUMN min_cart_amount REAL DEFAULT 0;');
+      } catch {}
+    }
+    // Ensure user_profiles table exists
+    try {
+      await db.execute('SELECT email FROM user_profiles LIMIT 1');
+    } catch {
+      try {
+        await db.execute(`
+          CREATE TABLE IF NOT EXISTS user_profiles (
+            email TEXT PRIMARY KEY,
+            name TEXT,
+            phone TEXT,
+            address TEXT,
+            city TEXT,
+            state TEXT,
+            pincode TEXT,
+            updated_at INTEGER NOT NULL
+          );
+        `);
+      } catch {}
+    }
     return;
   } catch {
     await performDatabaseInitialization();
@@ -677,6 +734,7 @@ async function performDatabaseInitialization(): Promise<void> {
       email TEXT UNIQUE NOT NULL,
       name TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'store_manager', -- 'owner', 'store_manager', 'content_manager'
+      password_hash TEXT,
       otp_code TEXT,
       otp_expires_at INTEGER,
       otp_attempts INTEGER DEFAULT 0,
@@ -836,6 +894,7 @@ async function performDatabaseInitialization(): Promise<void> {
       product_id TEXT,
       discount_percent REAL NOT NULL DEFAULT 15,
       min_members INTEGER NOT NULL DEFAULT 3,
+      min_cart_amount REAL NOT NULL DEFAULT 0,
       current_members INTEGER NOT NULL DEFAULT 1,
       status TEXT NOT NULL DEFAULT 'active', -- 'active', 'completed', 'expired'
       created_at INTEGER NOT NULL,
@@ -903,6 +962,37 @@ async function performDatabaseInitialization(): Promise<void> {
       user_email TEXT,
       error_message TEXT,
       created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    );
+  `);
+
+  // 18. Requested Pieces (Custom Inquiries for Archive & Out of Stock Masterpieces)
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS piece_requests (
+      id TEXT PRIMARY KEY,
+      piece_id TEXT,
+      piece_title TEXT NOT NULL,
+      piece_image TEXT,
+      piece_price REAL,
+      customer_name TEXT NOT NULL,
+      customer_phone TEXT NOT NULL,
+      customer_email TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending',
+      notes TEXT,
+      created_at INTEGER NOT NULL
+    );
+  `);
+
+  // 19. Patron Profiles & Saved Delivery Address
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS user_profiles (
+      email TEXT PRIMARY KEY,
+      name TEXT,
+      phone TEXT,
+      address TEXT,
+      city TEXT,
+      state TEXT,
+      pincode TEXT,
       updated_at INTEGER NOT NULL
     );
   `);

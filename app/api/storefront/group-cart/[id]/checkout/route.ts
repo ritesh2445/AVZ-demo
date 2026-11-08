@@ -15,8 +15,17 @@ export async function POST(
       buyerEmail,
       buyerPhone,
       shippingAddress,
-      paymentMethod = 'Cash on Delivery (Group Order)'
+      paymentMethod = 'Cash on Delivery (COD Verified)',
+      razorpayOrderId,
+      razorpayPaymentId
     } = body;
+
+    const isOnlinePayment = paymentMethod.includes('UPI') || paymentMethod.includes('Razorpay') || paymentMethod.includes('Cards');
+    if (isOnlinePayment && !razorpayPaymentId) {
+      return NextResponse.json({
+        error: 'Online payment verification required. Please complete payment via Razorpay before confirming.'
+      }, { status: 400 });
+    }
 
     if (!buyerName || !buyerEmail || !shippingAddress) {
       return NextResponse.json({ error: 'Shipping details and contact information are required' }, { status: 400 });
@@ -114,14 +123,16 @@ export async function POST(
       }))
     });
 
-    // Enforce payment_status = 'pending' so no unverified order is recorded as paid
+    const finalPaymentStatus = isOnlinePayment ? 'paid' : 'pending_cod';
+
     await db.execute({
       sql: `INSERT INTO orders (
         id, order_number, customer_name, customer_email, customer_phone,
         shipping_address, items, subtotal, discount, shipping_fee, tax,
         grand_total, currency, payment_status, payment_method,
+        razorpay_order_id, razorpay_payment_id,
         fulfillment_status, internal_notes, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 'INR', 'pending', ?, 'unfulfilled', ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 'INR', ?, ?, ?, ?, 'unfulfilled', ?, ?, ?)`,
       args: [
         orderId,
         orderNumber,
@@ -133,7 +144,10 @@ export async function POST(
         subtotal,
         discount,
         grandTotal,
-        sanitizeText(paymentMethod || 'Cash on Delivery (Group Order)', 60),
+        finalPaymentStatus,
+        sanitizeText(paymentMethod || 'Cash on Delivery (COD Verified)', 60),
+        razorpayOrderId || null,
+        razorpayPaymentId || null,
         groupMeta,
         Date.now(),
         Date.now()

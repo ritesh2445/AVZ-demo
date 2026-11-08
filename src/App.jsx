@@ -7,6 +7,7 @@ import ParallaxRow from './components/ParallaxRow';
 import ImageTunnel from './components/ImageTunnel';
 import ShopCatalogue from './components/ShopCatalogue';
 import ProductDetailModal from './components/ProductDetailModal';
+import RequestPieceModal from './components/RequestPieceModal';
 import AvzMuseum from './components/AvzMuseum';
 import CustomOrders from './components/CustomOrders';
 import CustomInquiryModal from './components/CustomInquiryModal';
@@ -105,7 +106,23 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   // 10. Client Auth & Guest Explorer state with persistence
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [groupOrderModalOpen, setGroupOrderModalOpen] = useState(false);
+  const [requestPieceModalOpen, setRequestPieceModalOpen] = useState(false);
+  const [requestedPieceTarget, setRequestedPieceTarget] = useState(null);
   const [activeGroupCart, setActiveGroupCart] = useState(null);
+
+  // Real-Time Live Sync: Polling storefront settings every 6 seconds
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/storefront/config');
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.settings) setStorefrontConfig(data.settings);
+        }
+      } catch {}
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Check for ?groupCart=... collaborative invite link
   useEffect(() => {
@@ -583,6 +600,17 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     } catch (e) {}
   }, []);
 
+  const handleRequestPiece = useCallback((productOrName) => {
+    let target = null;
+    if (typeof productOrName === 'object' && productOrName !== null) {
+      target = productOrName;
+    } else if (typeof productOrName === 'string') {
+      target = catalogProducts.find((p) => p.name === productOrName || p.title === productOrName) || { name: productOrName };
+    }
+    setRequestedPieceTarget(target);
+    setRequestPieceModalOpen(true);
+  }, [catalogProducts]);
+
   const handleRequestCustom = useCallback((referenceName) => {
     setCustomOrderPrefill(referenceName);
     scrollToSection('custom');
@@ -595,6 +623,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   // Centralized Modal Lock: guarantees background is 100% stable & scroll-locked when ANY popup is open
   const isAnyModalOpen = Boolean(
     cartOpen ||
+    requestPieceModalOpen ||
     searchOpen ||
     tunnelOpen ||
     squadModalOpen ||
@@ -705,13 +734,13 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
             onOpenSquadModal={handleOpenSquadModal}
             currentUser={currentUser}
             onOpenAuthModal={() => setAuthModalOpen(true)}
-            onRequestCustom={handleRequestCustom}
+            onRequestCustom={handleRequestPiece}
           />
         </section>
 
         {/* Section 6: AVZ Museum Archive Vault */}
         <AvzMuseum
-          onRequestCustomCommission={handleRequestCustom}
+          onRequestCustomCommission={handleRequestPiece}
           theme="dark"
           cmsMuseum={cmsContent?.museum}
         />
@@ -736,7 +765,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         <AutoplayingReels
           cmsReels={cmsContent?.reels}
           onSelectProduct={setActiveProduct}
-          onRequestCustom={handleRequestCustom}
+          onRequestCustom={handleRequestPiece}
           onScrollToSection={scrollToSection}
         />
 
@@ -769,7 +798,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         onAddToCart={handleAddToCart}
         cartItems={cartItems}
         currency={currency}
-        onRequestCustom={handleRequestCustom}
+        onRequestCustom={handleRequestPiece}
         onOpenSquadModal={handleOpenSquadModal}
         isWishlisted={wishlistItems.some((p) => p.id === activeProduct?.id)}
         onToggleWishlist={handleToggleWishlist}
@@ -798,6 +827,8 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           onOpenAuthModal={() => setAuthModalOpen(true)}
           purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
           purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
+          thankYouTitle={storefrontConfig?.order_thank_you_message?.title}
+          thankYouMessage={storefrontConfig?.order_thank_you_message?.message}
         />
       </ErrorBoundary>
 
@@ -810,9 +841,22 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         currentUser={currentUser}
         onOpenAuthModal={() => setAuthModalOpen(true)}
         onGroupCartCreated={(grp) => setActiveGroupCart(grp)}
+        onBrowseCatalog={() => {
+          setGroupOrderModalOpen(false);
+          scrollToSection('shop');
+        }}
         onCheckoutGroup={(grp) => {
           setCartOpen(true);
         }}
+        currency={currency}
+      />
+
+      {/* Dedicated Piece Request Modal (Name, Phone +91 strict 10 digits, Email) */}
+      <RequestPieceModal
+        isOpen={requestPieceModalOpen}
+        onClose={() => setRequestPieceModalOpen(false)}
+        piece={requestedPieceTarget}
+        currentUser={currentUser}
         currency={currency}
       />
 

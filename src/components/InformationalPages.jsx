@@ -228,8 +228,8 @@ export function ContactSection() {
                     <span className="contact-action-badge text-[9px] font-mono tracking-widest uppercase font-semibold" style={{ color: '#a1a1aa' }}>
                       DIRECT SUPPORT
                     </span>
-                    <span className="contact-action-number text-xs sm:text-[13px] font-mono font-bold tracking-wider" style={{ color: '#f472b6' }}>
-                      +91 73042 64901
+                    <span className="contact-action-number whitespace-nowrap text-[11px] sm:text-xs font-mono font-bold tracking-normal inline-block" style={{ color: '#f472b6', whiteSpace: 'nowrap' }}>
+                      +91&nbsp;73042&nbsp;64901
                     </span>
                   </div>
                 </div>
@@ -251,8 +251,8 @@ export function ContactSection() {
                     <span className="contact-action-badge text-[9px] font-mono tracking-widest uppercase font-semibold" style={{ color: '#a1a1aa' }}>
                       STUDIO SUPPORT
                     </span>
-                    <span className="contact-action-number text-xs sm:text-[13px] font-mono font-bold tracking-wider" style={{ color: '#f472b6' }}>
-                      +91 82914 97268
+                    <span className="contact-action-number whitespace-nowrap text-[11px] sm:text-xs font-mono font-bold tracking-normal inline-block" style={{ color: '#f472b6', whiteSpace: 'nowrap' }}>
+                      +91&nbsp;82914&nbsp;97268
                     </span>
                   </div>
                 </div>

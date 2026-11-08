@@ -415,6 +415,25 @@ export async function verifyAdminOtp(email: string, code: string): Promise<{ suc
 /**
  * Authenticates the administrator using email and password directly (no OTP required)
  */
+export function hashAdminPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.createHash('sha256').update(salt + ':' + password.trim()).digest('hex');
+  return `${salt}:${hash}`;
+}
+
+export function verifyAdminPassword(password: string, storedHash: string): boolean {
+  try {
+    if (!storedHash || !storedHash.includes(':')) return false;
+    const [salt, expectedHash] = storedHash.split(':');
+    const actualHash = crypto.createHash('sha256').update(salt + ':' + password.trim()).digest('hex');
+    const actualBuffer = Buffer.from(actualHash);
+    const expectedBuffer = Buffer.from(expectedHash);
+    return actualBuffer.length === expectedBuffer.length && crypto.timingSafeEqual(actualBuffer, expectedBuffer);
+  } catch {
+    return false;
+  }
+}
+
 export async function loginAdminWithPassword(
   email: string,
   password: string
@@ -428,39 +447,35 @@ export async function loginAdminWithPassword(
     return { success: false, message: 'Invalid admin credentials.' };
   }
 
-  // Security enforcement: Disallow default dev password in production environment
-  const configuredPassword = process.env.ADMIN_PASSWORD || (!isProd ? 'wyzrUz-9nifme-jijgu' : '');
+  const db = getDb();
+  // Check if user exists in admin_users
+  const userQuery = await db.execute({
+    sql: 'SELECT id, email, name, role, password_hash FROM admin_users WHERE email = ?',
+    args: [normalized],
+  });
 
-  if (isProd && (!configuredPassword || configuredPassword === 'wyzrUz-9nifme-jijgu')) {
-    await logAdminActivity(normalized, 'LOGIN_BLOCKED_UNCONFIGURED_PASSWORD', 'admin_users', undefined, { reason: 'ADMIN_PASSWORD missing or insecure in production' });
-    return {
-      success: false,
-      message: 'Direct password login is disabled until an explicit ADMIN_PASSWORD secret is configured. Please use One-Time Passcode (OTP) login.'
-    };
+  let user: any = userQuery.rows[0];
+  let isPasswordValid = false;
+
+  if (user && user.password_hash) {
+    isPasswordValid = verifyAdminPassword(password, user.password_hash);
+  } else {
+    // Fallback to configured master secret
+    const configuredPassword = process.env.ADMIN_PASSWORD || (!isProd ? 'wyzrUz-9nifme-jijgu' : '');
+    if (configuredPassword) {
+      const passBuffer = Buffer.from(password.trim());
+      const expectedBuffer = Buffer.from(configuredPassword.trim());
+      isPasswordValid =
+        passBuffer.length === expectedBuffer.length &&
+        crypto.timingSafeEqual(passBuffer, expectedBuffer);
+    }
   }
-
-  // Constant-time comparison to prevent timing attacks
-  const passBuffer = Buffer.from(password.trim());
-  const expectedBuffer = Buffer.from((configuredPassword || '').trim());
-
-  const isPasswordValid =
-    configuredPassword.length > 0 &&
-    passBuffer.length === expectedBuffer.length &&
-    crypto.timingSafeEqual(passBuffer, expectedBuffer);
 
   if (!isPasswordValid) {
     await logAdminActivity(normalized, 'LOGIN_FAILED_INVALID_PASSWORD', 'admin_users', undefined, { email: normalized });
     return { success: false, message: 'Invalid email or password.' };
   }
 
-  const db = getDb();
-  // Ensure user exists in admin_users
-  const userQuery = await db.execute({
-    sql: 'SELECT id, email, name, role FROM admin_users WHERE email = ?',
-    args: [normalized],
-  });
-
-  let user: any = userQuery.rows[0];
   if (!user) {
     const newId = `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
     await db.execute({

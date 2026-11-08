@@ -47,6 +47,8 @@ export default function CartDrawer({
   const [promoCelebrationTheme, setPromoCelebrationTheme] = useState(null);
   const [pincode, setPincode] = useState('');
   const [deliveryEstimate, setDeliveryEstimate] = useState('');
+  const [countryCode, setCountryCode] = useState('+91');
+  const [phoneDigits, setPhoneDigits] = useState('');
 
   const [checkoutData, setCheckoutData] = useState({
     fullName: '',
@@ -68,15 +70,51 @@ export default function CartDrawer({
     playSound('glitch');
   };
 
-  // Auto-prefill if user is logged in
+  // Auto-prefill delivery address and phone if user is logged in
   useEffect(() => {
-    if (currentUser && isOpen) {
+    if (currentUser && isOpen && !currentUser.isGuest) {
       setCheckoutData((prev) => ({
         ...prev,
-        fullName: prev.fullName || (currentUser.isGuest ? '' : currentUser.name || ''),
-        email: prev.email || (currentUser.isGuest ? '' : currentUser.email || ''),
-        phone: prev.phone || currentUser.phone || ''
+        fullName: prev.fullName || currentUser.name || '',
+        email: prev.email || currentUser.email || '',
+        phone: prev.phone || currentUser.phone || '',
+        address: prev.address || currentUser.address || '',
+        city: prev.city || currentUser.city || '',
+        state: prev.state || currentUser.state || '',
+        pincode: prev.pincode || currentUser.pincode || ''
       }));
+
+      if (currentUser.phone) {
+        const raw = String(currentUser.phone);
+        const digits = raw.replace(/\D/g, '');
+        const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+        setPhoneDigits(clean.slice(0, 10));
+      }
+
+      if (currentUser.email) {
+        fetch(`/api/storefront/user-profile?email=${encodeURIComponent(currentUser.email)}`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (data?.success && data.profile) {
+              const p = data.profile;
+              setCheckoutData((prev) => ({
+                ...prev,
+                fullName: prev.fullName || p.name || '',
+                address: prev.address || p.address || '',
+                city: prev.city || p.city || '',
+                state: prev.state || p.state || '',
+                pincode: prev.pincode || p.pincode || '',
+                phone: prev.phone || p.phone || ''
+              }));
+              if (p.phone) {
+                const digits = p.phone.replace(/\D/g, '');
+                const clean = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+                setPhoneDigits(clean.slice(0, 10));
+              }
+            }
+          })
+          .catch(() => {});
+      }
     }
   }, [currentUser, isOpen]);
   // Universal background stability & scroll lock
@@ -437,10 +475,10 @@ export default function CartDrawer({
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-xl font-mono font-medium uppercase text-white tracking-wider">
-                ORDER RESERVED • OUR TEAM NOTIFIED
+                {thankYouTitle || 'ORDER RESERVED • OUR TEAM NOTIFIED'}
               </h3>
               <p className="text-xs text-zinc-400 font-montserrat max-w-sm leading-relaxed">
-                Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.
+                {thankYouMessage || 'Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.'}
               </p>
               <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center space-y-2">
                 <span className="text-white block font-medium text-sm">
@@ -541,14 +579,41 @@ export default function CartDrawer({
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">WhatsApp / Phone *</label>
-                  <input
-                    required
-                    type="tel"
-                    value={checkoutData.phone}
-                    onChange={(e) => setCheckoutData({ ...checkoutData, phone: e.target.value })}
-                    placeholder="Enter phone number"
-                    className="w-full bg-black/80 border border-white/15 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
-                  />
+                  <div className="flex gap-2">
+                    <div className="shrink-0 bg-black/80 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-pink font-mono font-bold flex items-center gap-1">
+                      <span>🇮🇳</span>
+                      <select
+                        value={countryCode}
+                        onChange={(e) => {
+                          setCountryCode(e.target.value);
+                          setCheckoutData({ ...checkoutData, phone: `${e.target.value} ${phoneDigits}` });
+                        }}
+                        className="bg-transparent text-pink outline-none cursor-pointer text-xs"
+                      >
+                        <option value="+91" className="bg-[#12091c] text-white">+91 (IN)</option>
+                        <option value="+1" className="bg-[#12091c] text-white">+1 (US)</option>
+                        <option value="+44" className="bg-[#12091c] text-white">+44 (UK)</option>
+                        <option value="+971" className="bg-[#12091c] text-white">+971 (AE)</option>
+                        <option value="+65" className="bg-[#12091c] text-white">+65 (SG)</option>
+                      </select>
+                    </div>
+                    <input
+                      required
+                      type="tel"
+                      value={phoneDigits}
+                      onChange={(e) => {
+                        const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setPhoneDigits(digits);
+                        setCheckoutData({ ...checkoutData, phone: `${countryCode} ${digits}` });
+                      }}
+                      placeholder="10-digit number"
+                      maxLength={10}
+                      className="flex-1 bg-black/80 border border-white/15 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono text-zinc-500 block mt-1">
+                    Strictly 10 digits ({phoneDigits.length}/10 entered)
+                  </span>
                 </div>
               </div>
 

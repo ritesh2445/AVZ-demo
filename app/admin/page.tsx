@@ -9,7 +9,7 @@ import {
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
   Copy, Save, Sliders, ShieldAlert, Check, Menu
-  , Palette, Upload
+  , Palette, Upload, RotateCcw
 } from 'lucide-react';
 import MuseumGalleryAdminTab from '@/src/components/admin/MuseumGalleryAdminTab';
 
@@ -18,6 +18,14 @@ export default function AdminDashboardPage() {
 
   // Active navigation module
   const [activeTab, setActiveTab] = useState<string>('overview');
+  // Piece Requests state
+  const [pieceRequests, setPieceRequests] = useState<any[]>([]);
+  const [isResettingActivity, setIsResettingActivity] = useState(false);
+  const [editUserModalOpen, setEditUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<any>(null);
+  const [editSquadModalOpen, setEditSquadModalOpen] = useState(false);
+  const [editingSquad, setEditingSquad] = useState<any>(null);
+
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
 
   // Admin session state
@@ -253,6 +261,8 @@ export default function AdminDashboardPage() {
     newPromoModalOpen ||
     newSquadModalOpen ||
     newUserModalOpen ||
+    editUserModalOpen ||
+    editSquadModalOpen ||
     (refundModalOpen && refundOrderTarget)
   );
 
@@ -383,6 +393,13 @@ export default function AdminDashboardPage() {
         setGroupCarts(gbData.group_carts || []);
       }
 
+      // Requested Pieces
+      const reqRes = await fetch('/api/admin/piece-requests');
+      if (reqRes.ok) {
+        const reqData = await reqRes.json();
+        setPieceRequests(reqData.requests || []);
+      }
+
       // Activity Logs
       const actRes = await fetch('/api/admin/activity');
       if (actRes.ok) {
@@ -413,6 +430,43 @@ export default function AdminDashboardPage() {
       fetchData();
     }
   }, [loadingSession, adminUser, orderSearch, orderPaymentFilter, orderFulfillmentFilter, orderPage, productSearch, productCategoryFilter]);
+
+  // Real-Time Live Sync: Automatically poll orders & piece-requests every 6 seconds
+  useEffect(() => {
+    if (!adminUser) return;
+    const interval = setInterval(async () => {
+      try {
+        const [ordRes, reqRes] = await Promise.all([
+          fetch(`/api/admin/orders?limit=20`),
+          fetch('/api/admin/piece-requests')
+        ]);
+        if (ordRes.ok) {
+          const ordData = await ordRes.json();
+          if (ordData.orders) {
+            setOrders((prev) => {
+              if (prev.length > 0 && ordData.orders.length > prev.length) {
+                showNotification('✨ New Order Received in Real-Time!');
+              }
+              return ordData.orders;
+            });
+          }
+        }
+        if (reqRes.ok) {
+          const reqData = await reqRes.json();
+          if (reqData.requests) {
+            setPieceRequests((prev) => {
+              if (prev.length > 0 && reqData.requests.length > prev.length) {
+                showNotification('💎 New Piece Request Received in Real-Time!');
+              }
+              return reqData.requests;
+            });
+          }
+        }
+      } catch {}
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [adminUser]);
+
 
   // Handler: Open Order Detail with Full Ledger
   const handleOpenOrderDetail = async (ord: any) => {
@@ -679,6 +733,7 @@ export default function AdminDashboardPage() {
     const title = (form.elements.namedItem('squadTitle') as HTMLInputElement)?.value;
     const discount_percent = Number((form.elements.namedItem('squadDiscount') as HTMLInputElement)?.value || 15);
     const min_members = Number((form.elements.namedItem('squadMinMembers') as HTMLInputElement)?.value || 3);
+    const min_cart_amount = Number((form.elements.namedItem('squadMinCart') as HTMLInputElement)?.value || 0);
     const duration_days = Number((form.elements.namedItem('squadDays') as HTMLInputElement)?.value || 7);
 
     try {
@@ -690,6 +745,7 @@ export default function AdminDashboardPage() {
           title,
           discount_percent,
           min_members,
+          min_cart_amount,
           duration_days
         })
       });
@@ -703,6 +759,199 @@ export default function AdminDashboardPage() {
       }
     } catch {
       showNotification('Error creating squad drop', 'error');
+    }
+  };
+
+  // Handler: Update Piece Request Status
+  const handleUpdatePieceRequestStatus = async (id: string, status: string) => {
+    try {
+      const res = await fetch('/api/admin/piece-requests', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      });
+      if (res.ok) {
+        showNotification(`Piece request status updated to ${status}`);
+        setPieceRequests(prev => prev.map(r => r.id === id ? { ...r, status } : r));
+      }
+    } catch {
+      showNotification('Failed to update status', 'error');
+    }
+  };
+
+  const handleDeletePieceRequest = async (id: string) => {
+    if (!confirm('Remove this piece request inquiry?')) return;
+    try {
+      const res = await fetch(`/api/admin/piece-requests?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        showNotification('Piece request removed');
+        setPieceRequests(prev => prev.filter(r => r.id !== id));
+      }
+    } catch {
+      showNotification('Failed to remove request', 'error');
+    }
+  };
+
+  // Handler: Reset Activity Log
+  const handleResetActivityLog = async () => {
+    if (!confirm('Are you sure you want to reset all activity logs? This audit trail action cannot be undone.')) return;
+    setIsResettingActivity(true);
+    try {
+      const res = await fetch('/api/admin/activity', { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Activity log has been completely reset.');
+        fetchData();
+      } else {
+        showNotification(data.error || 'Failed to reset log', 'error');
+      }
+    } catch {
+      showNotification('Error resetting activity log', 'error');
+    } finally {
+      setIsResettingActivity(false);
+    }
+  };
+
+  // Handler: Update Administrator Access & Password
+  const handleUpdateUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    const form = e.currentTarget;
+    const role = (form.elements.namedItem('editRole') as HTMLSelectElement)?.value;
+    const name = (form.elements.namedItem('editName') as HTMLInputElement)?.value;
+    const password = (form.elements.namedItem('editPassword') as HTMLInputElement)?.value;
+
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingUser.id,
+          role,
+          name,
+          password: password && password.trim().length >= 6 ? password.trim() : undefined
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Administrator permissions updated successfully!');
+        setEditUserModalOpen(false);
+        setEditingUser(null);
+        fetchData();
+      } else {
+        showNotification(data.error || 'Failed to update access', 'error');
+      }
+    } catch {
+      showNotification('Error updating administrator', 'error');
+    }
+  };
+
+  const handleDeleteUser = async (u: any) => {
+    if (!confirm(`Revoke administrator access for ${u.email}?`)) return;
+    try {
+      const res = await fetch(`/api/admin/users?id=${u.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification(`Administrator ${u.email} removed.`);
+        fetchData();
+      } else {
+        showNotification(data.error || 'Failed to remove administrator', 'error');
+      }
+    } catch {
+      showNotification('Error removing administrator', 'error');
+    }
+  };
+
+  // Handler: Update Squad Drop Offer
+  const handleUpdateSquadOffer = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingSquad) return;
+    const form = e.currentTarget;
+    const title = (form.elements.namedItem('editSquadTitle') as HTMLInputElement)?.value;
+    const discount_percent = Number((form.elements.namedItem('editSquadDiscount') as HTMLInputElement)?.value);
+    const min_members = Number((form.elements.namedItem('editSquadMinMembers') as HTMLInputElement)?.value);
+    const min_cart_amount = Number((form.elements.namedItem('editSquadMinCart') as HTMLInputElement)?.value || 0);
+    const status = (form.elements.namedItem('editSquadStatus') as HTMLSelectElement)?.value;
+
+    try {
+      const res = await fetch('/api/admin/group-buys', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingSquad.id,
+          title,
+          discount_percent,
+          min_members,
+          min_cart_amount,
+          status
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Squad offer updated successfully!');
+        setEditSquadModalOpen(false);
+        setEditingSquad(null);
+        fetchData();
+      } else {
+        showNotification(data.error || 'Failed to update squad offer', 'error');
+      }
+    } catch {
+      showNotification('Error updating squad offer', 'error');
+    }
+  };
+
+  const handleDeleteSquadOffer = async (id: string) => {
+    if (!confirm('Delete this squad offer?')) return;
+    try {
+      const res = await fetch(`/api/admin/group-buys?id=${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        showNotification('Squad offer deleted.');
+        fetchData();
+      }
+    } catch {
+      showNotification('Error deleting squad offer', 'error');
+    }
+  };
+
+  // Handler: Save Storefront Freeze Banner & Thank You Message
+  const handleSaveStoreMessages = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const freezeTitle = (form.elements.namedItem('freezeTitle') as HTMLInputElement)?.value;
+    const freezeMessage = (form.elements.namedItem('freezeMessage') as HTMLTextAreaElement)?.value;
+    const thankYouTitle = (form.elements.namedItem('thankYouTitle') as HTMLInputElement)?.value;
+    const thankYouMessage = (form.elements.namedItem('thankYouMessage') as HTMLTextAreaElement)?.value;
+
+    try {
+      await fetch('/api/admin/storefront/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: 'purchases_enabled',
+          value: {
+            ...storefrontSettings.purchases_enabled,
+            banner_title: freezeTitle,
+            disabled_message: freezeMessage
+          }
+        })
+      });
+
+      await fetch('/api/admin/storefront/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: 'order_thank_you_message',
+          value: {
+            title: thankYouTitle,
+            message: thankYouMessage
+          }
+        })
+      });
+
+      showNotification('Storefront messages & thank you notice saved!');
+      fetchSettings();
+    } catch {
+      showNotification('Error saving storefront messages', 'error');
     }
   };
 
@@ -763,6 +1012,7 @@ export default function AdminDashboardPage() {
   const navigationModules = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'orders', label: 'Orders', icon: ShoppingBag, badge: kpis?.pendingFulfillmentCount },
+    { id: 'requested_pieces', label: 'Requested Pieces', icon: Sparkles, badge: pieceRequests.filter(r => r.status === 'pending').length || null, highlight: true },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'inventory', label: 'Inventory', icon: Warehouse, badge: kpis?.lowStockCount ? 'Low' : null },
     { id: 'collections', label: 'Collections', icon: Layers },
@@ -1958,6 +2208,78 @@ export default function AdminDashboardPage() {
                 <p className="text-xs text-neutral-400 mt-1 font-mono">Boutique identity, tax settings, and third-party provider status.</p>
               </div>
 
+              {/* STORE FREEZE & POST-PAYMENT CUSTOM MESSAGES */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
+                <h3 className="text-sm font-bold text-white font-cinzel mb-2 uppercase">Storefront Public Notices & Messages</h3>
+                <p className="text-xs text-neutral-400 font-mono mb-4">
+                  Configure custom banner messages displayed when store checkout is frozen, and customize the post-payment thank-you receipt notice.
+                </p>
+
+                <form onSubmit={handleSaveStoreMessages} className="space-y-4 text-xs font-mono">
+                  <div className="p-4 rounded-xl bg-[#161020] border border-neutral-800 space-y-3">
+                    <span className="text-amber-300 font-bold uppercase block text-[11px]">
+                      1. Store Freeze Banner & Notice (When Purchases Paused)
+                    </span>
+                    <div>
+                      <label className="text-neutral-400 block mb-1 uppercase">Banner Headline / Title</label>
+                      <input
+                        name="freezeTitle"
+                        type="text"
+                        defaultValue={storefrontSettings.purchases_enabled?.banner_title || 'STORE ORDERS CURRENTLY PAUSED'}
+                        placeholder="e.g. STORE ORDERS CURRENTLY PAUSED"
+                        className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-neutral-400 block mb-1 uppercase">Custom Freeze Message</label>
+                      <textarea
+                        name="freezeMessage"
+                        rows={2}
+                        defaultValue={storefrontSettings.purchases_enabled?.disabled_message || 'Purchases are momentarily paused while founder Dhrisni finalizes new creations. You may still explore the catalogue.'}
+                        placeholder="Message displayed across public top banner and checkout drawer..."
+                        className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-[#161020] border border-neutral-800 space-y-3">
+                    <span className="text-emerald-300 font-bold uppercase block text-[11px]">
+                      2. Post-Payment Customer Thank You Message
+                    </span>
+                    <div>
+                      <label className="text-neutral-400 block mb-1 uppercase">Confirmation Title</label>
+                      <input
+                        name="thankYouTitle"
+                        type="text"
+                        defaultValue={storefrontSettings.order_thank_you_message?.title || 'ORDER RESERVED • OUR TEAM NOTIFIED'}
+                        placeholder="e.g. ORDER RESERVED • OUR TEAM NOTIFIED"
+                        className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-neutral-400 block mb-1 uppercase">Thank You Note</label>
+                      <textarea
+                        name="thankYouMessage"
+                        rows={2}
+                        defaultValue={storefrontSettings.order_thank_you_message?.message || 'Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.'}
+                        placeholder="Personalized message displayed to customer upon verified payment..."
+                        className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 rounded-xl bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold uppercase cursor-pointer transition-all shadow-md active:scale-95 flex items-center gap-2"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Save Storefront Messages</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
                 <h3 className="text-sm font-bold text-white font-cinzel mb-4">Third-Party Account Status (Requirement 13)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -2282,6 +2604,7 @@ export default function AdminDashboardPage() {
                         <th className="py-3 px-3">Role</th>
                         <th className="py-3 px-3">Last Login</th>
                         <th className="py-3 px-3">Created</th>
+                        <th className="py-3 px-3 text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-neutral-800/60">
@@ -2302,6 +2625,23 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="py-3.5 px-3 font-mono text-neutral-500 text-[11px]">
                             {new Date(Number(u.created_at)).toLocaleDateString()}
+                          </td>
+                          <td className="py-3.5 px-3 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => { setEditingUser(u); setEditUserModalOpen(true); }}
+                                className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-mono cursor-pointer transition-colors"
+                              >
+                                Edit Access 🔑
+                              </button>
+                              <button
+                                onClick={() => handleDeleteUser(u)}
+                                className="text-neutral-500 hover:text-red-400 p-1 transition-colors cursor-pointer"
+                                title="Remove Admin"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -2466,8 +2806,22 @@ export default function AdminDashboardPage() {
           {activeTab === 'activity' && (
             <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6 max-w-7xl mx-auto space-y-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-cinzel font-bold text-white uppercase">Security & Administrative Activity Log</h2>
-                <span className="text-xs font-mono text-[#F4C2C2] bg-[#301934] px-3 py-1 rounded-lg">Audit Trail</span>
+                <div>
+                  <h2 className="text-xl font-cinzel font-bold text-white uppercase">Security & Administrative Activity Log</h2>
+                  <p className="text-xs text-neutral-400 mt-0.5 font-mono">Durable immutable audit log of administrative sessions and storefront mutations.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleResetActivityLog}
+                    disabled={isResettingActivity}
+                    className="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-300 font-mono text-xs px-3.5 py-1.5 rounded-xl cursor-pointer active:scale-95 transition-all flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{isResettingActivity ? 'Resetting...' : 'Reset Activity Log'}</span>
+                  </button>
+                  <span className="text-xs font-mono text-[#F4C2C2] bg-[#301934] px-3 py-1 rounded-lg">Audit Trail ({activityLogs.length})</span>
+                </div>
               </div>
 
               <div className="space-y-2 max-h-[600px] overflow-y-auto">
@@ -3443,7 +3797,7 @@ export default function AdminDashboardPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-neutral-400 block mb-1 uppercase">Target Members</label>
+                  <label className="text-neutral-400 block mb-1 uppercase">Min Squad Members</label>
                   <input
                     name="squadMinMembers"
                     type="number"
@@ -3452,14 +3806,24 @@ export default function AdminDashboardPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-neutral-400 block mb-1 uppercase">Duration (Days)</label>
+                  <label className="text-neutral-400 block mb-1 uppercase">Min Cart Amount (₹)</label>
                   <input
-                    name="squadDays"
+                    name="squadMinCart"
                     type="number"
-                    defaultValue="7"
+                    defaultValue="0"
+                    placeholder="e.g. 5000"
                     className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">Duration (Days)</label>
+                <input
+                  name="squadDays"
+                  type="number"
+                  defaultValue="7"
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                />
               </div>
               <div className="flex justify-end gap-2 pt-3 border-t border-neutral-800">
                 <button
@@ -3534,6 +3898,152 @@ export default function AdminDashboardPage() {
                   className="px-4 py-2 rounded-xl bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold text-xs uppercase"
                 >
                   Save Administrator
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+            {/* MODAL: EDIT ADMINISTRATOR ACCESS & PASSWORD */}
+      {editUserModalOpen && editingUser && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#120D1A] border border-[#301934] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-neutral-800 pb-3">
+              <h3 className="text-lg font-cinzel font-bold text-white uppercase">Edit Admin Access: {editingUser.email}</h3>
+              <button onClick={() => setEditUserModalOpen(false)} className="text-neutral-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateUser} className="space-y-3 text-xs font-mono">
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">Name</label>
+                <input
+                  name="editName"
+                  type="text"
+                  defaultValue={editingUser.name || ''}
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                />
+              </div>
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">Access Role *</label>
+                <select
+                  name="editRole"
+                  defaultValue={editingUser.role || 'store_manager'}
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                >
+                  <option value="store_manager">Store Manager</option>
+                  <option value="content_manager">Content Manager</option>
+                  <option value="owner">Owner (Full Superuser Access)</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">New Password 🔑 (Leave blank to keep unchanged)</label>
+                <input
+                  name="editPassword"
+                  type="password"
+                  placeholder="Enter new password (min 6 chars)"
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-800">
+                <button
+                  type="button"
+                  onClick={() => setEditUserModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold text-xs uppercase"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT SQUAD DROP OFFER */}
+      {editSquadModalOpen && editingSquad && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#120D1A] border border-[#301934] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-neutral-800 pb-3">
+              <h3 className="text-lg font-cinzel font-bold text-white uppercase">Edit Squad Offer: {editingSquad.squad_code}</h3>
+              <button onClick={() => setEditSquadModalOpen(false)} className="text-neutral-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateSquadOffer} className="space-y-3 text-xs font-mono">
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">Squad Campaign Title *</label>
+                <input
+                  name="editSquadTitle"
+                  type="text"
+                  required
+                  defaultValue={editingSquad.title || ''}
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-neutral-400 block mb-1 uppercase">Discount (%)</label>
+                  <input
+                    name="editSquadDiscount"
+                    type="number"
+                    defaultValue={editingSquad.discount_percent || 15}
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                  />
+                </div>
+                <div>
+                  <label className="text-neutral-400 block mb-1 uppercase">Min Members in Squad</label>
+                  <input
+                    name="editSquadMinMembers"
+                    type="number"
+                    defaultValue={editingSquad.min_members || 3}
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-neutral-400 block mb-1 uppercase">Min Cart Amount (₹)</label>
+                  <input
+                    name="editSquadMinCart"
+                    type="number"
+                    defaultValue={editingSquad.min_cart_amount || 0}
+                    placeholder="e.g. 5000"
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                  />
+                </div>
+                <div>
+                  <label className="text-neutral-400 block mb-1 uppercase">Offer Status</label>
+                  <select
+                    name="editSquadStatus"
+                    defaultValue={editingSquad.status || 'active'}
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                  >
+                    <option value="active">Active (Visible)</option>
+                    <option value="expired">Expired / Paused</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-800">
+                <button
+                  type="button"
+                  onClick={() => setEditSquadModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold text-xs uppercase"
+                >
+                  Save Squad Offer
                 </button>
               </div>
             </form>

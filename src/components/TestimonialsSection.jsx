@@ -5,39 +5,8 @@ import { useModalScrollLock } from '../utils/modalScrollLock';
 import { Star, MessageSquarePlus, ShieldCheck, User, Sparkles, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
-// Default initial testimonials
-const DEFAULT_TESTIMONIALS = [
-  {
-    id: 'test-001',
-    user_name: 'Aanya Sharma',
-    user_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    role_title: 'Fashion Editor • Mumbai',
-    product_name: 'Original Motherboard Top',
-    rating: 5,
-    content: 'The craftsmanship on the motherboard top is otherworldly. The solder pathways and curved industrial edges rest comfortably against the collarbones without pinching. Everywhere I wore it during Lakme Fashion Week, people stopped me to ask who made it. Truly 1-of-1 wearable art.'
-  },
-  {
-    id: 'test-002',
-    user_name: 'Devansh Kulkarni',
-    user_avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-    role_title: 'Music Producer & DJ • Bangalore',
-    product_name: 'Spike Bodice Armour',
-    rating: 5,
-    content: 'Purchased for a stage performance in Berlin. The weight of the solid chrome rivets and the hand-finished steel spikes feel heavy, grounded, and indestructible. Dhrisni tailored the waist tension cables to my exact chest dimensions. You feel like a cyberpunk deity the second you zip it on.'
-  },
-  {
-    id: 'test-003',
-    user_name: 'Priyanka Das',
-    user_avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
-    role_title: 'Visual Artist • Guwahati',
-    product_name: 'Guwahati Stainless Chainmail',
-    rating: 5,
-    content: 'Knowing this was hand-woven ring-by-ring by local women artisans in Guwahati makes it so special. The fluid drape of the stainless steel links moves like liquid metal under sunlight. Packaging arrived in a gorgeous matte black box with custom handwritten notes.'
-  }
-];
-
 function TestimonialsSection({ currentUser, onOpenAuthModal }) {
-  const [testimonials, setTestimonials] = useState(DEFAULT_TESTIMONIALS);
+  const [testimonials, setTestimonials] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [authPromptOpen, setAuthPromptOpen] = useState(false);
   useModalScrollLock(Boolean(modalOpen || authPromptOpen));
@@ -58,12 +27,12 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
         const res = await fetch('/api/testimonials');
         if (res.ok) {
           const data = await res.json();
-          if (Array.isArray(data.testimonials) && data.testimonials.length > 0) {
+          if (Array.isArray(data.testimonials)) {
             setTestimonials(data.testimonials);
           }
         }
       } catch (err) {
-        console.warn('Using default testimonials fallback');
+        console.warn('Unable to load testimonials');
       }
     }
     fetchTestimonials();
@@ -174,76 +143,98 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
           </div>
         </div>
 
-        {/* Testimonials Cards Grid (High-fashion luxury glass cards) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {testimonials.map((t) => (
-            <div
-              key={t.id}
-              className="group relative rounded-2xl sm:rounded-3xl bg-[#09090d] border border-white/10 p-6 sm:p-8 flex flex-col justify-between shadow-2xl transition-all duration-300 hover:border-pink/50 hover:shadow-[0_12px_40px_rgba(244,114,182,0.15)] hover:-translate-y-1.5"
-            >
-              {/* Card Ambient Glow on Hover */}
-              <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-pink/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+        {/* Testimonials Cards Grid or Empty State */}
+        {testimonials.length === 0 ? (
+          <div className="max-w-xl mx-auto p-8 sm:p-10 rounded-3xl bg-[#09090d] border border-white/15 text-center space-y-4 shadow-xl">
+            <div className="w-12 h-12 rounded-full bg-pink/10 border border-pink/30 text-pink flex items-center justify-center mx-auto">
+              <Star className="w-5 h-5 fill-pink/30 text-pink" />
+            </div>
+            <h3 className="text-base font-mono font-bold uppercase text-white tracking-wider">
+              No Reviews Yet
+            </h3>
+            <p className="text-xs text-zinc-400 font-montserrat leading-relaxed">
+              Be the first patron to share your experience with Dhrisni&apos;s wearable art and bespoke runway pieces.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={handleOpenReviewModal}
+                className="px-6 py-2.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                Write the First Review
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {testimonials.map((t) => (
+              <div
+                key={t.id}
+                className="group relative rounded-2xl sm:rounded-3xl bg-[#09090d] border border-white/10 p-6 sm:p-8 flex flex-col justify-between shadow-2xl transition-all duration-300 hover:border-pink/50 hover:shadow-[0_12px_40px_rgba(244,114,182,0.15)] hover:-translate-y-1.5"
+              >
+                {/* Card Ambient Glow on Hover */}
+                <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-pink/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
-              <div className="relative z-10">
-                {/* Avatar with Circular Frame */}
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-neutral-900 border-2 border-white/20 mb-5 shadow-md flex-shrink-0">
-                  {t.user_avatar ? (
-                    <img
-                      src={t.user_avatar}
-                      alt={t.user_name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(t.user_name)}&backgroundColor=14141c&textColor=ffffff`;
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#14141c] text-white">
-                      <User className="w-6 h-6 text-pink" />
-                    </div>
+                <div className="relative z-10">
+                  {/* Avatar with Circular Frame */}
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden bg-neutral-900 border-2 border-white/20 mb-5 shadow-md flex-shrink-0">
+                    {t.user_avatar ? (
+                      <img
+                        src={t.user_avatar}
+                        alt={t.user_name}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(t.user_name)}&backgroundColor=14141c&textColor=ffffff`;
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-[#14141c] text-white">
+                        <User className="w-6 h-6 text-pink" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="text-base sm:text-lg font-mono font-bold text-white uppercase tracking-tight">
+                    {t.user_name}
+                  </h3>
+
+                  {/* Role / Location */}
+                  <p className="text-xs text-zinc-400 font-mono mt-0.5 mb-5 font-normal">
+                    {t.role_title || 'Verified Patron'}
+                  </p>
+
+                  {/* Review Paragraph */}
+                  <p className="text-xs sm:text-sm text-zinc-300 font-mono leading-relaxed line-clamp-6">
+                    &ldquo;{t.content}&rdquo;
+                  </p>
+                </div>
+
+                {/* Card Footer: Stars & Product Badge */}
+                <div className="relative z-10 mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${
+                          i < (t.rating || 5)
+                            ? 'fill-[#f472b6] text-[#f472b6]'
+                            : 'text-neutral-700'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {t.product_name && (
+                    <span className="text-[10px] font-mono text-[#f472b6] uppercase tracking-wider font-semibold">
+                      {t.product_name}
+                    </span>
                   )}
                 </div>
-
-                {/* Name */}
-                <h3 className="text-base sm:text-lg font-mono font-bold text-white uppercase tracking-tight">
-                  {t.user_name}
-                </h3>
-
-                {/* Role / Location */}
-                <p className="text-xs text-zinc-400 font-mono mt-0.5 mb-5 font-normal">
-                  {t.role_title || 'Verified Patron'}
-                </p>
-
-                {/* Review Paragraph */}
-                <p className="text-xs sm:text-sm text-zinc-300 font-mono leading-relaxed line-clamp-6">
-                  "{t.content}"
-                </p>
               </div>
-
-              {/* Card Footer: Stars & Product Badge */}
-              <div className="relative z-10 mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3.5 h-3.5 ${
-                        i < (t.rating || 5)
-                          ? 'fill-[#f472b6] text-[#f472b6]'
-                          : 'text-neutral-700'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                {t.product_name && (
-                  <span className="text-[10px] font-mono text-[#f472b6] uppercase tracking-wider font-semibold">
-                    {t.product_name}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* MODAL 1: ADD REVIEW FORM (ONLY FOR REGISTERED USERS) */}

@@ -19,6 +19,8 @@
     }
   ],
   "vars": {
+    "BETTER_AUTH_URL": "https://aveezahvaganza.com",
+    "NEXT_PUBLIC_APP_URL": "https://aveezahvaganza.com",
     "RESEND_FROM_EMAIL": "AVZ Vaganza Studio <onboarding@resend.dev>"
   },
   "routes": [
