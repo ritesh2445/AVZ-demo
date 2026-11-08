@@ -305,10 +305,165 @@ function createInMemoryClient(): Client {
   ]);
 
 
+  // Pre-seed promotions with festival themes
+  store.set('promotions', [
+    {
+      id: 'promo_1',
+      code: 'BADDIES10',
+      discount_type: 'percentage',
+      discount_value: 10,
+      min_order_value: 1500,
+      max_uses: 500,
+      current_uses: 12,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'cyberpunk',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_2',
+      code: 'ATELIER500',
+      discount_type: 'fixed',
+      discount_value: 500,
+      min_order_value: 4000,
+      max_uses: 100,
+      current_uses: 5,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'luxury_gold',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_3',
+      code: 'DIWALI20',
+      discount_type: 'percentage',
+      discount_value: 20,
+      min_order_value: 2000,
+      max_uses: 1000,
+      current_uses: 0,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'diwali',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_4',
+      code: 'HOLISPLASH',
+      discount_type: 'percentage',
+      discount_value: 15,
+      min_order_value: 1500,
+      max_uses: 1000,
+      current_uses: 0,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'holi',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_5',
+      code: 'CYBERSQUAD',
+      discount_type: 'percentage',
+      discount_value: 25,
+      min_order_value: 3000,
+      max_uses: 500,
+      current_uses: 0,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'cyberpunk',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_6',
+      code: 'ROYALGOLD',
+      discount_type: 'fixed',
+      discount_value: 1000,
+      min_order_value: 6000,
+      max_uses: 200,
+      current_uses: 0,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'luxury_gold',
+      created_at: Date.now()
+    },
+    {
+      id: 'promo_7',
+      code: 'LOVEBIRDS',
+      discount_type: 'percentage',
+      discount_value: 14,
+      min_order_value: 2000,
+      max_uses: 500,
+      current_uses: 0,
+      start_date: Date.now() - 864000000,
+      expiry_date: null,
+      is_active: 1,
+      animation_theme: 'hearts',
+      created_at: Date.now()
+    }
+  ]);
+
   const client: Client = {
     async execute(stmt: any) {
       const sql = typeof stmt === 'string' ? stmt : stmt?.sql || '';
       const trimmed = sql.trim().toUpperCase();
+
+      if (trimmed.startsWith('SELECT') && sql.toLowerCase().includes('from promotions')) {
+        let promoRows = store.get('promotions') || [];
+        const codeArg = stmt?.args?.[0];
+        if (codeArg && typeof codeArg === 'string') {
+          const matched = promoRows.filter((p: any) => p.code?.toUpperCase() === codeArg.toUpperCase() && (p.is_active === 1 || p.is_active === true));
+          return { columns: Object.keys(matched[0] || {}), rows: matched, rowsAffected: 0 };
+        }
+        return { columns: Object.keys(promoRows[0] || {}), rows: [...promoRows], rowsAffected: 0 };
+      }
+
+      if (trimmed.startsWith('INSERT INTO PROMOTIONS')) {
+        const promoRows = store.get('promotions') || [];
+        const args = Array.isArray(stmt?.args) ? stmt.args : [];
+        if (args.length >= 10) {
+          promoRows.unshift({
+            id: args[0],
+            code: args[1],
+            discount_type: args[2],
+            discount_value: args[3],
+            min_order_value: args[4],
+            max_uses: args[5],
+            current_uses: args[6],
+            start_date: args[7],
+            expiry_date: args[8],
+            is_active: args[9],
+            animation_theme: args[10] || 'sparkles',
+            created_at: args[11] || Date.now()
+          });
+          store.set('promotions', promoRows);
+        }
+        return { columns: [], rows: [], rowsAffected: 1 };
+      }
+
+      if (trimmed.startsWith('DELETE FROM PROMOTIONS')) {
+        const id = stmt?.args?.[0];
+        if (id) {
+          const promoRows = (store.get('promotions') || []).filter((p: any) => p.id !== id);
+          store.set('promotions', promoRows);
+        }
+        return { columns: [], rows: [], rowsAffected: 1 };
+      }
+
+      if (trimmed.startsWith('UPDATE PROMOTIONS')) {
+        const promoRows = store.get('promotions') || [];
+        const id = stmt?.args?.[stmt?.args?.length - 1];
+        const target = promoRows.find((p: any) => p.id === id);
+        if (target) {
+          if (sql.includes('is_active = ?')) target.is_active = stmt?.args?.[0];
+          if (sql.includes('animation_theme = ?')) target.animation_theme = stmt?.args?.[0];
+        }
+        return { columns: [], rows: [], rowsAffected: 1 };
+      }
 
       if (trimmed.startsWith('SELECT')) {
         for (const [table, rows] of store.entries()) {
