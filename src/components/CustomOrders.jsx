@@ -29,7 +29,7 @@ const CUSTOM_ORDER_STEPS = [
     step: "02",
     title: "SOURCING",
     subtitle: "Materials Selection",
-    desc: "Selecting motherboards, spikes, rings, and upcycled fabrics."
+    desc: "Selecting reclaimed metals, spikes, steel chains, and upcycled fabrics."
   },
   {
     step: "03",
@@ -152,7 +152,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
               <span>TIMELINE: 2 TO 3 WEEKS PER BUILD</span>
             </div>
             <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed text-left">
-              Because raw motherboards must be hand-cut, edged, and reinforced, and chain links individually linked, made-to-order pieces take 14 to 21 working days for assembly and testing.
+              Because custom metal armor pieces must be hand-sculpted, edged, and reinforced, and chain links individually woven, made-to-order pieces take 14 to 21 working days for assembly and testing.
             </p>
           </div>
 
@@ -309,10 +309,10 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
                   >
                     <option value="Custom Top / Bodice">Custom Top / Bodice</option>
                     <option value="Spiked Corset / Bralette">Spiked Corset / Bralette</option>
-                    <option value="Motherboard Silicon Diva Top">Motherboard Silicon Diva Top</option>
+                    <option value="Sculptural Metal Armor Bodice">Sculptural Metal Armor Bodice</option>
                     <option value="Deconstructed Moto Jacket">Deconstructed Moto Jacket</option>
                     <option value="Chainmail Body Armor Harness">Chainmail Body Armor Harness</option>
-                    <option value="Keyboard Keycap Jewelry / Harness">Keyboard Keycap Jewelry / Harness</option>
+                    <option value="Cyber Hardware Choker / Harness">Cyber Hardware Choker / Harness</option>
                     <option value="Arm Cuffs / Leg Warmers">Arm Cuffs / Leg Warmers</option>
                     <option value="Full Editorial Co-ord Ensemble">Full Editorial Co-ord Ensemble</option>
                   </select>
@@ -344,7 +344,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
                   name="referencePiece"
                   value={formData.referencePiece}
                   onChange={handleChange}
-                  placeholder="e.g. Archival Motherboard Bralette Prototype 01 or Look 005 Chainmail"
+                  placeholder="e.g. Spikeria Bra, Look 005 Chainmail, or Spiral Body Chainmail"
                   className="w-full bg-black/80 border border-white/15 px-4 py-2.5 rounded-xl text-xs text-white font-mono outline-none focus:border-pink transition-colors"
                 />
               </div>
@@ -387,7 +387,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
                   rows={4}
                   value={formData.designNotes}
                   onChange={handleChange}
-                  placeholder="Describe what you want: circuit board colors (green/black), spike accents, chain drape, fit preferences, or any specific deadline date."
+                  placeholder="Describe what you want: metal tones (silver/chrome/black), spike accents, chain drape, fit preferences, or any specific deadline date."
                   className={`w-full bg-black/80 border ${
                     errors.designNotes ? 'border-red-500' : 'border-white/15'
                   } p-4 rounded-xl text-xs text-white font-mono outline-none focus:border-pink resize-none transition-colors`}

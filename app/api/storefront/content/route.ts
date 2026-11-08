@@ -24,7 +24,7 @@ export async function GET() {
           data: JSON.stringify({
             headline_line1: 'WEARABLE ART.',
             headline_line2: 'NOT MADE TO REPEAT.',
-            subheadline: 'Handcrafted high-fashion cyber couture, upcycled computer hardware, and archival 1-of-1 relics from Guwahati, Assam.',
+            subheadline: 'Handcrafted high-fashion cyber couture, reclaimed metals & chainmail, and archival 1-of-1 relics from Guwahati, Assam.',
             video_desktop: '/assets/hero_reel_desktop.mp4',
             video_mobile: '/assets/hero_reel_mobile.mp4',
             primary_cta_text: 'EXPLORE VAULT',
@@ -80,7 +80,7 @@ export async function GET() {
           section_key: 'care_guide',
           title: 'Garment & Hardware Care Guide',
           data: JSON.stringify({
-            motherboard_care: 'Do not soak in water. Clean with dry microfiber lens cloth.',
+            hardware_care: 'Keep metal hardware and chains dry. Polish gently with a soft jewelry cloth.',
             spikes_care: 'Wipe with jewelry cloth after wearing. Store flat in dust bag.',
             denim_care: 'Spot clean or cold hand wash. Never tumble dry or machine spin.'
           })
@@ -112,11 +112,11 @@ export async function GET() {
             reels: [
               {
                 id: 'reel-01',
-                title: 'The Motherboard Corset in Motion',
-                subtitle: 'Cybernetic armor sculpted to body contours',
+                title: 'Sculptural Chainmail & Spikes in Motion',
+                subtitle: 'Artisanal metal armor sculpted to body contours',
                 vimeo_url: 'https://vimeo.com/824804225',
                 fallback_video: '/assets/Desktop view.MP4',
-                tag: 'Motherboard Top'
+                tag: 'Chainmail Couture'
               },
               {
                 id: 'reel-02',
@@ -128,11 +128,11 @@ export async function GET() {
               },
               {
                 id: 'reel-03',
-                title: 'Tactile "CTRL+Z" Keycap Choker',
-                subtitle: 'Mechanical keys that click with every movement',
+                title: 'Tactile Industrial Hardware Choker',
+                subtitle: 'Reclaimed hardware and hand-linked chain detailing',
                 vimeo_url: 'https://vimeo.com/1084537',
                 fallback_video: '/assets/Desktop view.MP4',
-                tag: 'Keycap Choker'
+                tag: 'Hardware Choker'
               },
               {
                 id: 'reel-04',

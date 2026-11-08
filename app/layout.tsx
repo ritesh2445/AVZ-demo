@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | AVZ VAGANZA',
   },
   description:
-    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (@Dhristroyer). Sustainable avant-garde luxury fashion, sculptural wearable art, cyber-grunge couture, upcycled motherboards, heavy chainmail, solid spikes, and custom 1-of-1 pieces handcrafted in Guwahati, Assam.',
+    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (@Dhristroyer). Sustainable avant-garde luxury fashion, sculptural wearable art, cyber-grunge couture, reclaimed metals, heavy chainmail, solid spikes, and custom 1-of-1 pieces handcrafted in Guwahati, Assam.',
   keywords: [
     'AVZ Vaganza',
     'Aveezah Vaganza',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'wearable art India',
     'avant-garde fashion brand',
     'cyber grunge fashion',
-    'upcycled motherboard clothing',
+    'upcycled metal clothing',
     'hardware couture',
     'chainmail armour fashion',
     'custom corset designer India',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     'handcrafted clothing Guwahati Assam',
     'celebrity wearable art designer',
     'spike bodice',
-    'motherboard diva top',
+    'sculptural metal top',
     'fashion art installation',
   ],
   authors: [{ name: 'Dhrisni (Dhristroyer)', url: 'https://instagram.com/dhristroyer' }],
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AVZ VAGANZA | THE OTHER DIMENSION — Wearable Art by Dhrisni',
     description:
-      'An experimental, psychedelic, three-dimensional fashion universe. Handcrafted sculptural wearable art by Dhrisni (@Dhristroyer) utilizing reclaimed motherboards, computer hardware, spikes, and upcycled denim.',
+      'An experimental, psychedelic, three-dimensional fashion universe. Handcrafted sculptural wearable art by Dhrisni (@Dhristroyer) utilizing reclaimed metals, steel chains, spikes, and upcycled denim.',
     url: APP_URL,
     siteName: 'AVZ Vaganza',
     locale: 'en_US',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AVZ VAGANZA | Wearable Art by Dhrisni (Dhristroyer)',
     description:
-      'Sculptural wearable art, upcycled motherboards, spikes, and handmade cyber-couture by Dhrisni. Handcrafted in Guwahati, Assam.',
+      'Sculptural wearable art, upcycled metals, spikes, and handmade cyber-couture by Dhrisni. Handcrafted in Guwahati, Assam.',
     creator: '@dhristroyer',
     images: [`${APP_URL}/assets/editorial_hero_portrait.jpg`],
   },
@@ -121,7 +121,7 @@ export default function RootLayout({
     logo: `${APP_URL}/logo.png`,
     image: `${APP_URL}/assets/editorial_hero_portrait.jpg`,
     description:
-      'Sustainable avant-garde high fashion label and sculptural wearable art studio founded and designed by Dhrisni (Dhristroyer). Handcrafted 1-of-1 pieces from upcycled motherboards, denim, spikes, and chainmail.',
+      'Sustainable avant-garde high fashion label and sculptural wearable art studio founded and designed by Dhrisni (Dhristroyer). Handcrafted 1-of-1 pieces from upcycled metals, denim, spikes, and chainmail.',
     founder: {
       '@type': 'Person',
       name: 'Dhrisni',

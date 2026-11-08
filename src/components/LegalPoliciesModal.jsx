@@ -175,7 +175,7 @@ export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'priv
               <div>
                 <h4 className="font-mono font-bold text-white uppercase text-sm mb-2">2. Handcrafted & Archival 1-of-1 Nature</h4>
                 <p>
-                  Every AVZ creation is individually handcrafted using reclaimed textiles, decommissioned computer hardware, solid metal spikes, and artisanal chainmail. Because of the bespoke nature of wearable art:
+                  Every AVZ creation is individually handcrafted using reclaimed textiles, cold-forged metals, solid spikes, and artisanal chainmail. Because of the bespoke nature of wearable art:
                 </p>
                 <ul className="list-disc pl-5 mt-2 space-y-1 text-zinc-300">
                   <li>Subtle natural variances in circuit tracing, patina, and hardware placement are hallmarks of authentic handmade craftsmanship.</li>

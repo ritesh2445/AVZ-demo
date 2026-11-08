@@ -9,16 +9,16 @@ const CATEGORIES = [
   { id: 'corset', label: 'Corsetry' },
   { id: 'armor', label: 'Hardware Armor' },
   { id: 'denim', label: 'Upcycled Denim' },
-  { id: 'jewelry', label: 'Keycaps & Jewelry' },
+  { id: 'chainmail', label: 'Chainmail & Spikes' },
   { id: 'archive', label: 'Archive Vault' }
 ];
 
 const TRENDING_SEARCHES = [
-  'Motherboard Corset',
+  'Spikeria Bra',
   'Hardware Armor',
-  'Cyberpunk Bralette',
-  'Spike Cuff',
-  'Keycap Necklace',
+  'Chainmail Top',
+  'Spike Arm Cuffs',
+  'Silver Shoe Corset',
   'Upcycled Denim'
 ];
 

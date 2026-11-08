@@ -36,7 +36,14 @@ export async function GET(
       custom_made: Boolean(row.custom_made),
       materials: (() => { try { return JSON.parse(String(row.materials)); } catch { return []; } })(),
       images: (() => { try { return JSON.parse(String(row.images)); } catch { return []; } })(),
-      variants: (() => { try { return JSON.parse(String(row.variants)); } catch { return []; } })()
+      variants: (() => { try { return JSON.parse(String(row.variants)); } catch { return []; } })(),
+      sizes: (() => {
+        try {
+          const v = JSON.parse(String(row.variants));
+          if (Array.isArray(v)) return v.map((item: any) => typeof item === 'object' ? (item.size || item.name) : item).filter(Boolean);
+          return [];
+        } catch { return []; }
+      })()
     };
 
     return NextResponse.json({ success: true, product });
@@ -82,7 +89,9 @@ export async function PUT(
     const category = body.category ?? current.category;
     const materials = body.materials ? JSON.stringify(body.materials) : current.materials;
     const images = body.images ? JSON.stringify(body.images) : current.images;
-    const variants = body.variants ? JSON.stringify(body.variants) : current.variants;
+    const variants = Array.isArray(body.sizes) && body.sizes.length > 0
+      ? JSON.stringify(body.sizes.map((s: string) => ({ size: s, stock: 1, sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}` })))
+      : (body.variants ? JSON.stringify(body.variants) : current.variants);
     const status = body.status ?? current.status;
     const is_featured = body.is_featured !== undefined ? (body.is_featured ? 1 : 0) : current.is_featured;
     const custom_made = body.custom_made !== undefined ? (body.custom_made ? 1 : 0) : current.custom_made;

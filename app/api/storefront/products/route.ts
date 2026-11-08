@@ -14,21 +14,28 @@ export async function GET(request: Request) {
     const featured = searchParams.get('featured');
     const forceSync = searchParams.get('sync') === 'true';
 
-    // Auto-sync collection archive products into database
+    // Auto-sync consolidated CSV products into database
     try {
-      const countCheck = await db.execute("SELECT COUNT(*) as count FROM products WHERE id LIKE 'avz-col-%'");
-      const colCount = Number(countCheck.rows[0]?.count || 0);
+      const validSkus = new Set(fallbackProducts.map((p: any) => p.sku));
+      const countCheck = await db.execute("SELECT COUNT(*) as count FROM products");
+      const currentCount = Number(countCheck.rows[0]?.count || 0);
 
-      if (colCount < fallbackProducts.length || forceSync) {
-        const statements: any[] = [
-          { sql: "DELETE FROM products WHERE id NOT LIKE 'avz-col-%'", args: [] }
-        ];
+      // Trigger sync if count doesn't match the 26 consolidated products, or if forced
+      if (currentCount !== fallbackProducts.length || forceSync) {
+        // Delete any legacy/redundant products not in the authentic CSV inventory
+        const skuPlaceholders = fallbackProducts.map(() => '?').join(',');
+        await db.execute({
+          sql: `DELETE FROM products WHERE sku NOT IN (${skuPlaceholders})`,
+          args: fallbackProducts.map((p: any) => p.sku)
+        });
+
+        const statements: any[] = [];
 
         for (const p of fallbackProducts) {
           const sku = p.sku || `AVZ-${p.id}`;
           const imagesJson = JSON.stringify(p.images && p.images.length > 0 ? p.images : [p.image]);
           const materialsJson = JSON.stringify(p.materials || ['Upcycled Hardware', 'Reclaimed Metals']);
-          const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size'];
+          const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size (Adjustable)'];
           const variantsJson = JSON.stringify(
             sizes.map(s => ({
               size: s,
@@ -138,6 +145,13 @@ export async function GET(request: Request) {
         }
       })();
 
+      const parsedSizes = (() => {
+        if (Array.isArray(parsedVariants) && parsedVariants.length > 0) {
+          return parsedVariants.map((v: any) => typeof v === 'object' ? (v.size || v.name) : v).filter(Boolean);
+        }
+        return ['One Size (Adjustable)'];
+      })();
+
       const stockNum = Number(row.inventory_quantity);
 
       return {
@@ -158,6 +172,7 @@ export async function GET(request: Request) {
         images: parsedImages,
         materials: parsedMaterials,
         variants: parsedVariants,
+        sizes: parsedSizes,
         description: String(row.description),
         featured: Boolean(row.is_featured),
         is_featured: Boolean(row.is_featured),

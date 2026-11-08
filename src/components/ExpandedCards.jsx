@@ -18,8 +18,8 @@ const DEFAULT_VAULT_CARDS = (FEATURED_PIECES && FEATURED_PIECES.length > 0)
   : [
       {
         imgUrl: ASSET_MANIFEST?.products?.archiveBralette || "/assets/product_archive_bralette.jpg",
-        alt: "The Original Dhristroyer Motherboard Bralette",
-        title: "Motherboard Bralette (Prototype 01)",
+        alt: "The Original Dhristroyer Spiked Armor Bralette",
+        title: "Archival Spikeria Bralette",
         category: "ARCHIVE · 1-OF-1",
         price: 3800
       },
@@ -39,9 +39,9 @@ const DEFAULT_VAULT_CARDS = (FEATURED_PIECES && FEATURED_PIECES.length > 0)
       },
       {
         imgUrl: ASSET_MANIFEST?.products?.motherboardCuff || "/assets/prod_motherboard_cuff.jpg",
-        alt: "Salvaged Motherboard Cuff",
-        title: "Cyberpunk Circuitry Gauntlet",
-        category: "UPCYCLED TECH",
+        alt: "Reclaimed Metal Apex Cuff",
+        title: "Reclaimed Metal Gauntlet",
+        category: "UPCYCLED METAL",
         price: 1800
       },
       {

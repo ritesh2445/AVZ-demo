@@ -337,7 +337,7 @@ function TestimonialsSection({ currentUser, onOpenAuthModal }) {
                       type="text"
                       value={productName}
                       onChange={(e) => setProductName(e.target.value)}
-                      placeholder="e.g. Motherboard Top"
+                      placeholder="e.g. Spikeria Bra or Chainmail Top"
                       className="w-full bg-[#121218] border border-white/15 rounded-xl p-2.5 text-white text-xs font-mono focus:outline-none focus:border-pink"
                     />
                   </div>

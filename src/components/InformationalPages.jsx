@@ -350,8 +350,8 @@ export function ShippingPackagingReturns({ onOpenLegalModal }) {
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs sm:text-sm font-montserrat text-silver/80">
           <div>
-            <strong className="text-pink block mb-1">Motherboard & Tech Pieces:</strong>
-            Do not soak in water. Clean with a dry microfiber lens cloth. Treat as architectural jewelry.
+            <strong className="text-pink block mb-1">Reclaimed Metal & Hardware Pieces:</strong>
+            Keep dry and away from humidity. Clean with a dry microfiber cloth. Treat as architectural jewelry.
           </div>
           <div>
             <strong className="text-pink block mb-1">Spikes & Stainless Chains:</strong>

@@ -56,7 +56,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderNumber
           },
           {
             title: 'Raw Materials Sourced',
-            desc: 'Salvaged telecom motherboards, industrial spikes & textiles allocated.',
+            desc: 'Cold-forged steel, industrial spikes & upcycled textiles allocated.',
             done: true
           },
           {

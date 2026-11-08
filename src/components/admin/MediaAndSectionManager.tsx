@@ -122,13 +122,23 @@ export default function MediaAndSectionManager({
   });
 
   // 2. Lookbook Form
+  const DEFAULT_SIZE_PRESETS = [
+    'One Size (Adjustable)',
+    'XS (Bust 30-33in)',
+    'S (Bust 32-34in)',
+    'M (Bust 34-36in)',
+    'L (Bust 36-38in)',
+    'XL',
+    'Custom Measurements'
+  ];
+
   const [lookbookForm, setLookbookForm] = useState({
     title: '',
     code: 'LOOK 001 • EDITORIAL RUNWAY',
-    subtitle: 'Silicon Corsetry at the Intersection of Tech & Haute Rebellion',
+    subtitle: 'Metal Corsetry at the Intersection of Rebellion & Haute Cyber-Couture',
     caption: 'Model styled in bespoke upcycled armor under studio lighting.',
     story: 'A conceptual study in raw hardware and reconstructed silhouette.',
-    materials: 'Reclaimed Motherboards, 16-Gauge Copper Wire, Industrial Rivets'
+    materials: 'Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets'
   });
 
   // 3. Key Pieces Form
@@ -147,8 +157,10 @@ export default function MediaAndSectionManager({
     category: 'Tops',
     stock: '1',
     sku: '',
-    description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.'
+    description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.',
+    sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)'] as string[]
   });
+  const [customSizeInput, setCustomSizeInput] = useState('');
 
   // 5. The Archive Gallery Form
   const [museumForm, setMuseumForm] = useState({
@@ -158,7 +170,7 @@ export default function MediaAndSectionManager({
     category: 'Archival Haute Couture',
     frame_style: 'ornate_baroque',
     dimensions_cm: '75 × 100 cm',
-    description: 'Salvaged microcircuits, steel spikes, and upcycled industrial hardware.'
+    description: 'Reclaimed metal chains, steel spikes, and upcycled industrial hardware.'
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -304,8 +316,10 @@ export default function MediaAndSectionManager({
       category: 'Tops',
       stock: '1',
       sku: '',
-      description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.'
+      description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.',
+      sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)']
     });
+    setCustomSizeInput('');
     setMuseumForm({
       title: '',
       artist: 'Dhrisni & The AVZ Atelier',
@@ -313,7 +327,7 @@ export default function MediaAndSectionManager({
       category: 'Archival Haute Couture',
       frame_style: 'ornate_baroque',
       dimensions_cm: '75 × 100 cm',
-      description: 'Salvaged microcircuits, steel spikes, and upcycled industrial hardware.'
+      description: 'Reclaimed metal chains, steel spikes, and upcycled industrial hardware.'
     });
     setVaultForm({
       title: '',
@@ -332,10 +346,10 @@ export default function MediaAndSectionManager({
     setLookbookForm({
       title: '',
       code: 'LOOK 001 • EDITORIAL RUNWAY',
-      subtitle: 'Silicon Corsetry at the Intersection of Tech & Haute Rebellion',
+      subtitle: 'Metal Corsetry at the Intersection of Rebellion & Haute Cyber-Couture',
       caption: 'Model styled in bespoke upcycled armor under studio lighting.',
       story: 'A conceptual study in raw hardware and reconstructed silhouette.',
-      materials: 'Reclaimed Motherboards, 16-Gauge Copper Wire, Industrial Rivets'
+      materials: 'Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets'
     });
   };
 
@@ -356,13 +370,22 @@ export default function MediaAndSectionManager({
     setFormPhotos(images);
 
     if (type === 'collection') {
+      const extractedSizes = (() => {
+        if (Array.isArray(item.sizes) && item.sizes.length > 0) return item.sizes;
+        if (Array.isArray(item.variants) && item.variants.length > 0) {
+          return item.variants.map((v: any) => typeof v === 'object' ? (v.size || v.name) : v).filter(Boolean);
+        }
+        return ['One Size (Adjustable)'];
+      })();
+
       setCollectionForm({
         name: item.title || item.name || '',
         price: String(item.price || 2500),
         category: item.category || 'Tops',
         stock: String(item.inventory_quantity ?? item.stock ?? 1),
         sku: item.sku || '',
-        description: item.description || ''
+        description: item.description || '',
+        sizes: extractedSizes
       });
     } else if (type === 'archive_gallery') {
       setMuseumForm({
@@ -557,6 +580,7 @@ export default function MediaAndSectionManager({
             sku: autoSku,
             description: collectionForm.description.trim(),
             images: formPhotos, // MULTIPLE PICTURES ARRAY
+            sizes: collectionForm.sizes && collectionForm.sizes.length > 0 ? collectionForm.sizes : ['One Size (Adjustable)'],
             status: 'published'
           })
         });
@@ -971,7 +995,7 @@ export default function MediaAndSectionManager({
                         required
                         value={vaultForm.title}
                         onChange={(e) => setVaultForm(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="e.g. Cyberpunk Motherboard Bralette"
+                        placeholder="e.g. Cyberpunk Spikeria Bralette"
                         className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
                       />
                     </div>
@@ -1044,7 +1068,7 @@ export default function MediaAndSectionManager({
                         required
                         value={lookbookForm.title}
                         onChange={(e) => setLookbookForm(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="e.g. The Severed Circuit"
+                        placeholder="e.g. Sculptural Armor in Motion"
                         className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
                       />
                     </div>
@@ -1055,7 +1079,7 @@ export default function MediaAndSectionManager({
                         type="text"
                         value={lookbookForm.code}
                         onChange={(e) => setLookbookForm(prev => ({ ...prev, code: e.target.value }))}
-                        placeholder="LOOK 001 • THE SEVERED CIRCUIT"
+                        placeholder="LOOK 001 • SCULPTURAL ARMOR"
                         className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
                       />
                     </div>
@@ -1067,7 +1091,7 @@ export default function MediaAndSectionManager({
                       rows={2}
                       value={lookbookForm.caption}
                       onChange={(e) => setLookbookForm(prev => ({ ...prev, caption: e.target.value }))}
-                      placeholder="Model styled in Motherboard Diva Top and Spike Cuffs..."
+                      placeholder="Model styled in Spikeria Bra and Apex Cuffs..."
                       className="w-full bg-[#1b1325] border border-white/15 rounded-xl p-3 text-xs text-white font-mono focus:border-pink focus:outline-none"
                     />
                   </div>
@@ -1078,7 +1102,7 @@ export default function MediaAndSectionManager({
                       type="text"
                       value={lookbookForm.materials}
                       onChange={(e) => setLookbookForm(prev => ({ ...prev, materials: e.target.value }))}
-                      placeholder="Reclaimed Motherboards, Copper Wire, Rivets"
+                      placeholder="Reclaimed Metals, Stainless Chains, Hand-Set Spikes"
                       className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
                     />
                   </div>
@@ -1221,6 +1245,134 @@ export default function MediaAndSectionManager({
                       onChange={(e) => setCollectionForm(prev => ({ ...prev, description: e.target.value }))}
                       className="w-full bg-[#1b1325] border border-white/15 rounded-xl p-3 text-xs text-white font-mono focus:border-pink focus:outline-none"
                     />
+                  </div>
+
+                  {/* SIZING & INVENTORY OPTIONS (GENERIC & CONFIGURABLE) */}
+                  <div className="bg-[#130d1d] border border-white/15 rounded-xl p-3.5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-mono font-bold text-white tracking-wider flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5 text-pink" />
+                        <span>CONFIGURABLE PRODUCT SIZING</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setCollectionForm(prev => ({
+                          ...prev,
+                          sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)']
+                        }))}
+                        className="text-[10px] font-mono text-pink/80 hover:text-pink transition-colors hover:underline"
+                      >
+                        Reset to Defaults
+                      </button>
+                    </div>
+
+                    {/* Active sizes chips */}
+                    <div>
+                      <p className="text-[10px] font-mono text-neutral-400 mb-1.5">Active sizes available for this piece:</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(collectionForm.sizes && collectionForm.sizes.length > 0 ? collectionForm.sizes : []).map((sz, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-pink/20 text-pink border border-pink/40"
+                          >
+                            <span>{sz}</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setCollectionForm(prev => ({
+                                  ...prev,
+                                  sizes: prev.sizes.filter((_, i) => i !== idx)
+                                }));
+                              }}
+                              className="text-pink/70 hover:text-white transition-colors ml-0.5"
+                              title="Remove size"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                        {(!collectionForm.sizes || collectionForm.sizes.length === 0) && (
+                          <span className="text-[11px] font-mono text-neutral-500 italic">No sizes selected (will default to 'One Size')</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Quick Preset Toggles */}
+                    <div className="pt-1 border-t border-white/10">
+                      <p className="text-[10px] font-mono text-neutral-400 mb-1.5">Quick add presets:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {DEFAULT_SIZE_PRESETS.map((preset) => {
+                          const isSelected = collectionForm.sizes?.includes(preset);
+                          return (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => {
+                                setCollectionForm(prev => {
+                                  const current = prev.sizes || [];
+                                  if (current.includes(preset)) {
+                                    return { ...prev, sizes: current.filter(s => s !== preset) };
+                                  } else {
+                                    return { ...prev, sizes: [...current, preset] };
+                                  }
+                                });
+                              }}
+                              className={`px-2 py-0.5 rounded text-[10px] font-mono transition-colors border ${
+                                isSelected
+                                  ? 'bg-pink/30 text-pink-300 border-pink/50'
+                                  : 'bg-white/5 text-neutral-400 border-white/10 hover:border-pink/30 hover:text-white'
+                              }`}
+                            >
+                              {isSelected ? '✓ ' : '+ '}{preset}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Custom Size Input */}
+                    <div className="flex items-center gap-2 pt-1 border-t border-white/10">
+                      <input
+                        type="text"
+                        value={customSizeInput}
+                        onChange={(e) => setCustomSizeInput(e.target.value)}
+                        placeholder="Add custom size (e.g. 34 Medium, 28 Waist)"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (customSizeInput.trim()) {
+                              const trimmed = customSizeInput.trim();
+                              if (!collectionForm.sizes.includes(trimmed)) {
+                                setCollectionForm(prev => ({
+                                  ...prev,
+                                  sizes: [...(prev.sizes || []), trimmed]
+                                }));
+                              }
+                              setCustomSizeInput('');
+                            }
+                          }
+                        }}
+                        className="flex-1 bg-[#1b1325] border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono placeholder:text-neutral-500 focus:border-pink focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (customSizeInput.trim()) {
+                            const trimmed = customSizeInput.trim();
+                            if (!collectionForm.sizes.includes(trimmed)) {
+                              setCollectionForm(prev => ({
+                                ...prev,
+                                sizes: [...(prev.sizes || []), trimmed]
+                              }));
+                            }
+                            setCustomSizeInput('');
+                          }
+                        }}
+                        className="px-3 py-1.5 bg-pink/20 hover:bg-pink/30 text-pink border border-pink/40 rounded-lg text-xs font-mono font-medium transition-colors"
+                      >
+                        + Add Size
+                      </button>
+                    </div>
                   </div>
                 </>
               )}

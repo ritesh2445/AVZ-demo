@@ -51,7 +51,7 @@ function Footer({ onScrollToSection, cmsFooter, onOpenLegalModal }) {
             </p>
 
             <p className="text-sm text-silver/75 font-montserrat leading-relaxed max-w-md text-left">
-              An experimental, psychedelic, three-dimensional fashion universe. Handcrafted wearable art by Dhrisni (Dhristroyer) utilizing reclaimed motherboards, computer hardware, spikes, and upcycled denim.
+              An experimental, psychedelic, three-dimensional fashion universe. Handcrafted wearable art by Dhrisni (Dhristroyer) utilizing reclaimed metals, heavy spikes, stainless chains, and upcycled denim.
             </p>
 
             <div className="text-xs font-mono text-silver/50 text-left">

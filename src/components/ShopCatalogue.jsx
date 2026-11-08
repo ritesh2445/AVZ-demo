@@ -813,7 +813,7 @@ function ShopCatalogue({
             COLLECTION <span className="text-zinc-500 font-light">ARCHIVE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-1.5 sm:mt-2 leading-relaxed text-left">
-            1-of-1 sculptural corsets, motherboard breastplates, and tailored outerwear handcrafted in our Guwahati studio.
+            1-of-1 sculptural corsets, chainmail breastplates, and tailored outerwear handcrafted in our Guwahati studio.
           </p>
         </div>
 

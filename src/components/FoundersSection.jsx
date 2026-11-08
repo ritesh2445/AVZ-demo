@@ -25,7 +25,7 @@ const POLAROID_CARDS = [
     id: 'medium',
     tag: 'MEDIUM 03',
     headline: 'SALVAGED ARMOR',
-    body: 'Motherboards, spikes, and vintage hardware transformed into wearable art.',
+    body: 'Cold-forged steel, spikes, and reclaimed metals transformed into wearable art.',
     stamp: '1-OF-1 PIECE',
     rotation: '-rotate-1'
   },
@@ -60,12 +60,12 @@ const MANIFESTO_PILLARS = [
   },
   {
     id: '03',
-    title: 'SALVAGED TECHNOLOGY & RECLAIMED TEXTILES',
-    subtitle: 'Giving discarded computer hardware a bold second life',
-    icon: Cpu,
+    title: 'SALVAGED METALS & RECLAIMED TEXTILES',
+    subtitle: 'Giving reclaimed metals and fabrics a bold second life',
+    icon: Flame,
     summary:
-      'We do not treat sustainability as a hollow corporate slogan. We gather obsolete computer motherboards, mechanical keyboard keys, discarded denim, and industrial hardware, fusing cyber-grunge technology into haute wearable armor.',
-    highlight: 'Transforming landfill electronic waste into high-fashion archival statement pieces.'
+      'We do not treat sustainability as a hollow corporate slogan. We gather reclaimed metals, industrial chains, discarded denim, and handcrafted hardware, fusing cyber-grunge aesthetics into haute wearable armor.',
+    highlight: 'Transforming reclaimed materials into high-fashion archival statement pieces.'
   },
   {
     id: '04',

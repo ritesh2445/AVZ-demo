@@ -24,7 +24,7 @@ export const BRAND_INFO = {
   philosophy: {
     headline: "WEARABLE ART. NOT MADE TO REPEAT.",
     principles: [
-      { title: "Maximalism Over Minimalism", text: "We fiercely reject cookie-cutter minimalism. Raw textures, metallic spikes, motherboard circuit boards, and industrial hardware collide." },
+      { title: "Maximalism Over Minimalism", text: "We fiercely reject cookie-cutter minimalism. Raw textures, metallic spikes, hand-linked chainmail, and industrial hardware collide." },
       { title: "Human Hands Over Machine Sameness", text: "In a world drowning in fast fashion and AI generation, things built by real human hands are the ultimate luxury." },
       { title: "Upcycling & Reclaimed Textiles", text: "Tired of stuffed closets and landfill waste, we transform discarded garments and unconventional hardware into one-of-a-kind armor." },
       { title: "Empowering Women Artisans", text: "We hire and train women directly under Dhrisni's close personal supervision in our Guwahati studio." }
@@ -39,7 +39,7 @@ export const BRAND_INFO = {
     {
       tier: "Core Statement Pieces",
       range: "₹1,000 – ₹3,000",
-      description: "Handcrafted bralettes, corsets, custom skirts, and motherboard tops."
+      description: "Handcrafted bralettes, corsets, custom skirts, and metal-based cyber couture."
     },
     {
       tier: "Full Outfits & Heavy Art",
@@ -129,1895 +129,710 @@ export const CATEGORIES = [
 export const MATERIALS = [
   "All Materials",
   "Upcycled Hardware",
-  "Motherboards & Circuits",
   "Metal Spikes & Chains",
-  "Keycaps & Tech Scrap",
+  "Stainless Steel Chainmail",
   "Reclaimed Denim",
+  "Deadstock Textiles",
   "Industrial Wire",
-  "Chainmail"
+  "Pearls & Beads"
 ];
 
 // COLLECTION ARCHIVE — Curated from authentic studio inventory with multi-shot frame grouping
 export const PRODUCTS = [
   {
-    "id": "avz-col-arm-1",
-    "sku": "AVZ-ARM-0001",
-    "name": "Hand-Riveted Spikeria Gauntlet",
-    "category": "Arm cuffs",
-    "price": 1800,
+    "id": "avz-in-0001",
+    "sku": "IN0001",
+    "name": "Spikeria bra",
+    "title": "Spikeria bra",
+    "price": 1999,
+    "compare_at_price": null,
+    "stock": 50,
+    "category": "Bralettes",
     "tag": "BEST SELLER",
-    "stock": 1,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Steel Wire"
-    ],
-    "images": [
-      "/assets/collection/armcuffs/armcuffs_01.webp"
-    ],
-    "image": "/assets/collection/armcuffs/armcuffs_01.webp",
-    "description": "Hand-Riveted Spikeria Gauntlet — handcrafted archival wrist and bicep armor sculpted in the Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Hand-Set Metallic Spikes",
+      "Reinforced Bra Base",
+      "Upcycled Hardware"
     ],
     "sizes": [
-      "Adjustable Free Size"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-arm-2",
-    "sku": "AVZ-ARM-0002",
-    "name": "Salvaged Motherboard Cyber Cuff",
-    "category": "Arm cuffs",
-    "price": 1950,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Steel Wire"
+      "S (Bust 32-34in)",
+      "M (Bust 34-36in)",
+      "L (Bust 36-38in)"
     ],
     "images": [
-      "/assets/collection/armcuffs/armcuffs_02.webp"
+      "/assets/collection/bralettes/bralettes_30.webp",
+      "/assets/collection/bralettes/bralettes_31.webp",
+      "/assets/collection/bralettes/bralettes_32.webp"
     ],
-    "image": "/assets/collection/armcuffs/armcuffs_02.webp",
-    "description": "Salvaged Motherboard Cyber Cuff — handcrafted archival wrist and bicep armor sculpted in the Guwahati studio.",
+    "image": "/assets/collection/bralettes/bralettes_30.webp",
+    "description": "Bra with spikes studded — individually hand-set metallic cone spikes over a structured bra base. Raw metallic rebellion and punk cyber-couture.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
+      "Hand-set conical metallic spikes with reinforced inner lining",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Adjustable Free Size"
-    ],
-    "featured": false
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-arm-3",
-    "sku": "AVZ-ARM-0003",
-    "name": "Liquid Stainless Mesh Armlet",
-    "category": "Arm cuffs",
-    "price": 2100,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
+    "id": "avz-in-0002",
+    "sku": "IN0002",
+    "name": "Keyboard bra",
+    "title": "Keyboard bra",
+    "price": 2500,
+    "compare_at_price": null,
+    "stock": 100,
+    "category": "Bralettes",
+    "tag": "SIGNATURE",
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Steel Wire"
+      "Upcycled Mechanical Keycaps",
+      "Structured Bra Cups",
+      "Industrial Hardware"
+    ],
+    "sizes": [
+      "S (Bust 32-34in)",
+      "M (Bust 34-36in)",
+      "L (Bust 36-38in)"
     ],
     "images": [
-      "/assets/collection/armcuffs/armcuffs_03.webp"
+      "/assets/collection/bralettes/bralettes_33.webp",
+      "/assets/collection/bralettes/bralettes_03.webp",
+      "/assets/collection/bralettes/bralettes_04.webp",
+      "/assets/collection/bralettes/bralettes_05.webp"
     ],
-    "image": "/assets/collection/armcuffs/armcuffs_03.webp",
-    "description": "Liquid Stainless Mesh Armlet — handcrafted archival wrist and bicep armor sculpted in the Guwahati studio.",
+    "image": "/assets/collection/bralettes/bralettes_33.webp",
+    "description": "Bra w keyboard studded — deconstructed mechanical keyboard keycaps individually set across structured bust cups. Tactile maximalism and wearable sculpture.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
+      "Upcycled salvaged tactile keycaps",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Adjustable Free Size"
-    ],
-    "featured": false
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-arm-4",
-    "sku": "AVZ-ARM-0004",
-    "name": "Tactile Hardware Bicep Shackle",
-    "category": "Arm cuffs",
-    "price": 2250,
-    "tag": "1 OF 1 ARCHIVE",
+    "id": "avz-in-0003",
+    "sku": "IN0003",
+    "name": "Jersey co ord",
+    "title": "Jersey co ord",
+    "price": 3500,
+    "compare_at_price": null,
     "stock": 1,
+    "category": "Co-ord sets",
+    "tag": "1 OF 1 ARCHIVE",
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Steel Wire"
+      "Upcycled Sports Jersey",
+      "Heavy Front Zipper",
+      "Pleated Mesh Hem"
+    ],
+    "sizes": [
+      "Size: Small"
     ],
     "images": [
-      "/assets/collection/armcuffs/armcuffs_04.webp"
+      "/assets/collection/co_ords/co_ords_07.webp",
+      "/assets/collection/co_ords/co_ords_01.webp",
+      "/assets/collection/co_ords/co_ords_08.webp",
+      "/assets/collection/co_ords/co_ords_09.webp",
+      "/assets/collection/co_ords/co_ords_19.webp",
+      "/assets/collection/co_ords/co_ords_23.webp",
+      "/assets/collection/co_ords/co_ords_25.webp"
     ],
-    "image": "/assets/collection/armcuffs/armcuffs_04.webp",
-    "description": "Tactile Hardware Bicep Shackle — handcrafted archival wrist and bicep armor sculpted in the Guwahati studio.",
+    "image": "/assets/collection/co_ords/co_ords_07.webp",
+    "description": "Jersey upcycled corset & skirt — reconstructed sports jersey tailored into a boned corset bodice with heavy front industrial zipper and matching pleated skirt.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
+      "1-of-1 archival upcycled jersey reconstruction",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Adjustable Free Size"
-    ],
-    "featured": false
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-arm-5",
-    "sku": "AVZ-ARM-0005",
-    "name": "Sculpted Wire Carapace Gauntlet",
+    "id": "avz-in-0004",
+    "sku": "IN0004",
+    "name": "Spike arm cuffs",
+    "title": "Spike arm cuffs",
+    "price": 600,
+    "compare_at_price": null,
+    "stock": 30,
     "category": "Arm cuffs",
-    "price": 2400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
+    "tag": "ACCESSORY",
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Steel Wire"
+      "Metallic Cone Spikes",
+      "Black Rexine / Leatherette Base",
+      "Adjustable Snaps"
+    ],
+    "sizes": [
+      "One Size (Adjustable)"
     ],
     "images": [
+      "/assets/collection/armcuffs/armcuffs_01.webp",
+      "/assets/collection/armcuffs/armcuffs_03.webp",
+      "/assets/collection/armcuffs/armcuffs_04.webp",
       "/assets/collection/armcuffs/armcuffs_05.webp"
     ],
-    "image": "/assets/collection/armcuffs/armcuffs_05.webp",
-    "description": "Sculpted Wire Carapace Gauntlet — handcrafted archival wrist and bicep armor sculpted in the Guwahati studio.",
+    "image": "/assets/collection/armcuffs/armcuffs_01.webp",
+    "description": "Armcuffs w spikes — studded forearm and wrist gauntlets with hand-set metallic spikes. Statement armor for subcultural and editorial styling.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
+      "Heavy industrial conical spikes",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Adjustable Free Size"
-    ],
-    "featured": false
+    "featured": false,
+    "customMade": false
   },
   {
-    "id": "avz-col-bag-1",
-    "sku": "AVZ-BAG-0006",
-    "name": "Silicon Motherboard Core Micro Bag",
-    "category": "Bags",
-    "price": 2400,
-    "tag": "1 OF 1 ARCHIVE",
+    "id": "avz-in-0005",
+    "sku": "IN0005",
+    "name": "Frills belt purple",
+    "title": "Frills belt purple",
+    "price": 800,
+    "compare_at_price": null,
     "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Heavy Denim"
-    ],
-    "images": [
-      "/assets/collection/bags/bags_01.webp"
-    ],
-    "image": "/assets/collection/bags/bags_01.webp",
-    "description": "Silicon Motherboard Core Micro Bag — structured wearable sculpture built from salvaged electronic waste and industrial hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "One Size (Micro Silhouette)"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-bag-2",
-    "sku": "AVZ-BAG-0007",
-    "name": "Heavy Chain & O-Ring Hardware Pouch",
-    "category": "Bags",
-    "price": 2600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Heavy Denim"
-    ],
-    "images": [
-      "/assets/collection/bags/bags_02.webp"
-    ],
-    "image": "/assets/collection/bags/bags_02.webp",
-    "description": "Heavy Chain & O-Ring Hardware Pouch — structured wearable sculpture built from salvaged electronic waste and industrial hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "One Size (Micro Silhouette)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bag-3",
-    "sku": "AVZ-BAG-0008",
-    "name": "Deconstructed Denim Kinetic Holster Bag",
-    "category": "Bags",
-    "price": 2800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Heavy Denim"
-    ],
-    "images": [
-      "/assets/collection/bags/bags_03.webp"
-    ],
-    "image": "/assets/collection/bags/bags_03.webp",
-    "description": "Deconstructed Denim Kinetic Holster Bag — structured wearable sculpture built from salvaged electronic waste and industrial hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "One Size (Micro Silhouette)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bag-4",
-    "sku": "AVZ-BAG-0009",
-    "name": "Cyber-Goth Grommet Mini Handbag",
-    "category": "Bags",
-    "price": 3000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Heavy Denim"
-    ],
-    "images": [
-      "/assets/collection/bags/bags_04.webp"
-    ],
-    "image": "/assets/collection/bags/bags_04.webp",
-    "description": "Cyber-Goth Grommet Mini Handbag — structured wearable sculpture built from salvaged electronic waste and industrial hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "One Size (Micro Silhouette)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bag-5",
-    "sku": "AVZ-BAG-0010",
-    "name": "Reclaimed Circuit Crossbody Capsule",
-    "category": "Bags",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Heavy Denim"
-    ],
-    "images": [
-      "/assets/collection/bags/bags_05.webp"
-    ],
-    "image": "/assets/collection/bags/bags_05.webp",
-    "description": "Reclaimed Circuit Crossbody Capsule — structured wearable sculpture built from salvaged electronic waste and industrial hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Upcycled non-traditional materials",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "One Size (Micro Silhouette)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-belt-1",
-    "sku": "AVZ-BLT-0011",
-    "name": "Raw Steel O-Ring Matrix Waist Belt",
     "category": "Belts",
-    "price": 2100,
-    "tag": "STUDIO PIECE",
-    "stock": 3,
+    "tag": "1 OF 1 ARCHIVE",
     "materials": [
-      "Upcycled Hardware",
-      "Stainless Rings",
-      "Reinforced Webbing"
-    ],
-    "images": [
-      "/assets/collection/belts/belts_01.webp"
-    ],
-    "image": "/assets/collection/belts/belts_01.webp",
-    "description": "Raw Steel O-Ring Matrix Waist Belt — heavy industrial waist harness designed for subcultural clubwear and everyday defiance.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Fully adjustable clasps and ringlets",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Cascading Reclaimed Fabric Frills",
+      "Ribbon Drapes",
+      "Upcycled Hardware Clasp"
     ],
     "sizes": [
-      "S / M (24-30 in)",
-      "M / L (30-36 in)",
-      "Custom Waist Measurement"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-belt-2",
-    "sku": "AVZ-BLT-0012",
-    "name": "Barbed Kinetic Link Suspender Harness",
-    "category": "Belts",
-    "price": 2350,
-    "tag": "STUDIO PIECE",
-    "stock": 3,
-    "materials": [
-      "Upcycled Hardware",
-      "Stainless Rings",
-      "Reinforced Webbing"
+      "One Size (Adjustable Waist)"
     ],
     "images": [
-      "/assets/collection/belts/belts_02.webp"
-    ],
-    "image": "/assets/collection/belts/belts_02.webp",
-    "description": "Barbed Kinetic Link Suspender Harness — heavy industrial waist harness designed for subcultural clubwear and everyday defiance.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Fully adjustable clasps and ringlets",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (24-30 in)",
-      "M / L (30-36 in)",
-      "Custom Waist Measurement"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-belt-3",
-    "sku": "AVZ-BLT-0013",
-    "name": "Heavy Duty Carabiner Utility Cincher",
-    "category": "Belts",
-    "price": 2600,
-    "tag": "STUDIO PIECE",
-    "stock": 3,
-    "materials": [
-      "Upcycled Hardware",
-      "Stainless Rings",
-      "Reinforced Webbing"
-    ],
-    "images": [
-      "/assets/collection/belts/belts_03.webp"
-    ],
-    "image": "/assets/collection/belts/belts_03.webp",
-    "description": "Heavy Duty Carabiner Utility Cincher — heavy industrial waist harness designed for subcultural clubwear and everyday defiance.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Fully adjustable clasps and ringlets",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (24-30 in)",
-      "M / L (30-36 in)",
-      "Custom Waist Measurement"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-belt-4",
-    "sku": "AVZ-BLT-0014",
-    "name": "Multi-Ring Cyberpunk Hip Holster",
-    "category": "Belts",
-    "price": 2850,
-    "tag": "STUDIO PIECE",
-    "stock": 3,
-    "materials": [
-      "Upcycled Hardware",
-      "Stainless Rings",
-      "Reinforced Webbing"
-    ],
-    "images": [
+      "/assets/collection/belts/belts_01.webp",
+      "/assets/collection/belts/belts_02.webp",
+      "/assets/collection/belts/belts_03.webp",
       "/assets/collection/belts/belts_04.webp"
     ],
-    "image": "/assets/collection/belts/belts_04.webp",
-    "description": "Multi-Ring Cyberpunk Hip Holster — heavy industrial waist harness designed for subcultural clubwear and everyday defiance.",
+    "image": "/assets/collection/belts/belts_01.webp",
+    "description": "Belt with fabrics hanging — multi-textured waist harness adorned with cascading purple and printed fabric frills and free-hanging ribbons.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Fully adjustable clasps and ringlets",
+      "Upcycled deadstock fabric frills",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "S / M (24-30 in)",
-      "M / L (30-36 in)",
-      "Custom Waist Measurement"
-    ],
-    "featured": false
+    "featured": false,
+    "customMade": false
   },
   {
-    "id": "avz-col-skirt-1",
-    "sku": "AVZ-SKT-0015",
-    "name": "Acid-Wash Reclaimed Hardware Cargo Skirt",
-    "category": "Skirts",
-    "price": 3800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Industrial Eyelets",
-      "Chunky Zippers"
-    ],
-    "images": [
-      "/assets/collection/skirts/skirts_01.webp",
-      "/assets/collection/skirts/skirts_02.webp",
-      "/assets/collection/skirts/skirts_03.webp"
-    ],
-    "image": "/assets/collection/skirts/skirts_01.webp",
-    "description": "Acid-Wash Reclaimed Hardware Cargo Skirt — deconstructed raw-edge denim skirt with segmented hardware pocket suspension and industrial drapes.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "3 distinct editorial angles available in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Waist 25-26 in)",
-      "S (Waist 27-28 in)",
-      "M (Waist 29-30 in)"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-head-1",
-    "sku": "AVZ-HDG-0016",
-    "name": "Sculpted Silver Wire Carapace Halo",
-    "category": "Headgear",
-    "price": 2400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_01.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_01.webp",
-    "description": "Sculpted Silver Wire Carapace Halo — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-2",
-    "sku": "AVZ-HDG-0017",
-    "name": "Cyberpunk Salvaged Cable Crown",
-    "category": "Headgear",
-    "price": 2600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_02.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_02.webp",
-    "description": "Cyberpunk Salvaged Cable Crown — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-3",
-    "sku": "AVZ-HDG-0018",
-    "name": "Barbed Wire Radial Corona Headpiece",
-    "category": "Headgear",
-    "price": 2800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_03.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_03.webp",
-    "description": "Barbed Wire Radial Corona Headpiece — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-4",
-    "sku": "AVZ-HDG-0019",
-    "name": "Industrial Filigree Ear & Head Shroud",
-    "category": "Headgear",
-    "price": 3000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_04.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_04.webp",
-    "description": "Industrial Filigree Ear & Head Shroud — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-5",
-    "sku": "AVZ-HDG-0020",
-    "name": "Dark Wave Spiked Face Veil",
-    "category": "Headgear",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_05.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_05.webp",
-    "description": "Dark Wave Spiked Face Veil — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-6",
-    "sku": "AVZ-HDG-0021",
-    "name": "Mermaidcore Wire Tendril Headband",
-    "category": "Headgear",
-    "price": 3400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_06.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_06.webp",
-    "description": "Mermaidcore Wire Tendril Headband — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 shot captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-head-7",
-    "sku": "AVZ-HDG-0022",
-    "name": "Hand-Knit Spiked Balaclava & Halo",
-    "category": "Headgear",
-    "price": 3600,
-    "tag": "BEST SELLER",
-    "stock": 2,
-    "materials": [
-      "Industrial Wire",
-      "Upcycled Hardware",
-      "Assam Hand-Dyed Cotton"
-    ],
-    "images": [
-      "/assets/collection/headgears/headgears_07.webp",
-      "/assets/collection/headgears/headgears_08.webp"
-    ],
-    "image": "/assets/collection/headgears/headgears_07.webp",
-    "description": "Hand-Knit Spiked Balaclava & Halo — sculptural headpiece handcrafted by Dhrisni in Guwahati. Bridges ritual ornamentation with cold industrial cyberpunk aesthetics.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 shots captured in studio",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Head Fit"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-cor-1",
-    "sku": "AVZ-COR-0023",
-    "name": "Heavy Riveted Obsidian Armor Bodice",
-    "category": "Corsets",
-    "price": 3600,
-    "tag": "BEST SELLER",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_01.webp",
-      "/assets/collection/corsets/corsets_02.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_01.webp",
-    "description": "Heavy Riveted Obsidian Armor Bodice — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 angles available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-cor-2",
-    "sku": "AVZ-COR-0024",
-    "name": "Mermaidcore Cyber-Chitin Bodice",
-    "category": "Corsets",
-    "price": 3900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_03.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_03.webp",
-    "description": "Mermaidcore Cyber-Chitin Bodice — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 angle available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-cor-3",
-    "sku": "AVZ-COR-0025",
-    "name": "Asymmetrical Cone Spike Cyber Corset",
-    "category": "Corsets",
-    "price": 4200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_04.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_04.webp",
-    "description": "Asymmetrical Cone Spike Cyber Corset — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 angle available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-cor-4",
-    "sku": "AVZ-COR-0026",
-    "name": "Industrial Raw Canvas Corset Top",
-    "category": "Corsets",
-    "price": 4500,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_05.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_05.webp",
-    "description": "Industrial Raw Canvas Corset Top — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 angle available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-cor-5",
-    "sku": "AVZ-COR-0027",
-    "name": "Reclaimed Distressed Denim Micro-Bustier",
-    "category": "Corsets",
-    "price": 4800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_06.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_06.webp",
-    "description": "Reclaimed Distressed Denim Micro-Bustier — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 angle available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-cor-6",
-    "sku": "AVZ-COR-0028",
-    "name": "Dystopian Spikeria Cuirass",
-    "category": "Corsets",
-    "price": 5100,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/corsets/corsets_07.webp"
-    ],
-    "image": "/assets/collection/corsets/corsets_07.webp",
-    "description": "Dystopian Spikeria Cuirass — form-sculpted defensive armor bodice engineered with raw hardware, boning, and hand-riveted cones.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "1 angle available",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "Custom Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-1",
-    "sku": "AVZ-JKT-0029",
-    "name": "Syllabic Denim Kinetic Shrug (Archival)",
-    "category": "Jackets",
-    "price": 4200,
-    "tag": "BEST SELLER",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_01.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_01.webp",
-    "description": "Syllabic Denim Kinetic Shrug (Archival) — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-jkt-2",
-    "sku": "AVZ-JKT-0030",
-    "name": "Deconstructed Moto Bolero with Spike Accents",
-    "category": "Jackets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_02.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_02.webp",
-    "description": "Deconstructed Moto Bolero with Spike Accents — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-3",
-    "sku": "AVZ-JKT-0031",
-    "name": "Industrial Heavy Grommet Denim Jacket",
-    "category": "Jackets",
-    "price": 4600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_03.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_03.webp",
-    "description": "Industrial Heavy Grommet Denim Jacket — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-4",
-    "sku": "AVZ-JKT-0032",
-    "name": "Acid-Wash Asymmetrical Sleeve Bolero",
-    "category": "Jackets",
-    "price": 4800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_04.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_04.webp",
-    "description": "Acid-Wash Asymmetrical Sleeve Bolero — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-5",
-    "sku": "AVZ-JKT-0033",
-    "name": "Multi-Zipped Reclaimed Streetwear Shrug",
-    "category": "Jackets",
-    "price": 5000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_05.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_05.webp",
-    "description": "Multi-Zipped Reclaimed Streetwear Shrug — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-6",
-    "sku": "AVZ-JKT-0034",
-    "name": "Raw Edge Denim Arm Guard Bolero",
-    "category": "Jackets",
-    "price": 5200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_06.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_06.webp",
-    "description": "Raw Edge Denim Arm Guard Bolero — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-7",
-    "sku": "AVZ-JKT-0035",
-    "name": "Distressed Barbed Hardware Shrug",
-    "category": "Jackets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_07.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_07.webp",
-    "description": "Distressed Barbed Hardware Shrug — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-8",
-    "sku": "AVZ-JKT-0036",
-    "name": "Liquid Chrome Chain Waterfall Shrug",
-    "category": "Jackets",
-    "price": 5600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_08.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_08.webp",
-    "description": "Liquid Chrome Chain Waterfall Shrug — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-9",
-    "sku": "AVZ-JKT-0037",
-    "name": "Patchwork Reconstructed Denim Trucker",
-    "category": "Jackets",
-    "price": 5800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_09.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_09.webp",
-    "description": "Patchwork Reconstructed Denim Trucker — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-10",
-    "sku": "AVZ-JKT-0038",
-    "name": "Tactile Hardware Suspender Jacket",
-    "category": "Jackets",
-    "price": 6000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_10.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_10.webp",
-    "description": "Tactile Hardware Suspender Jacket — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-11",
-    "sku": "AVZ-JKT-0039",
-    "name": "Nocturnal Armor Crop Bolero",
-    "category": "Jackets",
-    "price": 6200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_11.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_11.webp",
-    "description": "Nocturnal Armor Crop Bolero — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-jkt-12",
-    "sku": "AVZ-JKT-0040",
-    "name": "Dhristroyer Signature Spiked Moto Relic",
-    "category": "Jackets",
-    "price": 6400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Zippers"
-    ],
-    "images": [
-      "/assets/collection/jackets/jackets_12.webp"
-    ],
-    "image": "/assets/collection/jackets/jackets_12.webp",
-    "description": "Dhristroyer Signature Spiked Moto Relic — deconstructed kinetic jacket handcrafted from deadstock denim and reclaimed heavy metals.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic reworked vintage textile base",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size (Oversized Slouch Fit)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-chn-1",
-    "sku": "AVZ-CHN-0041",
-    "name": "Guwahati Stainless Chainmail Cuirass",
+    "id": "avz-in-0006",
+    "sku": "IN0006",
+    "name": "Spike beaded bralette body chainmail",
+    "title": "Spike beaded bralette body chainmail",
+    "price": 1800,
+    "compare_at_price": null,
+    "stock": 5,
     "category": "Body chainmail",
-    "price": 5400,
-    "tag": "BEST SELLER",
-    "stock": 2,
+    "tag": "HAND-FORGED",
     "materials": [
-      "16-Gauge Stainless Steel",
-      "Industrial Rings",
-      "Chrome Clasps"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_15.webp",
-      "/assets/collection/body_chainmail/body_chainmail_16.webp",
-      "/assets/collection/body_chainmail/body_chainmail_17.webp",
-      "/assets/collection/body_chainmail/body_chainmail_18.webp",
-      "/assets/collection/body_chainmail/body_chainmail_19.webp",
-      "/assets/collection/body_chainmail/body_chainmail_20.webp",
-      "/assets/collection/body_chainmail/body_chainmail_21.webp",
-      "/assets/collection/body_chainmail/body_chainmail_22.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_15.webp",
-    "description": "Guwahati Stainless Chainmail Cuirass — over 1,400 individually hand-linked stainless steel ringlets flex dynamically across torso curves. Includes 8 distinct shoot angles.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "8 detailed photoshoot angles in product gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Hand-Strung Seed Beads",
+      "Metallic Cone Spikes",
+      "Stainless Steel Chainmail Links"
     ],
     "sizes": [
-      "S / M (Bust 32-36 in)",
-      "M / L (Bust 36-40 in)",
-      "Custom Studio Measurement"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-chn-2",
-    "sku": "AVZ-CHN-0042",
-    "name": "Liquid Steel Drape Halter Top",
-    "category": "Body chainmail",
-    "price": 4600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Stainless Steel Chainmail",
-      "O-Ring Hardware"
+      "One Size (Adjustable Chain Drape)"
     ],
     "images": [
       "/assets/collection/body_chainmail/body_chainmail_13.webp",
-      "/assets/collection/body_chainmail/body_chainmail_14.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_13.webp",
-    "description": "Liquid Steel Drape Halter Top — fluid medieval futurism that hugs the collarbones and ribcage with soothing, reassuring physical weight.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 detailed angles in product gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Adjustable Lobster Clasp Fit"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-chn-3",
-    "sku": "AVZ-CHN-0043",
-    "name": "Vertebrae Articulated Spine Armor",
-    "category": "Body chainmail",
-    "price": 4200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_01.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_01.webp",
-    "description": "Vertebrae Articulated Spine Armor — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-chn-4",
-    "sku": "AVZ-CHN-0044",
-    "name": "Cascading Waterfall Chainmail Shrug",
-    "category": "Body chainmail",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_02.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_02.webp",
-    "description": "Cascading Waterfall Chainmail Shrug — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-5",
-    "sku": "AVZ-CHN-0045",
-    "name": "Rib Cage Steel Matrix Cuirass",
-    "category": "Body chainmail",
-    "price": 4600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_03.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_03.webp",
-    "description": "Rib Cage Steel Matrix Cuirass — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-6",
-    "sku": "AVZ-CHN-0046",
-    "name": "Barbed Hardware Torso Harness",
-    "category": "Body chainmail",
-    "price": 4800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_04.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_04.webp",
-    "description": "Barbed Hardware Torso Harness — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-7",
-    "sku": "AVZ-CHN-0047",
-    "name": "Asymmetrical Shoulder Pauldron Mail",
-    "category": "Body chainmail",
-    "price": 5000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_05.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_05.webp",
-    "description": "Asymmetrical Shoulder Pauldron Mail — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-8",
-    "sku": "AVZ-CHN-0048",
-    "name": "Liquid Chrome Midriff Suspenders",
-    "category": "Body chainmail",
-    "price": 5200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_06.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_06.webp",
-    "description": "Liquid Chrome Midriff Suspenders — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-9",
-    "sku": "AVZ-CHN-0049",
-    "name": "Geometric Hex-Link Chainmail Vest",
-    "category": "Body chainmail",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_07.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_07.webp",
-    "description": "Geometric Hex-Link Chainmail Vest — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-10",
-    "sku": "AVZ-CHN-0050",
-    "name": "Multi-Ring Cyber Body Net",
-    "category": "Body chainmail",
-    "price": 5600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_08.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_08.webp",
-    "description": "Multi-Ring Cyber Body Net — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-11",
-    "sku": "AVZ-CHN-0051",
-    "name": "Sacred Geometry Torso Chandelier",
-    "category": "Body chainmail",
-    "price": 5800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_09.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_09.webp",
-    "description": "Sacred Geometry Torso Chandelier — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-chn-12",
-    "sku": "AVZ-CHN-0052",
-    "name": "Dystopian Warrior Chainmail Gorget",
-    "category": "Body chainmail",
-    "price": 6000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
+      "/assets/collection/body_chainmail/body_chainmail_01.webp",
+      "/assets/collection/body_chainmail/body_chainmail_03.webp",
+      "/assets/collection/body_chainmail/body_chainmail_07.webp",
+      "/assets/collection/body_chainmail/body_chainmail_08.webp",
+      "/assets/collection/body_chainmail/body_chainmail_09.webp",
       "/assets/collection/body_chainmail/body_chainmail_10.webp"
     ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_10.webp",
-    "description": "Dystopian Warrior Chainmail Gorget — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
+    "image": "/assets/collection/body_chainmail/body_chainmail_13.webp",
+    "description": "Beaded bralette w spikes and punk theme — intricate bib collar of cascading hand-beaded loops, stainless steel chain links, and metallic spikes.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
+      "Over 500 hand-threaded glass beads and steel links",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-chn-13",
-    "sku": "AVZ-CHN-0053",
-    "name": "Obsidian Steel Scale Halter",
-    "category": "Body chainmail",
-    "price": 6200,
-    "tag": "1 OF 1 ARCHIVE",
+    "id": "avz-in-0007",
+    "sku": "IN0007",
+    "name": "Psychedelic brown denim bag",
+    "title": "Psychedelic brown denim bag",
+    "price": 999,
+    "compare_at_price": null,
     "stock": 1,
+    "category": "Bags",
+    "tag": "1 OF 1 ARCHIVE",
     "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
+      "Upcycled Acid-Washed Denim Jeans",
+      "Neon Hand-Painted Motifs",
+      "Satin Ribbons & Chains"
+    ],
+    "sizes": [
+      "One Size (Shoulder Bag)"
     ],
     "images": [
-      "/assets/collection/body_chainmail/body_chainmail_11.webp"
+      "/assets/collection/bags/bags_03.webp",
+      "/assets/collection/bags/bags_01.webp",
+      "/assets/collection/bags/bags_02.webp",
+      "/assets/collection/bags/bags_04.webp",
+      "/assets/collection/bags/bags_05.webp"
     ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_11.webp",
-    "description": "Obsidian Steel Scale Halter — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
+    "image": "/assets/collection/bags/bags_03.webp",
+    "description": "Bag with acid paint denim jeans upcycled — one-of-a-kind slouchy shoulder bag deconstructed from brown denim jeans with psychedelic neon painting, charms, and satin ties.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
+      "Deconstructed vintage jeans with hand-painted artwork",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
+    "featured": false,
+    "customMade": false
   },
   {
-    "id": "avz-col-chn-14",
-    "sku": "AVZ-CHN-0054",
-    "name": "Cyber-Goth Chain Drape Shackle",
-    "category": "Body chainmail",
-    "price": 6400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Chainmail",
-      "Stainless Steel",
-      "Upcycled Hardware"
-    ],
-    "images": [
-      "/assets/collection/body_chainmail/body_chainmail_12.webp"
-    ],
-    "image": "/assets/collection/body_chainmail/body_chainmail_12.webp",
-    "description": "Cyber-Goth Chain Drape Shackle — wearable stainless steel sculpture created ring-by-ring in our Guwahati workshop.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Custom stainless hardware",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Free Size Adjustable"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-1",
-    "sku": "AVZ-BRA-0055",
-    "name": "Dhristroyer Masterwork Sculpted Wire Bralette",
-    "category": "Bralettes",
-    "price": 3600,
-    "tag": "BEST SELLER",
+    "id": "avz-in-0008",
+    "sku": "IN0008",
+    "name": "Spike tube top",
+    "title": "Spike tube top",
+    "price": 2000,
+    "compare_at_price": null,
     "stock": 3,
+    "category": "Tops",
+    "tag": "PUNK COUTURE",
     "materials": [
-      "Sculpted Wire",
-      "Iridescent Crystal Beads",
-      "Reclaimed Metals"
+      "Black Rexine Bodice",
+      "Metallic Spikes Cross Motif",
+      "Elastic Stretch Support"
+    ],
+    "sizes": [
+      "XS-S (Bust 30-33in)",
+      "M-L (Bust 34-37in)"
     ],
     "images": [
-      "/assets/collection/bralettes/bralettes_03.webp",
-      "/assets/collection/bralettes/bralettes_04.webp",
-      "/assets/collection/bralettes/bralettes_05.webp",
+      "/assets/collection/tops/tops_16.webp",
+      "/assets/collection/tops/tops_22.webp",
+      "/assets/collection/tops/tops_41.webp"
+    ],
+    "image": "/assets/collection/tops/tops_16.webp",
+    "description": "Tube top rexine black with spikes forming cross — sleek black leatherette tube top with heavy metallic cone spikes arranged in an extended crucifix motif down the torso.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Hand-riveted spikes with structured boning",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0009",
+    "sku": "IN0009",
+    "name": "Purple jibaro cross top",
+    "title": "Purple jibaro cross top",
+    "price": 1500,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Tops",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Lustrous Purple Silk/Satin",
+      "Gold Threadwork & Filigree",
+      "Blood-Red Gems & Safety Pins"
+    ],
+    "sizes": [
+      "Size: Small"
+    ],
+    "images": [
+      "/assets/collection/tops/tops_20.webp",
+      "/assets/collection/tops/tops_07.webp",
+      "/assets/collection/tops/tops_19.webp",
+      "/assets/collection/tops/tops_26.webp",
+      "/assets/collection/tops/tops_27.webp",
+      "/assets/collection/tops/tops_34.webp",
+      "/assets/collection/bralettes/bralettes_20.webp"
+    ],
+    "image": "/assets/collection/tops/tops_20.webp",
+    "description": "Cross top halter purple with gold and red embellishment — halter neck cross-silhouette top in rich purple fabric lavishly embellished with metallic filigree, hanging charms, and safety-pin hardware.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Intricate hand-embellished vintage charms",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0010",
+    "sku": "IN0010",
+    "name": "Chainmail bra",
+    "title": "Chainmail bra",
+    "price": 1800,
+    "compare_at_price": null,
+    "stock": 50,
+    "category": "Bralettes",
+    "tag": "METAL ARMOR",
+    "materials": [
+      "Hand-Linked Stainless Steel Rings",
+      "Reinforced Neck & Back Chains",
+      "Lobster Clasps"
+    ],
+    "sizes": [
+      "S (Bust 32-34in)",
+      "M (Bust 34-36in)",
+      "L (Bust 36-38in)"
+    ],
+    "images": [
+      "/assets/collection/body_chainmail/body_chainmail_14.webp"
+    ],
+    "image": "/assets/collection/body_chainmail/body_chainmail_14.webp",
+    "description": "Bra made out of chain links — fluid metallic armor constructed entirely from hand-interlinked stainless steel rings. Ergonomic contouring and adjustable chain ties.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Corrosion-resistant surgical steel jump rings",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0011",
+    "sku": "IN0011",
+    "name": "Purple pink beaded bralette",
+    "title": "Purple pink beaded bralette",
+    "price": 1500,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Bralettes",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Hand-Strung Glass & Acrylic Beads",
+      "Multi-Strand Bib Cascade",
+      "Adjustable Hardware"
+    ],
+    "sizes": [
+      "One Size (Adjustable Body Chain)"
+    ],
+    "images": [
+      "/assets/collection/bralettes/bralettes_08.webp",
+      "/assets/collection/bralettes/bralettes_01.webp",
       "/assets/collection/bralettes/bralettes_06.webp",
       "/assets/collection/bralettes/bralettes_07.webp",
-      "/assets/collection/bralettes/bralettes_08.webp",
       "/assets/collection/bralettes/bralettes_09.webp",
       "/assets/collection/bralettes/bralettes_10.webp"
     ],
-    "image": "/assets/collection/bralettes/bralettes_03.webp",
-    "description": "Dhristroyer Masterwork Sculpted Wire Bralette — Dhrisni's iconic hand-coiled wire bralette adorned with glistening beadwork. 8 editorial photoshoot angles included.",
+    "image": "/assets/collection/bralettes/bralettes_08.webp",
+    "description": "Bralette/ bodychain made with pink and purple beads — multi-layered wearable jewelry draped across the bust with thousands of hand-strung beads in violet and magenta.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "8 distinct editorial shots available in card gallery",
+      "Over 1,200 micro-beads individually hand-threaded",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "XS (Bust 30-32 in)",
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)"
-    ],
-    "featured": true
+    "featured": false,
+    "customMade": false
   },
   {
-    "id": "avz-col-bra-2",
-    "sku": "AVZ-BRA-0056",
-    "name": "Spikeria Hand-Built Studded Bra",
-    "category": "Bralettes",
-    "price": 2900,
-    "tag": "BEST SELLER",
-    "stock": 4,
+    "id": "avz-in-0012",
+    "sku": "IN0012",
+    "name": "Apex Cuffs",
+    "title": "Apex Cuffs",
+    "price": 499,
+    "compare_at_price": null,
+    "stock": 10,
+    "category": "Arm cuffs",
+    "tag": "UNDER ₹1K",
     "materials": [
-      "Metal Spikes & Chains",
-      "Upcycled Hardware",
-      "Blackened Canvas"
+      "Metallic Spike Hardware",
+      "Riveted Leatherette Wristband",
+      "Snap Fasteners"
+    ],
+    "sizes": [
+      "One Size (Adjustable)"
     ],
     "images": [
+      "/assets/collection/armcuffs/armcuffs_02.webp",
+      "/assets/collection/armcuffs/armcuffs_05.webp",
+      "/assets/collection/armcuffs/armcuffs_01.webp"
+    ],
+    "image": "/assets/collection/armcuffs/armcuffs_02.webp",
+    "description": "Hand cuffs w spikes — minimal yet fierce black wristbands studded with double rows of chrome spikes. Heavy punk styling.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Adjustable multi-snap wrist clasp",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0013",
+    "sku": "IN0013",
+    "name": "Denim upcycled headgear",
+    "title": "Denim upcycled headgear",
+    "price": 1700,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Headgear",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Deconstructed Reclaimed Denim",
+      "Handcrafted Plastic Bottle Flowers",
+      "Vintage Ribbons & Lace"
+    ],
+    "sizes": [
+      "One Size (Headpiece with Mask & Ties)"
+    ],
+    "images": [
+      "/assets/collection/headgears/headgears_03.webp",
+      "/assets/collection/headgears/headgears_01.webp",
+      "/assets/collection/headgears/headgears_02.webp",
+      "/assets/collection/headgears/headgears_04.webp",
+      "/assets/collection/headgears/headgears_05.webp",
+      "/assets/collection/headgears/headgears_06.webp",
+      "/assets/collection/headgears/headgears_07.webp"
+    ],
+    "image": "/assets/collection/headgears/headgears_03.webp",
+    "description": "Denim headgear with green plastic bottle flowers and ribbons and laces vaganza — avant-garde sculptural headpiece and mask sculpted from frayed denim seams, heat-formed plastic bottle flowers, and draping ribbons.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Upcycled zero-waste wearable sculpture",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0014",
+    "sku": "IN0014",
+    "name": "Jhumka jacket",
+    "title": "Jhumka jacket",
+    "price": 2600,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Jackets",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Lush Brown Faux Fur",
+      "Traditional Brass Jhumka Bells",
+      "Draped Hardware Chains"
+    ],
+    "sizes": [
+      "One Size (Oversized Boxy Silhouette)"
+    ],
+    "images": [
+      "/assets/collection/jackets/jackets_04.webp",
+      "/assets/collection/jackets/jackets_01.webp",
+      "/assets/collection/jackets/jackets_02.webp",
+      "/assets/collection/jackets/jackets_03.webp",
+      "/assets/collection/jackets/jackets_05.webp",
+      "/assets/collection/jackets/jackets_06.webp",
+      "/assets/collection/jackets/jackets_10.webp"
+    ],
+    "image": "/assets/collection/jackets/jackets_04.webp",
+    "description": "Jacket fur brown jhumkhas — rich chocolate brown faux fur cropped jacket adorned with dozens of traditional Indian brass jhumkas and connecting chain swags.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Authentic brass jhumka hardware hand-stitched",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0015",
+    "sku": "IN0015",
+    "name": "Black Cat Co ord Set",
+    "title": "Black Cat Co ord Set",
+    "price": 2200,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Co-ord sets",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Textured Silver Boned Corset",
+      "Black Faux Fur Trim Mini Skirt",
+      "Heavy Eyelet Hardware"
+    ],
+    "sizes": [
+      "Size: Small"
+    ],
+    "images": [
+      "/assets/collection/co_ords/co_ords_16.webp",
+      "/assets/collection/co_ords/co_ords_02.webp",
+      "/assets/collection/co_ords/co_ords_03.webp",
+      "/assets/collection/co_ords/co_ords_05.webp",
+      "/assets/collection/co_ords/co_ords_11.webp",
+      "/assets/collection/co_ords/co_ords_22.webp",
+      "/assets/collection/co_ords/co_ords_31.webp",
+      "/assets/collection/co_ords/co_ords_37.webp"
+    ],
+    "image": "/assets/collection/co_ords/co_ords_16.webp",
+    "description": "Silver corset and black fur skirt — sculptural two-piece ensemble featuring an engraved silver-finish corset top paired with a micro mini skirt trimmed in dense black faux fur.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Hand-structured corset boning with metal grommets",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0016",
+    "sku": "IN0016",
+    "name": "Cheetah print cavewoman set",
+    "title": "Cheetah print cavewoman set",
+    "price": 1999,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Co-ord sets",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Cheetah & Leopard Pattern Velour",
+      "Brown Fur Accents",
+      "Raw Asymmetric Hemline"
+    ],
+    "sizes": [
+      "Size: 34 Medium"
+    ],
+    "images": [
+      "/assets/collection/co_ords/co_ords_20.webp",
+      "/assets/collection/co_ords/co_ords_10.webp",
+      "/assets/collection/co_ords/co_ords_14.webp",
+      "/assets/collection/co_ords/co_ords_24.webp",
+      "/assets/collection/co_ords/co_ords_35.webp",
+      "/assets/collection/co_ords/co_ords_36.webp",
+      "/assets/collection/co_ords/co_ords_38.webp"
+    ],
+    "image": "/assets/collection/co_ords/co_ords_20.webp",
+    "description": "Cavewoman bra and leopard skirt — ferocious wild-animal print co-ord pairing an asymmetric ruched bralette with an uneven raw-hem leopard skirt.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Subcultural Y2K grunge styling",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0017",
+    "sku": "IN0017",
+    "name": "Silver Jesus cross charm top",
+    "title": "Silver Jesus cross charm top",
+    "price": 999,
+    "compare_at_price": null,
+    "stock": 0,
+    "category": "Tops",
+    "tag": "SOLD OUT",
+    "materials": [
+      "Silver Metallic Cross Halter",
+      "Black Butterfly Choker",
+      "Draped Silver Tone Chains"
+    ],
+    "sizes": [
+      "Size: small"
+    ],
+    "images": [
+      "/assets/collection/tops/tops_38.webp",
+      "/assets/collection/tops/tops_21.webp",
+      "/assets/collection/tops/tops_37.webp",
+      "/assets/collection/tops/tops_46.webp"
+    ],
+    "image": "/assets/collection/tops/tops_38.webp",
+    "description": "Cross shape halter top with black butterfly choker and silver elements — architectural cross-formed metallic top connected with chains and accompanied by a signature butterfly choker.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Archived piece — request a custom commission",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0018",
+    "sku": "IN0018",
+    "name": "Flowery",
+    "title": "Flowery",
+    "price": 1799,
+    "compare_at_price": null,
+    "stock": 6,
+    "category": "Tops",
+    "tag": "CROCHET ART",
+    "materials": [
+      "Hand-Crocheted Cotton Yarn",
+      "Multi-Colored 3D Floral Appliques",
+      "Lace-Up Back"
+    ],
+    "sizes": [
+      "XS-S (Bust 30-33in)",
+      "M-L (Bust 34-37in)"
+    ],
+    "images": [
+      "/assets/collection/tops/tops_23.webp",
+      "/assets/collection/tops/tops_06.webp",
+      "/assets/collection/tops/tops_33.webp"
+    ],
+    "image": "/assets/collection/tops/tops_23.webp",
+    "description": "Crocheted top with flowers multi colored — hand-knit kaleidoscopic crop top blooming with vibrant three-dimensional crochet flowers over a supportive frame.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Individually hand-crocheted 3D flowers",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0019",
+    "sku": "IN0019",
+    "name": "Pearlite crochet top",
+    "title": "Pearlite crochet top",
+    "price": 1500,
+    "compare_at_price": null,
+    "stock": 12,
+    "category": "Tops",
+    "tag": "HAND-BEADED",
+    "materials": [
+      "Freshwater-Style White Pearls",
+      "Crocheted Metallic Thread Base",
+      "Satin Ties"
+    ],
+    "sizes": [
+      "XS-S (Bust 30-33in)",
+      "M-L (Bust 34-37in)"
+    ],
+    "images": [
+      "/assets/collection/bralettes/bralettes_13.webp",
       "/assets/collection/bralettes/bralettes_11.webp",
       "/assets/collection/bralettes/bralettes_12.webp",
-      "/assets/collection/bralettes/bralettes_13.webp",
       "/assets/collection/bralettes/bralettes_14.webp",
       "/assets/collection/bralettes/bralettes_15.webp",
       "/assets/collection/bralettes/bralettes_16.webp",
       "/assets/collection/bralettes/bralettes_17.webp"
     ],
-    "image": "/assets/collection/bralettes/bralettes_11.webp",
-    "description": "Spikeria Hand-Built Studded Bra — sharp metallic cone spikes individually mounted by hand on structured cups. 7 studio shots included.",
+    "image": "/assets/collection/bralettes/bralettes_13.webp",
+    "description": "White pearls crocheted on bikini top — ethereal halter bikini top hand-woven with hundreds of luminous white pearls crocheted into an organic mesh.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "7 distinct studio shots available in card gallery",
+      "Hand-crocheted pearl architecture",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "S (Bust 32-34 in)",
-      "M (Bust 34-36 in)",
-      "L (Bust 36-38 in)"
-    ],
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-bra-3",
-    "sku": "AVZ-BRA-0057",
-    "name": "Sculptural Kinetic Cyber Bralette",
-    "category": "Bralettes",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Industrial Wire",
-      "Chrome Hardware",
-      "Translucent Filaments"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_21.webp",
-      "/assets/collection/bralettes/bralettes_22.webp",
-      "/assets/collection/bralettes/bralettes_23.webp",
-      "/assets/collection/bralettes/bralettes_24.webp",
-      "/assets/collection/bralettes/bralettes_25.webp",
-      "/assets/collection/bralettes/bralettes_26.webp",
-      "/assets/collection/bralettes/bralettes_27.webp",
-      "/assets/collection/bralettes/bralettes_28.webp",
-      "/assets/collection/bralettes/bralettes_29.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_21.webp",
-    "description": "Sculptural Kinetic Cyber Bralette — delicate biomorphic wire structures that contour with breathing and body motion. 9 studio angles included.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "9 distinct studio angles available in card gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "Custom Fitted Bust"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-bra-4",
-    "sku": "AVZ-BRA-0058",
-    "name": "Dual Wire Cyber Shrug Bralette",
-    "category": "Bralettes",
-    "price": 2800,
-    "tag": "STUDIO PIECE",
-    "stock": 2,
-    "materials": [
-      "Sculpted Wire",
-      "Silver Solder",
-      "Chains"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_18.webp",
-      "/assets/collection/bralettes/bralettes_19.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_18.webp",
-    "description": "Dual Wire Cyber Shrug Bralette — twin wire tendrils that sweep from shoulder blades to sternum with crystalline beads.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct studio shots available in card gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 32-36 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-5",
-    "sku": "AVZ-BRA-0059",
-    "name": "Circuit-Trace Kinetic Bralette",
-    "category": "Bralettes",
-    "price": 3100,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboard Circuits",
-      "Upcycled Hardware",
-      "Black Velvet Backing"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_31.webp",
-      "/assets/collection/bralettes/bralettes_32.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_31.webp",
-    "description": "Circuit-Trace Kinetic Bralette — deconstructed motherboard leads contoured into wearable armor with soft lining.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct studio shots available in card gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "M (Bust 34-36 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-6",
-    "sku": "AVZ-BRA-0060",
-    "name": "Motherboard Bralette (Prototype 01)",
-    "category": "Bralettes",
-    "price": 2700,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Metal Spikes & Chains",
-      "Reclaimed Wire"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_01.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_01.webp",
-    "description": "Motherboard Bralette (Prototype 01) — authentic 1-of-1 archival specimen hand-forged in Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 32-35 in)"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-bra-7",
-    "sku": "AVZ-BRA-0061",
-    "name": "Crystalline Sculpted Cyber Bralette",
-    "category": "Bralettes",
-    "price": 2900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Metal Spikes & Chains",
-      "Reclaimed Wire"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_02.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_02.webp",
-    "description": "Crystalline Sculpted Cyber Bralette — authentic 1-of-1 archival specimen hand-forged in Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 32-35 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-8",
-    "sku": "AVZ-BRA-0062",
-    "name": "Barbed Wire Accented Bralette",
-    "category": "Bralettes",
-    "price": 3100,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Metal Spikes & Chains",
-      "Reclaimed Wire"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_20.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_20.webp",
-    "description": "Barbed Wire Accented Bralette — authentic 1-of-1 archival specimen hand-forged in Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 32-35 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-9",
-    "sku": "AVZ-BRA-0063",
-    "name": "Reflective Dystopian Mesh Bralette",
-    "category": "Bralettes",
-    "price": 3300,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Metal Spikes & Chains",
-      "Reclaimed Wire"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_30.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_30.webp",
-    "description": "Reflective Dystopian Mesh Bralette — authentic 1-of-1 archival specimen hand-forged in Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 32-35 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-bra-10",
-    "sku": "AVZ-BRA-0064",
-    "name": "Cyberpunk Hardware Bralette Relic",
-    "category": "Bralettes",
+    "id": "avz-in-0020",
+    "sku": "IN0020",
+    "name": "Barbie set",
+    "title": "Barbie set",
     "price": 3500,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
+    "compare_at_price": null,
+    "stock": 12,
+    "category": "Co-ord sets",
+    "tag": "CAMP MAXIMALISM",
     "materials": [
-      "Upcycled Hardware",
-      "Metal Spikes & Chains",
-      "Reclaimed Wire"
-    ],
-    "images": [
-      "/assets/collection/bralettes/bralettes_33.webp"
-    ],
-    "image": "/assets/collection/bralettes/bralettes_33.webp",
-    "description": "Cyberpunk Hardware Bralette Relic — authentic 1-of-1 archival specimen hand-forged in Guwahati studio.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Sculpted Pink Starfish Bra",
+      "Distressed Denim Mini with Pink Fur Trim",
+      "Plush Headgear"
     ],
     "sizes": [
-      "S / M (Bust 32-35 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-1",
-    "sku": "AVZ-CRD-0065",
-    "name": "Runway Kinetic Cargo Co-Ord Set",
-    "category": "Co-ord sets",
-    "price": 5800,
-    "tag": "BEST SELLER",
-    "stock": 2,
-    "materials": [
-      "Reclaimed Denim",
-      "Industrial Carabiners",
-      "Segmented Straps"
+      "XS-S (Bust 30-33in)",
+      "M-L (Bust 34-37in)"
     ],
     "images": [
       "/assets/collection/co_ords/co_ords_26.webp",
@@ -2025,2057 +840,239 @@ export const PRODUCTS = [
       "/assets/collection/co_ords/co_ords_28.webp"
     ],
     "image": "/assets/collection/co_ords/co_ords_26.webp",
-    "description": "Runway Kinetic Cargo Co-Ord Set — matching deconstructed corset bodice and modular cargo skirt with heavy hardware suspension. 3 editorial slide angles included.",
+    "description": "Pink starfish bra + Barbie short skirt + green & pink fluffy headgear — the quintessential maximalist trio: sculpted hot pink starfish bralette, frayed denim mini edged with neon pink faux fur, and fluffy headpiece.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "3 distinct editorial angles in gallery",
+      "Three-piece complete editorial ensemble",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Fit"
-    ],
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-crd-2",
-    "sku": "AVZ-CRD-0066",
-    "name": "Reclaimed Denim & Hardware Co-Ord Set",
-    "category": "Co-ord sets",
-    "price": 4900,
+    "id": "avz-in-0021",
+    "sku": "IN0021",
+    "name": "Spiral body chainmail top",
+    "title": "Spiral body chainmail top",
+    "price": 2500,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Body chainmail",
     "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
     "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Raw Edge Trims"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_39.webp",
-      "/assets/collection/co_ords/co_ords_40.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_39.webp",
-    "description": "Reclaimed Denim & Hardware Co-Ord Set — two-piece artisanal ensemble featuring structured distressed crop bodice and asymmetric matching skirt.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct angles in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Architectural Spiral Coiled Wire",
+      "Hand-Linked Stainless Steel Chains",
+      "Draped Halter Harness"
     ],
     "sizes": [
-      "S (Bust 32-34 in, Waist 26-27 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-3",
-    "sku": "AVZ-CRD-0067",
-    "name": "Subcultural Acid-Wash Denim Co-Ord",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "BEST SELLER",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
+      "One Size (Adjustable Torso Drape)"
     ],
     "images": [
-      "/assets/collection/co_ords/co_ords_01.webp"
+      "/assets/collection/body_chainmail/body_chainmail_22.webp",
+      "/assets/collection/body_chainmail/body_chainmail_15.webp",
+      "/assets/collection/body_chainmail/body_chainmail_16.webp",
+      "/assets/collection/body_chainmail/body_chainmail_17.webp",
+      "/assets/collection/body_chainmail/body_chainmail_19.webp",
+      "/assets/collection/body_chainmail/body_chainmail_21.webp"
     ],
-    "image": "/assets/collection/co_ords/co_ords_01.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
+    "image": "/assets/collection/body_chainmail/body_chainmail_22.webp",
+    "description": "Spiral wired  chained top in silver — concentric wire spirals coiled and woven with steel chains to create a sculptural breastplate that cascades down the torso.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
+      "Hand-coiled silver-tone steel wire",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "avz-col-crd-4",
-    "sku": "AVZ-CRD-0068",
-    "name": "Cyber-Goth Spiked Micro Set",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
+    "id": "avz-in-0022",
+    "sku": "IN0022",
+    "name": "Cross tape bralette",
+    "title": "Cross tape bralette",
+    "price": 1200,
+    "compare_at_price": null,
+    "stock": 18,
+    "category": "Bralettes",
+    "tag": "CYBER-GRUNGE",
     "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
+      "Structural Black Vinyl Tape Illusion",
+      "Industrial Chain Straps",
+      "Snap Fasteners"
+    ],
+    "sizes": [
+      "XS-S (Bust 30-33in)",
+      "S-M (Bust 32-35in)",
+      "M-L (Bust 34-37in)"
     ],
     "images": [
-      "/assets/collection/co_ords/co_ords_02.webp"
+      "/assets/collection/bralettes/bralettes_23.webp",
+      "/assets/collection/bralettes/bralettes_21.webp",
+      "/assets/collection/bralettes/bralettes_22.webp",
+      "/assets/collection/bralettes/bralettes_24.webp",
+      "/assets/collection/bralettes/bralettes_25.webp",
+      "/assets/collection/bralettes/bralettes_26.webp",
+      "/assets/collection/bralettes/bralettes_27.webp",
+      "/assets/collection/bralettes/bralettes_28.webp",
+      "/assets/collection/bralettes/bralettes_29.webp"
     ],
-    "image": "/assets/collection/co_ords/co_ords_02.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
+    "image": "/assets/collection/bralettes/bralettes_23.webp",
+    "description": "Bralette in the illusion of taped bust — deconstructed black vinyl crosses creating the visual illusion of electrical tape with chain linkages and comfortable inner lining.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
+      "Durable industrial hardware connectors",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
+    "featured": false,
+    "customMade": false
   },
   {
-    "id": "avz-col-crd-5",
-    "sku": "AVZ-CRD-0069",
-    "name": "Liquid Metal Mesh & Denim Ensemble",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
+    "id": "avz-in-0023",
+    "sku": "IN0023",
+    "name": "Spike grey blouse/bra",
+    "title": "Spike grey blouse/bra",
+    "price": 2000,
+    "compare_at_price": null,
     "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_03.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_03.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-6",
-    "sku": "AVZ-CRD-0070",
-    "name": "Dystopian Carabiner Bustier & Skirt",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_04.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_04.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-7",
-    "sku": "AVZ-CRD-0071",
-    "name": "Industrial Grommet Halter Set",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_05.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_05.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-8",
-    "sku": "AVZ-CRD-0072",
-    "name": "Reconstructed Camo Kinetic Co-Ord",
-    "category": "Co-ord sets",
-    "price": 5650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_06.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_06.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-9",
-    "sku": "AVZ-CRD-0073",
-    "name": "Raw Edge Deconstructed Duo",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_07.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_07.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-10",
-    "sku": "AVZ-CRD-0074",
-    "name": "Hardware Suspension Festival Set",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_08.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_08.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-11",
-    "sku": "AVZ-CRD-0075",
-    "name": "Nocturnal Armor Two-Piece Relic",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_09.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_09.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-12",
-    "sku": "AVZ-CRD-0076",
-    "name": "Cyberpunk Utility Harness Co-Ord",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_10.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_10.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-13",
-    "sku": "AVZ-CRD-0077",
-    "name": "Subcultural Acid-Wash Denim Co-Ord (Edition 11)",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_11.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_11.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-14",
-    "sku": "AVZ-CRD-0078",
-    "name": "Cyber-Goth Spiked Micro Set (Edition 12)",
-    "category": "Co-ord sets",
-    "price": 5650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_12.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_12.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-15",
-    "sku": "AVZ-CRD-0079",
-    "name": "Liquid Metal Mesh & Denim Ensemble (Edition 13)",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_13.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_13.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-16",
-    "sku": "AVZ-CRD-0080",
-    "name": "Dystopian Carabiner Bustier & Skirt (Edition 14)",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_14.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_14.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-17",
-    "sku": "AVZ-CRD-0081",
-    "name": "Industrial Grommet Halter Set (Edition 15)",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_15.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_15.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-18",
-    "sku": "AVZ-CRD-0082",
-    "name": "Reconstructed Camo Kinetic Co-Ord (Edition 16)",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_16.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_16.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-19",
-    "sku": "AVZ-CRD-0083",
-    "name": "Raw Edge Deconstructed Duo (Edition 17)",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_17.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_17.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-20",
-    "sku": "AVZ-CRD-0084",
-    "name": "Hardware Suspension Festival Set (Edition 18)",
-    "category": "Co-ord sets",
-    "price": 5650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_18.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_18.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-21",
-    "sku": "AVZ-CRD-0085",
-    "name": "Nocturnal Armor Two-Piece Relic (Edition 19)",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_19.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_19.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-22",
-    "sku": "AVZ-CRD-0086",
-    "name": "Cyberpunk Utility Harness Co-Ord (Edition 20)",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_20.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_20.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-23",
-    "sku": "AVZ-CRD-0087",
-    "name": "Subcultural Acid-Wash Denim Co-Ord (Edition 21)",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_21.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_21.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-24",
-    "sku": "AVZ-CRD-0088",
-    "name": "Cyber-Goth Spiked Micro Set (Edition 22)",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_22.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_22.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-25",
-    "sku": "AVZ-CRD-0089",
-    "name": "Liquid Metal Mesh & Denim Ensemble (Edition 23)",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_23.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_23.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-26",
-    "sku": "AVZ-CRD-0090",
-    "name": "Dystopian Carabiner Bustier & Skirt (Edition 24)",
-    "category": "Co-ord sets",
-    "price": 5650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_24.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_24.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-27",
-    "sku": "AVZ-CRD-0091",
-    "name": "Industrial Grommet Halter Set (Edition 25)",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_25.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_25.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-28",
-    "sku": "AVZ-CRD-0092",
-    "name": "Reconstructed Camo Kinetic Co-Ord (Edition 26)",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_29.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_29.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-29",
-    "sku": "AVZ-CRD-0093",
-    "name": "Raw Edge Deconstructed Duo (Edition 27)",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_30.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_30.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-30",
-    "sku": "AVZ-CRD-0094",
-    "name": "Hardware Suspension Festival Set (Edition 28)",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_31.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_31.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-31",
-    "sku": "AVZ-CRD-0095",
-    "name": "Nocturnal Armor Two-Piece Relic (Edition 29)",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_32.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_32.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-32",
-    "sku": "AVZ-CRD-0096",
-    "name": "Cyberpunk Utility Harness Co-Ord (Edition 30)",
-    "category": "Co-ord sets",
-    "price": 5650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_33.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_33.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-33",
-    "sku": "AVZ-CRD-0097",
-    "name": "Subcultural Acid-Wash Denim Co-Ord (Edition 31)",
-    "category": "Co-ord sets",
-    "price": 4400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_34.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_34.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-34",
-    "sku": "AVZ-CRD-0098",
-    "name": "Cyber-Goth Spiked Micro Set (Edition 32)",
-    "category": "Co-ord sets",
-    "price": 4650,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_35.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_35.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-35",
-    "sku": "AVZ-CRD-0099",
-    "name": "Liquid Metal Mesh & Denim Ensemble (Edition 33)",
-    "category": "Co-ord sets",
-    "price": 4900,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_36.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_36.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-36",
-    "sku": "AVZ-CRD-0100",
-    "name": "Dystopian Carabiner Bustier & Skirt (Edition 34)",
-    "category": "Co-ord sets",
-    "price": 5150,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_37.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_37.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-crd-37",
-    "sku": "AVZ-CRD-0101",
-    "name": "Industrial Grommet Halter Set (Edition 35)",
-    "category": "Co-ord sets",
-    "price": 5400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Reclaimed Denim",
-      "Upcycled Hardware",
-      "Industrial Eyelets"
-    ],
-    "images": [
-      "/assets/collection/co_ords/co_ords_38.webp"
-    ],
-    "image": "/assets/collection/co_ords/co_ords_38.webp",
-    "description": "Handcrafted 1-of-1 archival co-ord ensemble constructed from upcycled denim and raw metallic hardware.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "S / M (Bust 33-36 in, Waist 26-29 in)"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-1",
-    "sku": "AVZ-TOP-0102",
-    "name": "Dhristroyer Motherboard Diva Top",
     "category": "Tops",
-    "price": 2800,
     "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
     "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_01.webp"
-    ],
-    "image": "/assets/collection/tops/tops_01.webp",
-    "description": "Dhristroyer Motherboard Diva Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
+      "Heavy Hand-Set Metallic Spikes",
+      "Tailored Saree Blouse Base",
+      "Silver Hardware Accents"
     ],
     "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-2",
-    "sku": "AVZ-TOP-0103",
-    "name": "Hand-Riveted Spikeria Crop Top",
-    "category": "Tops",
-    "price": 3000,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_02.webp",
-      "/assets/collection/tops/tops_03.webp"
-    ],
-    "image": "/assets/collection/tops/tops_02.webp",
-    "description": "Hand-Riveted Spikeria Crop Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-3",
-    "sku": "AVZ-TOP-0104",
-    "name": "Salvaged PCB Cyber Gorget Top",
-    "category": "Tops",
-    "price": 3200,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_04.webp",
-      "/assets/collection/tops/tops_05.webp"
-    ],
-    "image": "/assets/collection/tops/tops_04.webp",
-    "description": "Salvaged PCB Cyber Gorget Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-4",
-    "sku": "AVZ-TOP-0105",
-    "name": "Stainless Steel Chainmail Halter Top",
-    "category": "Tops",
-    "price": 3400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_06.webp"
-    ],
-    "image": "/assets/collection/tops/tops_06.webp",
-    "description": "Stainless Steel Chainmail Halter Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-5",
-    "sku": "AVZ-TOP-0106",
-    "name": "Deconstructed Denim Kinetic Top",
-    "category": "Tops",
-    "price": 3600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_07.webp"
-    ],
-    "image": "/assets/collection/tops/tops_07.webp",
-    "description": "Deconstructed Denim Kinetic Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-6",
-    "sku": "AVZ-TOP-0107",
-    "name": "Crystalline Wire Sculpted Top",
-    "category": "Tops",
-    "price": 3800,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
+      "Size: Small-Medium"
     ],
     "images": [
       "/assets/collection/tops/tops_08.webp",
-      "/assets/collection/tops/tops_09.webp"
-    ],
-    "image": "/assets/collection/tops/tops_08.webp",
-    "description": "Crystalline Wire Sculpted Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-7",
-    "sku": "AVZ-TOP-0108",
-    "name": "Barbed Hardware Kinetic Halter",
-    "category": "Tops",
-    "price": 4000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_10.webp"
-    ],
-    "image": "/assets/collection/tops/tops_10.webp",
-    "description": "Barbed Hardware Kinetic Halter — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-8",
-    "sku": "AVZ-TOP-0109",
-    "name": "Mechanical Keycap Mosaic Bustier Top",
-    "category": "Tops",
-    "price": 4200,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_11.webp",
-      "/assets/collection/tops/tops_12.webp"
-    ],
-    "image": "/assets/collection/tops/tops_11.webp",
-    "description": "Mechanical Keycap Mosaic Bustier Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-9",
-    "sku": "AVZ-TOP-0110",
-    "name": "Raw Steel O-Ring Harness Top",
-    "category": "Tops",
-    "price": 2800,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_13.webp",
-      "/assets/collection/tops/tops_14.webp"
-    ],
-    "image": "/assets/collection/tops/tops_13.webp",
-    "description": "Raw Steel O-Ring Harness Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-10",
-    "sku": "AVZ-TOP-0111",
-    "name": "Iridescent Pearlite Wire Crop Top",
-    "category": "Tops",
-    "price": 3000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_15.webp"
-    ],
-    "image": "/assets/collection/tops/tops_15.webp",
-    "description": "Iridescent Pearlite Wire Crop Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-11",
-    "sku": "AVZ-TOP-0112",
-    "name": "Spiked Cybernetic Shoulder Top",
-    "category": "Tops",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_16.webp"
-    ],
-    "image": "/assets/collection/tops/tops_16.webp",
-    "description": "Spiked Cybernetic Shoulder Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-12",
-    "sku": "AVZ-TOP-0113",
-    "name": "Industrial Heavy Grommet Halter Top",
-    "category": "Tops",
-    "price": 3400,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_17.webp",
-      "/assets/collection/tops/tops_18.webp"
-    ],
-    "image": "/assets/collection/tops/tops_17.webp",
-    "description": "Industrial Heavy Grommet Halter Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-13",
-    "sku": "AVZ-TOP-0114",
-    "name": "Hand-Linked Stainless Mesh Top",
-    "category": "Tops",
-    "price": 3600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_19.webp"
-    ],
-    "image": "/assets/collection/tops/tops_19.webp",
-    "description": "Hand-Linked Stainless Mesh Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-14",
-    "sku": "AVZ-TOP-0115",
-    "name": "Cyber-Goth Spiked Rib Cage Top",
-    "category": "Tops",
-    "price": 3800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_20.webp"
-    ],
-    "image": "/assets/collection/tops/tops_20.webp",
-    "description": "Cyber-Goth Spiked Rib Cage Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-15",
-    "sku": "AVZ-TOP-0116",
-    "name": "Guwahati Raw Filament Wire Top",
-    "category": "Tops",
-    "price": 4000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_21.webp"
-    ],
-    "image": "/assets/collection/tops/tops_21.webp",
-    "description": "Guwahati Raw Filament Wire Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-16",
-    "sku": "AVZ-TOP-0117",
-    "name": "Multi-Chain Waterfall Torso Top",
-    "category": "Tops",
-    "price": 4200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_22.webp"
-    ],
-    "image": "/assets/collection/tops/tops_22.webp",
-    "description": "Multi-Chain Waterfall Torso Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-17",
-    "sku": "AVZ-TOP-0118",
-    "name": "Deconstructed Zipper Kinetic Top",
-    "category": "Tops",
-    "price": 2800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_23.webp"
-    ],
-    "image": "/assets/collection/tops/tops_23.webp",
-    "description": "Deconstructed Zipper Kinetic Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-18",
-    "sku": "AVZ-TOP-0119",
-    "name": "Salvaged Green PCB Statement Top",
-    "category": "Tops",
-    "price": 3000,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_24.webp",
-      "/assets/collection/tops/tops_25.webp"
-    ],
-    "image": "/assets/collection/tops/tops_24.webp",
-    "description": "Salvaged Green PCB Statement Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-19",
-    "sku": "AVZ-TOP-0120",
-    "name": "Stainless D-Ring Cyber Top",
-    "category": "Tops",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_26.webp"
-    ],
-    "image": "/assets/collection/tops/tops_26.webp",
-    "description": "Stainless D-Ring Cyber Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-20",
-    "sku": "AVZ-TOP-0121",
-    "name": "Distressed Raw Edge Denim Top",
-    "category": "Tops",
-    "price": 3400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_27.webp"
-    ],
-    "image": "/assets/collection/tops/tops_27.webp",
-    "description": "Distressed Raw Edge Denim Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-21",
-    "sku": "AVZ-TOP-0122",
-    "name": "Hand-Coiled Industrial Wire Top",
-    "category": "Tops",
-    "price": 3600,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_28.webp"
-    ],
-    "image": "/assets/collection/tops/tops_28.webp",
-    "description": "Hand-Coiled Industrial Wire Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-22",
-    "sku": "AVZ-TOP-0123",
-    "name": "Cyberpunk Keycap Torso Shackle Top",
-    "category": "Tops",
-    "price": 3800,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_29.webp",
-      "/assets/collection/tops/tops_30.webp"
-    ],
-    "image": "/assets/collection/tops/tops_29.webp",
-    "description": "Cyberpunk Keycap Torso Shackle Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-23",
-    "sku": "AVZ-TOP-0124",
-    "name": "Reconstructed Denim Bolero Top",
-    "category": "Tops",
-    "price": 4000,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
+      "/assets/collection/tops/tops_02.webp",
+      "/assets/collection/tops/tops_04.webp",
       "/assets/collection/tops/tops_31.webp",
-      "/assets/collection/tops/tops_32.webp"
-    ],
-    "image": "/assets/collection/tops/tops_31.webp",
-    "description": "Reconstructed Denim Bolero Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-24",
-    "sku": "AVZ-TOP-0125",
-    "name": "Liquid Chrome Tendril Top",
-    "category": "Tops",
-    "price": 4200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_33.webp"
-    ],
-    "image": "/assets/collection/tops/tops_33.webp",
-    "description": "Liquid Chrome Tendril Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-25",
-    "sku": "AVZ-TOP-0126",
-    "name": "Subterranean Strobe Crop Top",
-    "category": "Tops",
-    "price": 2800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_34.webp"
-    ],
-    "image": "/assets/collection/tops/tops_34.webp",
-    "description": "Subterranean Strobe Crop Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-26",
-    "sku": "AVZ-TOP-0127",
-    "name": "Acid-Wash Asymmetrical Shrug Top",
-    "category": "Tops",
-    "price": 3000,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_35.webp",
-      "/assets/collection/tops/tops_36.webp"
-    ],
-    "image": "/assets/collection/tops/tops_35.webp",
-    "description": "Acid-Wash Asymmetrical Shrug Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-27",
-    "sku": "AVZ-TOP-0128",
-    "name": "Mermaidcore Wire Carapace Top",
-    "category": "Tops",
-    "price": 3200,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_37.webp"
-    ],
-    "image": "/assets/collection/tops/tops_37.webp",
-    "description": "Mermaidcore Wire Carapace Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-28",
-    "sku": "AVZ-TOP-0129",
-    "name": "Industrial Carabiner Suspension Top",
-    "category": "Tops",
-    "price": 3400,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_38.webp"
-    ],
-    "image": "/assets/collection/tops/tops_38.webp",
-    "description": "Industrial Carabiner Suspension Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-29",
-    "sku": "AVZ-TOP-0130",
-    "name": "Barbed Wire Accented Halter Top",
-    "category": "Tops",
-    "price": 3600,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_39.webp",
-      "/assets/collection/tops/tops_40.webp"
-    ],
-    "image": "/assets/collection/tops/tops_39.webp",
-    "description": "Barbed Wire Accented Halter Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-30",
-    "sku": "AVZ-TOP-0131",
-    "name": "Nocturnal Metal Scale Top",
-    "category": "Tops",
-    "price": 3800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_41.webp"
-    ],
-    "image": "/assets/collection/tops/tops_41.webp",
-    "description": "Nocturnal Metal Scale Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-31",
-    "sku": "AVZ-TOP-0132",
-    "name": "Reflective Wet-Look Vinyl Top",
-    "category": "Tops",
-    "price": 4000,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_42.webp",
-      "/assets/collection/tops/tops_43.webp"
-    ],
-    "image": "/assets/collection/tops/tops_42.webp",
-    "description": "Reflective Wet-Look Vinyl Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-32",
-    "sku": "AVZ-TOP-0133",
-    "name": "Heavy Duty Hardware Bustier Top",
-    "category": "Tops",
-    "price": 4200,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
+      "/assets/collection/tops/tops_32.webp",
       "/assets/collection/tops/tops_44.webp",
-      "/assets/collection/tops/tops_45.webp"
-    ],
-    "image": "/assets/collection/tops/tops_44.webp",
-    "description": "Heavy Duty Hardware Bustier Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 2 distinct product shots in gallery.",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "2 distinct product shots in gallery",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": true
-  },
-  {
-    "id": "avz-col-top-33",
-    "sku": "AVZ-TOP-0134",
-    "name": "Cybernetic Boned Mesh Top",
-    "category": "Tops",
-    "price": 2800,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_46.webp"
-    ],
-    "image": "/assets/collection/tops/tops_46.webp",
-    "description": "Cybernetic Boned Mesh Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-34",
-    "sku": "AVZ-TOP-0135",
-    "name": "Raw Edge Upcycled Denim Shrug Top",
-    "category": "Tops",
-    "price": 3000,
-    "tag": "1 OF 1 ARCHIVE",
-    "stock": 1,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
-      "/assets/collection/tops/tops_47.webp"
-    ],
-    "image": "/assets/collection/tops/tops_47.webp",
-    "description": "Raw Edge Upcycled Denim Shrug Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. ",
-    "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
-      "Authentic 1-of-1 piece",
-      "AVZ Vaganza Certificate of Authenticity included"
-    ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
-    ],
-    "featured": false
-  },
-  {
-    "id": "avz-col-top-35",
-    "sku": "AVZ-TOP-0136",
-    "name": "Dhristroyer Crown Kinetic Top",
-    "category": "Tops",
-    "price": 3200,
-    "tag": "BEST SELLER",
-    "stock": 3,
-    "materials": [
-      "Motherboards & Circuits",
-      "Upcycled Hardware",
-      "Reclaimed Denim"
-    ],
-    "images": [
+      "/assets/collection/tops/tops_45.webp",
       "/assets/collection/tops/tops_48.webp",
-      "/assets/collection/tops/tops_49.webp",
       "/assets/collection/tops/tops_50.webp"
     ],
-    "image": "/assets/collection/tops/tops_48.webp",
-    "description": "Dhristroyer Crown Kinetic Top — authentic wearable art top handcrafted by Dhrisni in the Guwahati studio. Includes 3 distinct product shots in gallery.",
+    "image": "/assets/collection/tops/tops_08.webp",
+    "description": "Blouse with spikes — traditional Indian grey saree blouse transformed into high-impact wearable armor with hundreds of pointed cone spikes covering the bodice.",
     "details": [
       "100% Handcrafted by Dhrisni in Guwahati",
-      "3 distinct product shots in gallery",
+      "Custom tailored base with metallic spike field",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
-    "sizes": [
-      "XS / S (Bust 30-34 in)",
-      "M / L (Bust 34-38 in)",
-      "Custom Studio Sizing"
+    "featured": false,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0024",
+    "sku": "IN0024",
+    "name": "Silver shoe corset and skirt set",
+    "title": "Silver shoe corset and skirt set",
+    "price": 3500,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Co-ord sets",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Deconstructed Silver Athletic Sneaker",
+      "Brown Faux Fur Trim",
+      "Matching Metallic Mini Skirt"
     ],
-    "featured": true
+    "sizes": [
+      "One Size (Custom Studio Fit)"
+    ],
+    "images": [
+      "/assets/collection/corsets/corsets_03.webp",
+      "/assets/collection/corsets/corsets_01.webp",
+      "/assets/collection/corsets/corsets_02.webp",
+      "/assets/collection/corsets/corsets_04.webp",
+      "/assets/collection/corsets/corsets_05.webp",
+      "/assets/collection/corsets/corsets_06.webp",
+      "/assets/collection/corsets/corsets_07.webp",
+      "/assets/collection/co_ords/co_ords_32.webp",
+      "/assets/collection/co_ords/co_ords_39.webp",
+      "/assets/collection/co_ords/co_ords_40.webp"
+    ],
+    "image": "/assets/collection/corsets/corsets_03.webp",
+    "description": "Corset in silver color made out of shoe and brown fur and similar skirt for a set — avant-garde runway set where athletic sneakers were unstitched and re-formed into a boned corset trimmed with brown fur, paired with metallic mini skirt.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Deconstructed sneaker upper wearable architecture",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0025",
+    "sku": "IN0025",
+    "name": "Spike red top",
+    "title": "Spike red top",
+    "price": 2200,
+    "compare_at_price": null,
+    "stock": 2,
+    "category": "Tops",
+    "tag": "HOT PIECE",
+    "materials": [
+      "Sculpted Red Heart Bustier",
+      "Hand-Mounted Metallic Spikes",
+      "Backless Strappy Tie Closure"
+    ],
+    "sizes": [
+      "XS-S (Bust 30-33in)",
+      "M-L (Bust 34-37in)"
+    ],
+    "images": [
+      "/assets/collection/tops/tops_10.webp",
+      "/assets/collection/tops/tops_01.webp",
+      "/assets/collection/tops/tops_15.webp",
+      "/assets/collection/tops/tops_28.webp",
+      "/assets/collection/tops/tops_47.webp"
+    ],
+    "image": "/assets/collection/tops/tops_10.webp",
+    "description": "Red heart top with spikes backless — sculpted crimson heart-shaped halter crop top studded with gleaming spikes with an open criss-cross strappy back.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Heart silhouette with conical spike studs",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "avz-in-0026",
+    "sku": "IN0026",
+    "name": "Check mini red skirt",
+    "title": "Check mini red skirt",
+    "price": 1600,
+    "compare_at_price": null,
+    "stock": 1,
+    "category": "Skirts",
+    "tag": "1 OF 1 ARCHIVE",
+    "materials": [
+      "Red Gingham Check Cotton",
+      "Overlaid Black Fishnet",
+      "Rose & Ribbon Waist Hardware"
+    ],
+    "sizes": [
+      "Size: Small (Waist 24-27in)"
+    ],
+    "images": [
+      "/assets/collection/skirts/skirts_03.webp",
+      "/assets/collection/skirts/skirts_01.webp",
+      "/assets/collection/skirts/skirts_02.webp"
+    ],
+    "image": "/assets/collection/skirts/skirts_03.webp",
+    "description": "Red skirt w checks and fishnet mini size — pleated red and white gingham mini skirt overlaid with deconstructed black fishnet mesh, red rose rosette, and ribbon tails.",
+    "details": [
+      "100% Handcrafted by Dhrisni in Guwahati",
+      "Gingham check with fishnet overlay and flower pin",
+      "AVZ Vaganza Certificate of Authenticity included"
+    ],
+    "featured": false,
+    "customMade": false
   }
 ];
 
@@ -4088,7 +1085,7 @@ export const MUSEUM_ITEMS = [
     aspectRatio: 220 / 415,
     year: "2023",
     tag: "ARCHIVE · SOLD OUT",
-    materials: "Salvaged 1998 Motherboard, Copper Wire, Velvet Ties",
+    materials: "Reclaimed Industrial Metal, Steel Wire, Velvet Ties",
     priceTier: "Core Statement Pieces (₹1,000 – ₹3,000)",
     originalOwner: "Private Collection (Mumbai)",
     image: ASSET_MANIFEST.products.archiveBralette,
@@ -4144,8 +1141,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-01",
     "sku": "AVZ-FT-001",
-    "name": "Dhristroyer Cyberpunk Motherboard Bralette",
-    "title": "Dhristroyer Cyberpunk Motherboard Bralette",
+    "name": "Dhristroyer Cyberpunk Spikeria Bralette",
+    "title": "Dhristroyer Cyberpunk Spikeria Bralette",
     "category": "Bralettes",
     "price": 3800,
     "tag": "BEST SELLER",
@@ -4160,8 +1157,8 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_01.webp"
     ],
     "imgUrl": "/assets/featured/featured_01.webp",
-    "alt": "Dhristroyer Cyberpunk Motherboard Bralette",
-    "description": "Dhristroyer Cyberpunk Motherboard Bralette — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Dhristroyer Cyberpunk Spikeria Bralette",
+    "description": "Dhristroyer Cyberpunk Spikeria Bralette — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
     "details": [
       "Handcrafted by Dhrisni in the Guwahati studio",
       "Authentic upcycled hardware and custom metalwork",
@@ -4249,8 +1246,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-04",
     "sku": "AVZ-FT-004",
-    "name": "Salvaged Circuit Motherboard Gauntlet",
-    "title": "Salvaged Circuit Motherboard Gauntlet",
+    "name": "Guwahati Hand-Riveted Spike Gauntlet",
+    "title": "Guwahati Hand-Riveted Spike Gauntlet",
     "category": "Arm cuffs",
     "price": 1800,
     "tag": "UPCYCLED TECH",
@@ -4265,8 +1262,8 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_04.webp"
     ],
     "imgUrl": "/assets/featured/featured_04.webp",
-    "alt": "Salvaged Circuit Motherboard Gauntlet",
-    "description": "Salvaged Circuit Motherboard Gauntlet — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Guwahati Hand-Riveted Spike Gauntlet",
+    "description": "Guwahati Hand-Riveted Spike Gauntlet — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
     "details": [
       "Handcrafted by Dhrisni in the Guwahati studio",
       "Authentic upcycled hardware and custom metalwork",
@@ -4739,8 +1736,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-18",
     "sku": "AVZ-FT-018",
-    "name": "Motherboard Core Micro Handbag Relic",
-    "title": "Motherboard Core Micro Handbag Relic",
+    "name": "Psychedelic Acid-Wash Denim Relic Bag",
+    "title": "Psychedelic Acid-Wash Denim Relic Bag",
     "category": "Bags",
     "price": 2200,
     "tag": "UPCYCLED TECH",
@@ -4755,8 +1752,8 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_18.webp"
     ],
     "imgUrl": "/assets/featured/featured_18.webp",
-    "alt": "Motherboard Core Micro Handbag Relic",
-    "description": "Motherboard Core Micro Handbag Relic — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Psychedelic Acid-Wash Denim Relic Bag",
+    "description": "Psychedelic Acid-Wash Denim Relic Bag — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
     "details": [
       "Handcrafted by Dhrisni in the Guwahati studio",
       "Authentic upcycled hardware and custom metalwork",
@@ -5509,8 +2506,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-40",
     "sku": "AVZ-FT-040",
-    "name": "Motherboard Fragment Heart Locket",
-    "title": "Motherboard Fragment Heart Locket",
+    "name": "Hand-Forged Metal Heart Bodice",
+    "title": "Hand-Forged Metal Heart Bodice",
     "category": "Neckpieces",
     "price": 1550,
     "tag": "STUDIO PIECE",
@@ -5525,8 +2522,8 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_40.webp"
     ],
     "imgUrl": "/assets/featured/featured_40.webp",
-    "alt": "Motherboard Fragment Heart Locket",
-    "description": "Motherboard Fragment Heart Locket — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Hand-Forged Metal Heart Bodice",
+    "description": "Hand-Forged Metal Heart Bodice — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
     "details": [
       "Handcrafted by Dhrisni in the Guwahati studio",
       "Authentic upcycled hardware and custom metalwork",
@@ -5870,9 +2867,9 @@ export const LOOKBOOK_ENTRIES = [
       "/assets/lookbook/lookbook_02.webp"
     ],
     "aspect": "portrait",
-    "caption": "Model styled in Motherboard Diva Top and Spike Cuffs under high-intensity neon.",
+    "caption": "Model styled in Purple Jibaro Cross Top and Spike Cuffs under high-intensity neon.",
     "story": "What happens when the technology designed to automate us is dismantled and reclaimed to adorn us? Dhrisni treats circuit boards not as e-waste, but as sacred cybernetic armor.",
-    "materials": "Reclaimed Motherboards, 16-Gauge Copper Wire, Industrial Rivets",
+    "materials": "Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets",
     "vibe": "Cyberpunk Couture"
   },
   {
@@ -6037,7 +3034,7 @@ export const LOOKBOOK_ENTRIES = [
     "aspect": "portrait",
     "caption": "Close-up editorial crop highlighting microscopic copper circuits.",
     "story": "Why should microchips stay hidden inside plastic shells? Dhrisni surfaces the hidden beauty of the machine age.",
-    "materials": "Motherboard Fragments, Gold-Plated Leads, Velvet Backing",
+    "materials": "Reclaimed Metals, Gold-Plated Filigree, Velvet Backing",
     "vibe": "Tech-Deco"
   },
   {
@@ -6232,7 +3229,7 @@ export const LOOKBOOK_ENTRIES = [
     "aspect": "portrait",
     "caption": "Signature editorial campaign portrait directed by Dhrisni in Guwahati.",
     "story": "The definitive statement of Aveezah Vaganza. A manifesto written in solder, denim, and steel by Dhristroyer herself.",
-    "materials": "Upcycled Motherboards, Hand-Linked Stainless Rings, Studio Relics",
+    "materials": "Upcycled Hardware, Hand-Linked Stainless Rings, Studio Relics",
     "vibe": "Crown Archival Art"
   }
 ];
@@ -6249,7 +3246,7 @@ export const FAQS = [
   },
   {
     q: "What is the design philosophy of AVZ Vaganza?",
-    a: "Absolute maximalism, texture, chaos, and grit. The brand fiercely rejects minimalism, cookie-cutter aesthetics, and AI-generated sameness. It specializes in subcultural styles like cyber-grunge, Y2K, mermaidcore, industrial punk, and avant-garde streetwear, built from non-traditional materials like computer motherboards, mechanical keyboard keycaps, chainmail, metal spikes, and upcycled hardware."
+    a: "Absolute maximalism, texture, chaos, and grit. The brand fiercely rejects minimalism, cookie-cutter aesthetics, and AI-generated sameness. It specializes in subcultural styles like cyber-grunge, Y2K, mermaidcore, industrial punk, and avant-garde streetwear, built from non-traditional materials like hand-linked chainmail, cold-forged spikes, reclaimed metals, and upcycled hardware."
   },
   {
     q: "Are the pieces mass-produced?",

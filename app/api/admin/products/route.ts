@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
+import { PRODUCTS as fallbackProducts } from '@/src/data/brandData';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -18,6 +19,75 @@ export async function GET(request: Request) {
     const search = searchParams.get('search') || '';
     const category = searchParams.get('category') || '';
     const status = searchParams.get('status') || '';
+
+    // Auto-sync products with authentic CSV catalog if count differs
+    try {
+      const countCheck = await db.execute("SELECT COUNT(*) as count FROM products");
+      const currentCount = Number(countCheck.rows[0]?.count || 0);
+
+      if (currentCount !== fallbackProducts.length) {
+        const skuPlaceholders = fallbackProducts.map(() => '?').join(',');
+        await db.execute({
+          sql: `DELETE FROM products WHERE sku NOT IN (${skuPlaceholders})`,
+          args: fallbackProducts.map((p: any) => p.sku)
+        });
+
+        const statements: any[] = [];
+        for (const p of fallbackProducts) {
+          const sku = p.sku || `AVZ-${p.id}`;
+          const imagesJson = JSON.stringify(p.images && p.images.length > 0 ? p.images : [p.image]);
+          const materialsJson = JSON.stringify(p.materials || ['Upcycled Hardware', 'Reclaimed Metals']);
+          const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size (Adjustable)'];
+          const variantsJson = JSON.stringify(
+            sizes.map((s: string) => ({
+              size: s,
+              stock: p.stock > 1 ? Math.ceil(p.stock / sizes.length) : (p.stock ?? 1),
+              sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}`
+            }))
+          );
+
+          statements.push({
+            sql: `INSERT OR REPLACE INTO products (
+              id, slug, title, description, price, compare_at_price, sku,
+              inventory_quantity, category, materials, images, variants,
+              status, is_featured, custom_made, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            args: [
+              p.id,
+              (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+              p.name,
+              p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni in Guwahati.',
+              p.price || 2500,
+              p.compare_at_price || null,
+              sku,
+              p.stock ?? 1,
+              p.category || 'Wearable Art',
+              materialsJson,
+              imagesJson,
+              variantsJson,
+              'published',
+              p.featured ? 1 : 0,
+              p.customMade ? 1 : 0,
+              Date.now(),
+              Date.now()
+            ]
+          });
+        }
+
+        for (let i = 0; i < statements.length; i += 50) {
+          const chunk = statements.slice(i, i + 50);
+          if (typeof (db as any).batch === 'function') {
+            await (db as any).batch(chunk, 'write');
+          } else {
+            for (const stmt of chunk) {
+              await db.execute(stmt);
+            }
+          }
+        }
+      }
+    } catch (syncErr) {
+      console.warn('Admin products sync note:', syncErr);
+    }
 
     let sql = 'SELECT * FROM products WHERE 1=1';
     const args: any[] = [];
@@ -57,6 +127,13 @@ export async function GET(request: Request) {
       })(),
       variants: (() => {
         try { return JSON.parse(String(row.variants)); } catch { return []; }
+      })(),
+      sizes: (() => {
+        try {
+          const v = JSON.parse(String(row.variants));
+          if (Array.isArray(v)) return v.map((item: any) => typeof item === 'object' ? (item.size || item.name) : item).filter(Boolean);
+          return [];
+        } catch { return []; }
       })()
     }));
 
@@ -85,10 +162,15 @@ export async function POST(request: Request) {
       materials = [],
       images = [],
       variants = [],
+      sizes = [],
       status = 'published',
       is_featured = false,
       custom_made = false
     } = body;
+
+    const variantsToSave = Array.isArray(sizes) && sizes.length > 0
+      ? sizes.map((s: string) => ({ size: s, stock: 1, sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}` }))
+      : (Array.isArray(variants) ? variants : []);
 
     if (!title || price === undefined || !sku) {
       return NextResponse.json({ error: 'Title, price, and SKU are required' }, { status: 400 });
@@ -127,7 +209,7 @@ export async function POST(request: Request) {
         category,
         JSON.stringify(materials),
         JSON.stringify(images),
-        JSON.stringify(variants),
+        JSON.stringify(variantsToSave),
         status,
         is_featured ? 1 : 0,
         custom_made ? 1 : 0,
