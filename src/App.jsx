@@ -28,7 +28,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { useModalScrollLock } from './utils/modalScrollLock';
 import DPDPConsentBanner from './components/DPDPConsentBanner';
 import GroupOrderModal from './components/GroupOrderModal';
-import { PRODUCTS, LOOKBOOK_ENTRIES } from './data/brandData';
+import { PRODUCTS, LOOKBOOK_ENTRIES, FEATURED_PIECES } from './data/brandData';
 import { playSound } from './utils/audio';
 import { Scissors, Sparkles, ArrowDown } from 'lucide-react';
 import { authClient } from './lib/auth-client';
@@ -733,7 +733,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         {/* Section 2: Vault Piece Rail */}
         <section id="vault" className="w-full">
           <ExpandedCards
-            items={catalogProducts.slice(0, 5)}
+            items={FEATURED_PIECES}
             onSelectProduct={setActiveProduct}
             currency={currency}
           />

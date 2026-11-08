@@ -176,7 +176,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
         {/* Navigation Controls & Counter */}
         <div className="flex items-center gap-3 shrink-0 self-start sm:self-end">
           <span className="text-xs font-mono text-zinc-400 tracking-wider">
-            [ 0{currentSlide + 1} / 0{entries.length} ]
+            [ {String(currentSlide + 1).padStart(2, '0')} / {String(entries.length).padStart(2, '0')} ]
           </span>
 
           <button
@@ -208,7 +208,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
             }`}
           >
-            LOOK 0{i + 1}
+            LOOK {String(i + 1).padStart(2, '0')}
           </button>
         ))}
       </div>
@@ -260,6 +260,8 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
             let diff = (idx - currentSlide) % count;
             if (diff > count / 2) diff -= count;
             if (diff < -count / 2) diff += count;
+
+            if (Math.abs(diff) > 2) return null;
 
             const isCenter = diff === 0;
             const isVisible = Math.abs(diff) <= 2;

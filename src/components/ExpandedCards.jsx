@@ -3,60 +3,69 @@
 import React, { useMemo, useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Flame, Eye, Sparkles } from 'lucide-react';
 import SocialCards, { CardItem } from './ui/card-fan-carousel';
-import { ASSET_MANIFEST, formatPrice } from '../data/brandData';
+import { ASSET_MANIFEST, formatPrice, FEATURED_PIECES } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
-const DEFAULT_VAULT_CARDS = [
-  {
-    imgUrl: ASSET_MANIFEST?.products?.archiveBralette || "/assets/product_archive_bralette.jpg",
-    alt: "The Original Dhristroyer Motherboard Bralette",
-    title: "Motherboard Bralette (Prototype 01)",
-    category: "ARCHIVE · 1-OF-1",
-    price: 3800
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.spikeBodice || "/assets/look_spike_bodice.jpg",
-    alt: "Spike Bodice Armour",
-    title: "Hand-Riveted Spike Bodice",
-    category: "HANDMADE PIECE",
-    price: 4500
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.chainmailArmor || "/assets/look_chainmail_armor.jpg",
-    alt: "Chainmail Cyber Armour",
-    title: "Guwahati Chainmail Armour",
-    category: "STATEMENT PIECE",
-    price: 5200
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.motherboardCuff || "/assets/prod_motherboard_cuff.jpg",
-    alt: "Salvaged Motherboard Cuff",
-    title: "Cyberpunk Circuitry Gauntlet",
-    category: "UPCYCLED TECH",
-    price: 1800
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.reworkedJacket || "/assets/product_reworked_jacket.jpg",
-    alt: "Reworked Denim Jacket",
-    title: "Syllabic Denim Kinetic Relic",
-    category: "REWORKED ARCHIVE",
-    price: 3600
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.beadedBralette || "/assets/product_beaded_bralette.jpg",
-    alt: "Beaded Wire Bralette",
-    title: "Crystalline Cyber Bralette",
-    category: "SCULPTED WIRE",
-    price: 2900
-  },
-  {
-    imgUrl: ASSET_MANIFEST?.products?.divaTop || "/assets/product_diva_top.jpg",
-    alt: "Diva Hardware Corset",
-    title: "Hardware Diva Corset",
-    category: "RUNWAY ICON",
-    price: 3200
-  }
-];
+const DEFAULT_VAULT_CARDS = (FEATURED_PIECES && FEATURED_PIECES.length > 0)
+  ? FEATURED_PIECES.map((p) => ({
+      imgUrl: p.imgUrl || p.image || p.images?.[0],
+      alt: p.alt || p.title || p.name,
+      title: p.title || p.name,
+      category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'BEST SELLER'}` : 'BEST SELLER',
+      price: p.price,
+      data: p
+    }))
+  : [
+      {
+        imgUrl: ASSET_MANIFEST?.products?.archiveBralette || "/assets/product_archive_bralette.jpg",
+        alt: "The Original Dhristroyer Motherboard Bralette",
+        title: "Motherboard Bralette (Prototype 01)",
+        category: "ARCHIVE · 1-OF-1",
+        price: 3800
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.spikeBodice || "/assets/look_spike_bodice.jpg",
+        alt: "Spike Bodice Armour",
+        title: "Hand-Riveted Spike Bodice",
+        category: "HANDMADE PIECE",
+        price: 4500
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.chainmailArmor || "/assets/look_chainmail_armor.jpg",
+        alt: "Chainmail Cyber Armour",
+        title: "Guwahati Chainmail Armour",
+        category: "STATEMENT PIECE",
+        price: 5200
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.motherboardCuff || "/assets/prod_motherboard_cuff.jpg",
+        alt: "Salvaged Motherboard Cuff",
+        title: "Cyberpunk Circuitry Gauntlet",
+        category: "UPCYCLED TECH",
+        price: 1800
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.reworkedJacket || "/assets/product_reworked_jacket.jpg",
+        alt: "Reworked Denim Jacket",
+        title: "Syllabic Denim Kinetic Relic",
+        category: "REWORKED ARCHIVE",
+        price: 3600
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.beadedBralette || "/assets/product_beaded_bralette.jpg",
+        alt: "Beaded Wire Bralette",
+        title: "Crystalline Cyber Bralette",
+        category: "SCULPTED WIRE",
+        price: 2900
+      },
+      {
+        imgUrl: ASSET_MANIFEST?.products?.divaTop || "/assets/product_diva_top.jpg",
+        alt: "Diva Hardware Corset",
+        title: "Hardware Diva Corset",
+        category: "RUNWAY ICON",
+        price: 3200
+      }
+    ];
 
 function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -65,20 +74,14 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
   // Merge incoming catalog items with vault archive specimens
   const cards = useMemo(() => {
     if (items && items.length > 0) {
-      const mappedCatalog = items.map((p, idx) => ({
-        imgUrl: p.image || p.images?.[0] || DEFAULT_VAULT_CARDS[idx % DEFAULT_VAULT_CARDS.length].imgUrl,
-        alt: p.name || `Vault Specimen ${idx + 1}`,
-        title: p.name,
-        category: p.stock === 0 ? 'SOLD OUT · ARCHIVE' : p.category ? `${p.category.toUpperCase()} · ARCHIVE` : 'VAULT PIECE',
+      return items.map((p, idx) => ({
+        imgUrl: p.imgUrl || p.image || p.images?.[0] || DEFAULT_VAULT_CARDS[idx % DEFAULT_VAULT_CARDS.length].imgUrl,
+        alt: p.alt || p.title || p.name || `Vault Specimen ${idx + 1}`,
+        title: p.title || p.name || `Vault Specimen ${idx + 1}`,
+        category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'BEST SELLER'}` : (p.stock === 0 ? 'SOLD OUT · ARCHIVE' : 'BEST SELLER'),
         price: p.price,
         data: p
       }));
-
-      if (mappedCatalog.length < 7) {
-        const remaining = DEFAULT_VAULT_CARDS.slice(mappedCatalog.length);
-        return [...mappedCatalog, ...remaining];
-      }
-      return mappedCatalog;
     }
     return DEFAULT_VAULT_CARDS;
   }, [items]);
@@ -165,7 +168,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
         {/* Mobile Lookbook-Format Navigation Controls & Counter */}
         <div className="flex md:hidden items-center gap-3 shrink-0 self-start">
           <span className="text-xs font-mono text-zinc-400 tracking-wider">
-            [ 0{currentSlide + 1} / 0{cards.length} ]
+            [ {String(currentSlide + 1).padStart(2, '0')} / {String(cards.length).padStart(2, '0')} ]
           </span>
 
           <button
@@ -208,7 +211,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
                   : 'bg-white/5 text-zinc-400 border-white/10 hover:border-pink hover:text-white'
               }`}
             >
-              PIECE 0{i + 1}
+              PIECE {String(i + 1).padStart(2, '0')}
             </button>
           ))}
         </div>
@@ -237,7 +240,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
               {/* Top Badge Bar */}
               <div className="relative z-10 flex items-center justify-between text-left">
                 <span className="px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white/90 text-[10px] font-mono tracking-widest uppercase font-bold">
-                  {card.category || `VAULT 00${idx + 1}`}
+                  {card.category || `VAULT ${String(idx + 1).padStart(3, '0')}`}
                 </span>
 
                 <button
@@ -274,7 +277,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
                   </span>
 
                   <span className="text-[11px] font-mono text-zinc-400 font-semibold">
-                    0{idx + 1} / 0{cards.length}
+                    {String(idx + 1).padStart(2, '0')} / {String(cards.length).padStart(2, '0')}
                   </span>
                 </div>
               </div>
