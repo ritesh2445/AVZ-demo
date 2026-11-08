@@ -12,9 +12,16 @@ export async function GET() {
 
     let res;
     try {
+      // Purge legacy placeholder sample IDs from previous builds
+      try {
+        await db.execute("DELETE FROM gallery_artworks WHERE id LIKE 'art-00%'");
+      } catch (cleanErr) {
+        // ignore
+      }
+
       res = await db.execute(`
         SELECT * FROM gallery_artworks 
-        WHERE is_published = 1 
+        WHERE is_published = 1 AND id NOT LIKE 'art-00%'
         ORDER BY display_order ASC, created_at ASC
       `);
     } catch (dbErr: any) {
@@ -22,7 +29,7 @@ export async function GET() {
         await bootstrapDatabaseSchema();
         res = await db.execute(`
           SELECT * FROM gallery_artworks 
-          WHERE is_published = 1 
+          WHERE is_published = 1 AND id NOT LIKE 'art-00%'
           ORDER BY display_order ASC, created_at ASC
         `);
       } else {
@@ -30,23 +37,39 @@ export async function GET() {
       }
     }
 
-    // Auto-seed initial masterpieces if database table is empty
-    if (!res.rows || res.rows.length === 0) {
+    // Auto-seed or expand initial masterpieces if database table is missing new archive pieces
+    if (!res.rows || res.rows.length < INITIAL_GALLERY_ARTWORKS.length) {
       const now = Date.now();
       for (const art of INITIAL_GALLERY_ARTWORKS) {
         try {
           await db.execute({
-            sql: `INSERT OR IGNORE INTO gallery_artworks (
+            sql: `INSERT INTO gallery_artworks (
               id, title, artist, image_url, thumbnail_url, description, year, category,
               frame_style, aspect_ratio, width_px, height_px, display_order, is_published,
               metadata, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET
+              title = excluded.title,
+              artist = excluded.artist,
+              image_url = excluded.image_url,
+              thumbnail_url = excluded.thumbnail_url,
+              description = excluded.description,
+              year = excluded.year,
+              category = excluded.category,
+              frame_style = excluded.frame_style,
+              aspect_ratio = excluded.aspect_ratio,
+              width_px = excluded.width_px,
+              height_px = excluded.height_px,
+              display_order = excluded.display_order,
+              is_published = excluded.is_published,
+              metadata = excluded.metadata,
+              updated_at = excluded.updated_at`,
             args: [
               art.id,
               art.title,
               art.artist,
               art.image_url,
-              art.thumbnail_url,
+              art.thumbnail_url || art.image_url,
               art.description,
               art.year,
               art.category,
@@ -66,57 +89,12 @@ export async function GET() {
         }
       }
 
-      // Re-query newly seeded artworks
+      // Re-query complete artworks
       res = await db.execute(`
         SELECT * FROM gallery_artworks 
-        WHERE is_published = 1 
+        WHERE is_published = 1 AND id NOT LIKE 'art-00%'
         ORDER BY display_order ASC, created_at ASC
       `);
-    } else {
-      // If table already has rows with old AI titles, update them to authentic human studio copy
-      const hasOldAiTitle = (res.rows || []).some((r: any) => 
-        r.title?.includes('Cyber Empress') || 
-        r.title?.includes('Allegory of') || 
-        r.title?.includes('Study in Raw') ||
-        r.title?.includes('Still Life with')
-      );
-
-      if (hasOldAiTitle) {
-        const now = Date.now();
-        for (const art of INITIAL_GALLERY_ARTWORKS) {
-          try {
-            await db.execute({
-              sql: `UPDATE gallery_artworks 
-                    SET title = ?, artist = ?, description = ?, category = ?, 
-                        aspect_ratio = ?, width_px = ?, height_px = ?, display_order = ?,
-                        metadata = ?, updated_at = ?
-                    WHERE id = ?`,
-              args: [
-                art.title,
-                art.artist,
-                art.description,
-                art.category,
-                art.aspect_ratio,
-                art.width_px,
-                art.height_px,
-                art.display_order,
-                JSON.stringify(art.metadata),
-                now,
-                art.id
-              ]
-            });
-          } catch (updateErr) {
-            console.warn('[GALLERY COPY UPGRADE ERROR]:', updateErr);
-          }
-        }
-
-        // Re-query with updated records
-        res = await db.execute(`
-          SELECT * FROM gallery_artworks 
-          WHERE is_published = 1 
-          ORDER BY display_order ASC, created_at ASC
-        `);
-      }
     }
 
     const artworks = (res.rows || []).map((row: any) => {

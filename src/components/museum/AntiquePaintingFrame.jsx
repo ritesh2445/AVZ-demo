@@ -14,12 +14,12 @@ const FRAME_CLASSES = {
 };
 
 const ASPECT_RATIO_STYLES = {
-  '3:4': 'aspect-[3/4]',
-  '4:5': 'aspect-[4/5]',
-  '1:1': 'aspect-square',
-  '4:3': 'aspect-[4/3]',
-  '16:9': 'aspect-[16/9]',
-  '2:3': 'aspect-[2/3]'
+  '3:4': 'frame-aspect-3-4 aspect-[3/4]',
+  '4:5': 'frame-aspect-4-5 aspect-[4/5]',
+  '1:1': 'frame-aspect-1-1 aspect-square',
+  '4:3': 'frame-aspect-4-3 aspect-[4/3]',
+  '16:9': 'frame-aspect-16-9 aspect-[16/9]',
+  '2:3': 'frame-aspect-2-3 aspect-[2/3]'
 };
 
 /**
@@ -209,7 +209,7 @@ export default function AntiquePaintingFrame({
               imgLoaded ? 'opacity-100' : 'opacity-0'
             } ${isHovered ? 'scale-102 contrast-105' : 'scale-100 contrast-100'}`}
             style={{
-              objectPosition: meta.object_position || 'center 20%'
+              objectPosition: meta.object_position || 'center center'
             }}
           />
 

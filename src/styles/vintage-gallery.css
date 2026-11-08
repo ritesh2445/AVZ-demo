@@ -491,3 +491,38 @@
   transform: scale(1.15) rotate(10deg);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.95), 0 0 16px rgba(250, 229, 150, 0.9);
 }
+
+/* ========================================================
+   FRAME ASPECT RATIO EXACT ENFORCEMENT
+   Guarantees perfect proportional frame bounds across all devices
+   ======================================================== */
+.frame-aspect-2-3,
+.aspect-\[2\/3\] {
+  aspect-ratio: 2 / 3 !important;
+}
+
+.frame-aspect-3-4,
+.aspect-\[3\/4\] {
+  aspect-ratio: 3 / 4 !important;
+}
+
+.frame-aspect-4-5,
+.aspect-\[4\/5\] {
+  aspect-ratio: 4 / 5 !important;
+}
+
+.frame-aspect-1-1,
+.aspect-square {
+  aspect-ratio: 1 / 1 !important;
+}
+
+.frame-aspect-4-3,
+.aspect-\[4\/3\] {
+  aspect-ratio: 4 / 3 !important;
+}
+
+.frame-aspect-16-9,
+.aspect-\[16\/9\] {
+  aspect-ratio: 16 / 9 !important;
+}
+
