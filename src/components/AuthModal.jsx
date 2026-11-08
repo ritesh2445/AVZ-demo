@@ -242,11 +242,22 @@ export default function AuthModal({
     setStatusMessage(null);
 
     try {
-      const callbackURL = typeof window !== 'undefined' ? window.location.href : 'https://aveezahvaganza.com';
+      const origin = typeof window !== 'undefined' ? window.location.origin : 'https://aveezahvaganza.com';
+      const currentPath = typeof window !== 'undefined' ? (window.location.pathname + window.location.search) : '/';
+      const callbackURL = `${origin}${currentPath}`;
+
+      // 1. Try Better Auth client
       const res = await authClient.signIn.social({
         provider: 'google',
         callbackURL,
       });
+
+      // Explicitly redirect if Better Auth returned the target Google URL
+      const targetUrl = res?.data?.url || res?.url;
+      if (targetUrl) {
+        window.location.href = targetUrl;
+        return;
+      }
 
       if (res?.error) {
         playSound('metal');
@@ -257,8 +268,53 @@ export default function AuthModal({
             'Google OAuth not configured. Verify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.'
         });
         setLoading(false);
+        return;
       }
+
+      // 2. Direct API fallback if client returned without immediate navigation
+      const directRes = await fetch('/api/auth/sign-in/social', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          provider: 'google',
+          callbackURL,
+        }),
+      });
+
+      if (directRes.ok) {
+        const directData = await directRes.json();
+        if (directData?.url) {
+          window.location.href = directData.url;
+          return;
+        }
+      }
+
+      setLoading(false);
     } catch (err) {
+      console.warn('Better Auth client Google sign-in failed, trying direct endpoint:', err);
+      try {
+        const origin = typeof window !== 'undefined' ? window.location.origin : 'https://aveezahvaganza.com';
+        const callbackURL = `${origin}/`;
+        const directRes = await fetch('/api/auth/sign-in/social', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            provider: 'google',
+            callbackURL,
+          }),
+        });
+
+        if (directRes.ok) {
+          const directData = await directRes.json();
+          if (directData?.url) {
+            window.location.href = directData.url;
+            return;
+          }
+        }
+      } catch (fallbackErr) {
+        console.error('Direct fallback also failed:', fallbackErr);
+      }
+
       playSound('metal');
       setStatusMessage({
         type: 'error',

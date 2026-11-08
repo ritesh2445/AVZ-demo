@@ -2,15 +2,19 @@ import { createAuthClient } from 'better-auth/react';
 
 /**
  * Better Auth client instance for browser and React components.
- * Automatically handles session cookies, Google OAuth redirection,
- * email verification, and password resets.
+ * Uses window.location.origin in the browser to ensure requests match
+ * the active host (aveezahvaganza.com vs www.aveezahvaganza.com vs localhost)
+ * avoiding cross-origin credential issues.
  */
+const resolveClientBaseURL = () => {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin;
+  }
+  return process.env.NEXT_PUBLIC_APP_URL || 'https://aveezahvaganza.com';
+};
+
 export const authClient: any = createAuthClient({
-  baseURL:
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (typeof window !== 'undefined'
-      ? window.location.origin
-      : 'http://localhost:3000'),
+  baseURL: resolveClientBaseURL(),
 });
 
 export const {
