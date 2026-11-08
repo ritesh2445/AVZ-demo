@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useModalScrollLock } from '../utils/modalScrollLock';
-import { X, Heart, ShoppingBag, ArrowRight, Trash2, Share2, Sparkles } from 'lucide-react';
+import { X, Heart, ShoppingBag, ArrowRight, Trash2, Share2, Sparkles, Check, MessageCircle } from 'lucide-react';
 import { formatPrice } from '../data/brandData';
 import { playSound } from '../utils/audio';
 
@@ -14,6 +14,7 @@ export default function WishlistDrawer({
   onOpenSquadModal
 }) {
   useModalScrollLock(Boolean(isOpen));
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -42,12 +43,56 @@ export default function WishlistDrawer({
     return item;
   });
 
-  const handleShareWishlist = () => {
+  const getShareableData = () => {
+    const origin = typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : 'https://aveezahvaganza.com';
+    const itemIds = normalizedItems.map((it) => it.id || it.slug).filter(Boolean);
+    const shareUrl = `${origin}/?wishlist=${encodeURIComponent(itemIds.join(','))}`;
+    const titles = normalizedItems.slice(0, 3).map((it) => `• ${it.title || it.name}`).join('\n');
+    const extra = normalizedItems.length > 3 ? `\n...and ${normalizedItems.length - 3} more pieces` : '';
+    const shareText = `Explore my curated wearable art collection from AVZ Vaganza (${normalizedItems.length} piece${normalizedItems.length > 1 ? 's' : ''}):\n\n${titles}${extra}\n\nUnlock my curated vault:\n${shareUrl}`;
+    return { shareUrl, shareText };
+  };
+
+  const handleCopyLink = async () => {
     playSound('snap');
-    const msg = encodeURIComponent(
-      `Explore my curated wearable art collection from AVZ Vaganza: https://avzvaganza.com`
-    );
-    window.open(`https://wa.me/?text=${msg}`, '_blank');
+    const { shareUrl } = getShareableData();
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      playSound('pip');
+      setTimeout(() => setCopied(false), 2500);
+    } catch (e) {
+      // Fallback prompt if clipboard fails
+      window.prompt('Copy your curated wishlist link:', shareUrl);
+    }
+  };
+
+  const handleShareWishlist = async () => {
+    playSound('snap');
+    const { shareUrl } = getShareableData();
+
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: 'Curated Wearable Art Collection — AVZ Vaganza',
+          text: `Check out my curated wearable art collection from AVZ Vaganza:`,
+          url: shareUrl
+        });
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+      }
+    }
+
+    await handleCopyLink();
+  };
+
+  const handleShareWhatsApp = () => {
+    playSound('snap');
+    const { shareText } = getShareableData();
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
   };
 
   return (
@@ -171,16 +216,41 @@ export default function WishlistDrawer({
           )}
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Bar: Multi-Channel Curated Wishlist Share */}
         {normalizedItems.length > 0 && (
-          <div className="p-4 sm:p-5 border-t border-white/10 bg-black/40">
-            <button
-              onClick={handleShareWishlist}
-              className="w-full py-3 px-4 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-mono tracking-wider uppercase flex items-center justify-center gap-2 transition-all cursor-pointer"
-            >
-              <Share2 className="w-3.5 h-3.5 text-zinc-400" />
-              <span>SHARE CURATED WISHLIST</span>
-            </button>
+          <div className="p-4 sm:p-5 border-t border-white/10 bg-black/40 space-y-2.5 shrink-0">
+            <div className="flex gap-2">
+              <button
+                onClick={handleShareWishlist}
+                className="flex-1 py-3 px-4 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-mono tracking-wider uppercase flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400 font-bold">LINK COPIED TO CLIPBOARD!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5 text-pink" />
+                    <span>SHARE WISHLIST</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleShareWhatsApp}
+                title="Share Curated Wishlist on WhatsApp"
+                aria-label="Share Curated Wishlist on WhatsApp"
+                className="py-3 px-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-mono tracking-wider uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 shrink-0"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">WHATSAPP</span>
+              </button>
+            </div>
+
+            <p className="text-[10px] font-mono text-zinc-500 text-center">
+              Companions opening your link unlock this exact curated vault in 1 click.
+            </p>
           </div>
         )}
       </div>

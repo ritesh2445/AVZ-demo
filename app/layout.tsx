@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { FAQS, PRODUCTS, BRAND_INFO } from '@/src/data/brandData';
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://avzvaganza.com';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://aveezahvaganza.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),

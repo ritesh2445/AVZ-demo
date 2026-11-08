@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { PRODUCTS, MUSEUM_ITEMS } from '@/src/data/brandData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://avzvaganza.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://aveezahvaganza.com';
   const now = new Date();
 
   // Core Landing & Section Routes

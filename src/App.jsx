@@ -124,6 +124,62 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         .catch(() => {});
     }
   }, []);
+
+  // Check for ?wishlist=... or ?stash=... curated shared link
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const sharedParam = params.get('wishlist') || params.get('stash');
+    if (!sharedParam) return;
+
+    const ids = sharedParam.split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+    if (ids.length === 0) return;
+
+    setWishlistItems((prev) => {
+      const prevIds = new Set(prev.map((p) => String(p.id || p.slug || p).toLowerCase()));
+      const toAdd = catalogProducts.filter((p) =>
+        ids.includes(String(p.id).toLowerCase()) ||
+        ids.includes(String(p.slug || '').toLowerCase())
+      );
+
+      // If any of the IDs are not in catalogProducts, add fallback item
+      ids.forEach((id) => {
+        const found = toAdd.some(
+          (p) => String(p.id).toLowerCase() === id || String(p.slug || '').toLowerCase() === id
+        );
+        if (!found && !prevIds.has(id)) {
+          toAdd.push({
+            id,
+            name: 'Archival Vault Piece',
+            title: 'Archival Vault Piece',
+            price: null,
+            images: ['/assets/editorial_hero_portrait.jpg'],
+            image: '/assets/editorial_hero_portrait.jpg',
+            tag: 'ARCHIVE 1-OF-1'
+          });
+        }
+      });
+
+      const combined = [...prev];
+      toAdd.forEach((item) => {
+        const itemId = String(item.id || item.slug || item).toLowerCase();
+        if (!prevIds.has(itemId)) {
+          combined.push(item);
+          prevIds.add(itemId);
+        }
+      });
+
+      try {
+        localStorage.setItem('avz_vault_stash', JSON.stringify(combined));
+      } catch (e) {}
+      return combined;
+    });
+
+    const timer = setTimeout(() => {
+      setWishlistOpen(true);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [catalogProducts]);
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const stored = localStorage.getItem('avz_user');
