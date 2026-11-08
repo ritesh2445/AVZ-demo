@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import LoadingExperience from './components/LoadingExperience';
+import MatrixRainIntro from './components/MatrixRainIntro';
 import Navbar from './components/Navbar';
 import HeroThreeDimension from './components/HeroThreeDimension';
 import ExpandedCards from './components/ExpandedCards';
@@ -47,7 +48,19 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     }
     return false;
   });
+
+  // Phase 2: Matrix rain intro that plays after the existing 3D loader
+  const [showMatrixIntro, setShowMatrixIntro] = useState(false);
+
+  // Called when the existing 3D rings loader finishes — switches to Matrix rain phase
   const handleLoadingComplete = useCallback(() => {
+    setShowMatrixIntro(true);
+    // Keep isLoading = true so the site stays hidden behind the Matrix intro
+  }, []);
+
+  // Called when the Matrix rain pillar sequence finishes — reveals the site
+  const handleMatrixIntroComplete = useCallback(() => {
+    setShowMatrixIntro(false);
     setIsLoading(false);
     try {
       sessionStorage.setItem('avz_intro_seen', 'true');
@@ -649,9 +662,14 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   return (
     <div className="avz-storefront-root italic min-h-screen w-full bg-pitch-black text-silver relative overflow-x-clip selection:bg-pink selection:text-black">
-      {/* Cinematic Pitch-black Loading Experience */}
-      {isLoading && (
+      {/* Phase 1: Existing cinematic 3D rings loading experience */}
+      {isLoading && !showMatrixIntro && (
         <LoadingExperience onComplete={handleLoadingComplete} />
+      )}
+
+      {/* Phase 2: Purple/violet Matrix digital rain — brand pillars, non-skippable */}
+      {showMatrixIntro && (
+        <MatrixRainIntro onComplete={handleMatrixIntroComplete} />
       )}
 
       {/* Global Studio Announcement Bar (Configured via Admin Panel) */}
