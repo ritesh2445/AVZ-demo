@@ -336,7 +336,7 @@ function KeyArchiveCarousel({
 /**
  * MobileCompactProductCard:
  * Compact, smaller product frame specifically tailored for mobile view.
- * Eliminates gigantic bulky cards, offering fast, delightful browsing.
+ * Displays multi-shot options directly on the card frame.
  */
 function MobileCompactProductCard({
   product,
@@ -349,6 +349,16 @@ function MobileCompactProductCard({
   onOpenAuthModal,
   onRequestCustom
 }) {
+  const shots = useMemo(() => {
+    if (Array.isArray(product.images) && product.images.length > 0) {
+      return product.images;
+    }
+    return product.image ? [product.image] : [];
+  }, [product.images, product.image]);
+
+  const [activeShot, setActiveShot] = useState(0);
+  const currentImg = shots[activeShot] || product.image;
+
   return (
     <article
       onClick={() => {
@@ -360,35 +370,63 @@ function MobileCompactProductCard({
       {/* Compact Image Frame */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
         <img
-          src={product.images ? product.images[0] : product.image}
+          key={currentImg}
+          src={currentImg}
           alt={product.name}
           decoding="async"
-          draggable={false} className="w-full h-full object-cover filter brightness-95 pointer-events-none"
+          draggable={false}
+          className="w-full h-full object-cover filter brightness-95 pointer-events-none transition-all duration-300"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 pointer-events-none" />
 
         {/* MobileCompact SOLD OUT Tag */}
         {product.stock === 0 ? (
-          <div className="absolute top-2 left-2 z-10">
+          <div className="absolute top-2 left-2 z-10 pointer-events-none">
             <span className="px-2 py-0.5 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[8px] font-mono tracking-wider uppercase font-bold backdrop-blur-md">
               SOLD OUT
             </span>
           </div>
         ) : product.stock === 1 ? (
-          <div className="absolute top-2 left-2 z-10">
+          <div className="absolute top-2 left-2 z-10 pointer-events-none">
             <span className="px-1.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[8px] font-mono tracking-wider uppercase backdrop-blur-md">
               1 OF 1
             </span>
           </div>
         ) : product.stock <= 3 ? (
-          <div className="absolute top-2 left-2 z-10">
+          <div className="absolute top-2 left-2 z-10 pointer-events-none">
             <span className="px-1.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[8px] font-mono tracking-wider uppercase backdrop-blur-md">
               FEW REMAINING
             </span>
           </div>
         ) : null}
 
-        
+        {/* Multi-shot indicator & dot switchers */}
+        {shots.length > 1 && (
+          <>
+            <div className="absolute top-2 right-9 z-10 pointer-events-none">
+              <span className="px-1.5 py-0.5 rounded-full bg-black/80 border border-white/20 text-white/95 text-[8px] font-mono tracking-tight backdrop-blur-md">
+                {activeShot + 1}/{shots.length}
+              </span>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-2 z-10 flex items-center justify-center gap-1 px-2 pointer-events-auto">
+              {shots.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSound('snap');
+                    setActiveShot(idx);
+                  }}
+                  aria-label={`View shot ${idx + 1}`}
+                  className={`h-1 rounded-full transition-all ${
+                    activeShot === idx ? 'w-3.5 bg-pink shadow-[0_0_6px_rgba(244,63,94,0.8)]' : 'w-1 bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* Wishlist Button */}
         {onToggleWishlist && (
@@ -451,6 +489,221 @@ function MobileCompactProductCard({
             </button>
           )}
         </div>
+      </div>
+    </article>
+  );
+}
+
+/**
+ * DesktopCatalogueCard:
+ * Full featured product card with multi-shot switcher in frame,
+ * dots navigation, and seamless link to product details modal.
+ */
+function DesktopCatalogueCard({
+  product,
+  onSelectProduct,
+  onAddToCart,
+  currency = 'INR',
+  onToggleWishlist,
+  isWish = false,
+  onRequestCustom
+}) {
+  const shots = useMemo(() => {
+    if (Array.isArray(product.images) && product.images.length > 0) {
+      return product.images;
+    }
+    return product.image ? [product.image] : [];
+  }, [product.images, product.image]);
+
+  const [activeShot, setActiveShot] = useState(0);
+
+  const handlePrevShot = (e) => {
+    e.stopPropagation();
+    playSound('snap');
+    setActiveShot((prev) => (prev > 0 ? prev - 1 : shots.length - 1));
+  };
+
+  const handleNextShot = (e) => {
+    e.stopPropagation();
+    playSound('snap');
+    setActiveShot((prev) => (prev < shots.length - 1 ? prev + 1 : 0));
+  };
+
+  const currentImg = shots[activeShot] || product.image;
+
+  return (
+    <article
+      onClick={() => {
+        playSound('metal');
+        onSelectProduct(product);
+      }}
+      className="group relative flex flex-col justify-between bg-[#0d0d12] border border-white/10 hover:border-pink/40 rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl mobile-grunge-card"
+    >
+      {/* Product Image Frame */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
+        <img
+          key={currentImg}
+          src={currentImg}
+          alt={`${product.name} shot ${activeShot + 1}`}
+          decoding="async"
+          draggable={false}
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
+        />
+
+        {/* Dark Vignette Scrim */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-40 transition-opacity pointer-events-none" />
+
+        {/* Desktop Grid SOLD OUT Tag */}
+        {product.stock === 0 ? (
+          <div className="absolute top-3 left-3 z-20 pointer-events-none">
+            <span className="px-2.5 py-1 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[10px] font-mono tracking-widest uppercase font-bold shadow-lg backdrop-blur-md flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+              SOLD OUT
+            </span>
+          </div>
+        ) : product.stock === 1 ? (
+          <div className="absolute top-3 left-3 z-20 pointer-events-none">
+            <span className="px-2.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md">
+              1 OF 1
+            </span>
+          </div>
+        ) : product.stock <= 3 ? (
+          <div className="absolute top-3 left-3 z-20 pointer-events-none">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              FEW REMAINING
+            </span>
+          </div>
+        ) : null}
+
+        {/* Multi-shot switcher buttons & badge */}
+        {shots.length > 1 && (
+          <>
+            <div className="absolute top-3 right-12 z-20 pointer-events-none">
+              <span className="px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-white/95 text-[9px] font-mono tracking-wider backdrop-blur-md shadow-md">
+                {activeShot + 1} / {shots.length} SHOTS
+              </span>
+            </div>
+
+            {/* In-Frame Switchers */}
+            <button
+              onClick={handlePrevShot}
+              aria-label="Previous shot"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-1.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 hover:border-pink text-white/80 hover:text-white transition-all opacity-0 group-hover:opacity-100 backdrop-blur-md shadow-lg active:scale-90"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleNextShot}
+              aria-label="Next shot"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-1.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 hover:border-pink text-white/80 hover:text-white transition-all opacity-0 group-hover:opacity-100 backdrop-blur-md shadow-lg active:scale-90"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+
+            {/* Bottom Dots */}
+            <div className="absolute bottom-2 inset-x-0 z-20 flex items-center justify-center gap-1.5 px-3 pointer-events-auto">
+              {shots.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playSound('snap');
+                    setActiveShot(idx);
+                  }}
+                  aria-label={`View shot ${idx + 1}`}
+                  className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                    activeShot === idx
+                      ? 'w-5 bg-pink shadow-[0_0_8px_rgba(244,63,94,0.8)]'
+                      : 'w-1.5 bg-white/40 hover:bg-white/80'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Wishlist Heart Toggle */}
+        {onToggleWishlist && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              playSound('snap');
+              onToggleWishlist(product);
+            }}
+            aria-label="Wishlist"
+            className="absolute top-3 right-3 z-20 p-2 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer active:scale-125 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
+          >
+            <Heart className={`w-4 h-4 transition-all duration-200 ${isWish ? 'text-pink-400 fill-pink-400 scale-110' : 'text-white/90 hover:scale-110'}`} />
+          </button>
+        )}
+
+        {/* Quick View Hover State */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[1px] pointer-events-none">
+          <span className="px-4 py-1.5 rounded-full bg-black/85 border border-white/25 text-white text-[11px] font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
+            VIEW DETAILS ↗
+          </span>
+        </div>
+      </div>
+
+      {/* Product Card Details */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d0d12] text-left">
+        <div>
+          <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase mb-1.5 tracking-wider">
+            <span className="truncate">{product.category}</span>
+            <span className="text-zinc-400 font-medium ml-1 shrink-0">{product.subCategory}</span>
+          </div>
+
+          <h3 className="font-mono text-sm sm:text-base font-medium text-white group-hover:text-pink-200 transition-colors uppercase leading-snug line-clamp-1 mb-2 text-left">
+            {product.name}
+          </h3>
+        </div>
+
+        {/* Price & Action Button Row */}
+        <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
+          <div className="flex flex-col text-left">
+            <span className="text-sm sm:text-base font-mono font-bold text-white group-hover:text-pink-200 transition-colors text-left">
+              {formatPrice(product.price, currency)}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white flex items-center gap-0.5">
+              <span>DETAILS</span>
+              <ArrowUpRight className="w-3 h-3" />
+            </span>
+          </div>
+        </div>
+
+        {/* Shopify / Flipkart Style Full Action Button */}
+        {product.stock === 0 ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              playSound('snap');
+              onRequestCustom?.(product.name);
+            }}
+            className="w-full mt-3 py-2.5 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-red-300" />
+            <span>REQUEST PIECE</span>
+          </button>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              playSound('snap');
+              onAddToCart?.({
+                ...product,
+                selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
+              });
+            }}
+            className="w-full mt-3 py-2.5 px-3 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
+          >
+            <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>ADD TO CART</span>
+          </button>
+        )}
       </div>
     </article>
   );
@@ -809,135 +1062,16 @@ function ShopCatalogue({
               const isWish = wishlistIds.includes(product.id);
 
               return (
-                <article
+                <DesktopCatalogueCard
                   key={product.id}
-                  onClick={() => {
-                    playSound('metal');
-                    onSelectProduct(product);
-                  }}
-                  className="group relative flex flex-col justify-between bg-[#0d0d12] border border-white/10 hover:border-pink/40 rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl mobile-grunge-card"
-                >
-                  {/* Product Image Frame */}
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/95">
-                    <img
-                      src={product.images ? product.images[0] : product.image}
-                      alt={product.name}
-                      decoding="async"
-                      draggable={false} className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-95 group-hover:brightness-105 pointer-events-none"
-                    />
-
-                    {/* Dark Vignette Scrim */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-75 group-hover:opacity-40 transition-opacity pointer-events-none" />
-
-                    {/* Desktop Grid SOLD OUT Tag */}
-                    {product.stock === 0 ? (
-                      <div className="absolute top-3 left-3 z-20">
-                        <span className="px-2.5 py-1 rounded-full bg-red-950/90 border border-red-500/70 text-red-200 text-[10px] font-mono tracking-widest uppercase font-bold shadow-lg backdrop-blur-md flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                          SOLD OUT
-                        </span>
-                      </div>
-                    ) : product.stock === 1 ? (
-                      <div className="absolute top-3 left-3 z-20">
-                        <span className="px-2.5 py-0.5 rounded-full bg-pink-950/80 border border-pink-500/50 text-pink-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md">
-                          1 OF 1
-                        </span>
-                      </div>
-                    ) : product.stock <= 3 ? (
-                      <div className="absolute top-3 left-3 z-20">
-                        <span className="px-2.5 py-0.5 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-200 text-[9px] font-mono tracking-wider uppercase font-semibold backdrop-blur-md flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                          FEW REMAINING
-                        </span>
-                      </div>
-                    ) : null}
-
-                    
-
-                    {/* Wishlist Heart Toggle */}
-                    {onToggleWishlist && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playSound('snap');
-                          onToggleWishlist(product);
-                        }}
-                        aria-label="Wishlist"
-                        className="absolute top-3 right-3 z-20 p-2 flex items-center justify-center text-white/80 hover:text-pink-400 transition-all cursor-pointer active:scale-125 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
-                      >
-                        <Heart className={`w-4 h-4 transition-all duration-200 ${isWish ? 'text-pink-400 fill-pink-400 scale-110' : 'text-white/90 hover:scale-110'}`} />
-                      </button>
-                    )}
-
-                    {/* Quick View Hover State */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] image-overlay-text">
-                      <span className="px-4 py-2 rounded-full bg-black/85 border border-white/25 text-white text-xs font-mono tracking-widest uppercase shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        VIEW DETAILS ↗
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Product Card Details */}
-                  <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 border-t border-white/10 bg-[#0d0d12] text-left">
-                    <div>
-                      <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-zinc-500 uppercase mb-1.5 tracking-wider">
-                        <span className="truncate">{product.category}</span>
-                        <span className="text-zinc-400 font-medium ml-1 shrink-0">{product.subCategory}</span>
-                      </div>
-
-                      <h3 className="font-mono text-sm sm:text-base font-medium text-white group-hover:text-pink-200 transition-colors uppercase leading-snug line-clamp-1 mb-2 text-left">
-                        {product.name}
-                      </h3>
-
-                    </div>
-
-                    {/* Price & Action Button Row */}
-                    <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
-                      <div className="flex flex-col text-left">
-                        <span className="text-sm sm:text-base font-mono font-bold text-white group-hover:text-pink-200 transition-colors text-left">
-                          {formatPrice(product.price, currency)}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-mono text-zinc-400 group-hover:text-white flex items-center gap-0.5">
-                          <span>DETAILS</span>
-                          <ArrowUpRight className="w-3 h-3" />
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Shopify / Flipkart Style Full Action Button */}
-                    {product.stock === 0 ? (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playSound('snap');
-                          onRequestCustom?.(product.name);
-                        }}
-                        className="w-full mt-3 py-2.5 px-3 rounded-full bg-red-950/70 hover:bg-red-900 border border-red-500/60 text-red-200 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-red-300" />
-                        <span>REQUEST PIECE</span>
-                      </button>
-                    ) : (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          playSound('snap');
-                          onAddToCart?.({
-                            ...product,
-                            selectedSize: product.sizes ? product.sizes[0] : 'Free Size'
-                          });
-                        }}
-                        className="w-full mt-3 py-2.5 px-3 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
-                      >
-                        <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
-                        <span>ADD TO CART</span>
-                      </button>
-                    )}
-                  </div>
-                </article>
+                  product={product}
+                  onSelectProduct={onSelectProduct}
+                  onAddToCart={onAddToCart}
+                  currency={currency}
+                  onToggleWishlist={onToggleWishlist}
+                  isWish={isWish}
+                  onRequestCustom={onRequestCustom}
+                />
               );
             })}
           </div>

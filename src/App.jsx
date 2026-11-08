@@ -787,13 +787,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           />
         </section>
 
-        {/* Section 8.5: Autoplaying Runway & Studio Reels with Vimeo links */}
-        <AutoplayingReels
-          cmsReels={cmsContent?.reels}
-          onSelectProduct={setActiveProduct}
-          onRequestCustom={handleRequestPiece}
-          onScrollToSection={scrollToSection}
-        />
+        {/* Section 8.5: Promo videos section skipped as requested by client team */}
 
         {/* Section 9: Packaging & Logistics */}
         <section id="specs" className="w-full">

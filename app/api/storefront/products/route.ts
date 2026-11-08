@@ -12,6 +12,74 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
     const featured = searchParams.get('featured');
+    const forceSync = searchParams.get('sync') === 'true';
+
+    // Auto-sync collection archive products into database
+    try {
+      const countCheck = await db.execute("SELECT COUNT(*) as count FROM products WHERE id LIKE 'avz-col-%'");
+      const colCount = Number(countCheck.rows[0]?.count || 0);
+
+      if (colCount < fallbackProducts.length || forceSync) {
+        const statements: any[] = [
+          { sql: "DELETE FROM products WHERE id NOT LIKE 'avz-col-%'", args: [] }
+        ];
+
+        for (const p of fallbackProducts) {
+          const sku = p.sku || `AVZ-${p.id}`;
+          const imagesJson = JSON.stringify(p.images && p.images.length > 0 ? p.images : [p.image]);
+          const materialsJson = JSON.stringify(p.materials || ['Upcycled Hardware', 'Reclaimed Metals']);
+          const sizes = Array.isArray(p.sizes) && p.sizes.length > 0 ? p.sizes : ['One Size'];
+          const variantsJson = JSON.stringify(
+            sizes.map(s => ({
+              size: s,
+              stock: p.stock > 1 ? Math.ceil(p.stock / sizes.length) : (p.stock ?? 1),
+              sku: `${sku}-${s.replace(/[^a-zA-Z0-9]/g, '')}`
+            }))
+          );
+
+          statements.push({
+            sql: `INSERT OR REPLACE INTO products (
+              id, slug, title, description, price, compare_at_price, sku,
+              inventory_quantity, category, materials, images, variants,
+              status, is_featured, custom_made, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            args: [
+              p.id,
+              (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+              p.name,
+              p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni in Guwahati.',
+              p.price || 2500,
+              p.compare_at_price || null,
+              sku,
+              p.stock ?? 1,
+              p.category || 'Wearable Art',
+              materialsJson,
+              imagesJson,
+              variantsJson,
+              'published',
+              p.featured ? 1 : 0,
+              p.customMade ? 1 : 0,
+              Date.now(),
+              Date.now()
+            ]
+          });
+        }
+
+        // Execute in chunks of 50 to respect LibSQL batch limits
+        for (let i = 0; i < statements.length; i += 50) {
+          const chunk = statements.slice(i, i + 50);
+          if (typeof (db as any).batch === 'function') {
+            await (db as any).batch(chunk, 'write');
+          } else {
+            for (const stmt of chunk) {
+              await db.execute(stmt);
+            }
+          }
+        }
+      }
+    } catch (syncErr) {
+      console.warn('Collection sync to database note:', syncErr);
+    }
 
     let sql = "SELECT * FROM products WHERE status = 'published'";
     const args: any[] = [];
