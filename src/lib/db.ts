@@ -604,6 +604,30 @@ async function ensureDatabaseInitialized(): Promise<void> {
   try {
     // Fast-path: Check if schema is already provisioned to avoid hitting Cloudflare's subrequest limit
     await db.execute('SELECT 1 FROM storefront_settings, testimonials, user, gallery_artworks LIMIT 1');
+    // Ensure promotions table and animation_theme column exist
+    try {
+      await db.execute('SELECT animation_theme FROM promotions LIMIT 1');
+    } catch {
+      try {
+        await db.execute(`
+          CREATE TABLE IF NOT EXISTS promotions (
+            id TEXT PRIMARY KEY,
+            code TEXT UNIQUE NOT NULL,
+            discount_type TEXT NOT NULL DEFAULT 'percentage',
+            discount_value REAL NOT NULL,
+            min_order_value REAL NOT NULL DEFAULT 0,
+            max_uses INTEGER,
+            current_uses INTEGER NOT NULL DEFAULT 0,
+            start_date INTEGER NOT NULL,
+            expiry_date INTEGER,
+            is_active INTEGER NOT NULL DEFAULT 1,
+            animation_theme TEXT DEFAULT 'sparkles',
+            created_at INTEGER NOT NULL
+          );
+        `);
+        await db.execute(`ALTER TABLE promotions ADD COLUMN animation_theme TEXT DEFAULT 'sparkles';`);
+      } catch {}
+    }
     return;
   } catch {
     await performDatabaseInitialization();

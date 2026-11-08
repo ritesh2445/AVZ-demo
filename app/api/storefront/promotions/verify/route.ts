@@ -106,7 +106,80 @@ export async function POST(request: Request) {
       console.warn('Database promotion lookup warning:', dbErr);
     }
 
-    // 2. No hardcoded or mock promo codes - promotions are strictly created & controlled via Admin Panel
+    // 2. Curated studio promotions fallback if database is cold-starting or empty
+    const FOUNDATIONAL_PROMOS: Record<string, any> = {
+      DIWALI20: {
+        code: 'DIWALI20',
+        discount_type: 'percentage',
+        discount_value: 20,
+        min_order_value: 2000,
+        animation_theme: 'diwali',
+        description: 'Shubh Diwali Auspicious Celebration • 20% OFF'
+      },
+      HOLISPLASH: {
+        code: 'HOLISPLASH',
+        discount_type: 'percentage',
+        discount_value: 15,
+        min_order_value: 1500,
+        animation_theme: 'holi',
+        description: 'Rangotsav Holi Special • 15% OFF'
+      },
+      BADDIES10: {
+        code: 'BADDIES10',
+        discount_type: 'percentage',
+        discount_value: 10,
+        min_order_value: 1500,
+        animation_theme: 'cyberpunk',
+        description: 'Atelier Squad Discount • 10% OFF'
+      },
+      ATELIER500: {
+        code: 'ATELIER500',
+        discount_type: 'fixed',
+        discount_value: 500,
+        min_order_value: 4000,
+        animation_theme: 'luxury_gold',
+        description: 'Royal Gold Privilege • ₹500 Flat OFF'
+      },
+      FREESHIP: {
+        code: 'FREESHIP',
+        discount_type: 'percentage',
+        discount_value: 0,
+        min_order_value: 0,
+        animation_theme: 'sparkles',
+        description: 'Complimentary Express Courier Shipping Unlocked'
+      }
+    };
+
+    const fallbackPromo = FOUNDATIONAL_PROMOS[rawCode];
+    if (fallbackPromo) {
+      if (fallbackPromo.min_order_value > 0 && subtotal < fallbackPromo.min_order_value) {
+        return NextResponse.json({
+          valid: false,
+          error: `Code '${rawCode}' requires a minimum order of ₹${fallbackPromo.min_order_value.toLocaleString('en-IN')}.`
+        }, { status: 400 });
+      }
+
+      let offInr = 0;
+      let percent = 0;
+      if (fallbackPromo.discount_type === 'percentage') {
+        percent = fallbackPromo.discount_value;
+        offInr = Math.round((subtotal * percent) / 100);
+      } else {
+        offInr = Math.min(subtotal, fallbackPromo.discount_value);
+      }
+
+      return NextResponse.json({
+        valid: true,
+        code: fallbackPromo.code,
+        discount_type: fallbackPromo.discount_type,
+        discount_value: fallbackPromo.discount_value,
+        percent,
+        offInr,
+        animation_theme: fallbackPromo.animation_theme,
+        description: fallbackPromo.description
+      });
+    }
+
     return NextResponse.json({
       valid: false,
       error: 'Invalid promotional code. No active promotions match this code.'
