@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useModalScrollLock } from '../utils/modalScrollLock';
 import { X, Search, Package, CheckCircle2, Clock, Truck, ShieldCheck, MessageCircle, Sparkles } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
-export default function OrderTrackingModal({ isOpen, onClose }) {
+export default function OrderTrackingModal({ isOpen, onClose, initialOrderNumber = '' }) {
   useModalScrollLock(Boolean(isOpen));
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialOrderNumber || '');
   const [orderStatus, setOrderStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  if (!isOpen) return null;
-
-  const handleTrack = async (e) => {
-    e.preventDefault();
-    const clean = query.trim();
+  const fetchTrack = async (targetOrderNumber) => {
+    const clean = (targetOrderNumber || query).trim();
     if (!clean) return;
     playSound('warp');
     setLoading(true);
@@ -75,20 +72,35 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
               : 'En route to courier partner terminal.',
             done: isDelivered,
             current: isFulfilled && !isDelivered
-          },
-          {
-            title: 'Delivered to Patron',
-            desc: 'Sealed archival packaging delivered.',
-            done: isDelivered
           }
         ]
       });
-      playSound('snap');
-    } catch (err) {
-      setErrorMsg('Unable to retrieve tracking at this moment. Please check back shortly.');
+      playSound('ping');
+    } catch {
+      setErrorMsg('Network error checking order craft ticket. Please retry.');
+      playSound('glitch');
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      if (initialOrderNumber) {
+        setQuery(initialOrderNumber);
+        fetchTrack(initialOrderNumber);
+      } else {
+        setErrorMsg('');
+        setOrderStatus(null);
+      }
+    }
+  }, [isOpen, initialOrderNumber]);
+
+  if (!isOpen) return null;
+
+  const handleTrack = async (e) => {
+    e.preventDefault();
+    fetchTrack(query);
   };
 
   return (

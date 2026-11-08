@@ -80,6 +80,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   // 6. Live D2C Order Tracking state
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
+  const [trackingOrderNumber, setTrackingOrderNumber] = useState('');
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalTab, setLegalModalTab] = useState('privacy');
   const handleOpenLegalModal = useCallback((tab = 'privacy') => {
@@ -139,6 +140,12 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           }
         })
         .catch(() => {});
+    }
+
+    const trackOrder = params.get('track') || params.get('order');
+    if (trackOrder) {
+      setTrackingOrderNumber(trackOrder);
+      setTrackingModalOpen(true);
     }
   }, []);
 
@@ -879,7 +886,11 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
       <OrderTrackingModal
         isOpen={trackingModalOpen}
-        onClose={() => setTrackingModalOpen(false)}
+        onClose={() => {
+          setTrackingModalOpen(false);
+          setTrackingOrderNumber('');
+        }}
+        initialOrderNumber={trackingOrderNumber}
       />
 
       <SearchModal
@@ -902,6 +913,11 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         user={currentUser}
         onLogin={handleLogin}
         onLogout={handleLogout}
+        onTrackOrder={(orderNum) => {
+          setAuthModalOpen(false);
+          setTrackingOrderNumber(orderNum);
+          setTrackingModalOpen(true);
+        }}
       />
 
       <ImageTunnel

@@ -58,7 +58,8 @@ export default function AuthModal({
   onClose,
   user,
   onLogin,
-  onLogout
+  onLogout,
+  onTrackOrder
 }) {
   const [activeTab, setActiveTab] = useState('signin'); // 'signin' | 'signup' | 'forgot'
   const [email, setEmail] = useState('');
@@ -906,15 +907,19 @@ export default function AuthModal({
 
                           {/* Action Buttons: Cancel Order & Real-Time Tracking */}
                           <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between gap-2">
-                            <a
-                              href={`https://aveezahvaganza.com/?track=${encodeURIComponent(ord.orderNumber)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[10px] font-mono text-zinc-400 hover:text-pink flex items-center gap-1 transition-colors"
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playSound('warp');
+                                if (onTrackOrder) {
+                                  onTrackOrder(ord.orderNumber);
+                                }
+                              }}
+                              className="text-[10px] font-mono text-zinc-300 hover:text-pink flex items-center gap-1.5 transition-colors cursor-pointer py-1 px-2 rounded bg-white/5 hover:bg-white/10 border border-white/10 hover:border-pink/40"
                             >
-                              <FileText className="w-3 h-3" />
-                              Track Ticket
-                            </a>
+                              <FileText className="w-3 h-3 text-pink" />
+                              <span>Track Ticket</span>
+                            </button>
 
                             {ord.canCancel && (
                               <button
