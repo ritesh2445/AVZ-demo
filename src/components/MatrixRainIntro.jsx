@@ -34,6 +34,7 @@ export default function MatrixRainIntro({ onComplete }) {
   const [pillarIdx, setPillarIdx] = useState(0);
   const [textOpacity, setTextOpacity] = useState(0);
   const [glowOpacity, setGlowOpacity] = useState(0);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   // ── Cleanup helper ─────────────────────────────────────────────────────
   const clearAllTimers = useCallback(() => {
@@ -212,12 +213,15 @@ export default function MatrixRainIntro({ onComplete }) {
           if (idx + 1 < BRAND_PILLARS.length) {
             showPillar(idx + 1);
           } else {
-            // All pillars done → outro binary rain → call onComplete
+            // All pillars done → smooth fade out of binary rain into the site
             schedule(() => {
-              if (!finishedRef.current) {
-                finishedRef.current = true;
-                onCompleteRef.current?.();
-              }
+              setIsFadingOut(true);
+              schedule(() => {
+                if (!finishedRef.current) {
+                  finishedRef.current = true;
+                  onCompleteRef.current?.();
+                }
+              }, 450);
             }, OUTRO_DELAY);
           }
         }, FADE_OUT_DURATION + BETWEEN_PILLARS);
@@ -241,7 +245,9 @@ export default function MatrixRainIntro({ onComplete }) {
 
   return (
     <div
-      className="fixed inset-0 z-[99999] bg-black overflow-hidden select-none cursor-default"
+      className={`fixed inset-0 z-[99999] bg-black overflow-hidden select-none cursor-default transition-opacity duration-[450ms] ease-out ${
+        isFadingOut ? 'opacity-0' : 'opacity-100'
+      }`}
       style={{ pointerEvents: 'all' }}
     >
       {/* ── Layered Binary Digital Rain Canvas ────────────────────────── */}

@@ -662,14 +662,15 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
 
   return (
     <div className="avz-storefront-root italic min-h-screen w-full bg-pitch-black text-silver relative overflow-x-clip selection:bg-pink selection:text-black">
-      {/* Phase 1: Existing cinematic 3D rings loading experience */}
-      {isLoading && !showMatrixIntro && (
-        <LoadingExperience onComplete={handleLoadingComplete} />
-      )}
-
-      {/* Phase 2: Purple/violet Matrix digital rain — brand pillars, non-skippable */}
-      {showMatrixIntro && (
-        <MatrixRainIntro onComplete={handleMatrixIntroComplete} />
+      {/* Continuous Noir Intro Experience: Phase 1 (Skippable 3D Rings) -> Phase 2 (Unskippable Binary Pillars) */}
+      {isLoading && (
+        <div className="fixed inset-0 z-[99999] bg-black overflow-hidden pointer-events-auto">
+          {showMatrixIntro ? (
+            <MatrixRainIntro onComplete={handleMatrixIntroComplete} />
+          ) : (
+            <LoadingExperience onComplete={handleLoadingComplete} />
+          )}
+        </div>
       )}
 
       {/* Global Studio Announcement Bar (Configured via Admin Panel) */}
