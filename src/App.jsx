@@ -182,6 +182,15 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   }, []);
 
   // Scroll to section handler (memoized for zero child re-renders)
+  const scrollToSection = useCallback((id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -75; // compensate for sleek fixed navbar
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, []);
+
   // Deep-linking route handler: resolves URLs like /custom, /shop, /vault, /lookbook, /cart, /wishlist, /privacy, etc.
   useEffect(() => {
     if (!initialSlug) return;

@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import React, { useState, useEffect } from 'react';
 import { Lock, ShieldCheck } from 'lucide-react';
+import ErrorBoundary from '@/src/components/ErrorBoundary';
 
 const LegacyApp = dynamic(() => import('@/src/App'), {
   ssr: false,
@@ -154,7 +155,9 @@ export default function ClientStorefront({ initialSlug }: { initialSlug?: string
 
       {/* Main Storefront */}
       <div className="avz-storefront-root italic">
-        <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} initialSlug={initialSlug} />
+        <ErrorBoundary>
+          <LegacyApp storefrontConfig={storefrontSettings} cmsContent={cmsSections} products={storefrontProducts} initialSlug={initialSlug} />
+        </ErrorBoundary>
       </div>
     </>
   );

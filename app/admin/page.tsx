@@ -9,7 +9,8 @@ import {
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
   Copy, Save, Sliders, ShieldAlert, Check, Menu
-, Palette, Upload } from 'lucide-react';
+  , Palette, Upload
+} from 'lucide-react';
 import MuseumGalleryAdminTab from '@/src/components/admin/MuseumGalleryAdminTab';
 
 export default function AdminDashboardPage() {
@@ -305,7 +306,7 @@ export default function AdminDashboardPage() {
           setStoreProfile(data.settings.store_profile.data);
         }
       }
-    } catch {}
+    } catch { }
   };
 
   // 3. Fetch module-specific data
@@ -739,11 +740,10 @@ export default function AdminDashboardPage() {
       {/* Toast Notification */}
       {notification && (
         <div
-          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border text-xs font-mono transition-all animate-in slide-in-from-bottom duration-300 ${
-            notification.type === 'success'
-              ? 'bg-[#180F1F] border-[#BE185D] text-white'
-              : 'bg-red-950 border-red-700 text-red-200'
-          }`}
+          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border text-xs font-mono transition-all animate-in slide-in-from-bottom duration-300 ${notification.type === 'success'
+            ? 'bg-[#180F1F] border-[#BE185D] text-white'
+            : 'bg-red-950 border-red-700 text-red-200'
+            }`}
         >
           {notification.type === 'success' ? <CheckCircle className="w-4 h-4 text-[#F4C2C2]" /> : <AlertTriangle className="w-4 h-4 text-red-400" />}
           <span>{notification.message}</span>
@@ -781,11 +781,10 @@ export default function AdminDashboardPage() {
               <span className="text-neutral-400 font-mono text-[11px]">Maintenance:</span>
               <button
                 onClick={handleToggleMaintenance}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider cursor-pointer uppercase transition-all ${
-                  storefrontSettings.maintenance_mode.enabled
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse'
-                    : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                }`}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider cursor-pointer uppercase transition-all ${storefrontSettings.maintenance_mode.enabled
+                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse'
+                  : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                  }`}
               >
                 {storefrontSettings.maintenance_mode.enabled ? 'ACTIVE (PUBLIC GATED)' : 'DISABLED (PUBLIC LIVE)'}
               </button>
@@ -796,11 +795,10 @@ export default function AdminDashboardPage() {
               <span className="text-neutral-400 font-mono text-[11px]">Purchases:</span>
               <button
                 onClick={handleTogglePurchases}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider cursor-pointer uppercase transition-all ${
-                  storefrontSettings.purchases_enabled.enabled
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                    : 'bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse'
-                }`}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider cursor-pointer uppercase transition-all ${storefrontSettings.purchases_enabled.enabled
+                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                  : 'bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse'
+                  }`}
               >
                 {storefrontSettings.purchases_enabled.enabled ? 'ACCEPTING ORDERS' : 'CHECKOUT FROZEN'}
               </button>
@@ -849,9 +847,8 @@ export default function AdminDashboardPage() {
 
         {/* SIDEBAR: 18 Modules (Responsive drawer on mobile, static on desktop) */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0A070F] border-r border-[#231A2A] flex flex-col shrink-0 overflow-y-auto transition-transform duration-300 md:static md:w-64 md:translate-x-0 ${
-            mobileNavOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
-          }`}
+          className={`fixed inset-y-0 left-0 z-50 w-72 bg-[#0A070F] border-r border-[#231A2A] flex flex-col shrink-0 overflow-y-auto transition-transform duration-300 md:static md:w-64 md:translate-x-0 ${mobileNavOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full md:translate-x-0'
+            }`}
         >
           {/* Mobile Sidebar Close Header */}
           <div className="flex items-center justify-between p-3 border-b border-[#231A2A] md:hidden">
@@ -879,13 +876,12 @@ export default function AdminDashboardPage() {
                       setActiveTab(item.id);
                       setMobileNavOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-gradient-to-r from-[#BE185D]/20 to-[#301934]/40 text-white border border-[#BE185D]/50 shadow-sm'
-                        : item.highlight
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${isActive
+                      ? 'bg-gradient-to-r from-[#BE185D]/20 to-[#301934]/40 text-white border border-[#BE185D]/50 shadow-sm'
+                      : item.highlight
                         ? 'text-[#F4C2C2] hover:bg-[#1B1324] hover:text-white'
                         : 'text-neutral-400 hover:bg-[#140F1C] hover:text-neutral-200'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <Icon className={`w-4 h-4 ${isActive ? 'text-[#F4C2C2]' : item.highlight ? 'text-[#F4C2C2]' : 'text-neutral-500'}`} />
@@ -1004,17 +1000,15 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="py-3.5 px-3 font-mono text-white">₹{ord.grand_total}</td>
                           <td className="py-3.5 px-3">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400'
+                              }`}>
                               {ord.payment_status}
                             </span>
                           </td>
                           <td className="py-3.5 px-3">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
                               ord.fulfillment_status === 'shipped' ? 'bg-purple-500/10 text-purple-300' : 'bg-amber-500/10 text-amber-400'
-                            }`}>
+                              }`}>
                               {ord.fulfillment_status}
                             </span>
                           </td>
@@ -1120,17 +1114,15 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="py-4 px-4 font-mono text-white font-bold">₹{ord.grand_total}</td>
                           <td className="py-4 px-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400'
-                            }`}>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400'
+                              }`}>
                               {ord.payment_status}
                             </span>
                           </td>
                           <td className="py-4 px-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
                               ord.fulfillment_status === 'shipped' ? 'bg-purple-500/10 text-purple-300' : 'bg-amber-500/10 text-amber-400'
-                            }`}>
+                              }`}>
                               {ord.fulfillment_status}
                             </span>
                           </td>
@@ -1266,18 +1258,16 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="py-4 px-4 font-mono font-bold text-white">₹{p.price}</td>
                           <td className="py-4 px-4 font-mono">
-                            <span className={`px-2 py-0.5 rounded text-[10px] ${
-                              p.inventory_quantity === 0 ? 'bg-red-500/20 text-red-300' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] ${p.inventory_quantity === 0 ? 'bg-red-500/20 text-red-300' :
                               p.inventory_quantity <= 1 ? 'bg-amber-500/20 text-amber-300' : 'bg-neutral-800 text-neutral-300'
-                            }`}>
+                              }`}>
                               {p.inventory_quantity} in stock
                             </span>
                           </td>
                           <td className="py-4 px-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              p.status === 'published' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${p.status === 'published' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' :
                               p.status === 'draft' ? 'bg-neutral-800 text-neutral-400' : 'bg-red-950/40 text-red-400'
-                            }`}>
+                              }`}>
                               {p.status}
                             </span>
                           </td>
@@ -1350,10 +1340,9 @@ export default function AdminDashboardPage() {
                             </td>
                             <td className="py-3 px-3 font-mono text-neutral-400">{item.sku}</td>
                             <td className="py-3 px-3 font-mono">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                item.inventory_quantity === 0 ? 'bg-red-500/20 text-red-300' :
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${item.inventory_quantity === 0 ? 'bg-red-500/20 text-red-300' :
                                 item.isLowStock ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/10 text-emerald-400'
-                              }`}>
+                                }`}>
                                 {item.inventory_quantity} units
                               </span>
                             </td>
@@ -1436,9 +1425,8 @@ export default function AdminDashboardPage() {
                         <span className="px-2 py-0.5 rounded text-[10px] bg-[#301934] text-[#F4C2C2] font-mono uppercase">
                           {sec.section_key}
                         </span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                          sec.status === 'published' ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'
-                        }`}>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${sec.status === 'published' ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'
+                          }`}>
                           {sec.status} (v{sec.version})
                         </span>
                       </div>
@@ -1866,11 +1854,10 @@ export default function AdminDashboardPage() {
                               {ord.razorpay_payment_id || ord.razorpay_order_id || 'N/A'}
                             </td>
                             <td className="py-3 px-3">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                                ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
                                 ord.payment_status === 'refunded' ? 'bg-purple-500/10 text-purple-300 border border-purple-500/20' :
-                                'bg-amber-500/10 text-amber-400'
-                              }`}>
+                                  'bg-amber-500/10 text-amber-400'
+                                }`}>
                                 {ord.payment_status}
                               </span>
                             </td>
@@ -2128,11 +2115,10 @@ export default function AdminDashboardPage() {
                                 {members.length} {members.length === 1 ? 'member' : 'members'} · {totalPieces} {totalPieces === 1 ? 'piece' : 'pieces'}
                               </td>
                               <td className="py-3 px-3">
-                                <span className={`px-2 py-0.5 rounded text-[10px] uppercase ${
-                                  gc.status === 'open' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                <span className={`px-2 py-0.5 rounded text-[10px] uppercase ${gc.status === 'open' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
                                   gc.status === 'completed' ? 'bg-purple-500/10 text-purple-300 border border-purple-500/20' :
-                                  'bg-amber-500/10 text-amber-400'
-                                }`}>
+                                    'bg-amber-500/10 text-amber-400'
+                                  }`}>
                                   {gc.status}
                                 </span>
                               </td>
@@ -2192,11 +2178,10 @@ export default function AdminDashboardPage() {
                           <td className="py-3.5 px-3 font-bold text-white">{u.name}</td>
                           <td className="py-3.5 px-3 font-mono text-neutral-300">{u.email}</td>
                           <td className="py-3.5 px-3">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
-                              u.role === 'owner' ? 'bg-[#BE185D]/20 text-[#F4C2C2] border border-[#BE185D]/40 font-bold' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${u.role === 'owner' ? 'bg-[#BE185D]/20 text-[#F4C2C2] border border-[#BE185D]/40 font-bold' :
                               u.role === 'store_manager' ? 'bg-blue-500/10 text-blue-300 border border-blue-500/30' :
-                              'bg-neutral-800 text-neutral-300'
-                            }`}>
+                                'bg-neutral-800 text-neutral-300'
+                              }`}>
                               {u.role.replace('_', ' ')}
                             </span>
                           </td>
@@ -2494,9 +2479,8 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="text-right">
                         <span className="text-purple-300 font-bold block">₹{ref.amount}</span>
-                        <span className={`text-[10px] uppercase font-bold ${
-                          ref.status === 'processed' ? 'text-emerald-400' : ref.status === 'pending' ? 'text-amber-400' : 'text-red-400'
-                        }`}>
+                        <span className={`text-[10px] uppercase font-bold ${ref.status === 'processed' ? 'text-emerald-400' : ref.status === 'pending' ? 'text-amber-400' : 'text-red-400'
+                          }`}>
                           {ref.status} {ref.restock ? '• Restocked' : ''}
                         </span>
                       </div>
@@ -2568,10 +2552,9 @@ export default function AdminDashboardPage() {
             <div className="p-4 rounded-xl bg-[#1A1224] border border-[#2D2038] flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono text-neutral-400 uppercase block">Payment & Settlement</span>
-                <span className={`font-mono text-xs font-bold uppercase ${
-                  selectedOrder.payment_status === 'paid' ? 'text-emerald-400' :
+                <span className={`font-mono text-xs font-bold uppercase ${selectedOrder.payment_status === 'paid' ? 'text-emerald-400' :
                   selectedOrder.payment_status === 'refunded' ? 'text-purple-400' : 'text-amber-400'
-                }`}>
+                  }`}>
                   {selectedOrder.payment_status} ({selectedOrder.payment_method || 'Razorpay'})
                 </span>
                 {selectedOrder.razorpay_payment_id && (
