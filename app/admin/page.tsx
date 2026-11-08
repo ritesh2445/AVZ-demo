@@ -58,6 +58,8 @@ export default function AdminDashboardPage() {
   const [activityLogs, setActivityLogs] = useState<any[]>([]);
   const [adminUsersList, setAdminUsersList] = useState<any[]>([]);
   const [collections, setCollections] = useState<any[]>([]);
+  const [mediaSearch, setMediaSearch] = useState<string>('');
+  const [mediaFilterCategory, setMediaFilterCategory] = useState<string>('all');
 
   // Modals & form states
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -2225,36 +2227,123 @@ export default function AdminDashboardPage() {
                 </label>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {mediaAssets.map((asset) => (
-                  <div key={asset.id} className="bg-[#100C17] border border-[#231A2A] rounded-xl overflow-hidden group">
-                    <div className="aspect-square bg-neutral-900 relative">
-                      {asset.media_type === 'video' ? (
-                        <div className="w-full h-full flex items-center justify-center bg-[#1A1224] text-[#F4C2C2]">
-                          <span className="font-mono text-xs">Video Asset (MP4)</span>
-                        </div>
-                      ) : (
-                        <img src={asset.url} alt={asset.alt_text} className="w-full h-full object-cover" />
-                      )}
+              {/* Media Filter Tabs & Search Bar */}
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 bg-[#100C17] border border-[#231A2A] p-3 rounded-xl">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {[
+                    { id: 'all', label: `All (${mediaAssets.length})` },
+                    { id: 'collection', label: `Collection (${mediaAssets.filter(a => a.category === 'collection' || a.tags?.includes('collection') || a.url?.includes('/collection/')).length})` },
+                    { id: 'featured', label: `Featured (${mediaAssets.filter(a => a.category === 'featured' || a.tags?.includes('featured') || a.url?.includes('/featured/')).length})` },
+                    { id: 'lookbook', label: `Lookbook (${mediaAssets.filter(a => a.category === 'lookbook' || a.tags?.includes('lookbook') || a.url?.includes('/lookbook/')).length})` },
+                    { id: 'museum', label: `Museum (${mediaAssets.filter(a => a.category === 'museum' || a.tags?.includes('museum') || a.url?.includes('/museum/')).length})` },
+                    { id: 'editorial', label: `Brand / Editorial (${mediaAssets.filter(a => a.category === 'editorial' || a.tags?.includes('brand') || (!a.url?.includes('/collection/') && !a.url?.includes('/featured/') && !a.url?.includes('/lookbook/') && !a.url?.includes('/museum/'))).length})` }
+                  ].map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setMediaFilterCategory(tab.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                        mediaFilterCategory === tab.id
+                          ? 'bg-pink text-black font-bold shadow-md'
+                          : 'bg-[#1A1224] text-neutral-400 hover:text-white hover:bg-[#261B33]'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative min-w-[240px]">
+                  <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={mediaSearch}
+                    onChange={(e) => setMediaSearch(e.target.value)}
+                    placeholder="Search pictures by title or tag..."
+                    className="w-full bg-[#1A1224] border border-[#2D1F38] text-white text-xs pl-8 pr-7 py-2 rounded-lg font-mono focus:outline-none focus:border-pink"
+                  />
+                  {mediaSearch && (
+                    <button
+                      onClick={() => setMediaSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {(() => {
+                const filtered = mediaAssets.filter((asset) => {
+                  const matchesCat =
+                    mediaFilterCategory === 'all' ||
+                    asset.category === mediaFilterCategory ||
+                    (Array.isArray(asset.tags) && asset.tags.includes(mediaFilterCategory)) ||
+                    (asset.url && asset.url.includes(`/${mediaFilterCategory}/`)) ||
+                    (mediaFilterCategory === 'editorial' && !asset.url?.includes('/collection/') && !asset.url?.includes('/featured/') && !asset.url?.includes('/lookbook/') && !asset.url?.includes('/museum/'));
+
+                  const q = mediaSearch.toLowerCase().trim();
+                  const matchesSearch =
+                    !q ||
+                    (asset.title && asset.title.toLowerCase().includes(q)) ||
+                    (asset.url && asset.url.toLowerCase().includes(q)) ||
+                    (Array.isArray(asset.tags) && asset.tags.some((t: string) => t.toLowerCase().includes(q)));
+
+                  return matchesCat && matchesSearch;
+                });
+
+                return (
+                  <div>
+                    <div className="text-[11px] font-mono text-neutral-400 mb-3 flex items-center justify-between">
+                      <span>Showing {filtered.length} of {mediaAssets.length} prepopulated pictures</span>
                     </div>
-                    <div className="p-3">
-                      <span className="text-xs font-bold text-white block truncate">{asset.title}</span>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-[10px] text-neutral-500 font-mono uppercase">{asset.media_type}</span>
-                        <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(asset.url);
-                            showNotification('Asset URL copied to clipboard');
-                          }}
-                          className="text-[10px] text-[#F4C2C2] hover:underline flex items-center gap-1 font-mono cursor-pointer"
-                        >
-                          <Copy className="w-3 h-3" /> Copy URL
-                        </button>
-                      </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {filtered.map((asset) => (
+                        <div key={asset.id} className="bg-[#100C17] border border-[#231A2A] rounded-xl overflow-hidden group hover:border-pink/40 transition-all">
+                          <div className="aspect-square bg-neutral-900 relative overflow-hidden">
+                            {asset.media_type === 'video' ? (
+                              <div className="w-full h-full flex items-center justify-center bg-[#1A1224] text-[#F4C2C2]">
+                                <span className="font-mono text-xs">Video Asset (MP4)</span>
+                              </div>
+                            ) : (
+                              <img
+                                src={asset.url}
+                                alt={asset.alt_text}
+                                loading="lazy"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                            )}
+                            <div className="absolute top-2 left-2 pointer-events-none">
+                              <span className="px-1.5 py-0.5 rounded bg-black/80 border border-white/10 text-[9px] font-mono text-white uppercase backdrop-blur-sm">
+                                {asset.category || (asset.tags && asset.tags[0]) || 'media'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <span className="text-xs font-bold text-white block truncate" title={asset.title}>
+                              {asset.title}
+                            </span>
+                            <div className="flex items-center justify-between mt-2 pt-2 border-t border-neutral-800/60">
+                              <span className="text-[10px] text-neutral-500 font-mono uppercase">
+                                {asset.media_type}
+                              </span>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(asset.url);
+                                  showNotification('Asset URL copied to clipboard');
+                                }}
+                                className="text-[10px] text-[#F4C2C2] hover:text-white hover:underline flex items-center gap-1 font-mono cursor-pointer"
+                              >
+                                <Copy className="w-3 h-3" /> Copy URL
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </div>
           )}
 

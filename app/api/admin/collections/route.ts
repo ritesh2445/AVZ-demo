@@ -14,60 +14,103 @@ export async function GET() {
     const db = getDb();
     let res = await db.execute('SELECT * FROM collections ORDER BY created_at DESC');
 
-    // Auto pre-populate initial archive collections if empty
-    if (res.rows.length === 0) {
+    // Auto pre-populate initial archive collections if fewer than 11
+    if (res.rows.length < 11) {
       const seedCollections = [
         {
-          id: 'col_cyberpunk_hardware',
-          title: 'Cyberpunk Metal & Hardware Archive',
-          slug: 'cyberpunk-hardware-archive',
-          description: 'Cold-forged rebellion, hand-set spikes, and upcycled industrial hardware tailored into sculptural wearable armor.',
-          image: '/assets/product_spike_bra.jpg',
-          product_ids: ['avz-001', 'avz-002', 'avz-004', 'avz-005', 'avz-012', 'avz-021'],
-          status: 'published'
+          id: 'col_armcuffs',
+          title: 'Arm Cuffs & Bicep Armor',
+          slug: 'arm-cuffs',
+          description: 'Sculptural metallic wrist and bicep armor crafted with upcycled non-traditional hardware and steel wire.',
+          image: '/assets/collection/armcuffs/armcuffs_01.webp',
+          category: 'Arm cuffs'
         },
         {
-          id: 'col_atelier_coords',
-          title: 'Atelier Co-ord & Runway Sets',
-          slug: 'atelier-coord-sets',
-          description: 'Hand-crafted two-piece statement silhouettes designed for high-impact presence and editorial distinction.',
-          image: '/assets/product_coord_set.jpg',
-          product_ids: ['avz-003', 'avz-015', 'avz-016', 'avz-020', 'avz-024'],
-          status: 'published'
+          id: 'col_bags',
+          title: 'Archival Bags & Carry Relics',
+          slug: 'bags',
+          description: 'Hand-constructed upcycled denim and utilitarian cyber carry pieces.',
+          image: '/assets/collection/bags/bags_01.webp',
+          category: 'Bags'
         },
         {
-          id: 'col_sculptural_tops',
-          title: 'Sculptural Tops & Statement Bodices',
-          slug: 'sculptural-tops-bodices',
-          description: 'Avant-garde tops featuring deconstructed silhouettes, raw hems, and architectural drapery.',
-          image: '/assets/product_white_crochet.jpg',
-          product_ids: ['avz-008', 'avz-009', 'avz-017', 'avz-018', 'avz-019', 'avz-023'],
-          status: 'published'
+          id: 'col_belts',
+          title: 'Hardware Belts & Waist Harnesses',
+          slug: 'belts',
+          description: 'Industrial buckle corsetry and distressed waist hardware relics.',
+          image: '/assets/collection/belts/belts_01.webp',
+          category: 'Belts'
         },
         {
-          id: 'col_armour_headgear',
-          title: 'Armour Accents & Headgear Archive',
-          slug: 'armour-accents-headgear',
-          description: 'Ceremonial arm cuffs, heavy chainmail, and artisanal crown pieces embodying dark botanical mysticism.',
-          image: '/assets/editorial_hero_portrait.jpg',
-          product_ids: ['avz-004', 'avz-005', 'avz-012', 'avz-013', 'avz-021'],
-          status: 'published'
+          id: 'col_body_chainmail',
+          title: 'Body Chainmail & Metal Cuirass',
+          slug: 'body-chainmail',
+          description: 'Hand-woven stainless steel and upcycled ringmail draped armor pieces.',
+          image: '/assets/collection/body_chainmail/body_chainmail_01.webp',
+          category: 'Body chainmail'
         },
         {
-          id: 'col_dhrisni_signature',
-          title: 'DHRISNI 1-of-1 Signature Vault',
-          slug: 'dhrisni-signature-vault',
-          description: 'Exclusive limited studio pieces crafted directly by Dhrisni in the Guwahati atelier. Non-repeatable wearable artwork.',
-          image: '/assets/product_beaded_bralette.jpg',
-          product_ids: ['avz-001', 'avz-006', 'avz-010', 'avz-011', 'avz-014', 'avz-022'],
-          status: 'published'
+          id: 'col_bralettes',
+          title: 'Spike Bralettes & Metal Bodices',
+          slug: 'bralettes',
+          description: 'Cold-forged spike brassieres, beaded hardware, and mechanical armor cups.',
+          image: '/assets/collection/bralettes/bralettes_01.webp',
+          category: 'Bralettes'
+        },
+        {
+          id: 'col_co_ords',
+          title: 'Two-Piece Co-ord Sets',
+          slug: 'co-ords',
+          description: 'High-impact runway matching statement sets sculpted for editorial distinction.',
+          image: '/assets/collection/co_ords/co_ords_01.webp',
+          category: 'Co-ord sets'
+        },
+        {
+          id: 'col_corsets',
+          title: 'Sculptural Corsetry & Stays',
+          slug: 'corsets',
+          description: 'Archival boned corsets, upcycled shoe bodices, and steel-riveted armor stays.',
+          image: '/assets/collection/corsets/corsets_01.webp',
+          category: 'Corsets'
+        },
+        {
+          id: 'col_headgears',
+          title: 'Cyber Headgears & Balaclavas',
+          slug: 'headgears',
+          description: 'Hand-knit spiked crowns, upcycled denim headwear, and ceremonial halos.',
+          image: '/assets/collection/headgears/headgears_01.webp',
+          category: 'Headgear'
+        },
+        {
+          id: 'col_jackets',
+          title: 'Deconstructed Jackets & Outerwear',
+          slug: 'jackets',
+          description: 'Heavy reworked denim armor jackets with jhumka accents and metal rivets.',
+          image: '/assets/collection/jackets/jackets_01.webp',
+          category: 'Jackets'
+        },
+        {
+          id: 'col_skirts',
+          title: 'Hardware Cargo Skirts',
+          slug: 'skirts',
+          description: 'Acid-wash distressed utilitarian cargo mini and midi skirts.',
+          image: '/assets/collection/skirts/skirts_01.webp',
+          category: 'Skirts'
+        },
+        {
+          id: 'col_tops',
+          title: 'Avant-Garde Architectural Tops',
+          slug: 'tops',
+          description: 'Deconstructed blouses, cross tape silhouettes, crochet drapery, and tube tops.',
+          image: '/assets/collection/tops/tops_01.webp',
+          category: 'Tops'
         }
       ];
 
       for (let i = 0; i < seedCollections.length; i++) {
         const col = seedCollections[i];
         await db.execute({
-          sql: `INSERT INTO collections (id, title, slug, description, image, product_ids, status, created_at)
+          sql: `INSERT OR REPLACE INTO collections (id, title, slug, description, image, product_ids, status, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           args: [
             col.id,
@@ -75,8 +118,8 @@ export async function GET() {
             col.slug,
             col.description,
             col.image,
-            JSON.stringify(col.product_ids),
-            col.status,
+            JSON.stringify([]),
+            'published',
             Date.now() - (seedCollections.length - i) * 86400000
           ]
         });

@@ -1,6 +1,7 @@
 import { createClient as createWebClient } from '@libsql/client/web';
 import { createRequire } from 'module';
 import { PRODUCTS, BRAND_INFO } from '../data/brandData';
+import { PREPOPULATED_MEDIA_ASSETS } from '../data/prepopulatedMediaAssets';
 
 export type Client = {
   execute: (stmt: any) => Promise<any>;
@@ -92,6 +93,19 @@ function createInMemoryClient(): Client {
     };
   });
   store.set('products', productRows);
+
+  // Pre-seed media_assets with all 379 pictures
+  const mediaRows = PREPOPULATED_MEDIA_ASSETS.map((m, idx) => ({
+    id: m.id,
+    title: m.title,
+    url: m.url,
+    media_type: m.media_type || 'image',
+    alt_text: m.alt_text || m.title,
+    tags: JSON.stringify(m.tags || []),
+    size_bytes: 0,
+    created_at: Date.now() - (idx * 60000)
+  }));
+  store.set('media_assets', mediaRows);
   // Pre-seed gallery_artworks
   store.set('gallery_artworks', [
     {

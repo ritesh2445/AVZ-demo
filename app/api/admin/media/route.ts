@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
 import { isValidMediaUrl, sanitizeText } from '@/src/lib/security';
+import { PREPOPULATED_MEDIA_ASSETS } from '@/src/data/prepopulatedMediaAssets';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -13,26 +14,62 @@ export async function GET() {
   try {
     await initializeDatabase();
     const db = getDb();
-    const res = await db.execute('SELECT * FROM media_assets ORDER BY created_at DESC');
 
-    const defaultAssets = [
-      { id: 'm1', title: 'Editorial Hero Portrait', url: '/assets/editorial_hero_portrait.jpg', media_type: 'image', alt_text: 'Dhrisni high fashion portrait', tags: ['editorial', 'hero'] },
-      { id: 'm2', title: 'Hero Video Reel (Desktop)', url: '/assets/hero_reel_desktop.mp4', media_type: 'video', alt_text: 'Kinetic runway fashion reel', tags: ['video', 'hero'] },
-      { id: 'm3', title: 'Official AVZ Brand Emblem', url: '/assets/avz_logo_official.png', media_type: 'image', alt_text: 'AVZ Vaganza official logo', tags: ['branding', 'logo'] },
-      { id: 'm4', title: 'Cyberpunk Spike Bodice', url: '/assets/product_spike_bra.jpg', media_type: 'image', alt_text: 'Handcrafted spike bodice', tags: ['product', 'top'] },
-      { id: 'm5', title: 'Motherboard Tech Relic Cuff', url: '/assets/prod_motherboard_cuff.jpg', media_type: 'image', alt_text: 'Upcycled motherboard cuff', tags: ['hardware', 'accessory'] },
-      { id: 'm6', title: 'Reworked Denim Armor Jacket', url: '/assets/product_reworked_jacket.jpg', media_type: 'image', alt_text: 'Heavy art archival jacket', tags: ['jacket', 'outerwear'] },
-      { id: 'm7', title: 'Cyber Cat Mascot Companion', url: '/assets/cat_companion.png', media_type: 'image', alt_text: 'Interactive anime cat mascot', tags: ['mascot', 'ui'] }
-    ];
+    // Auto-sync prepopulated assets into media_assets table in DB if missing
+    try {
+      const countRes = await db.execute('SELECT COUNT(*) as count FROM media_assets');
+      const count = Number(countRes.rows[0]?.count || 0);
+
+      if (count < PREPOPULATED_MEDIA_ASSETS.length) {
+        const existingUrlsRes = await db.execute('SELECT url FROM media_assets');
+        const existingUrls = new Set(existingUrlsRes.rows.map(r => String(r.url)));
+        const missing = PREPOPULATED_MEDIA_ASSETS.filter(a => !existingUrls.has(a.url));
+
+        for (let i = 0; i < missing.length; i += 50) {
+          const chunk = missing.slice(i, i + 50);
+          const statements = chunk.map(asset => ({
+            sql: `INSERT OR REPLACE INTO media_assets (id, title, url, media_type, alt_text, tags, created_at)
+                  VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            args: [
+              asset.id,
+              asset.title,
+              asset.url,
+              asset.media_type || 'image',
+              asset.alt_text || asset.title,
+              JSON.stringify(asset.tags || []),
+              Date.now() - (400 - i) * 60000
+            ]
+          }));
+
+          if (typeof (db as any).batch === 'function') {
+            await (db as any).batch(statements, 'write');
+          } else {
+            for (const s of statements) {
+              await db.execute(s);
+            }
+          }
+        }
+      }
+    } catch (syncErr) {
+      console.warn('Media assets auto-sync note:', syncErr);
+    }
+
+    const res = await db.execute('SELECT * FROM media_assets ORDER BY created_at DESC');
 
     const dbAssets = res.rows.map(r => ({
       ...r,
       tags: (() => { try { return JSON.parse(String(r.tags)); } catch { return []; } })()
     }));
 
+    // In case DB has fewer items than prepopulated, merge to guarantee complete 379 assets
+    const dbUrlSet = new Set(dbAssets.map(a => a.url));
+    const fallbackAssets = PREPOPULATED_MEDIA_ASSETS.filter(a => !dbUrlSet.has(a.url));
+    const mergedAssets = [...dbAssets, ...fallbackAssets];
+
     return NextResponse.json({
       success: true,
-      assets: [...dbAssets, ...defaultAssets],
+      assets: mergedAssets,
+      count: mergedAssets.length,
       r2Status: {
         configured: true,
         bucket: 'avz-media',
