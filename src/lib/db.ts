@@ -632,6 +632,7 @@ async function performDatabaseInitialization(): Promise<void> {
       start_date INTEGER NOT NULL,
       expiry_date INTEGER,
       is_active INTEGER NOT NULL DEFAULT 1,
+      animation_theme TEXT DEFAULT 'sparkles',
       created_at INTEGER NOT NULL
     );
   `);
@@ -906,6 +907,9 @@ async function performDatabaseInitialization(): Promise<void> {
   } catch {}
   try {
     await db.execute(`ALTER TABLE admin_users ADD COLUMN otp_window_start INTEGER;`);
+  } catch {}
+  try {
+    await db.execute(`ALTER TABLE promotions ADD COLUMN animation_theme TEXT DEFAULT 'sparkles';`);
   } catch {}
 
   await db.execute(`CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);`);
@@ -1196,14 +1200,24 @@ async function performDatabaseInitialization(): Promise<void> {
   const existingPromos = await db.execute('SELECT COUNT(*) as count FROM promotions');
   if (Number(existingPromos.rows[0]?.count || 0) === 0) {
     await db.execute({
-      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`,
-      args: ['promo_1', 'BADDIES10', 'percentage', 10, 1500, 500, 12, Date.now() - 864000000, Date.now()]
+      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, animation_theme, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)`,
+      args: ['promo_1', 'BADDIES10', 'percentage', 10, 1500, 500, 12, Date.now() - 864000000, 'cyberpunk', Date.now()]
     });
     await db.execute({
-      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`,
-      args: ['promo_2', 'ATELIER500', 'fixed', 500, 4000, 100, 5, Date.now() - 864000000, Date.now()]
+      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, animation_theme, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)`,
+      args: ['promo_2', 'ATELIER500', 'fixed', 500, 4000, 100, 5, Date.now() - 864000000, 'luxury_gold', Date.now()]
+    });
+    await db.execute({
+      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, animation_theme, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)`,
+      args: ['promo_3', 'DIWALI20', 'percentage', 20, 2500, 500, 0, Date.now() - 864000000, 'diwali', Date.now()]
+    });
+    await db.execute({
+      sql: `INSERT INTO promotions (id, code, discount_type, discount_value, min_order_value, max_uses, current_uses, start_date, is_active, animation_theme, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)`,
+      args: ['promo_4', 'HOLISPLASH', 'percentage', 15, 2000, 500, 0, Date.now() - 864000000, 'holi', Date.now()]
     });
   }
 

@@ -590,6 +590,7 @@ export default function AdminDashboardPage() {
     const discount_value = Number((form.elements.namedItem('promoValue') as HTMLInputElement)?.value);
     const min_order_value = Number((form.elements.namedItem('promoMinOrder') as HTMLInputElement)?.value || 0);
     const max_uses = (form.elements.namedItem('promoMaxUses') as HTMLInputElement)?.value;
+    const animation_theme = (form.elements.namedItem('promoAnimation') as HTMLSelectElement)?.value || 'sparkles';
 
     try {
       const res = await fetch('/api/admin/promotions', {
@@ -600,12 +601,13 @@ export default function AdminDashboardPage() {
           discount_type,
           discount_value,
           min_order_value,
-          max_uses: max_uses ? Number(max_uses) : null
+          max_uses: max_uses ? Number(max_uses) : null,
+          animation_theme
         })
       });
       const data = await res.json();
       if (res.ok) {
-        showNotification(`Promotion code '${code.toUpperCase()}' activated!`);
+        showNotification(`Promotion code '${code.toUpperCase()}' activated with ${animation_theme} celebration!`);
         setNewPromoModalOpen(false);
         fetchData();
       } else {
@@ -613,6 +615,43 @@ export default function AdminDashboardPage() {
       }
     } catch {
       showNotification('Error creating promotion', 'error');
+    }
+  };
+
+  const handleDeletePromotion = async (id: string, code: string) => {
+    if (!confirm(`Are you sure you want to delete promotion code '${code}'?`)) return;
+    try {
+      const res = await fetch(`/api/admin/promotions?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        showNotification(`Promotion '${code}' deleted`);
+        fetchData();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showNotification(data.error || 'Failed to delete promotion', 'error');
+      }
+    } catch {
+      showNotification('Error deleting promotion', 'error');
+    }
+  };
+
+  const handleTogglePromotion = async (id: string, currentStatus: number) => {
+    try {
+      const res = await fetch('/api/admin/promotions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, is_active: currentStatus === 1 ? 0 : 1 })
+      });
+      if (res.ok) {
+        showNotification(`Promotion status updated`);
+        fetchData();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showNotification(data.error || 'Failed to update promotion', 'error');
+      }
+    } catch {
+      showNotification('Error updating promotion', 'error');
     }
   };
 
@@ -1989,31 +2028,73 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {promotions.map((p) => (
-                  <div key={p.id} className="p-5 rounded-2xl bg-[#100C17] border border-[#231A2A] space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <span className="font-mono font-black text-xl text-[#F4C2C2] tracking-wider block">{p.code}</span>
-                        <span className="text-xs font-mono text-neutral-400">
-                          {p.discount_type === 'percentage' ? `${p.discount_value}% Discount` : `₹${p.discount_value} Flat Off`}
+                {promotions.map((p) => {
+                  const themeKey = (p.animation_theme || 'sparkles').toLowerCase();
+                  const themeConfig: Record<string, { label: string; icon: string; color: string }> = {
+                    diwali: { label: 'Diwali Diyas & Crackers', icon: '🪔', color: 'bg-amber-500/10 text-amber-300 border-amber-500/30' },
+                    holi: { label: 'Holi Color Splash', icon: '🎨', color: 'bg-fuchsia-500/10 text-fuchsia-300 border-fuchsia-500/30' },
+                    cyberpunk: { label: 'Cyberpunk Sparks', icon: '⚡', color: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30' },
+                    luxury_gold: { label: 'Royal Gold Coins', icon: '🪙', color: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/30' },
+                    hearts: { label: 'Romantic Hearts', icon: '💖', color: 'bg-pink-500/10 text-pink-300 border-pink-500/30' },
+                    sparkles: { label: 'Classic Sparkles', icon: '✨', color: 'bg-purple-500/10 text-purple-300 border-purple-500/30' }
+                  };
+                  const themeBadge = themeConfig[themeKey] || themeConfig.sparkles;
+                  const isActive = p.is_active === 1 || p.is_active === true;
+
+                  return (
+                    <div key={p.id} className="p-5 rounded-2xl bg-[#100C17] border border-[#231A2A] space-y-3 relative group">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <span className="font-mono font-black text-xl text-[#F4C2C2] tracking-wider block">{p.code}</span>
+                          <span className="text-xs font-mono text-neutral-400">
+                            {p.discount_type === 'percentage' ? `${p.discount_value}% Discount` : `₹${p.discount_value} Flat Off`}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleTogglePromotion(p.id, isActive ? 1 : 0)}
+                            title={isActive ? 'Click to deactivate' : 'Click to activate'}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono border uppercase cursor-pointer transition-colors ${
+                              isActive
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                : 'bg-neutral-800 text-neutral-400 border-neutral-700 hover:text-white'
+                            }`}
+                          >
+                            {isActive ? 'Active' : 'Disabled'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePromotion(p.id, p.code)}
+                            title="Delete Promotion"
+                            className="p-1 rounded text-neutral-500 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Animation Theme Pill */}
+                      <div className="flex items-center gap-2 pt-0.5">
+                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border flex items-center gap-1 ${themeBadge.color}`}>
+                          <span>{themeBadge.icon}</span>
+                          <span className="font-medium">{themeBadge.label}</span>
                         </span>
                       </div>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase">
-                        Active
-                      </span>
-                    </div>
-                    <div className="text-xs font-mono text-neutral-400 space-y-1 pt-2 border-t border-neutral-800/80">
-                      <div className="flex justify-between">
-                        <span>Min Order Value:</span>
-                        <span className="text-white">₹{p.min_order_value || 0}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Total Redemptions:</span>
-                        <span className="text-white">{p.current_uses} {p.max_uses ? `/ ${p.max_uses}` : '(Unlimited)'}</span>
+
+                      <div className="text-xs font-mono text-neutral-400 space-y-1 pt-2 border-t border-neutral-800/80">
+                        <div className="flex justify-between">
+                          <span>Min Order Value:</span>
+                          <span className="text-white">₹{p.min_order_value || 0}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total Redemptions:</span>
+                          <span className="text-white">{p.current_uses ?? p.times_used ?? 0} {p.max_uses ? `/ ${p.max_uses}` : '(Unlimited)'}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -3229,6 +3310,24 @@ export default function AdminDashboardPage() {
                   placeholder="e.g. 100"
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                 />
+              </div>
+              <div>
+                <label className="text-neutral-400 block mb-1 uppercase">Cart Window Celebration Animation</label>
+                <select
+                  name="promoAnimation"
+                  defaultValue="sparkles"
+                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
+                >
+                  <option value="sparkles">✨ Classic Atelier Sparkles & Stars</option>
+                  <option value="diwali">🪔 Diwali (Glowing Diyas & Firecrackers)</option>
+                  <option value="holi">🎨 Holi (Vibrant Gulal Color Splash)</option>
+                  <option value="cyberpunk">⚡ Cyberpunk (Matrix & Glitch Sparks)</option>
+                  <option value="luxury_gold">🪙 Luxury Gold (Coins & Glitter Dust)</option>
+                  <option value="hearts">💖 Lovers / Valentine (Floating Hearts)</option>
+                </select>
+                <span className="text-[10px] text-neutral-500 mt-1 block">
+                  When the customer applies this code at checkout, this custom festive visual spectacle triggers in their cart drawer.
+                </span>
               </div>
               <div className="flex justify-end gap-2 pt-3 border-t border-neutral-800">
                 <button

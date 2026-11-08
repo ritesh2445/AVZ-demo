@@ -2,6 +2,19 @@ import { NextResponse } from 'next/server';
 import { getDb, initializeDatabase } from '@/src/lib/db';
 import { getClientIp, checkRateLimit } from '@/src/lib/security';
 
+function resolveAnimationTheme(explicitTheme?: string, code?: string): string {
+  if (explicitTheme && ['sparkles', 'diwali', 'holi', 'cyberpunk', 'luxury_gold', 'hearts'].includes(explicitTheme.toLowerCase().trim())) {
+    return explicitTheme.toLowerCase().trim();
+  }
+  const c = (code || '').toUpperCase();
+  if (c.includes('DIWALI') || c.includes('DEEPAVALI') || c.includes('DIYA') || c.includes('PATAKHA') || c.includes('CRACKER') || c.includes('FESTIVE')) return 'diwali';
+  if (c.includes('HOLI') || c.includes('RANG') || c.includes('GULAL') || c.includes('COLOR') || c.includes('COLOUR') || c.includes('SPLASH')) return 'holi';
+  if (c.includes('CYBER') || c.includes('MATRIX') || c.includes('NEON') || c.includes('TECH') || c.includes('GLITCH') || c.includes('BADDIES')) return 'cyberpunk';
+  if (c.includes('GOLD') || c.includes('LUXURY') || c.includes('ROYAL') || c.includes('VIP') || c.includes('RICH') || c.includes('COIN') || c.includes('ATELIER')) return 'luxury_gold';
+  if (c.includes('HEART') || c.includes('LOVE') || c.includes('VALENTINE') || c.includes('ROMANCE')) return 'hearts';
+  return 'sparkles';
+}
+
 export async function POST(request: Request) {
   try {
     // Brute-force defense against discount code enumeration: Max 12 attempts per minute per IP
@@ -40,15 +53,18 @@ export async function POST(request: Request) {
 
         // Check date window
         const now = Date.now();
-        if (promo.starts_at && Number(promo.starts_at) > now) {
+        const startDate = promo.start_date || promo.starts_at;
+        if (startDate && Number(startDate) > now) {
           return NextResponse.json({ valid: false, error: 'This promotion has not started yet.' }, { status: 400 });
         }
-        if (promo.expires_at && Number(promo.expires_at) < now) {
+        const expiryDate = promo.expiry_date || promo.expires_at;
+        if (expiryDate && Number(expiryDate) < now) {
           return NextResponse.json({ valid: false, error: 'This promotion code has expired.' }, { status: 400 });
         }
 
         // Check max uses
-        if (promo.max_uses && Number(promo.times_used) >= Number(promo.max_uses)) {
+        const timesUsed = Number(promo.current_uses ?? promo.times_used ?? 0);
+        if (promo.max_uses && timesUsed >= Number(promo.max_uses)) {
           return NextResponse.json({ valid: false, error: 'This promotion code has reached its maximum usage limit.' }, { status: 400 });
         }
 
@@ -57,7 +73,7 @@ export async function POST(request: Request) {
         if (minOrder > 0 && subtotal < minOrder) {
           return NextResponse.json({
             valid: false,
-            error: `Code '${rawCode}' requires a minimum order of â‚¹${minOrder.toLocaleString('en-IN')}.`
+            error: `Code '${rawCode}' requires a minimum order of ₹${minOrder.toLocaleString('en-IN')}.`
           }, { status: 400 });
         }
 
@@ -73,6 +89,8 @@ export async function POST(request: Request) {
           offInr = Math.min(subtotal, discountValue);
         }
 
+        const theme = resolveAnimationTheme(promo.animation_theme, promo.code);
+
         return NextResponse.json({
           valid: true,
           code: promo.code,
@@ -80,7 +98,8 @@ export async function POST(request: Request) {
           discount_value: discountValue,
           percent,
           offInr,
-          description: promo.description || `Special discount of ${discountType === 'percentage' ? `${discountValue}%` : `â‚¹${discountValue}`}`
+          animation_theme: theme,
+          description: promo.description || `Special discount of ${discountType === 'percentage' ? `${discountValue}%` : `₹${discountValue}`}`
         });
       }
     } catch (dbErr) {

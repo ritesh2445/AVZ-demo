@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { BRAND_INFO, formatPrice, CURRENCIES } from '../data/brandData';
 import { playSound } from '../utils/audio';
+import CartCelebrationOverlay from './CartCelebrationOverlay';
 
 export default function CartDrawer({
   isOpen,
@@ -41,8 +42,9 @@ export default function CartDrawer({
   const isAuthenticated = Boolean(currentUser && !currentUser.isGuest && currentUser.email);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState(null); // { code, percent, offInr }
+  const [appliedPromo, setAppliedPromo] = useState(null); // { code, percent, offInr, animation_theme }
   const [promoError, setPromoError] = useState('');
+  const [promoCelebrationTheme, setPromoCelebrationTheme] = useState(null);
   const [pincode, setPincode] = useState('');
   const [deliveryEstimate, setDeliveryEstimate] = useState('');
 
@@ -136,11 +138,14 @@ export default function CartDrawer({
       });
       const data = await res.json();
       if (res.ok && data.valid) {
+        const theme = data.animation_theme || 'sparkles';
         setAppliedPromo({
           code: data.code,
           percent: data.percent,
-          offInr: data.offInr
+          offInr: data.offInr,
+          animation_theme: theme
         });
+        setPromoCelebrationTheme(theme);
         setPromoError('');
         playSound('chord');
       } else {
@@ -356,6 +361,16 @@ export default function CartDrawer({
         data-surface="dark"
         className="cart-drawer modal-card w-full max-w-xl bg-[#0c0c10] border border-white/15 rounded-2xl sm:rounded-3xl max-h-[92vh] sm:max-h-[90vh] flex flex-col justify-between overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)] relative text-left will-change-transform transform-gpu overscroll-contain"
       >
+        {/* Themed Festival Celebration Overlay */}
+        {promoCelebrationTheme && (
+          <CartCelebrationOverlay
+            theme={promoCelebrationTheme}
+            promoCode={appliedPromo?.code}
+            discountLabel={appliedPromo?.percent ? `${appliedPromo.percent}% OFF Applied` : appliedPromo?.offInr ? `₹${appliedPromo.offInr} OFF Applied` : 'Special Savings Applied'}
+            onClose={() => setPromoCelebrationTheme(null)}
+          />
+        )}
+
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between gap-3 bg-black/40 shrink-0">
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
@@ -793,10 +808,19 @@ export default function CartDrawer({
                   <p className="text-[10px] font-mono text-rose-400 mt-1">{promoError}</p>
                 )}
                 {appliedPromo && (
-                  <p className="text-[10px] font-mono text-green-400 mt-1 flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" />
-                    Applied code {appliedPromo.code}!
-                  </p>
+                  <div className="flex items-center justify-between text-[10px] font-mono mt-1.5 pt-0.5">
+                    <p className="text-green-400 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 shrink-0" />
+                      Applied code {appliedPromo.code}!
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setPromoCelebrationTheme(appliedPromo.animation_theme || 'sparkles')}
+                      className="text-zinc-400 hover:text-white underline cursor-pointer text-[9px] uppercase tracking-wider"
+                    >
+                      Replay Celebration
+                    </button>
+                  </div>
                 )}
               </form>
 
