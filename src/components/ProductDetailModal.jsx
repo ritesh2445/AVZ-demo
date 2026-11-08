@@ -35,19 +35,13 @@ export default function ProductDetailModal({
 }) {
   useModalScrollLock(Boolean(product));
 
-  if (!product) return null;
-
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(product.sizes ? product.sizes[0] : 'One Size');
+  const [selectedSize, setSelectedSize] = useState(product?.sizes ? product.sizes[0] : 'One Size');
   const [showSizeEstimator, setShowSizeEstimator] = useState(false);
   const [bustInches, setBustInches] = useState('');
   const [waistInches, setWaistInches] = useState('');
   const [recommendedSize, setRecommendedSize] = useState('');
   const [errorNotice, setErrorNotice] = useState('');
-
-  // Check if this 1-of-1 product is already in the bag
-  const isAlreadyInCart = cartItems.some((item) => item.id === product.id);
-  const isSoldOut = product?.stock === 0 || product?.inventory_quantity === 0;
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -58,6 +52,20 @@ export default function ProductDetailModal({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  useEffect(() => {
+    if (product) {
+      setActiveImageIndex(0);
+      setSelectedSize(product.sizes ? product.sizes[0] : 'One Size');
+      setErrorNotice('');
+    }
+  }, [product?.id]);
+
+  if (!product) return null;
+
+  // Check if this 1-of-1 product is already in the bag
+  const isAlreadyInCart = cartItems.some((item) => item.id === product.id);
+  const isSoldOut = product?.stock === 0 || product?.inventory_quantity === 0;
 
   const handleAdd = () => {
     if (isSoldOut) {

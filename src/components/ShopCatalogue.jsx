@@ -77,7 +77,6 @@ function KeyArchiveCarousel({
 
   const total = items.length;
   const scrollRafRef = useRef(null);
-  if (total === 0) return null;
 
   const updateScrollState = () => {
     const el = trackRef.current;
@@ -92,7 +91,7 @@ function KeyArchiveCarousel({
 
     // Approximate active item index
     const cardWidth = el.querySelector('article')?.clientWidth || 320;
-    const idx = Math.min(Math.round(current / (cardWidth + 20)), total - 1);
+    const idx = Math.min(Math.round(current / (cardWidth + 20)), Math.max(0, total - 1));
     setActiveIdx(idx);
   };
 
@@ -118,6 +117,8 @@ function KeyArchiveCarousel({
     window.addEventListener('resize', updateScrollState);
     return () => window.removeEventListener('resize', updateScrollState);
   }, [items]);
+
+  if (total === 0) return null;
 
   const scrollLeft = () => {
     playSound('pip');
