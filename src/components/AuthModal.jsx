@@ -23,7 +23,8 @@ import {
   AlertTriangle,
   RotateCcw,
   FileText,
-  CheckCircle2
+  CheckCircle2,
+  Truck
 } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
