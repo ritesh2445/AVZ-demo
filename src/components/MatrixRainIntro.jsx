@@ -24,12 +24,12 @@ const RAIN_COLORS = [
 ];
 
 // ─── Timing constants (ms) ──────────────────────────────────────────────────
-const INITIAL_RAIN_SETTLE = 700;  // rain establishes before first word
-const FADE_IN_DURATION   = 550;   // text fade-in
-const HOLD_DURATION      = 1250;  // word stays at full opacity
-const FADE_OUT_DURATION  = 480;   // text fade-out
-const BETWEEN_PILLARS    = 180;   // pause between words
-const OUTRO_DELAY        = 650;   // rain-only moment before calling onComplete
+const INITIAL_RAIN_SETTLE = 400;  // rain establishes before first word
+const FADE_IN_DURATION   = 350;   // text fade-in
+const HOLD_DURATION      = 850;   // word stays at full opacity
+const FADE_OUT_DURATION  = 300;   // text fade-out
+const BETWEEN_PILLARS    = 120;   // pause between words
+const OUTRO_DELAY        = 400;   // rain-only moment before calling onComplete
 
 export default function MatrixRainIntro({ onComplete }) {
   const canvasRef      = useRef(null);
@@ -203,57 +203,56 @@ export default function MatrixRainIntro({ onComplete }) {
       </div>
 
       {/* ── Centre brand pillar text ──────────────────────────────────── */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        {/* Decorative bracket — top */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none px-4">
+        {/* Top studio tag */}
         <div
           style={{
-            opacity: textOpacity * 0.5,
+            opacity: textOpacity * 0.7,
             transition: `opacity ${FADE_IN_DURATION}ms ease-in-out`,
             color: '#c084fc',
-            letterSpacing: '0.6em',
+            letterSpacing: '0.45em',
             fontSize: '11px',
             fontFamily: '"Courier New", monospace',
           }}
-          className="mb-5 uppercase tracking-widest font-mono"
+          className="mb-4 uppercase font-mono text-center"
         >
-          [ AVZ VAGANZA ]
+          AVZ VAGANZA • GUWAHATI ATELIER
         </div>
 
-        {/* Main pillar word */}
+        {/* Main pillar word (Neon glowing like PRNKS title) */}
         <div
           style={{
             opacity: textOpacity,
             transition: `opacity ${FADE_IN_DURATION}ms ease-in-out`,
             textShadow:
-              '0 0 18px #9333ea, 0 0 36px #a855f7, 0 0 72px #7c3aed, 0 0 120px rgba(139,92,246,0.5)',
+              '0 0 20px #a855f7, 0 0 40px #9333ea, 0 0 70px #7c3aed, 0 0 110px rgba(168,85,247,0.8)',
             willChange: 'opacity',
-            lineHeight: 1,
+            lineHeight: 1.1,
           }}
-          className="text-center font-mono font-black uppercase text-white"
+          className="text-center font-mono font-black uppercase text-white tracking-[0.18em]"
         >
           <span
             style={{
-              fontSize: 'clamp(2.4rem, 7vw, 6rem)',
-              letterSpacing: '0.22em',
+              fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
             }}
           >
             {BRAND_PILLARS[pillarIdx]}
           </span>
         </div>
 
-        {/* Decorative bracket — bottom */}
+        {/* Glowing sub-box styled exactly like PRNKS [ CLICK TO ENTER ] frame */}
         <div
           style={{
-            opacity: textOpacity * 0.5,
+            opacity: textOpacity,
             transition: `opacity ${FADE_IN_DURATION}ms ease-in-out`,
-            color: '#c084fc',
-            letterSpacing: '0.6em',
-            fontSize: '11px',
-            fontFamily: '"Courier New", monospace',
+            border: '1.5px solid #a855f7',
+            boxShadow: '0 0 18px rgba(168,85,247,0.5), inset 0 0 12px rgba(147,51,234,0.25)',
+            backgroundColor: 'rgba(10, 6, 18, 0.75)',
+            backdropFilter: 'blur(10px)',
           }}
-          className="mt-5 uppercase tracking-widest font-mono"
+          className="mt-6 px-6 py-2 rounded-sm text-xs font-mono uppercase tracking-[0.3em] text-[#f3e8ff]"
         >
-          [ GUWAHATI ATELIER ]
+          [ 1-OF-1 WEARABLE ART ARCHIVE ]
         </div>
       </div>
 
@@ -292,3 +291,4 @@ export default function MatrixRainIntro({ onComplete }) {
     </div>
   );
 }
+

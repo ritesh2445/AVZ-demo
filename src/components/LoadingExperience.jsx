@@ -247,15 +247,6 @@ export default function LoadingExperience({ onComplete }) {
 
     animId = requestAnimationFrame(animate);
 
-    window.__skipLoading = triggerFinish;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' || e.key === ' ') {
-        triggerFinish();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
     const handleResize = () => {
       if (!renderer) return;
       const w = window.innerWidth;
@@ -267,7 +258,6 @@ export default function LoadingExperience({ onComplete }) {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animId);
       if (typeof window !== 'undefined' && window.__onHeroVideoReady) {
@@ -296,7 +286,7 @@ export default function LoadingExperience({ onComplete }) {
   }, []);
 
   return (
-    <div id="loading-experience" onClick={() => triggerFinishRef.current?.()} title="Click anywhere to skip" className="fixed inset-0 z-[99999] pointer-events-auto cursor-pointer select-none overflow-hidden">
+    <div id="loading-experience" className="fixed inset-0 z-[99999] pointer-events-none select-none overflow-hidden">
       {/* ========================================================
           CINEMATIC APERTURE / LETTERBOX SHUTTER SYSTEM
           Top and bottom cinema curtains split vertically on exit
@@ -346,17 +336,7 @@ export default function LoadingExperience({ onComplete }) {
             <span>AVZ VAGANZA • GUWAHATI STUDIO</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-silver/50 hidden md:inline">DHRISTROYER WEARABLE ART ARCHIVE</span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                triggerFinishRef.current?.();
-              }}
-              className="pointer-events-auto px-3 py-1 rounded-full border border-white/20 bg-black/60 hover:bg-white hover:text-black transition-all text-[10px] font-mono tracking-widest text-silver hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              SKIP [ESC]
-            </button>
+            <span className="text-silver/50">DHRISTROYER WEARABLE ART ARCHIVE</span>
           </div>
         </div>
 
@@ -407,12 +387,7 @@ export default function LoadingExperience({ onComplete }) {
 
           <div className="flex items-center justify-between text-[10px] font-mono text-silver/50 tracking-wider">
             <span>EXPERIENCE SPATIAL LUXURY</span>
-            <button
-              onClick={() => triggerFinishRef.current?.()}
-              className="pointer-events-auto hover:text-white transition-colors cursor-pointer bg-transparent border-none text-[10px] font-mono text-silver/50"
-            >
-              PRESS SPACE OR ESC TO SKIP
-            </button>
+            <span className="text-[#f472b6]/70">CALIBRATING ATELIER DIMENSIONS</span>
           </div>
         </div>
       </div>
