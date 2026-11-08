@@ -1483,6 +1483,189 @@ export default function AdminDashboardPage() {
             </div>
           )}
 
+          {/* MODULE: REQUESTED PIECES & CUSTOM COMMISSIONS */}
+          {activeTab === 'requested_pieces' && (
+            <div className="space-y-6 max-w-7xl mx-auto">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-cinzel font-bold text-white">Requested Pieces & Commissions</h2>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-pink/20 text-pink border border-pink/30">
+                      LIVE INTAKE
+                    </span>
+                  </div>
+                  <p className="text-xs text-neutral-400 mt-1 font-mono">
+                    Direct patron requests from the museum gallery and customized couture inquiries.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={async () => {
+                      try {
+                        const res = await fetch('/api/admin/piece-requests');
+                        if (res.ok) {
+                          const data = await res.json();
+                          setPieceRequests(data.requests || []);
+                          showNotification('Refreshed piece requests');
+                        }
+                      } catch {
+                        showNotification('Error refreshing requests', 'error');
+                      }
+                    }}
+                    className="px-3 py-2 rounded-xl bg-[#100C17] border border-[#231A2A] hover:border-pink/40 text-xs font-mono text-neutral-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    Refresh
+                  </button>
+                </div>
+              </div>
+
+              {/* STATS OVERVIEW */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="bg-[#100C17] border border-[#231A2A] p-4 rounded-xl">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">Total Inquiries</span>
+                  <p className="text-xl font-bold font-mono text-white mt-1">{pieceRequests.length}</p>
+                </div>
+                <div className="bg-[#100C17] border border-[#231A2A] p-4 rounded-xl">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-amber-400">Pending Review</span>
+                  <p className="text-xl font-bold font-mono text-amber-400 mt-1">
+                    {pieceRequests.filter(r => r.status === 'pending').length}
+                  </p>
+                </div>
+                <div className="bg-[#100C17] border border-[#231A2A] p-4 rounded-xl">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-blue-400">Reviewed / In Talks</span>
+                  <p className="text-xl font-bold font-mono text-blue-400 mt-1">
+                    {pieceRequests.filter(r => r.status === 'reviewed' || r.status === 'contacted').length}
+                  </p>
+                </div>
+                <div className="bg-[#100C17] border border-[#231A2A] p-4 rounded-xl">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400">Completed</span>
+                  <p className="text-xl font-bold font-mono text-emerald-400 mt-1">
+                    {pieceRequests.filter(r => r.status === 'completed').length}
+                  </p>
+                </div>
+              </div>
+
+              {/* REQUESTS TABLE */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-xl overflow-hidden">
+                {pieceRequests.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <Sparkles className="w-8 h-8 text-neutral-600 mx-auto mb-3" />
+                    <p className="text-sm font-mono text-neutral-400">No piece requests recorded yet.</p>
+                    <p className="text-xs text-neutral-500 font-mono mt-1">
+                      When patrons submit custom piece requests or museum archive commissions, inquiries appear here in real-time.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs font-mono">
+                      <thead className="bg-[#16101E] border-b border-[#231A2A] text-neutral-400 uppercase tracking-wider text-[10px]">
+                        <tr>
+                          <th className="p-4">Date & ID</th>
+                          <th className="p-4">Piece Inquired</th>
+                          <th className="p-4">Patron Details</th>
+                          <th className="p-4">Patron Notes / Sizing</th>
+                          <th className="p-4">Status</th>
+                          <th className="p-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#231A2A]">
+                        {pieceRequests.map((req) => {
+                          const dateStr = req.created_at
+                            ? new Date(typeof req.created_at === 'number' && req.created_at < 10000000000 ? req.created_at * 1000 : req.created_at).toLocaleDateString()
+                            : 'Recent';
+                          const cleanPhone = (req.customer_phone || '').replace(/[^0-9]/g, '');
+                          const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hi ${req.customer_name || 'there'}, this is AVZ Atelier following up on your request for "${req.piece_title}".`)}` : null;
+
+                          return (
+                            <tr key={req.id} className="hover:bg-[#16101F]/60 transition-colors">
+                              <td className="p-4">
+                                <div className="text-white font-bold">{req.id ? req.id.slice(0, 10) : 'REQ'}</div>
+                                <div className="text-[10px] text-neutral-500 mt-0.5">{dateStr}</div>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-3">
+                                  {req.piece_image && (
+                                    <img
+                                      src={req.piece_image}
+                                      alt={req.piece_title || 'Piece'}
+                                      className="w-10 h-10 object-cover rounded-lg border border-[#231A2A] flex-shrink-0"
+                                    />
+                                  )}
+                                  <div>
+                                    <div className="text-white font-bold max-w-[180px] truncate">{req.piece_title || 'Custom Garment'}</div>
+                                    {req.piece_price && (
+                                      <div className="text-[10px] text-pink mt-0.5">₹{req.piece_price.toLocaleString('en-IN')}</div>
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <div className="text-white font-medium">{req.customer_name || 'Anonymous Patron'}</div>
+                                <div className="text-neutral-400 text-[11px] mt-0.5">{req.customer_email || '—'}</div>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span className="text-neutral-500 text-[10px]">{req.customer_phone || '—'}</span>
+                                  {waUrl && (
+                                    <a
+                                      href={waUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-[10px] text-emerald-400 hover:text-emerald-300 underline flex items-center gap-0.5"
+                                    >
+                                      WhatsApp ↗
+                                    </a>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-4 max-w-[220px]">
+                                <div className="text-neutral-300 text-[11px] line-clamp-3 whitespace-pre-wrap">
+                                  {req.notes || <span className="text-neutral-600 italic">No additional notes provided</span>}
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <select
+                                  value={req.status || 'pending'}
+                                  onChange={(e) => handleUpdatePieceRequestStatus(req.id, e.target.value)}
+                                  className={`text-[10px] font-mono px-2.5 py-1 rounded-lg border uppercase cursor-pointer transition-colors bg-[#0D0A12] ${
+                                    req.status === 'completed'
+                                      ? 'border-emerald-500/50 text-emerald-400'
+                                      : req.status === 'contacted'
+                                      ? 'border-purple-500/50 text-purple-400'
+                                      : req.status === 'reviewed'
+                                      ? 'border-blue-500/50 text-blue-400'
+                                      : req.status === 'declined'
+                                      ? 'border-rose-500/50 text-rose-400'
+                                      : 'border-amber-500/50 text-amber-400'
+                                  }`}
+                                >
+                                  <option value="pending" className="bg-[#100C17] text-amber-400">Pending</option>
+                                  <option value="reviewed" className="bg-[#100C17] text-blue-400">Reviewed</option>
+                                  <option value="contacted" className="bg-[#100C17] text-purple-400">Contacted</option>
+                                  <option value="completed" className="bg-[#100C17] text-emerald-400">Completed</option>
+                                  <option value="declined" className="bg-[#100C17] text-rose-400">Declined</option>
+                                </select>
+                              </td>
+                              <td className="p-4 text-right">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeletePieceRequest(req.id)}
+                                  className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition-colors cursor-pointer"
+                                  title="Delete inquiry"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* MODULE 3: PRODUCTS */}
           {activeTab === 'products' && (
             <div className="space-y-6 max-w-7xl mx-auto">
