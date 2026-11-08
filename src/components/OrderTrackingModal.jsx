@@ -7,31 +7,84 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
   useModalScrollLock(Boolean(isOpen));
   const [query, setQuery] = useState('');
   const [orderStatus, setOrderStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
 
-  const handleTrack = (e) => {
+  const handleTrack = async (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
+    const clean = query.trim();
+    if (!clean) return;
     playSound('warp');
+    setLoading(true);
+    setErrorMsg('');
+    setOrderStatus(null);
 
-    // Simulate realistic D2C order timeline
-    setOrderStatus({
-      orderId: query.startsWith('AVZ-') ? query.toUpperCase() : `AVZ-${query}`,
-      customer: 'Private Client',
-      placementDate: '24 Oct 2026',
-      estimatedDelivery: '30 Oct 2026',
-      courier: 'Blue Dart Air Express (AWB: BLUEDART-984129)',
-      currentStage: 3,
-      stages: [
-        { title: 'Order Confirmed', desc: 'Craft ticket generated at studio.', done: true },
-        { title: 'Raw Materials Sourced', desc: 'Circuits, hardware, and reclaimed textiles allocated.', done: true },
-        { title: 'Handmade by Artisans', desc: 'Under Dhrisni’s direct studio supervision in Guwahati.', done: true, current: true },
-        { title: 'Fitting & Quality Check', desc: 'Structural strength and hardware fit verified.', done: false },
-        { title: 'Packaging & Authenticity Certificate', desc: 'Sealed in matte-black box with authentication card.', done: false },
-        { title: 'Dispatched via Air Courier', desc: 'In transit with real-time SMS delivery tracking.', done: false }
-      ]
-    });
+    try {
+      const res = await fetch(`/api/storefront/orders/track?number=${encodeURIComponent(clean)}`);
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setErrorMsg(data.error || 'No studio order found matching your identifier.');
+        playSound('glitch');
+        return;
+      }
+
+      const ord = data.order;
+      const createdDate = new Date(ord.createdAt);
+      const estDelivery = new Date(ord.createdAt + 7 * 86400000);
+      const isFulfilled = ord.fulfillmentStatus === 'fulfilled' || ord.fulfillmentStatus === 'delivered';
+      const isDelivered = ord.fulfillmentStatus === 'delivered';
+
+      setOrderStatus({
+        orderId: ord.orderNumber,
+        customer: ord.customerMasked,
+        placementDate: createdDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        estimatedDelivery: estDelivery.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        courier: ord.trackingNumber
+          ? `${ord.carrier} (AWB: ${ord.trackingNumber})`
+          : `${ord.carrier} (Dispatches in 24-48 hrs)`,
+        paymentMethod: ord.paymentMethod,
+        paymentStatus: ord.paymentStatus,
+        stages: [
+          {
+            title: 'Order Confirmed',
+            desc: `Craft ticket generated at atelier for ${ord.itemsCount} piece${ord.itemsCount > 1 ? 's' : ''}.`,
+            done: true
+          },
+          {
+            title: 'Raw Materials Sourced',
+            desc: 'Salvaged telecom motherboards, industrial spikes & textiles allocated.',
+            done: true
+          },
+          {
+            title: 'Handmade by Artisans',
+            desc: 'Sculpted under Dhrisni’s direct studio supervision in Guwahati, Assam.',
+            done: isFulfilled,
+            current: !isFulfilled
+          },
+          {
+            title: 'Dispatched via Air Express',
+            desc: ord.trackingNumber
+              ? `Shipped via ${ord.carrier} — AWB ${ord.trackingNumber}`
+              : 'En route to courier partner terminal.',
+            done: isDelivered,
+            current: isFulfilled && !isDelivered
+          },
+          {
+            title: 'Delivered to Patron',
+            desc: 'Sealed archival packaging delivered.',
+            done: isDelivered
+          }
+        ]
+      });
+      playSound('snap');
+    } catch (err) {
+      setErrorMsg('Unable to retrieve tracking at this moment. Please check back shortly.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,17 +128,33 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
               type="text"
               placeholder="Enter Order ID (e.g. AVZ-891029)"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (errorMsg) setErrorMsg('');
+              }}
               className="flex-1 bg-black border border-white/15 focus:border-pink/50 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-mono text-white placeholder-zinc-500 focus:outline-none"
             />
             <button
               type="submit"
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 text-xs font-mono font-bold tracking-wider uppercase cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 shrink-0"
+              disabled={loading}
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 disabled:opacity-50 text-xs font-mono font-bold tracking-wider uppercase cursor-pointer flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 shrink-0"
             >
-              <Search className="w-3.5 h-3.5" />
-              <span>TRACK</span>
+              {loading ? (
+                <div className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              ) : (
+                <Search className="w-3.5 h-3.5" />
+              )}
+              <span>{loading ? 'LOCATING...' : 'TRACK'}</span>
             </button>
           </form>
+
+          {/* Error Message */}
+          {errorMsg && (
+            <div className="p-3 rounded-xl bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-mono flex items-center gap-2 animate-fade-in">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+              <span>{errorMsg}</span>
+            </div>
+          )}
 
           {/* Tracking Timeline Output */}
           {orderStatus && (

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDb, initializeDatabase, ensureGroupCartsTable } from '@/src/lib/db';
+import { PRODUCTS } from '@/src/data/brandData';
+import { isValidEmail, isValidPhone, sanitizeText } from '@/src/lib/security';
 
 export async function POST(
   request: Request,
@@ -13,11 +15,19 @@ export async function POST(
       buyerEmail,
       buyerPhone,
       shippingAddress,
-      paymentMethod = 'UPI / Card'
+      paymentMethod = 'Cash on Delivery (Group Order)'
     } = body;
 
     if (!buyerName || !buyerEmail || !shippingAddress) {
       return NextResponse.json({ error: 'Shipping details and contact information are required' }, { status: 400 });
+    }
+
+    if (!isValidEmail(buyerEmail)) {
+      return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
+    }
+
+    if (buyerPhone && !isValidPhone(buyerPhone)) {
+      return NextResponse.json({ error: 'Please provide a valid 10-digit phone number.' }, { status: 400 });
     }
 
     await initializeDatabase();
@@ -34,9 +44,13 @@ export async function POST(
     }
 
     const row: any = res.rows[0];
+    if (row.status !== 'open') {
+      return NextResponse.json({ error: 'This group cart session is already checked out.' }, { status: 400 });
+    }
+
     const membersData: any[] = JSON.parse(row.members_data || '[]');
 
-    // Collect all items across all members
+    // Collect all items across all members and re-verify authoritative prices from server database
     const allItems: any[] = [];
     const participantEmails: string[] = [buyerEmail.toLowerCase()];
     let subtotal = 0;
@@ -46,11 +60,31 @@ export async function POST(
         participantEmails.push(member.userEmail.toLowerCase());
       }
       for (const item of (member.items || [])) {
-        const itemQty = Number(item.quantity || 1);
-        const itemPrice = Number(item.price || 0);
-        subtotal += itemPrice * itemQty;
+        const itemQty = Math.max(1, Math.min(10, Number(item.quantity || 1)));
+
+        // Look up authoritative product price from database or catalog
+        let verifiedPrice = Number(item.price || 0);
+        const prodRes = await db.execute({
+          sql: 'SELECT price FROM products WHERE id = ?',
+          args: [item.id || '']
+        });
+
+        if (prodRes.rows.length > 0) {
+          verifiedPrice = Number(prodRes.rows[0].price);
+        } else {
+          const brandMatch = PRODUCTS.find((p) => String(p.id) === String(item.id));
+          if (brandMatch) {
+            verifiedPrice = Number(brandMatch.price);
+          } else {
+            verifiedPrice = Math.max(1000, Number(item.price) || 1000);
+          }
+        }
+
+        subtotal += verifiedPrice * itemQty;
         allItems.push({
           ...item,
+          price: verifiedPrice,
+          quantity: itemQty,
           addedBy: member.userName,
           addedByEmail: member.userEmail
         });
@@ -80,25 +114,26 @@ export async function POST(
       }))
     });
 
+    // Enforce payment_status = 'pending' so no unverified order is recorded as paid
     await db.execute({
       sql: `INSERT INTO orders (
         id, order_number, customer_name, customer_email, customer_phone,
         shipping_address, items, subtotal, discount, shipping_fee, tax,
         grand_total, currency, payment_status, payment_method,
         fulfillment_status, internal_notes, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 'INR', 'paid', ?, 'unfulfilled', ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 'INR', 'pending', ?, 'unfulfilled', ?, ?, ?)`,
       args: [
         orderId,
         orderNumber,
-        buyerName.trim(),
-        buyerEmail.trim(),
-        buyerPhone?.trim() || "+91 9876543210",
-        typeof shippingAddress === 'string' ? shippingAddress : JSON.stringify(shippingAddress),
+        sanitizeText(buyerName.trim(), 100),
+        buyerEmail.trim().toLowerCase(),
+        buyerPhone ? buyerPhone.trim() : 'Not provided',
+        typeof shippingAddress === 'string' ? sanitizeText(shippingAddress, 300) : JSON.stringify(shippingAddress),
         JSON.stringify(allItems),
         subtotal,
         discount,
         grandTotal,
-        paymentMethod,
+        sanitizeText(paymentMethod || 'Cash on Delivery (Group Order)', 60),
         groupMeta,
         Date.now(),
         Date.now()

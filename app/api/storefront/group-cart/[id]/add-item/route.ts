@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getDb, initializeDatabase, ensureGroupCartsTable } from '@/src/lib/db';
+import { PRODUCTS } from '@/src/data/brandData';
 
 export async function POST(
   request: Request,
@@ -10,7 +11,7 @@ export async function POST(
     const body = await request.json();
     const { userId, userName, userEmail, item } = body;
 
-    // Point b requirement: User must be signed in to add items
+    // User must be signed in to contribute to group cart
     if (!userId || !userName || !userEmail) {
       return NextResponse.json({
         error: 'Please sign in or create an account to contribute your piece to this group order'
@@ -39,6 +40,45 @@ export async function POST(
       return NextResponse.json({ error: 'This group order has already been completed' }, { status: 400 });
     }
 
+    // Authoritative Item Price & Details Verification (prevents client price spoofing)
+    const prodRes = await db.execute({
+      sql: 'SELECT id, title, price, sku, images FROM products WHERE id = ? OR title = ?',
+      args: [item.id || '', item.name || item.title || '']
+    });
+
+    let verifiedPrice = 0;
+    let verifiedTitle = item.name || item.title || 'Studio Piece';
+    let verifiedSku = item.sku || `AVZ-${item.id}`;
+
+    if (prodRes.rows.length > 0) {
+      const prod = prodRes.rows[0];
+      verifiedPrice = Number(prod.price);
+      verifiedTitle = String(prod.title);
+      verifiedSku = String(prod.sku);
+    } else {
+      const brandMatch = PRODUCTS.find(
+        (p) => String(p.id) === String(item.id) || p.title?.toLowerCase() === (item.name || item.title || '').toLowerCase()
+      );
+      if (brandMatch) {
+        verifiedPrice = Number(brandMatch.price);
+        verifiedTitle = brandMatch.title;
+        verifiedSku = brandMatch.sku || `AVZ-${brandMatch.id}`;
+      } else {
+        verifiedPrice = Math.max(1000, Number(item.price) || 1000);
+      }
+    }
+
+    const sanitizedItem = {
+      id: String(item.id),
+      title: verifiedTitle,
+      name: verifiedTitle,
+      price: verifiedPrice,
+      sku: verifiedSku,
+      quantity: Math.max(1, Math.min(10, Number(item.quantity || 1))),
+      selectedSize: String(item.selectedSize || 'Standard').slice(0, 30),
+      image: item.image || item.images?.[0] || '/assets/editorial_hero_portrait.jpg'
+    };
+
     let membersData: any[] = JSON.parse(row.members_data || '[]');
 
     // Find if member already exists (by userId or userEmail)
@@ -53,20 +93,20 @@ export async function POST(
         userName: userName.trim(),
         userEmail: userEmail.trim(),
         isCreator: false,
-        items: [item]
+        items: [sanitizedItem]
       });
     } else {
       // Append item to existing member
       const existingItems = membersData[memberIndex].items || [];
-      const itemKey = `${item.id}-${item.selectedSize || 'Standard'}`;
+      const itemKey = `${sanitizedItem.id}-${sanitizedItem.selectedSize || 'Standard'}`;
       const existingItemIndex = existingItems.findIndex(
         (i: any) => `${i.id}-${i.selectedSize || 'Standard'}` === itemKey
       );
 
       if (existingItemIndex > -1) {
-        existingItems[existingItemIndex].quantity = (existingItems[existingItemIndex].quantity || 1) + (item.quantity || 1);
+        existingItems[existingItemIndex].quantity = (existingItems[existingItemIndex].quantity || 1) + (sanitizedItem.quantity || 1);
       } else {
-        existingItems.push(item);
+        existingItems.push(sanitizedItem);
       }
       membersData[memberIndex].items = existingItems;
     }
