@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession, logAdminActivity } from '@/src/lib/auth';
 import { getDb, initializeDatabase } from '@/src/lib/db';
+import { sendFulfillmentDispatchEmail, sendOrderCancellationEmail } from '@/src/lib/email';
 
 export async function GET(
   request: Request,
@@ -110,6 +111,79 @@ export async function PATCH(
       carrier: newCarrier,
       tracking_number: newTracking
     });
+
+    if (newFulfillment === 'shipped' && current.fulfillment_status !== 'shipped' && current.customer_email) {
+      sendFulfillmentDispatchEmail(
+        {
+          order_number: String(current.order_number),
+          customer_name: String(current.customer_name),
+          customer_email: String(current.customer_email),
+          grand_total: Number(current.grand_total)
+        },
+        newCarrier || 'Blue Dart / Delhivery Express',
+        newTracking || 'Standard Track'
+      ).catch((err) => console.warn('[EMAIL NOTICE]: Failed to send dispatch email:', err));
+    }
+
+    if (newFulfillment === 'cancelled' && current.fulfillment_status !== 'cancelled') {
+      const now = Date.now();
+      await db.execute({
+        sql: `UPDATE orders SET
+          payment_status = 'cancelled',
+          cancellation_reason = COALESCE(cancellation_reason, 'Cancelled by atelier administrator'),
+          cancelled_at = COALESCE(cancelled_at, ?),
+          updated_at = ?
+          WHERE id = ?`,
+        args: [now, now, current.id]
+      });
+
+      // Restock products
+      let items: any[] = [];
+      try {
+        items = typeof current.items === 'string' ? JSON.parse(current.items) : current.items;
+      } catch {}
+
+      for (const item of items) {
+        const qty = Number(item.quantity || 1);
+        if (item.id && !String(item.id).startsWith('custom_')) {
+          await db.execute({
+            sql: 'UPDATE products SET inventory_quantity = inventory_quantity + ?, updated_at = ? WHERE id = ?',
+            args: [qty, now, item.id]
+          });
+          await db.execute({
+            sql: `INSERT INTO inventory_logs (id, product_id, sku, adjustment, previous_quantity, new_quantity, reason, user_email, created_at)
+                  VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?)`,
+            args: [
+              `inv_${now}_${Math.random().toString(36).substring(2, 5)}`,
+              String(item.id),
+              String(item.sku || 'AVZ'),
+              qty,
+              `Admin Order Cancellation Restock: ${current.order_number}`,
+              session.email,
+              now
+            ]
+          });
+        }
+      }
+
+      // Send cancellation email
+      if (current.customer_email) {
+        sendOrderCancellationEmail(
+          {
+            order_number: String(current.order_number),
+            customer_name: String(current.customer_name),
+            customer_email: String(current.customer_email),
+            items,
+            grand_total: Number(current.grand_total),
+            payment_method: String(current.payment_method || ''),
+            payment_status: String(current.payment_status || ''),
+            cancellation_reason: 'Cancelled by atelier administrator',
+            cancelled_at: now
+          },
+          'Cancelled by atelier administrator'
+        ).catch((err) => console.warn('[EMAIL NOTICE]: Failed to send cancellation email:', err));
+      }
+    }
 
     return NextResponse.json({
       success: true,

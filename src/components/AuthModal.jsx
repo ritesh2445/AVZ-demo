@@ -17,7 +17,13 @@ import {
   KeyRound,
   Loader2,
   Send,
-  ArrowLeft
+  ArrowLeft,
+  Package,
+  Clock,
+  AlertTriangle,
+  RotateCcw,
+  FileText,
+  CheckCircle2
 } from 'lucide-react';
 import { BRAND_INFO, ASSET_MANIFEST } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -64,6 +70,89 @@ export default function AuthModal({
   const [vipAlerts, setVipAlerts] = useState(true);
   const [statusMessage, setStatusMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Client Order History & Cancellation State (Up to 6 Months)
+  const [userTab, setUserTab] = useState('orders'); // 'orders' | 'profile'
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [cancellingOrder, setCancellingOrder] = useState(null);
+  const [cancelReason, setCancelReason] = useState('Change of mind');
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancelSuccessMsg, setCancelSuccessMsg] = useState('');
+
+  // Fetch 6-month order history when modal opens for a logged-in non-guest user
+  useEffect(() => {
+    if (!isOpen || !user || user.isGuest || !user.email) return;
+
+    setLoadingOrders(true);
+    fetch('/api/storefront/orders/my-orders', {
+      headers: {
+        'x-user-email': user.email
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.orders)) {
+          setOrders(data.orders);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoadingOrders(false);
+      });
+  }, [isOpen, user]);
+
+  const handleCancelOrderSubmit = async (e) => {
+    e.preventDefault();
+    if (!cancellingOrder) return;
+
+    setIsCancelling(true);
+    setCancelSuccessMsg('');
+    try {
+      const res = await fetch('/api/storefront/orders/cancel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-email': user.email
+        },
+        body: JSON.stringify({
+          orderId: cancellingOrder.id,
+          orderNumber: cancellingOrder.orderNumber,
+          reason: cancelReason,
+          userEmail: user.email
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        playSound('sparkle');
+        setCancelSuccessMsg(`Order ${cancellingOrder.orderNumber} successfully cancelled. Items restocked.`);
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === cancellingOrder.id
+              ? {
+                  ...o,
+                  fulfillmentStatus: 'cancelled',
+                  paymentStatus: 'cancelled',
+                  canCancel: false,
+                  cancellationReason: cancelReason
+                }
+              : o
+          )
+        );
+        setTimeout(() => {
+          setCancellingOrder(null);
+          setCancelSuccessMsg('');
+        }, 2000);
+      } else {
+        setStatusMessage({ type: 'error', text: data.error || 'Failed to cancel order.' });
+      }
+    } catch {
+      setStatusMessage({ type: 'error', text: 'Network error processing cancellation.' });
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   // Close on Escape key
   useEffect(() => {
@@ -382,92 +471,374 @@ export default function AuthModal({
           </div>
         )}
 
-        {/* IF USER IS ALREADY LOGGED IN: ACTIVE PROFILE VIEW */}
+        {/* IF USER IS ALREADY LOGGED IN: ACTIVE PROFILE & ORDER HISTORY */}
         {user ? (
-          <div className="space-y-5">
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {user.image ? (
-                    <img
-                      src={user.image}
-                      alt={user.name}
-                      className="w-10 h-10 rounded-full border border-pink/40 object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-pink/20 border border-pink/40 flex items-center justify-center text-pink font-mono font-bold text-sm">
-                      {user.name?.charAt(0).toUpperCase() || 'A'}
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="font-mono text-sm font-bold text-white uppercase">
-                      {user.name}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-pink tracking-wider uppercase block">
-                        {user.tier || (user.isGuest ? 'VIP Guest Pass' : 'Archive VIP Member')}
-                      </span>
-                      {user.emailVerified && (
-                        <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 text-[8px] font-mono uppercase rounded border border-emerald-500/30">
-                          Verified
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Active
-                </span>
-              </div>
-
-              <div className="text-xs font-montserrat text-zinc-300 border-t border-white/10 pt-2.5 space-y-1">
-                <p className="text-[11px] text-zinc-400">
-                  Email: <span className="text-white font-mono">{user.email}</span>
-                </p>
-                {user.isGuest && (
-                  <p className="text-[11px] text-pink-300/90 leading-relaxed">
-                    You are browsing with temporary Guest status. Your cart items and saved favorites are stored on this device.
-                  </p>
+          <div className="space-y-4">
+            {/* Tab Selector between Order History and Profile */}
+            <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  playSound('snap');
+                  setUserTab('orders');
+                }}
+                className={`py-2 px-3 rounded-lg text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  userTab === 'orders'
+                    ? 'bg-gradient-to-r from-pink to-purple-600 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Package className="w-3.5 h-3.5" />
+                <span>My Orders</span>
+                {orders.length > 0 && (
+                  <span className={`px-1.5 py-0.2 rounded-full text-[9px] ${userTab === 'orders' ? 'bg-black text-pink' : 'bg-pink/20 text-pink'}`}>
+                    {orders.length}
+                  </span>
                 )}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2.5">
-              {user.isGuest && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSound('pip');
-                    onLogout?.();
-                    setActiveTab('signup');
-                  }}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Upgrade to Permanent VIP Account
-                </button>
-              )}
+              </button>
 
               <button
                 type="button"
                 onClick={() => {
                   playSound('snap');
-                  onClose?.();
+                  setUserTab('profile');
                 }}
-                className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className={`py-2 px-3 rounded-lg text-xs font-mono font-bold tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  userTab === 'profile'
+                    ? 'bg-gradient-to-r from-pink to-purple-600 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
               >
-                Continue Browsing
-              </button>
-
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="w-full py-2.5 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 font-mono text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer border border-rose-500/25 transition-all"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                Sign Out of Session
+                <User className="w-3.5 h-3.5" />
+                <span>VIP Profile</span>
               </button>
             </div>
+
+            {/* TAB 1: ORDER HISTORY & CANCELLATIONS (6 MONTH ROLLING ACCESS) */}
+            {userTab === 'orders' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 px-1">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3 h-3 text-pink" />
+                    Past 6 Months History
+                  </span>
+                  <span className="text-[10px] text-zinc-500">DPDP Act Compliant</span>
+                </div>
+
+                {/* Cancellation In-Modal Dialog */}
+                {cancellingOrder && (
+                  <form
+                    onSubmit={handleCancelOrderSubmit}
+                    className="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/40 space-y-3 animate-fade-in"
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                          Cancel Order {cancellingOrder.orderNumber}?
+                        </h4>
+                        <p className="text-[11px] text-zinc-300 mt-1 leading-relaxed">
+                          Garment items will be automatically restocked into atelier inventory. If paid online, an automated full refund is initiated to your payment source.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-mono uppercase text-zinc-400">
+                        Reason for Cancellation
+                      </label>
+                      <select
+                        value={cancelReason}
+                        onChange={(e) => setCancelReason(e.target.value)}
+                        className="w-full bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-rose-400 font-mono"
+                      >
+                        <option value="Change of mind">Change of mind</option>
+                        <option value="Incorrect sizing or delivery address">Incorrect sizing or delivery address</option>
+                        <option value="Selected wrong payment method">Selected wrong payment method</option>
+                        <option value="Ordered another piece in collection">Ordered another piece in collection</option>
+                        <option value="Delivery timeline concern">Delivery timeline concern</option>
+                        <option value="Other reason">Other reason</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        type="submit"
+                        disabled={isCancelling}
+                        className="flex-1 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all"
+                      >
+                        {isCancelling ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Cancelling...
+                          </>
+                        ) : (
+                          'Confirm Cancellation'
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCancellingOrder(null)}
+                        disabled={isCancelling}
+                        className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-zinc-300 font-mono text-xs font-medium cursor-pointer"
+                      >
+                        Keep Order
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Cancellation Success Feedback */}
+                {cancelSuccessMsg && (
+                  <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center gap-2 text-emerald-300 font-mono text-xs">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>{cancelSuccessMsg}</span>
+                  </div>
+                )}
+
+                {/* Orders List Container */}
+                {loadingOrders ? (
+                  <div className="py-12 text-center space-y-2">
+                    <Loader2 className="w-6 h-6 text-pink animate-spin mx-auto" />
+                    <p className="text-xs font-mono text-zinc-400">Loading purchase ledger...</p>
+                  </div>
+                ) : orders.length === 0 ? (
+                  <div className="py-10 text-center space-y-3 bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <Package className="w-8 h-8 text-zinc-500 mx-auto" />
+                    <p className="text-xs font-mono text-zinc-400">
+                      No purchase orders recorded in the past 6 months.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playSound('snap');
+                        onClose?.();
+                      }}
+                      className="inline-block py-2 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 text-black font-mono text-xs font-bold uppercase tracking-wider cursor-pointer"
+                    >
+                      Explore Atelier Catalog
+                    </button>
+                  </div>
+                ) : (
+                  <div className="max-h-80 overflow-y-auto space-y-3 pr-1 custom-scrollbar">
+                    {orders.map((ord) => {
+                      const isCancelled = ord.fulfillmentStatus === 'cancelled' || ord.paymentStatus === 'cancelled';
+                      const isPaid = ord.paymentStatus === 'paid';
+                      const isShipped = ord.fulfillmentStatus === 'shipped';
+                      const isDelivered = ord.fulfillmentStatus === 'delivered';
+
+                      return (
+                        <div
+                          key={ord.id}
+                          className={`p-3.5 rounded-2xl border transition-all ${
+                            isCancelled
+                              ? 'bg-rose-950/20 border-rose-500/30'
+                              : 'bg-white/5 border-white/10 hover:border-pink/40'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div>
+                              <span className="font-mono font-bold text-xs text-white block">
+                                {ord.orderNumber}
+                              </span>
+                              <span className="text-[10px] font-mono text-zinc-400">
+                                {new Date(ord.createdAt).toLocaleDateString('en-IN', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                  year: 'numeric'
+                                })}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                              {/* Payment badge */}
+                              <span
+                                className={`px-2 py-0.5 rounded text-[9px] font-mono uppercase font-bold ${
+                                  isCancelled
+                                    ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                                    : isPaid
+                                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                }`}
+                              >
+                                {isCancelled ? 'CANCELLED' : isPaid ? 'PAID' : ord.paymentMethod || 'COD'}
+                              </span>
+
+                              {/* Fulfillment badge */}
+                              {!isCancelled && (
+                                <span
+                                  className={`px-2 py-0.5 rounded text-[9px] font-mono uppercase ${
+                                    isDelivered
+                                      ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                                      : isShipped
+                                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                                      : 'bg-zinc-800 text-zinc-400'
+                                  }`}
+                                >
+                                  {ord.fulfillmentStatus}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Items Preview */}
+                          <div className="border-t border-white/5 pt-2 space-y-1.5">
+                            {(ord.items || []).map((item, idx) => (
+                              <div key={idx} className="flex justify-between items-center text-xs">
+                                <span className="text-zinc-200 line-clamp-1 font-montserrat">
+                                  {item.name || item.title || 'Wearable Art'}
+                                  {item.size ? ` (${item.size})` : ''}
+                                  <span className="text-zinc-400 font-mono text-[11px] ml-1">x{item.quantity || 1}</span>
+                                </span>
+                                <span className="font-mono text-pink text-[11px] shrink-0 font-bold">
+                                  ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString('en-IN')}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Grand Total & Courier */}
+                          <div className="border-t border-white/5 pt-2 mt-2 flex justify-between items-center">
+                            <span className="text-xs font-mono font-bold text-white">
+                              Total: ₹{ord.grandTotal?.toLocaleString('en-IN')}
+                            </span>
+
+                            {ord.trackingNumber && (
+                              <span className="text-[10px] font-mono text-purple-300">
+                                {ord.carrier}: {ord.trackingNumber}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Cancellation Note if Cancelled */}
+                          {isCancelled && ord.cancellationReason && (
+                            <div className="mt-2 text-[10px] font-mono text-rose-300/80 bg-rose-950/40 p-1.5 rounded border border-rose-500/20">
+                              Cancelled: {ord.cancellationReason}
+                            </div>
+                          )}
+
+                          {/* Action Buttons: Cancel Order & Real-Time Tracking */}
+                          <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between gap-2">
+                            <a
+                              href={`https://aveezahvaganza.com/?track=${encodeURIComponent(ord.orderNumber)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[10px] font-mono text-zinc-400 hover:text-pink flex items-center gap-1 transition-colors"
+                            >
+                              <FileText className="w-3 h-3" />
+                              Track Ticket
+                            </a>
+
+                            {ord.canCancel && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  playSound('snap');
+                                  setCancellingOrder(ord);
+                                }}
+                                className="py-1 px-2.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-mono font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer transition-all"
+                              >
+                                <RotateCcw className="w-3 h-3" />
+                                Cancel Order
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 2: VIP PROFILE CARD */}
+            {userTab === 'profile' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {user.image ? (
+                        <img
+                          src={user.image}
+                          alt={user.name}
+                          className="w-10 h-10 rounded-full border border-pink/40 object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-pink/20 border border-pink/40 flex items-center justify-center text-pink font-mono font-bold text-sm">
+                          {user.name?.charAt(0).toUpperCase() || 'A'}
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-mono text-sm font-bold text-white uppercase">
+                          {user.name}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono text-pink tracking-wider uppercase block">
+                            {user.tier || (user.isGuest ? 'VIP Guest Pass' : 'Archive VIP Member')}
+                          </span>
+                          {user.emailVerified && (
+                            <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-400 text-[8px] font-mono uppercase rounded border border-emerald-500/30">
+                              Verified
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      Active
+                    </span>
+                  </div>
+
+                  <div className="text-xs font-montserrat text-zinc-300 border-t border-white/10 pt-2.5 space-y-1">
+                    <p className="text-[11px] text-zinc-400">
+                      Email: <span className="text-white font-mono">{user.email}</span>
+                    </p>
+                    {user.isGuest && (
+                      <p className="text-[11px] text-pink-300/90 leading-relaxed">
+                        You are browsing with temporary Guest status. Your cart items and saved favorites are stored on this device.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2.5">
+                  {user.isGuest && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playSound('pip');
+                        onLogout?.();
+                        setActiveTab('signup');
+                      }}
+                      className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 hover:from-pink-300 hover:to-purple-400 text-black font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-95 transition-all"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Upgrade to Permanent VIP Account
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSound('snap');
+                      onClose?.();
+                    }}
+                    className="w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  >
+                    Continue Browsing
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="w-full py-2.5 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 font-mono text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer border border-rose-500/25 transition-all"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    Sign Out of Session
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           /* USER NOT LOGGED IN: GUEST CARD + GOOGLE + TABS (SIGN IN / SIGN UP / FORGOT) */

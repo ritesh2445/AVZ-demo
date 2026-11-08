@@ -581,6 +581,22 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // Handler: Delete Collection
+  const handleDeleteCollection = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete collection "${title}"?`)) return;
+    try {
+      const res = await fetch(`/api/admin/collections?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+      if (res.ok) {
+        setCollections((prev) => prev.filter((c) => c.id !== id));
+        showNotification(`Collection '${title}' deleted successfully.`);
+      } else {
+        showNotification('Failed to delete collection', 'error');
+      }
+    } catch {
+      showNotification('Error deleting collection', 'error');
+    }
+  };
+
   // Handler: Create Promotion
   const handleCreatePromotion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -1105,6 +1121,7 @@ export default function AdminDashboardPage() {
                   <option value="">All Payment Statuses</option>
                   <option value="paid">Paid</option>
                   <option value="pending">Pending</option>
+                  <option value="cancelled">Cancelled</option>
                   <option value="failed">Failed</option>
                 </select>
                 <select
@@ -1116,6 +1133,7 @@ export default function AdminDashboardPage() {
                   <option value="unfulfilled">Unfulfilled</option>
                   <option value="shipped">Shipped</option>
                   <option value="delivered">Delivered</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
 
@@ -1153,13 +1171,17 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="py-4 px-4 font-mono text-white font-bold">₹{ord.grand_total}</td>
                           <td className="py-4 px-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400'
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
+                              ord.payment_status === 'cancelled' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30 font-bold' :
+                              ord.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400'
                               }`}>
                               {ord.payment_status}
                             </span>
                           </td>
                           <td className="py-4 px-4">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase ${
+                              ord.fulfillment_status === 'cancelled' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30 font-bold' :
+                              ord.fulfillment_status === 'delivered' ? 'bg-blue-500/10 text-blue-400' :
                               ord.fulfillment_status === 'shipped' ? 'bg-purple-500/10 text-purple-300' : 'bg-amber-500/10 text-amber-400'
                               }`}>
                               {ord.fulfillment_status}
@@ -1997,7 +2019,16 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="pt-2 border-t border-neutral-800/80 flex justify-between items-center text-[11px] font-mono text-neutral-500">
                       <span>{(col.product_ids || []).length} Products Assigned</span>
-                      <span>{new Date(Number(col.created_at)).toLocaleDateString()}</span>
+                      <div className="flex items-center gap-2">
+                        <span>{new Date(Number(col.created_at)).toLocaleDateString()}</span>
+                        <button
+                          onClick={() => handleDeleteCollection(col.id, col.title)}
+                          className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 cursor-pointer transition-colors"
+                          title="Delete Collection"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -2490,6 +2521,27 @@ export default function AdminDashboardPage() {
                 <span className="text-neutral-400 block">{selectedOrder.shipping_address?.country || 'India'}</span>
               </div>
             </div>
+
+            {/* Cancellation Status Banner if Cancelled */}
+            {(selectedOrder.fulfillment_status === 'cancelled' || selectedOrder.payment_status === 'cancelled' || selectedOrder.cancellation_reason) && (
+              <div className="bg-rose-950/40 border border-rose-500/40 p-4 rounded-xl space-y-1">
+                <div className="flex items-center gap-2 text-rose-300 font-mono font-bold text-xs uppercase">
+                  <AlertTriangle className="w-4 h-4 text-rose-400" />
+                  <span>Order Cancelled</span>
+                  {selectedOrder.cancelled_at && (
+                    <span className="text-[10px] text-rose-400/80 font-normal">
+                      ({new Date(Number(selectedOrder.cancelled_at)).toLocaleString()})
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-rose-200/90 font-mono">
+                  Reason: <span className="text-white">{selectedOrder.cancellation_reason || 'Cancelled by customer / admin request'}</span>
+                </p>
+                <p className="text-[10px] text-neutral-400 font-mono">
+                  Status: Items restored to available inventory.
+                </p>
+              </div>
+            )}
 
             {/* Order Items Table & Financials */}
             <div className="bg-[#181122] p-4 rounded-xl space-y-3">

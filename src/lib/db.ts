@@ -628,6 +628,17 @@ async function ensureDatabaseInitialized(): Promise<void> {
         await db.execute(`ALTER TABLE promotions ADD COLUMN animation_theme TEXT DEFAULT 'sparkles';`);
       } catch {}
     }
+    // Ensure cancellation columns exist on orders table
+    try {
+      await db.execute('SELECT cancellation_reason, cancelled_at FROM orders LIMIT 1');
+    } catch {
+      try {
+        await db.execute('ALTER TABLE orders ADD COLUMN cancellation_reason TEXT;');
+      } catch {}
+      try {
+        await db.execute('ALTER TABLE orders ADD COLUMN cancelled_at INTEGER;');
+      } catch {}
+    }
     return;
   } catch {
     await performDatabaseInitialization();
@@ -1048,6 +1059,12 @@ async function performDatabaseInitialization(): Promise<void> {
   try {
     await db.execute(`CREATE INDEX IF NOT EXISTS idx_refunds_amount_paise ON refunds(amount_paise);`);
   } catch {}
+  try {
+    await db.execute(`ALTER TABLE orders ADD COLUMN cancellation_reason TEXT;`);
+  } catch {}
+  try {
+    await db.execute(`ALTER TABLE orders ADD COLUMN cancelled_at INTEGER;`);
+  } catch {}
 
   // Backfill existing rows if paise columns are null
   try {
@@ -1417,6 +1434,76 @@ async function performDatabaseInitialization(): Promise<void> {
         Date.now() + 86400000 * 5
       ]
     });
+  }
+
+  // --- SEED INITIAL COLLECTIONS ARCHIVE ---
+  const existingCols = await db.execute('SELECT COUNT(*) as count FROM collections');
+  if (Number(existingCols.rows[0]?.count || 0) === 0) {
+    const seedCollections = [
+      {
+        id: 'col_cyberpunk_hardware',
+        title: 'Cyberpunk Metal & Hardware Archive',
+        slug: 'cyberpunk-hardware-archive',
+        description: 'Cold-forged rebellion, hand-set spikes, and upcycled industrial hardware tailored into sculptural wearable armor.',
+        image: '/assets/product_spike_bra.jpg',
+        product_ids: ['avz-001', 'avz-002', 'avz-004', 'avz-005', 'avz-012', 'avz-021'],
+        status: 'published'
+      },
+      {
+        id: 'col_atelier_coords',
+        title: 'Atelier Co-ord & Runway Sets',
+        slug: 'atelier-coord-sets',
+        description: 'Hand-crafted two-piece statement silhouettes designed for high-impact presence and editorial distinction.',
+        image: '/assets/product_coord_set.jpg',
+        product_ids: ['avz-003', 'avz-015', 'avz-016', 'avz-020', 'avz-024'],
+        status: 'published'
+      },
+      {
+        id: 'col_sculptural_tops',
+        title: 'Sculptural Tops & Statement Bodices',
+        slug: 'sculptural-tops-bodices',
+        description: 'Avant-garde tops featuring deconstructed silhouettes, raw hems, and architectural drapery.',
+        image: '/assets/product_white_crochet.jpg',
+        product_ids: ['avz-008', 'avz-009', 'avz-017', 'avz-018', 'avz-019', 'avz-023'],
+        status: 'published'
+      },
+      {
+        id: 'col_armour_headgear',
+        title: 'Armour Accents & Headgear Archive',
+        slug: 'armour-accents-headgear',
+        description: 'Ceremonial arm cuffs, heavy chainmail, and artisanal crown pieces embodying dark botanical mysticism.',
+        image: '/assets/editorial_hero_portrait.jpg',
+        product_ids: ['avz-004', 'avz-005', 'avz-012', 'avz-013', 'avz-021'],
+        status: 'published'
+      },
+      {
+        id: 'col_dhrisni_signature',
+        title: 'DHRISNI 1-of-1 Signature Vault',
+        slug: 'dhrisni-signature-vault',
+        description: 'Exclusive limited studio pieces crafted directly by Dhrisni in the Guwahati atelier. Non-repeatable wearable artwork.',
+        image: '/assets/product_beaded_bralette.jpg',
+        product_ids: ['avz-001', 'avz-006', 'avz-010', 'avz-011', 'avz-014', 'avz-022'],
+        status: 'published'
+      }
+    ];
+
+    for (let i = 0; i < seedCollections.length; i++) {
+      const col = seedCollections[i];
+      await db.execute({
+        sql: `INSERT INTO collections (id, title, slug, description, image, product_ids, status, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          col.id,
+          col.title,
+          col.slug,
+          col.description,
+          col.image,
+          JSON.stringify(col.product_ids),
+          col.status,
+          Date.now() - (seedCollections.length - i) * 86400000
+        ]
+      });
+    }
   }
 
   // --- SEED INITIAL GALLERY ARTWORKS ---

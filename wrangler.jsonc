@@ -18,6 +18,9 @@
       "bucket_name": "avz-media"
     }
   ],
+  "vars": {
+    "RESEND_FROM_EMAIL": "AVZ Vaganza Studio <onboarding@resend.dev>"
+  },
   "routes": [
     { "pattern": "aveezahvaganza.com", "custom_domain": true },
     { "pattern": "www.aveezahvaganza.com", "custom_domain": true }

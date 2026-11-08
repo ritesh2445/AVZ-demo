@@ -144,8 +144,15 @@ export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'priv
                 </ul>
               </div>
 
+              <div>
+                <h4 className="font-mono font-bold text-white uppercase text-sm mb-2">5. Order History Retention & Real-Time Account Access</h4>
+                <p className="text-zinc-300">
+                  In compliance with statutory commercial record-keeping and data minimization standards, registered patrons can review, track, and download transaction receipts for their complete purchase history for up to <strong>six (6) months</strong> directly through their VIP Client Account portal. Transaction records older than six months are permanently transitioned to offline accounting archives. Patrons may also submit automated order cancellation requests directly from their dashboard prior to courier dispatch.
+                </p>
+              </div>
+
               <div className="p-4 rounded-2xl bg-black/60 border border-white/10">
-                <h4 className="font-mono font-bold text-white uppercase text-xs mb-1">5. Grievance Officer Contact Details</h4>
+                <h4 className="font-mono font-bold text-white uppercase text-xs mb-1">6. Grievance Officer Contact Details</h4>
                 <p className="text-xs text-zinc-400">
                   Designated Data Grievance Redressal Officer:<br />
                   <strong className="text-white">AVZ Compliance Desk</strong> • Aveezah Vaganza Studio, Guwahati, Assam, India<br />

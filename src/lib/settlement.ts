@@ -1,5 +1,6 @@
 import { getDb, initializeDatabase } from './db';
 import { logAdminActivity } from './auth';
+import { sendOrderConfirmationEmail } from './email';
 
 export interface SettleOrderParams {
   orderId?: string;
@@ -355,6 +356,23 @@ export async function settleOrderPayment(params: SettleOrderParams): Promise<{
 
     // COMMIT ENTIRE TRANSACTION
     await tx.commit();
+
+    // Send Resend Payment & Order Confirmation Email
+    sendOrderConfirmationEmail({
+      order_number: String(order.order_number),
+      customer_name: String(order.customer_name),
+      customer_email: String(order.customer_email),
+      customer_phone: String(order.customer_phone || ''),
+      shipping_address: order.shipping_address,
+      items: order.items,
+      subtotal: Number(order.subtotal || order.grand_total),
+      discount: Number(order.discount || 0),
+      shipping_fee: Number(order.shipping_fee || 0),
+      grand_total: Number(order.grand_total),
+      payment_method: String(order.payment_method || 'Razorpay / UPI'),
+      payment_status: 'paid',
+      created_at: Number(order.created_at)
+    }).catch((err) => console.warn('[EMAIL NOTICE]: Failed to send confirmation email:', err));
 
     return {
       success: true,

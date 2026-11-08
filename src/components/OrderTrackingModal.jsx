@@ -36,13 +36,17 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
       const estDelivery = new Date(ord.createdAt + 7 * 86400000);
       const isFulfilled = ord.fulfillmentStatus === 'fulfilled' || ord.fulfillmentStatus === 'delivered';
       const isDelivered = ord.fulfillmentStatus === 'delivered';
+      const isCancelled = ord.fulfillmentStatus === 'cancelled' || ord.paymentStatus === 'cancelled';
 
       setOrderStatus({
         orderId: ord.orderNumber,
         customer: ord.customerMasked,
         placementDate: createdDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-        estimatedDelivery: estDelivery.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-        courier: ord.trackingNumber
+        estimatedDelivery: isCancelled ? 'CANCELLED' : estDelivery.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        isCancelled,
+        courier: isCancelled
+          ? 'Cancellation processed — Zero courier liability'
+          : ord.trackingNumber
           ? `${ord.carrier} (AWB: ${ord.trackingNumber})`
           : `${ord.carrier} (Dispatches in 24-48 hrs)`,
         paymentMethod: ord.paymentMethod,
@@ -170,35 +174,47 @@ export default function OrderTrackingModal({ isOpen, onClose }) {
                 </div>
               </div>
 
-              {/* Stages List */}
-              <div className="space-y-3 relative pl-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1px] before:bg-white/20">
-                {orderStatus.stages.map((stage, i) => (
-                  <div key={i} className="relative text-left">
-                    <div
-                      className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                        stage.done
-                          ? 'bg-white border-white text-black'
-                          : stage.current
-                          ? 'bg-pink border-pink text-black animate-pulse shadow-[0_0_8px_rgba(244,194,194,0.6)]'
-                          : 'bg-black border-white/30'
-                      }`}
-                    >
-                      {stage.done && <CheckCircle2 className="w-2.5 h-2.5 text-black" />}
-                    </div>
-
-                    <h5
-                      className={`text-xs font-mono font-medium uppercase ${
-                        stage.done || stage.current ? 'text-white font-bold' : 'text-zinc-500'
-                      }`}
-                    >
-                      {stage.title}
-                    </h5>
-                    <p className="text-[10px] sm:text-[11px] font-montserrat text-zinc-400 leading-relaxed">
-                      {stage.desc}
-                    </p>
+              {/* Stages List or Cancellation Banner */}
+              {orderStatus.isCancelled ? (
+                <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs font-mono space-y-1">
+                  <div className="flex items-center gap-2 font-bold text-white uppercase">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                    <span>Order Cancelled</span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-zinc-300 text-[11px] leading-relaxed">
+                    This order was cancelled prior to dispatch. Associated wearable art garments have been returned to studio inventory.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3 relative pl-6 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[1px] before:bg-white/20">
+                  {orderStatus.stages.map((stage, i) => (
+                    <div key={i} className="relative text-left">
+                      <div
+                        className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                          stage.done
+                            ? 'bg-white border-white text-black'
+                            : stage.current
+                            ? 'bg-pink border-pink text-black animate-pulse shadow-[0_0_8px_rgba(244,194,194,0.6)]'
+                            : 'bg-black border-white/30'
+                        }`}
+                      >
+                        {stage.done && <CheckCircle2 className="w-2.5 h-2.5 text-black" />}
+                      </div>
+
+                      <h5
+                        className={`text-xs font-mono font-medium uppercase ${
+                          stage.done || stage.current ? 'text-white font-bold' : 'text-zinc-500'
+                        }`}
+                      >
+                        {stage.title}
+                      </h5>
+                      <p className="text-[10px] sm:text-[11px] font-montserrat text-zinc-400 leading-relaxed">
+                        {stage.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Courier and Concierge Support */}
               <div className="pt-2.5 border-t border-white/10 flex flex-col sm:flex-row gap-2 items-start sm:items-center justify-between text-xs font-mono">

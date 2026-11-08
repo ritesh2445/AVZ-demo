@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { getDb, initializeDatabase } from '@/src/lib/db';
 import { PRODUCTS } from '@/src/data/brandData';
 import { getClientIp, checkRateLimit, isValidEmail, isValidPhone, sanitizeText } from '@/src/lib/security';
+import { sendOrderConfirmationEmail } from '@/src/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -233,6 +234,23 @@ export async function POST(request: Request) {
           Date.now()
         ]
       });
+
+      // Dispatch Resend Order Confirmation Email for Cash on Delivery Order
+      sendOrderConfirmationEmail({
+        order_number: orderNumber,
+        customer_name: cleanCustomerName,
+        customer_email: cleanCustomerEmail,
+        customer_phone: cleanCustomerPhone,
+        shipping_address: customer.address || {},
+        items: verifiedItems,
+        subtotal: calculatedSubtotal,
+        discount: discountAmount,
+        shipping_fee: shippingFee,
+        grand_total: grandTotal,
+        payment_method: 'Cash on Delivery (COD Verified)',
+        payment_status: 'pending',
+        created_at: Date.now()
+      }).catch((err) => console.warn('[EMAIL NOTICE]: Failed to send COD confirmation email:', err));
 
       return NextResponse.json({
         success: true,

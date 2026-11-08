@@ -180,6 +180,58 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     }, 600);
     return () => clearTimeout(timer);
   }, [catalogProducts]);
+
+  // Synchronize cart items with live catalog product prices, names, and stock
+  useEffect(() => {
+    if (!Array.isArray(catalogProducts) || catalogProducts.length === 0) return;
+
+    setCartItems((prevItems) => {
+      if (!Array.isArray(prevItems) || prevItems.length === 0) return prevItems;
+
+      let changed = false;
+      const updated = prevItems.map((item) => {
+        const liveMatch = catalogProducts.find(
+          (p) => String(p.id) === String(item.id) ||
+                 (p.title && item.name && p.title.toLowerCase() === item.name.toLowerCase()) ||
+                 (p.name && item.name && p.name.toLowerCase() === item.name.toLowerCase())
+        );
+
+        if (!liveMatch) return item;
+
+        const livePrice = Number(liveMatch.price);
+        const currentPrice = Number(item.price);
+        const liveName = liveMatch.title || liveMatch.name || item.name;
+        const liveImage = liveMatch.image || (Array.isArray(liveMatch.images) ? liveMatch.images[0] : null) || item.image;
+        const liveStock = liveMatch.stock !== undefined ? liveMatch.stock : (liveMatch.inventory_quantity !== undefined ? liveMatch.inventory_quantity : item.stock);
+
+        if (
+          (!isNaN(livePrice) && livePrice !== currentPrice) ||
+          liveName !== item.name ||
+          (liveStock !== undefined && liveStock !== item.stock) ||
+          (liveImage && liveImage !== item.image)
+        ) {
+          changed = true;
+          return {
+            ...item,
+            price: !isNaN(livePrice) ? livePrice : item.price,
+            name: liveName,
+            title: liveName,
+            image: liveImage,
+            stock: liveStock,
+          };
+        }
+        return item;
+      });
+
+      if (changed) {
+        try {
+          localStorage.setItem('avz_cart', JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      }
+      return prevItems;
+    });
+  }, [catalogProducts]);
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const stored = localStorage.getItem('avz_user');
