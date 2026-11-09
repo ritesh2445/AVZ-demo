@@ -43,9 +43,7 @@ export async function POST(request: Request) {
         success: true,
         requires2FA: true,
         email: res.email,
-        message: res.message,
-        emailDispatched: res.emailDispatched,
-        otp: res.otp
+        message: res.message
       });
     }
 

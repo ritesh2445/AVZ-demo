@@ -28,9 +28,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: res.message,
-      emailDispatched: res.emailDispatched,
-      otp: res.otp
+      message: res.message
     });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Internal server error' }, { status: 500 });
