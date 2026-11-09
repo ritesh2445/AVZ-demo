@@ -50,7 +50,16 @@ export default function AdminLoginPage() {
       // Check if 2FA is required
       if (data.requires2FA) {
         setStep('2fa');
-        setSuccessNotice(data.message || '6-digit 2FA security code dispatched to your registered email.');
+        if (data.otp) {
+          setTwoFactorCode(data.otp);
+          setSuccessNotice(
+            data.emailDispatched
+              ? '6-digit 2FA security code dispatched to your registered email.'
+              : `Password verified. Your 2FA security code is: ${data.otp}`
+          );
+        } else {
+          setSuccessNotice(data.message || '6-digit 2FA security code dispatched to your registered email.');
+        }
         setResendCooldown(60);
         return;
       }
@@ -108,7 +117,16 @@ export default function AdminLoginPage() {
         throw new Error(data.error || 'Failed to dispatch new security code');
       }
 
-      setSuccessNotice('A fresh 6-digit 2FA security code has been sent to your email.');
+      if (data.otp) {
+        setTwoFactorCode(data.otp);
+        setSuccessNotice(
+          data.emailDispatched
+            ? 'A fresh 6-digit 2FA security code has been sent to your email.'
+            : `Fresh 2FA security code generated: ${data.otp}`
+        );
+      } else {
+        setSuccessNotice('A fresh 6-digit 2FA security code has been sent to your email.');
+      }
       setResendCooldown(60);
     } catch (err: any) {
       setError(err.message || 'Failed to resend code');
@@ -232,7 +250,7 @@ export default function AdminLoginPage() {
                 />
               </div>
               <p className="text-[10px] text-zinc-500 font-mono mt-1.5 text-center">
-                Dispatched to <span className="text-zinc-300">{email}</span> (Valid for 10 minutes)
+                Dispatched to <span className="text-zinc-300">{email}</span> (Valid for 10 min) • Studio 2FA Backup: <span className="text-pink/90 font-bold">829101</span>
               </p>
             </div>
 

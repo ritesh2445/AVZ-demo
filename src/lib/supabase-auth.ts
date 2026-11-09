@@ -12,7 +12,11 @@ const supabaseAnonKey =
   '';
 
 export const isSupabaseConfigured = Boolean(
-  supabaseUrl.trim() && supabaseAnonKey.trim()
+  supabaseUrl.trim() &&
+  supabaseAnonKey.trim() &&
+  !supabaseUrl.includes('your-project-id') &&
+  !supabaseUrl.includes('placeholder') &&
+  !supabaseUrl.includes('oqymjljgzrjdsruqthpy')
 );
 
 let supabaseInstance: SupabaseClient | null = null;

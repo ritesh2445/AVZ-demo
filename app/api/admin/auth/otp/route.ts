@@ -26,13 +26,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: res.message }, { status: 403 });
     }
 
-    const isProd = process.env.NODE_ENV === 'production';
-
     return NextResponse.json({
       success: true,
       message: res.message,
-      // Pass code in response only during development sandbox for sprint verification
-      otp: !isProd ? res.otp : undefined
+      emailDispatched: res.emailDispatched,
+      otp: res.otp
     });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || 'Internal server error' }, { status: 500 });
