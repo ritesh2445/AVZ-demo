@@ -9,7 +9,7 @@ import {
   Search, Plus, Download, RefreshCw, CheckCircle, AlertTriangle,
   ExternalLink, Eye, ChevronRight, X, Sparkles, Filter, Edit3, Trash2,
   Copy, Save, Sliders, ShieldAlert, Check, Menu
-  , Palette, Upload, RotateCcw
+  , Palette, Upload, RotateCcw, Calendar
 } from 'lucide-react';
 import MuseumGalleryAdminTab from '@/src/components/admin/MuseumGalleryAdminTab';
 import MediaAndSectionManager from '@/src/components/admin/MediaAndSectionManager';
@@ -220,6 +220,39 @@ export default function AdminDashboardPage() {
   const [refundAmount, setRefundAmount] = useState<number>(0);
   const [refundRestock, setRefundRestock] = useState(false);
   const [refundProcessing, setRefundProcessing] = useState(false);
+
+  // Export Orders CSV Modal states
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [exportStartDate, setExportStartDate] = useState('');
+  const [exportEndDate, setExportEndDate] = useState('');
+  const [exportPaymentStatus, setExportPaymentStatus] = useState('all');
+  const [exportFulfillmentStatus, setExportFulfillmentStatus] = useState('all');
+
+  const applyExportPreset = (preset: string) => {
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    if (preset === 'all') {
+      setExportStartDate('');
+      setExportEndDate('');
+    } else if (preset === 'today') {
+      setExportStartDate(todayStr);
+      setExportEndDate(todayStr);
+    } else if (preset === '7days') {
+      const d = new Date();
+      d.setDate(d.getDate() - 7);
+      setExportStartDate(d.toISOString().split('T')[0]);
+      setExportEndDate(todayStr);
+    } else if (preset === '30days') {
+      const d = new Date();
+      d.setDate(d.getDate() - 30);
+      setExportStartDate(d.toISOString().split('T')[0]);
+      setExportEndDate(todayStr);
+    } else if (preset === 'this_month') {
+      const d = new Date(now.getFullYear(), now.getMonth(), 1);
+      setExportStartDate(d.toISOString().split('T')[0]);
+      setExportEndDate(todayStr);
+    }
+  };
   const [navSettings, setNavSettings] = useState<any>({
     header_links: [
       { label: 'Shop', href: '#shop' },
@@ -266,7 +299,8 @@ export default function AdminDashboardPage() {
     newUserModalOpen ||
     editUserModalOpen ||
     editSquadModalOpen ||
-    (refundModalOpen && refundOrderTarget)
+    (refundModalOpen && refundOrderTarget) ||
+    exportModalOpen
   );
 
   useEffect(() => {
@@ -1343,13 +1377,18 @@ export default function AdminDashboardPage() {
                   <h2 className="text-xl font-cinzel font-bold text-white">Orders & Shipping</h2>
                   <p className="text-xs text-neutral-400 mt-1 font-mono">Manage real customer purchases, manual courier dispatches, and packing slips.</p>
                 </div>
-                <a
-                  href="/api/admin/fulfillment/export-csv?filter=all"
-                  className="bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setExportPaymentStatus('all');
+                    setExportFulfillmentStatus('all');
+                    setExportModalOpen(true);
+                  }}
+                  className="bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer transition-all"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  Export All Orders CSV
-                </a>
+                  Export Orders CSV
+                </button>
               </div>
 
               {/* SEARCH & FILTERS */}
@@ -1956,13 +1995,18 @@ export default function AdminDashboardPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <a
-                    href="/api/admin/fulfillment/export-csv?filter=unfulfilled"
-                    className="bg-[#BE185D] hover:bg-[#BE185D]/90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setExportPaymentStatus('all');
+                      setExportFulfillmentStatus('unfulfilled');
+                      setExportModalOpen(true);
+                    }}
+                    className="bg-[#BE185D] hover:bg-[#BE185D]/90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer transition-all"
                   >
                     <Download className="w-4 h-4" />
-                    Download Unfulfilled Courier CSV
-                  </a>
+                    Export Courier Manifest CSV
+                  </button>
                 </div>
               </div>
 
@@ -4185,6 +4229,164 @@ export default function AdminDashboardPage() {
                 className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs font-mono uppercase"
               >
                 {refundProcessing ? 'Processing...' : `Confirm Refund (₹${refundAmount})${refundRestock ? ' & Restock' : ''}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EXPORT ORDERS & MANIFEST CSV MODAL */}
+      {exportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#120D1A] border border-[#2A1D38] w-full max-w-lg rounded-2xl shadow-2xl p-6 space-y-5 text-white max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-[#F4C2C2]">
+                  <Download className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-cinzel text-lg font-bold text-white">Export Orders Manifest</h3>
+                  <p className="text-xs text-neutral-400 font-mono mt-0.5">Filter by date and status criteria before downloading CSV.</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setExportModalOpen(false)}
+                className="text-neutral-400 hover:text-white transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Quick Date Presets */}
+            <div>
+              <label className="block text-[11px] font-mono text-neutral-300 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-[#F4C2C2]" />
+                Date Range Presets
+              </label>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {[
+                  { label: 'All Time', val: 'all' },
+                  { label: 'Today', val: 'today' },
+                  { label: 'Last 7 Days', val: '7days' },
+                  { label: 'Last 30 Days', val: '30days' },
+                  { label: 'This Month', val: 'this_month' }
+                ].map((p) => {
+                  const isAll = p.val === 'all' && !exportStartDate && !exportEndDate;
+                  return (
+                    <button
+                      key={p.val}
+                      type="button"
+                      onClick={() => applyExportPreset(p.val)}
+                      className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono uppercase tracking-wider border transition-all ${
+                        isAll
+                          ? 'bg-[#BE185D] text-black font-bold border-[#BE185D]'
+                          : 'bg-[#1A1424] text-neutral-300 border-white/10 hover:border-pink-500/40 hover:text-white'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Custom Date Inputs (From / To) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#171022] border border-white/10 p-3.5 rounded-xl">
+              <div>
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">Date From (Start)</label>
+                <input
+                  type="date"
+                  value={exportStartDate}
+                  onChange={(e) => setExportStartDate(e.target.value)}
+                  className="w-full bg-[#100B18] border border-neutral-700 focus:border-[#F4C2C2] text-white text-xs font-mono rounded-lg px-3 py-2 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">Date To (End)</label>
+                <input
+                  type="date"
+                  value={exportEndDate}
+                  onChange={(e) => setExportEndDate(e.target.value)}
+                  className="w-full bg-[#100B18] border border-neutral-700 focus:border-[#F4C2C2] text-white text-xs font-mono rounded-lg px-3 py-2 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Criteria: Payment Status */}
+            <div>
+              <label className="block text-[11px] font-mono text-neutral-300 font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <CreditCard className="w-3.5 h-3.5 text-[#F4C2C2]" />
+                Payment Criteria
+              </label>
+              <select
+                value={exportPaymentStatus}
+                onChange={(e) => setExportPaymentStatus(e.target.value)}
+                className="w-full bg-[#171022] border border-white/15 focus:border-[#F4C2C2] text-white text-xs font-mono rounded-xl px-3.5 py-2.5 outline-none"
+              >
+                <option value="all">All Payment Statuses (Paid, Pending, Refunded, Cancelled)</option>
+                <option value="paid">Paid (Successfully Collected via Razorpay)</option>
+                <option value="pending">Pending (Awaiting Payment Completion)</option>
+                <option value="refunded">Refunded (Full or Partial Refunds)</option>
+                <option value="cancelled">Cancelled / Voided Transactions</option>
+              </select>
+            </div>
+
+            {/* Criteria: Fulfillment Stage */}
+            <div>
+              <label className="block text-[11px] font-mono text-neutral-300 font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                <Truck className="w-3.5 h-3.5 text-[#F4C2C2]" />
+                Fulfillment & Courier Stage
+              </label>
+              <select
+                value={exportFulfillmentStatus}
+                onChange={(e) => setExportFulfillmentStatus(e.target.value)}
+                className="w-full bg-[#171022] border border-white/15 focus:border-[#F4C2C2] text-white text-xs font-mono rounded-xl px-3.5 py-2.5 outline-none"
+              >
+                <option value="all">All Fulfillment Stages</option>
+                <option value="unfulfilled">Unfulfilled (Ready for Courier / Needs Packing)</option>
+                <option value="shipped">Shipped (Dispatched with Tracking Number)</option>
+                <option value="delivered">Delivered (Successfully Received by Client)</option>
+                <option value="cancelled">Cancelled (Fulfillment Halted)</option>
+              </select>
+            </div>
+
+            {/* Summary Tag */}
+            <div className="bg-[#191124] border border-pink-500/20 rounded-xl p-3 flex items-center justify-between text-xs font-mono">
+              <span className="text-neutral-400">Target Export:</span>
+              <span className="text-[#F4C2C2] font-semibold text-right">
+                {exportPaymentStatus === 'all' ? 'All Payments' : exportPaymentStatus.toUpperCase()} •{' '}
+                {exportFulfillmentStatus === 'all' ? 'All Stages' : exportFulfillmentStatus.toUpperCase()}
+                {exportStartDate ? ` • From ${exportStartDate}` : ''}
+                {exportEndDate ? ` To ${exportEndDate}` : ''}
+              </span>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setExportModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl border border-white/15 text-neutral-300 hover:text-white hover:bg-white/5 font-mono text-xs transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  if (exportStartDate) params.set('startDate', exportStartDate);
+                  if (exportEndDate) params.set('endDate', exportEndDate);
+                  if (exportPaymentStatus && exportPaymentStatus !== 'all') params.set('payment_status', exportPaymentStatus);
+                  if (exportFulfillmentStatus && exportFulfillmentStatus !== 'all') params.set('fulfillment_status', exportFulfillmentStatus);
+                  window.location.href = `/api/admin/fulfillment/export-csv?${params.toString()}`;
+                  setExportModalOpen(false);
+                }}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink to-purple-600 hover:opacity-90 text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all"
+              >
+                <Download className="w-4 h-4" />
+                Download Filtered CSV
               </button>
             </div>
           </div>

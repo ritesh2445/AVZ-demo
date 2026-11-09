@@ -27,13 +27,75 @@ export async function GET(request: Request) {
     await initializeDatabase();
     const db = getDb();
     const { searchParams } = new URL(request.url);
-    const filter = searchParams.get('filter') || 'all'; // 'unfulfilled' or 'all'
+
+    const filter = searchParams.get('filter') || 'all'; // legacy fallback
+    const startDate = searchParams.get('startDate') || searchParams.get('from_date');
+    const endDate = searchParams.get('endDate') || searchParams.get('to_date');
+    const paymentStatus = searchParams.get('payment_status') || searchParams.get('paymentStatus') || '';
+    const fulfillmentStatus = searchParams.get('fulfillment_status') || searchParams.get('fulfillmentStatus') || '';
+    const search = searchParams.get('search') || '';
 
     let sql = 'SELECT * FROM orders';
+    const whereClauses: string[] = [];
     const args: any[] = [];
 
-    if (filter === 'unfulfilled') {
-      sql += " WHERE fulfillment_status = 'unfulfilled'";
+    // Date range filtering
+    if (startDate) {
+      let startMs = Number(startDate);
+      if (isNaN(startMs) || startMs < 1000000000000) {
+        startMs = new Date(`${startDate}T00:00:00`).getTime();
+      }
+      if (!isNaN(startMs)) {
+        whereClauses.push('created_at >= ?');
+        args.push(startMs);
+      }
+    }
+
+    if (endDate) {
+      let endMs = Number(endDate);
+      if (isNaN(endMs) || endMs < 1000000000000) {
+        endMs = new Date(`${endDate}T23:59:59.999`).getTime();
+      }
+      if (!isNaN(endMs)) {
+        whereClauses.push('created_at <= ?');
+        args.push(endMs);
+      }
+    }
+
+    // Payment status filter
+    if (paymentStatus && paymentStatus !== 'all') {
+      whereClauses.push('LOWER(payment_status) = ?');
+      args.push(paymentStatus.toLowerCase().trim());
+    }
+
+    // Fulfillment status filter
+    if (fulfillmentStatus && fulfillmentStatus !== 'all') {
+      whereClauses.push('LOWER(fulfillment_status) = ?');
+      args.push(fulfillmentStatus.toLowerCase().trim());
+    }
+
+    // Legacy or status preset shortcuts
+    if (!paymentStatus && !fulfillmentStatus) {
+      if (filter === 'unfulfilled') {
+        whereClauses.push("LOWER(fulfillment_status) = 'unfulfilled'");
+      } else if (filter === 'completed') {
+        whereClauses.push("(LOWER(payment_status) = 'paid' AND LOWER(fulfillment_status) IN ('delivered', 'shipped'))");
+      } else if (filter === 'pending') {
+        whereClauses.push("(LOWER(payment_status) = 'pending' OR LOWER(fulfillment_status) = 'unfulfilled')");
+      } else if (filter === 'cancelled') {
+        whereClauses.push("(LOWER(payment_status) = 'cancelled' OR LOWER(fulfillment_status) = 'cancelled')");
+      }
+    }
+
+    // Search filter
+    if (search && search.trim()) {
+      whereClauses.push('(order_number LIKE ? OR customer_name LIKE ? OR customer_email LIKE ? OR customer_phone LIKE ?)');
+      const term = `%${search.trim()}%`;
+      args.push(term, term, term, term);
+    }
+
+    if (whereClauses.length > 0) {
+      sql += ` WHERE ${whereClauses.join(' AND ')}`;
     }
     sql += ' ORDER BY created_at DESC';
 
@@ -107,14 +169,26 @@ export async function GET(request: Request) {
 
     await logAdminActivity(session.email, 'EXPORT_FULFILLMENT_CSV', 'orders', undefined, {
       record_count: res.rows.length,
-      filter
+      filter,
+      startDate,
+      endDate,
+      paymentStatus,
+      fulfillmentStatus
     });
+
+    const filenameParts = ['AVZ_Orders'];
+    if (paymentStatus && paymentStatus !== 'all') filenameParts.push(paymentStatus);
+    if (fulfillmentStatus && fulfillmentStatus !== 'all') filenameParts.push(fulfillmentStatus);
+    if (startDate) filenameParts.push(`from_${startDate}`);
+    if (endDate) filenameParts.push(`to_${endDate}`);
+    filenameParts.push(new Date().toISOString().slice(0, 10));
+    const safeFilename = filenameParts.join('_').replace(/[^a-zA-Z0-9_\-]/g, '_') + '.csv';
 
     return new Response(csvContent, {
       status: 200,
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': `attachment; filename="AVZ_Fulfillment_Manifest_${new Date().toISOString().slice(0, 10)}.csv"`,
+        'Content-Disposition': `attachment; filename="${safeFilename}"`,
         'Cache-Control': 'no-store, no-cache'
       }
     });
