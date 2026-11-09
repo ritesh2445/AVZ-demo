@@ -225,7 +225,7 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full bg-white hover:bg-zinc-200 text-black font-mono font-bold uppercase tracking-wider py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50 mt-4 shadow-lg"
             >
-              {loading ? 'Authenticating...' : 'Sign In to Management Console'}
+              {loading ? 'Verifying Password & Dispatching 2FA...' : 'Verify Password & Send 2FA Code'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>

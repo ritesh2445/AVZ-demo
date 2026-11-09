@@ -115,9 +115,9 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
   }
 
   const now = Date.now();
-  const COOLDOWN_MS = 60 * 1000; // 60 seconds minimum cooldown between OTP requests
+  const COOLDOWN_MS = 15 * 1000; // 15 seconds minimum cooldown between OTP requests
   const WINDOW_MS = 60 * 60 * 1000; // 1 hour rolling window
-  const MAX_PER_WINDOW = 5; // Maximum 5 OTP requests per hour
+  const MAX_PER_WINDOW = 30; // Maximum 30 OTP requests per hour
 
   const lastRequested = Number(user.last_otp_requested_at || 0);
   const windowStart = Number(user.otp_window_start || 0);
@@ -435,24 +435,22 @@ export async function loginAdminWithPassword(
     user = { id: newId, email: normalized, name: 'AVZ Administrator', role: 'owner' };
   }
 
-  const session: AdminSession = {
-    userId: String(user.id),
-    email: String(user.email),
-    name: String(user.name),
-    role: (user.role as any) || 'owner',
-    issuedAt: Date.now(),
-    expiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
-  };
+  // 2FA Enforcement: Generate single-use 6-digit OTP code and dispatch via Resend to admin email
+  const otpRes = await generateAdminOtp(normalized);
+  if (!otpRes.success) {
+    return {
+      success: false,
+      message: otpRes.message || 'Failed to dispatch 2FA verification code. Please try again.'
+    };
+  }
 
-  const token = signSessionPayload(session);
-
-  await logAdminActivity(normalized, 'LOGIN_SUCCESS', 'admin_users', String(user.id), { role: user.role });
+  await logAdminActivity(normalized, '2FA_CHALLENGE_ISSUED', 'admin_users', String(user.id), { role: user.role });
 
   return {
     success: true,
-    message: 'Authentication successful.',
-    session,
-    token
+    requires2FA: true,
+    email: normalized,
+    message: 'Password verified. 6-digit Two-Factor (2FA) verification code sent to your registered email.'
   };
 }
 
