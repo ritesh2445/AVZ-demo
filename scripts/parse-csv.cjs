@@ -28,3 +28,4 @@ for (let i = 7; i <= 32; i++) {
 
 console.log(JSON.stringify(products, null, 2));
 fs.writeFileSync('scratch/csv_products.json', JSON.stringify(products, null, 2));
+

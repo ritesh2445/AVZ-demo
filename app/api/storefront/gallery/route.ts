@@ -12,9 +12,14 @@ export async function GET() {
 
     let res;
     try {
-      // Purge legacy placeholder sample IDs from previous builds
+      // Purge duplicate angles not in the clean INITIAL_GALLERY_ARTWORKS set
       try {
-        await db.execute("DELETE FROM gallery_artworks WHERE id LIKE 'art-00%'");
+        const validIds = INITIAL_GALLERY_ARTWORKS.map(a => a.id);
+        const placeholders = validIds.map(() => '?').join(',');
+        await db.execute({
+          sql: `DELETE FROM gallery_artworks WHERE id NOT IN (${placeholders})`,
+          args: validIds
+        });
       } catch (cleanErr) {
         // ignore
       }
@@ -37,8 +42,8 @@ export async function GET() {
       }
     }
 
-    // Auto-seed or expand initial masterpieces if database table is missing new archive pieces
-    if (!res.rows || res.rows.length < INITIAL_GALLERY_ARTWORKS.length) {
+    // Auto-seed or expand initial masterpieces if database table count differs from clean artworks
+    if (!res.rows || res.rows.length !== INITIAL_GALLERY_ARTWORKS.length) {
       const now = Date.now();
       for (const art of INITIAL_GALLERY_ARTWORKS) {
         try {
