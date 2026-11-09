@@ -2405,6 +2405,20 @@ export default function AdminDashboardPage() {
                 </form>
               </div>
 
+              {/* 2FA Status Banner */}
+              <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 text-xs font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <div>
+                    <span className="font-bold text-white uppercase tracking-wider block text-xs">TWO-FACTOR AUTHENTICATION (2FA) • ENFORCED</span>
+                    <span className="text-[11px] text-emerald-300/80">Every administrator login requires master credentials verification + a single-use 6-digit email security code.</span>
+                  </div>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                  ACTIVE & ENFORCED
+                </span>
+              </div>
+
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
                 <h3 className="text-sm font-bold text-white font-cinzel mb-4">Third-Party Account Status (Requirement 13)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
@@ -2717,6 +2731,20 @@ export default function AdminDashboardPage() {
                   <Plus className="w-3.5 h-3.5" />
                   Add Administrator
                 </button>
+              </div>
+
+              {/* 2FA Status Banner */}
+              <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 text-xs font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                  <div>
+                    <span className="font-bold text-white uppercase tracking-wider block text-xs">TWO-FACTOR AUTHENTICATION (2FA) • ENFORCED</span>
+                    <span className="text-[11px] text-emerald-300/80">Every administrator login requires master credentials verification + a single-use 6-digit email security code.</span>
+                  </div>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase tracking-wider shrink-0">
+                  ACTIVE & ENFORCED
+                </span>
               </div>
 
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">

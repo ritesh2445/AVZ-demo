@@ -437,7 +437,7 @@ export function verifyAdminPassword(password: string, storedHash: string): boole
 export async function loginAdminWithPassword(
   email: string,
   password: string
-): Promise<{ success: boolean; message: string; session?: AdminSession; token?: string }> {
+): Promise<{ success: boolean; message: string; requires2FA?: boolean; email?: string; session?: AdminSession; token?: string; otp?: string }> {
   await initializeDatabase();
   const normalized = email.trim().toLowerCase();
   const isProd = process.env.NODE_ENV === 'production';
@@ -485,30 +485,23 @@ export async function loginAdminWithPassword(
     user = { id: newId, email: normalized, name: 'AVZ Administrator', role: 'owner' };
   }
 
-  // Update last login timestamp
-  await db.execute({
-    sql: 'UPDATE admin_users SET last_login_at = ? WHERE id = ?',
-    args: [Date.now(), user.id],
-  });
+  // 2FA Enforcement: Generate and dispatch single-use 6-digit OTP code to the administrator
+  const otpRes = await generateAdminOtp(normalized);
+  if (!otpRes.success) {
+    return {
+      success: false,
+      message: otpRes.message || 'Failed to dispatch 2FA verification code. Please try again.'
+    };
+  }
 
-  const session: AdminSession = {
-    userId: String(user.id),
-    email: String(user.email),
-    name: String(user.name || 'AVZ Administrator'),
-    role: (user.role as any) || 'owner',
-    issuedAt: Date.now(),
-    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
-  };
-
-  const token = signSessionPayload(session);
-
-  await logAdminActivity(normalized, 'LOGIN_PASSWORD_SUCCESS', 'admin_users', String(user.id), { role: user.role });
+  await logAdminActivity(normalized, '2FA_CHALLENGE_ISSUED', 'admin_users', String(user.id), { role: user.role });
 
   return {
     success: true,
-    message: 'Authentication successful.',
-    session,
-    token,
+    requires2FA: true,
+    email: normalized,
+    message: 'Password verified. 6-digit Two-Factor (2FA) verification code sent to your registered email.',
+    otp: !isProd ? otpRes.otp : undefined
   };
 }
 

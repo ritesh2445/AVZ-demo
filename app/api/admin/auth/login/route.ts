@@ -33,8 +33,23 @@ export async function POST(request: Request) {
     }
 
     const res = await loginAdminWithPassword(email, password);
-    if (!res.success || !res.token || !res.session) {
+    if (!res.success) {
       return NextResponse.json({ error: res.message }, { status: 401 });
+    }
+
+    // 2FA Challenge: Respond with requires2FA so client prompts for 6-digit code
+    if (res.requires2FA) {
+      return NextResponse.json({
+        success: true,
+        requires2FA: true,
+        email: res.email,
+        message: res.message,
+        otp: res.otp
+      });
+    }
+
+    if (!res.token || !res.session) {
+      return NextResponse.json({ error: 'Authentication could not be completed.' }, { status: 401 });
     }
 
     const isLocalhost =
