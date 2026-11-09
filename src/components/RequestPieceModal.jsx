@@ -50,8 +50,33 @@ export default function RequestPieceModal({
   if (!isOpen || !piece) return null;
 
   const pieceTitle = piece.name || piece.title || 'Exclusive Archive Piece';
-  const pieceImage = piece.images?.[0] || piece.image || '/assets/editorial_hero_portrait.jpg';
-  const piecePrice = piece.price || 0;
+  
+  // Safely extract the primary image URL across all formats (array, string, JSON-stringified, or imgUrl)
+  const pieceImage = (() => {
+    if (Array.isArray(piece.images) && piece.images.length > 0 && typeof piece.images[0] === 'string') {
+      return piece.images[0];
+    }
+    if (typeof piece.image === 'string' && piece.image.length > 1) {
+      return piece.image;
+    }
+    if (typeof piece.imgUrl === 'string' && piece.imgUrl.length > 1) {
+      return piece.imgUrl;
+    }
+    if (typeof piece.image_url === 'string' && piece.image_url.length > 1) {
+      return piece.image_url;
+    }
+    if (typeof piece.images === 'string' && piece.images.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(piece.images);
+        if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === 'string') {
+          return parsed[0];
+        }
+      } catch {}
+    }
+    return '/assets/editorial_hero_portrait.jpg';
+  })();
+
+  const piecePrice = Number(piece.price) || 0;
 
   const handlePhoneChange = (e) => {
     const digits = e.target.value.replace(/\D/g, '').slice(0, 10);

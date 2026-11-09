@@ -100,9 +100,7 @@ export default function AntiquePaintingFrame({
     return isStacked ? Math.min(artwork.width_px || 280, 290) : (artwork.width_px || 360);
   };
 
-  const handleFrameClick = (e) => {
-    // If admin clicked the edit button, don't open viewer
-    if (e.target.closest('.admin-frame-edit-btn')) return;
+  const handleFrameClick = () => {
     onInspect?.(artwork);
   };
 
@@ -135,24 +133,7 @@ export default function AntiquePaintingFrame({
         </div>
       )}
 
-      {/* 3. Admin Direct Edit Badge (Visible ONLY to verified logged-in administrators) */}
-      {isAdmin && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            playSound('snap');
-            onAdminEdit?.(artwork);
-          }}
-          className="admin-frame-edit-btn"
-          title="Edit Vault Piece"
-          aria-label="Edit Vault Piece"
-        >
-          <Edit3 className="w-3.5 h-3.5" />
-        </button>
-      )}
-
-      {/* 4. The Authentic Antique Gold Frame Structure */}
+      {/* 3. The Authentic Antique Gold Frame Structure */}
       <div
         className={`w-full ${aspectClass} relative transition-all duration-500 rounded-none museum-frame-shadow ${frameClass} ${
           isHovered ? '-translate-y-1.5' : 'translate-y-0'

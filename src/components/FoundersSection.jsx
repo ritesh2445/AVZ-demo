@@ -267,7 +267,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
                           borderColor: 'rgba(255, 255, 255, 0.3)'
                         }}
                       >
-                        GUWAHATI
+                        STUDIO
                       </span>
                     </div>
                   </div>

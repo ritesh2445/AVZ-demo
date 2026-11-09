@@ -246,16 +246,8 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
           </p>
         </div>
 
-        {/* Gallery Controls (Sound Toggle, Navigation, Admin Indicator) */}
+        {/* Gallery Controls (Sound Toggle, Navigation) */}
         <div className="flex flex-wrap items-center gap-3 shrink-0 self-start md:self-end">
-          {/* Admin Curator Mode Pill (When logged in) */}
-          {isAdmin && (
-            <div className="px-3 py-1.5 bg-[#d4af37]/15 border border-[#d4af37] text-[#fae596] text-[10px] font-mono tracking-widest uppercase flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-[#d4af37]" />
-              <span>STUDIO CURATOR ACTIVE</span>
-            </div>
-          )}
-
           {/* Navigation Arrows */}
           <div className="flex items-center gap-2">
             <button

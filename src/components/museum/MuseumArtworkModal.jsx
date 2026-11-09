@@ -141,7 +141,7 @@ export default function MuseumArtworkModal({
               onClick={() => {
                 playSound('subdrop');
                 onClose();
-                onRequestCustomCommission?.(artwork.title);
+                onRequestCustomCommission?.(artwork);
               }}
               className="py-3 px-6 bg-gradient-to-r from-[#b3892c] via-[#fae596] to-[#b3892c] text-black font-serif font-bold text-xs tracking-[0.16em] uppercase flex items-center justify-center gap-2 cursor-pointer shadow-xl hover:brightness-110 active:scale-98 transition-all border border-[#fae596]"
             >

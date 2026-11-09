@@ -623,10 +623,28 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   const handleRequestPiece = useCallback((productOrName) => {
     let target = null;
     if (typeof productOrName === 'object' && productOrName !== null) {
-      target = productOrName;
+      target = { ...productOrName };
     } else if (typeof productOrName === 'string') {
-      target = catalogProducts.find((p) => p.name === productOrName || p.title === productOrName) || { name: productOrName };
+      const q = productOrName.trim().toLowerCase();
+      target = catalogProducts.find((p) => (p.name || p.title || '').toLowerCase() === q)
+        || PRODUCTS.find((p) => (p.name || p.title || '').toLowerCase() === q)
+        || FEATURED_PIECES.find((p) => (p.title || p.name || '').toLowerCase() === q)
+        || { name: productOrName, title: productOrName };
     }
+
+    // Ensure image is resolved from fallback catalog if missing
+    if (target && !target.image && (!target.images || target.images.length === 0)) {
+      const q = (target.name || target.title || '').toLowerCase();
+      const match = PRODUCTS.find((p) => (p.name || p.title || '').toLowerCase() === q)
+        || catalogProducts.find((p) => (p.name || p.title || '').toLowerCase() === q)
+        || FEATURED_PIECES.find((p) => (p.title || p.name || '').toLowerCase() === q);
+      if (match) {
+        target.image = match.image || match.imgUrl || match.images?.[0];
+        target.images = match.images || (target.image ? [target.image] : []);
+        target.price = target.price || match.price;
+      }
+    }
+
     setRequestedPieceTarget(target);
     setRequestPieceModalOpen(true);
   }, [catalogProducts]);
