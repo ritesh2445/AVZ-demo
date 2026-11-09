@@ -1018,7 +1018,6 @@ export default function AdminDashboardPage() {
     { id: 'requested_pieces', label: 'Requested Pieces', icon: Sparkles, badge: pieceRequests.filter(r => r.status === 'pending').length || null, highlight: true },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'inventory', label: 'Inventory', icon: Warehouse, badge: kpis?.lowStockCount ? 'Low' : null },
-    { id: 'collections', label: 'Collections', icon: Layers },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'content', label: 'Content & Website Editor', icon: FileEdit, highlight: true },
     { id: 'media', label: 'Media & Photo Sections', icon: ImageIcon, highlight: true },
@@ -2447,61 +2446,6 @@ export default function AdminDashboardPage() {
             </div>
           )}
 
-          {/* MODULE: COLLECTIONS */}
-          {activeTab === 'collections' && (
-            <div className="space-y-6 max-w-7xl mx-auto">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h2 className="text-xl font-cinzel font-bold text-white uppercase">Collections Management</h2>
-                  <p className="text-xs text-neutral-400 mt-1 font-mono">Curate thematic drops, lookbook groupings, and runway categories.</p>
-                </div>
-                <button
-                  onClick={() => setNewCollectionModalOpen(true)}
-                  className="bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Create Collection
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {collections.map((col) => (
-                  <div key={col.id} className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-5 space-y-3">
-                    <div className="h-32 rounded-xl overflow-hidden bg-neutral-900 relative">
-                      <img src={col.image || '/assets/editorial_hero_portrait.jpg'} alt={col.title} className="w-full h-full object-cover" />
-                      <span className="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-mono bg-black/80 text-[#F4C2C2] border border-white/10 uppercase">
-                        {col.status}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-white font-cinzel text-base">{col.title}</h3>
-                      <span className="text-[11px] font-mono text-[#F4C2C2] block">/{col.slug}</span>
-                      <p className="text-xs text-neutral-400 mt-1 line-clamp-2">{col.description || 'No description provided.'}</p>
-                    </div>
-                    <div className="pt-2 border-t border-neutral-800/80 flex justify-between items-center text-[11px] font-mono text-neutral-500">
-                      <span>{(col.product_ids || []).length} Products Assigned</span>
-                      <div className="flex items-center gap-2">
-                        <span>{new Date(Number(col.created_at)).toLocaleDateString()}</span>
-                        <button
-                          onClick={() => handleDeleteCollection(col.id, col.title)}
-                          className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 cursor-pointer transition-colors"
-                          title="Delete Collection"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {collections.length === 0 && (
-                  <div className="col-span-3 text-center py-12 bg-[#100C17] border border-[#231A2A] rounded-2xl text-neutral-400 font-mono text-xs">
-                    No custom collections created yet. Click "Create Collection" to organize catalog pieces.
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
           {/* MODULE: PROMOTIONS & DISCOUNTS */}
           {activeTab === 'promotions' && (
             <div className="space-y-6 max-w-7xl mx-auto">
@@ -3752,62 +3696,6 @@ export default function AdminDashboardPage() {
         </div>
       )}
       {/* MODAL: CREATE COLLECTION */}
-      {newCollectionModalOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#120D1A] border border-[#301934] rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center border-b border-neutral-800 pb-3">
-              <h3 className="text-lg font-cinzel font-bold text-white uppercase">Create New Collection</h3>
-              <button onClick={() => setNewCollectionModalOpen(false)} className="text-neutral-400 hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleCreateCollection} className="space-y-3 text-xs font-mono">
-              <div>
-                <label className="text-neutral-400 block mb-1 uppercase">Collection Title *</label>
-                <input
-                  name="colTitle"
-                  required
-                  placeholder="e.g. Cyber Relics Runway 2026"
-                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
-                />
-              </div>
-              <div>
-                <label className="text-neutral-400 block mb-1 uppercase">Description</label>
-                <textarea
-                  name="colDesc"
-                  rows={2}
-                  placeholder="Studio theme and material notes..."
-                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
-                />
-              </div>
-              <div>
-                <label className="text-neutral-400 block mb-1 uppercase">Featured Cover Image URL</label>
-                <input
-                  name="colImage"
-                  defaultValue="/assets/editorial_hero_portrait.jpg"
-                  className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-3 border-t border-neutral-800">
-                <button
-                  type="button"
-                  onClick={() => setNewCollectionModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#BE185D] hover:bg-[#BE185D]/80 text-black font-bold text-xs uppercase"
-                >
-                  Create Collection
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* MODAL: CREATE PROMOTION */}
       {newPromoModalOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
