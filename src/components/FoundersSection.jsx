@@ -18,7 +18,7 @@ const POLAROID_CARDS = [
     tag: 'IDENTITY 02',
     headline: '@DHRISTROYER',
     body: 'Actor. Sculptor. Founder. Slicing through fashion monotony since day one.',
-    stamp: 'GUWAHATI ARCHIVE',
+    stamp: 'STUDIO ARCHIVE',
     rotation: 'rotate-2'
   },
   {
@@ -33,7 +33,7 @@ const POLAROID_CARDS = [
     id: 'guild',
     tag: 'COMMUNITY 04',
     headline: 'WOMEN ARTISANS',
-    body: 'Handmade by women artisans in our Guwahati studio. True human soul over assembly lines.',
+    body: 'Handmade by women artisans in our Studio. True human soul over assembly lines.',
     stamp: 'ASSAM • 26°N 91°E',
     rotation: 'rotate-2'
   }
@@ -69,11 +69,11 @@ const MANIFESTO_PILLARS = [
   },
   {
     id: '04',
-    title: 'WOMEN ARTISANS OF OUR GUWAHATI STUDIO',
+    title: 'WOMEN ARTISANS OF OUR Studio',
     subtitle: 'Mentorship, independence, and North-East craftsmanship',
     icon: Users,
     summary:
-      'Our studio is rooted in Guwahati, Assam. Dhrisni personally trains and mentors local women artisans in wiring, structural corsetry, and heavy hardware sculpting, creating skilled economic independence through avant-garde fashion.',
+      'Our studio is rooted in independent craft. Dhrisni personally trains and mentors local women artisans in wiring, structural corsetry, and heavy hardware sculpting, creating skilled economic independence through avant-garde fashion.',
     highlight: 'Deeply empowering North-Eastern women craftsmanship on a global fashion stage.'
   }
 ];
@@ -126,7 +126,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
           blooming and growing botanical animation of the DHRISNI wordmark.
           ========================================================================= */}
       <div
-        className="atelier-dark-canvas studio-dark-canvas w-full bg-[#070609] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-white/10"
+        className="studio-dark-canvas studio-dark-canvas w-full bg-[#070609] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 relative overflow-hidden flex flex-col items-center justify-center border-b border-white/10"
         style={{ backgroundColor: '#070609', color: '#ffffff' }}
       >
         {/* Subtle Ambient Spatial Glows (Magenta & Emerald) */}
@@ -165,7 +165,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
               className="text-[11px] sm:text-xs font-montserrat uppercase tracking-[0.22em] font-semibold"
               style={{ color: 'rgba(244, 212, 216, 0.75)' }}
             >
-              THE ARCHITECT OF WEARABLE ART • GUWAHATI, ASSAM
+              THE ARCHITECT OF WEARABLE ART • STUDIO ARCHIVE
             </span>
           </div>
         </div>
@@ -177,7 +177,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
           and oversized haute-couture quote.
           ========================================================================= */}
       <div
-        className="atelier-dark-canvas studio-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black" data-surface="dark"
+        className="studio-dark-canvas studio-dark-canvas relative w-full bg-[#0a0a0f] text-white py-20 sm:py-28 md:py-36 px-4 sm:px-8 lg:px-12 border-t border-white/10 selection:bg-pink selection:text-black" data-surface="dark"
         style={{ backgroundColor: '#0a0a0f', color: '#ffffff' }}
       >
         {/* Subtle Ambient Spatial Glow */}
@@ -193,7 +193,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
             </div>
             <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono tracking-wider uppercase font-semibold" style={{ color: '#d4d4d8' }}>
               <MapPin className="w-3.5 h-3.5 text-pink shrink-0" style={{ color: '#f472b6', stroke: '#f472b6' }} />
-              <span style={{ color: '#d4d4d8' }}>26.1445° N, 91.7362° E • GUWAHATI, ASSAM</span>
+              <span style={{ color: '#d4d4d8' }}>26.1445° N, 91.7362° E • THE STUDIO</span>
             </div>
           </div>
 
@@ -301,7 +301,7 @@ function FoundersSection({ onScrollToSection, onOpenSquadModal, cmsFounders }) {
                 <p style={{ color: '#e4e4e7' }}>
                   Growing up in Assam with strict boundaries on clothing, her creativity had to break out. She picked up a pair
                   of heavy scissors and began slicing up garments to sculpt raw wearable armor. Today, every single relic from
-                  AVZ Vaganza is born directly under her hands in our Guwahati workshop.
+                  AVZ Vaganza is born directly under her hands in our Studio workshop.
                 </p>
               </div>
 

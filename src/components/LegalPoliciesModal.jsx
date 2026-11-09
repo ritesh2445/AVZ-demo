@@ -264,7 +264,7 @@ export default function LegalPoliciesModal({ isOpen, onClose, initialTab = 'priv
 
         {/* Footer */}
         <div className="p-4 sm:p-5 border-t border-white/10 bg-black/60 flex items-center justify-between text-xs font-mono text-zinc-400 shrink-0">
-          <span>LAST REVISED: 2026 • GUWAHATI, ASSAM</span>
+          <span>LAST REVISED: 2026 • STUDIO COMPLIANCE</span>
           <button
             onClick={() => {
               playSound('snap');

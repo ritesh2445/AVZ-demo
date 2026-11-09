@@ -130,7 +130,7 @@ export async function POST(request: Request) {
           
           if (isNaN(clientPrice) || clientPrice < STUDIO_MIN_TIER_INR) {
             return NextResponse.json(
-              { error: `Custom studio commissions start at minimum ₹${STUDIO_MIN_TIER_INR.toLocaleString('en-IN')}. Please contact atelier on WhatsApp for custom billing.` },
+              { error: `Custom studio commissions start at minimum ₹${STUDIO_MIN_TIER_INR.toLocaleString('en-IN')}. Please contact studio on WhatsApp for custom billing.` },
               { status: 400 }
             );
           }

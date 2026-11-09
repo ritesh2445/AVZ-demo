@@ -111,7 +111,7 @@ function createInMemoryClient(): Client {
     {
       id: 'art-001',
       title: 'Portrait of the Cyber Empress in Gilded Armor',
-      artist: 'Dhrisni & The AVZ Atelier',
+      artist: 'Dhrisni & The AVZ Studio',
       image_url: '/assets/editorial_hero_portrait.jpg',
       thumbnail_url: '/assets/editorial_hero_portrait.jpg',
       description: 'An archival masterwork featuring reclaimed sculptural metal breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
@@ -126,7 +126,7 @@ function createInMemoryClient(): Client {
       metadata: JSON.stringify({
         medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
         dimensions_cm: '78 × 104 cm',
-        provenance: 'Guwahati Permanent Salon Collection',
+        provenance: 'Studio Permanent Collection',
         hanging_bracket: 'brass_chains',
         wall_position: 'center',
         sconce_light: true
@@ -162,11 +162,11 @@ function createInMemoryClient(): Client {
     },
     {
       id: 'art-003',
-      title: 'The Guwahati River Chainmail Nocturne',
+      title: 'The River Chainmail Nocturne',
       artist: 'AVZ Women Artisan Guild',
       image_url: '/assets/look_chainmail_armor.jpg',
       thumbnail_url: '/assets/look_chainmail_armor.jpg',
-      description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
+      description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen over 45 uninterrupted studio hours.',
       year: '2024',
       category: 'Fluid Chainmail',
       frame_style: 'florentine_gold',
@@ -215,7 +215,7 @@ function createInMemoryClient(): Client {
     {
       id: 'art-005',
       title: 'Still Life with Telecom Motherboard & Copper Relics',
-      artist: 'Dhrisni & The AVZ Atelier',
+      artist: 'Dhrisni & The AVZ Studio',
       image_url: '/assets/prod_motherboard_cuff.jpg',
       thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
       description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
@@ -256,7 +256,7 @@ function createInMemoryClient(): Client {
       metadata: JSON.stringify({
         medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
         dimensions_cm: '68 × 90 cm',
-        provenance: 'Atelier Archive No. 008',
+        provenance: 'Studio Archive No. 008',
         hanging_bracket: 'brass_chains',
         wall_position: 'center',
         sconce_light: false
@@ -267,7 +267,7 @@ function createInMemoryClient(): Client {
     {
       id: 'art-007',
       title: 'Composition with Hand-Strung Beadwork & Metal Shards',
-      artist: 'Dhrisni & Guwahati Guild',
+      artist: 'Dhrisni & Studio Guild',
       image_url: '/assets/product_beaded_bralette.jpg',
       thumbnail_url: '/assets/product_beaded_bralette.jpg',
       description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
@@ -308,7 +308,7 @@ function createInMemoryClient(): Client {
       metadata: JSON.stringify({
         medium: 'Boned silk corset, reclaimed alloy embellishments, raw steel closures',
         dimensions_cm: '85 × 114 cm',
-        provenance: 'Guwahati Master Collection',
+        provenance: 'Studio Master Collection',
         hanging_bracket: 'brass_chains',
         wall_position: 'center',
         sconce_light: true
@@ -1310,7 +1310,7 @@ async function performDatabaseInitialization(): Promise<void> {
       data: JSON.stringify({
         headline_line1: 'WEARABLE ART.',
         headline_line2: 'NOT MADE TO REPEAT.',
-        subheadline: 'Handcrafted high-fashion cyber couture, reclaimed metals & chainmail, and archival 1-of-1 relics from Guwahati, Assam.',
+        subheadline: 'Handcrafted high-fashion cyber couture, reclaimed metals & chainmail, and archival 1-of-1 relics from our Studio.',
         video_desktop: '/assets/hero_reel_desktop.mp4',
         video_mobile: '/assets/hero_reel_mobile.mp4',
         primary_cta_text: 'EXPLORE VAULT',
@@ -1399,7 +1399,7 @@ async function performDatabaseInitialization(): Promise<void> {
             vimeo_url: 'https://vimeo.com/1243095629/47f3f9c6c6',
             fallback_video: 'https://player.vimeo.com/video/1243095629?h=47f3f9c6c6&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
             poster: '/assets/product_diva_top.jpg',
-            tag: 'ATELIER'
+            tag: 'STUDIO'
           },
           {
             id: 'reel-04',
@@ -1413,7 +1413,7 @@ async function performDatabaseInitialization(): Promise<void> {
           {
             id: 'reel-05',
             title: 'Wearable Art Showcase',
-            subtitle: '1-of-1 handmade creations from our Guwahati studio',
+            subtitle: '1-of-1 handmade creations from our Studio',
             vimeo_url: 'https://vimeo.com/1243095628/95ae4f7ecd',
             fallback_video: 'https://player.vimeo.com/video/1243095628?h=95ae4f7ecd&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
             poster: '/assets/editorial_hero_portrait.jpg',
@@ -1555,7 +1555,7 @@ async function performDatabaseInitialization(): Promise<void> {
       },
       {
         id: 'col_atelier_coords',
-        title: 'Atelier Co-ord & Runway Sets',
+        title: 'Studio Co-ord & Runway Sets',
         slug: 'atelier-coord-sets',
         description: 'Hand-crafted two-piece statement silhouettes designed for high-impact presence and editorial distinction.',
         image: '/assets/product_coord_set.jpg',
@@ -1584,7 +1584,7 @@ async function performDatabaseInitialization(): Promise<void> {
         id: 'col_dhrisni_signature',
         title: 'DHRISNI 1-of-1 Signature Vault',
         slug: 'dhrisni-signature-vault',
-        description: 'Exclusive limited studio pieces crafted directly by Dhrisni in the Guwahati atelier. Non-repeatable wearable artwork.',
+        description: 'Exclusive limited studio pieces crafted directly by Dhrisni in our Studio. Non-repeatable wearable artwork.',
         image: '/assets/product_beaded_bralette.jpg',
         product_ids: ['avz-001', 'avz-006', 'avz-010', 'avz-011', 'avz-014', 'avz-022'],
         status: 'published'
@@ -1619,7 +1619,7 @@ async function performDatabaseInitialization(): Promise<void> {
       {
         id: 'art-001',
         title: 'Portrait of the Cyber Empress in Gilded Armor',
-        artist: 'Dhrisni & The AVZ Atelier',
+        artist: 'Dhrisni & The AVZ Studio',
         image_url: '/assets/editorial_hero_portrait.jpg',
         thumbnail_url: '/assets/editorial_hero_portrait.jpg',
         description: 'An archival masterwork featuring reclaimed sculptural metal breastplates, hand-beaded glass crystals, and heavy-gauge industrial brass wire over hand-tailored velvet.',
@@ -1634,7 +1634,7 @@ async function performDatabaseInitialization(): Promise<void> {
         metadata: JSON.stringify({
           medium: 'Salvaged microcircuits, patinated brass, hand-beaded crystal on tailored velvet',
           dimensions_cm: '78 × 104 cm',
-          provenance: 'Guwahati Permanent Salon Collection',
+          provenance: 'Studio Permanent Collection',
           hanging_bracket: 'brass_chains',
           wall_position: 'center',
           sconce_light: true
@@ -1666,11 +1666,11 @@ async function performDatabaseInitialization(): Promise<void> {
       },
       {
         id: 'art-003',
-        title: 'The Guwahati River Chainmail Nocturne',
+        title: 'The River Chainmail Nocturne',
         artist: 'AVZ Women Artisan Guild',
         image_url: '/assets/look_chainmail_armor.jpg',
         thumbnail_url: '/assets/look_chainmail_armor.jpg',
-        description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen in Guwahati over 45 uninterrupted atelier hours.',
+        description: 'Over 1,200 hand-threaded stainless steel rings woven by indigenous craftswomen over 45 uninterrupted studio hours.',
         year: '2024',
         category: 'Fluid Chainmail',
         frame_style: 'florentine_gold',
@@ -1715,7 +1715,7 @@ async function performDatabaseInitialization(): Promise<void> {
       {
         id: 'art-005',
         title: 'Still Life with Telecom Motherboard & Copper Relics',
-        artist: 'Dhrisni & The AVZ Atelier',
+        artist: 'Dhrisni & The AVZ Studio',
         image_url: '/assets/prod_motherboard_cuff.jpg',
         thumbnail_url: '/assets/prod_motherboard_cuff.jpg',
         description: 'Exposed golden solder joints, copper circuit paths, and salvaged telecommunication capacitors sculpted into an ergonomic wrist relic.',
@@ -1754,7 +1754,7 @@ async function performDatabaseInitialization(): Promise<void> {
         metadata: JSON.stringify({
           medium: 'Hand-pressed steel cones, black lambskin lining, adjustable nickel hardware',
           dimensions_cm: '68 × 90 cm',
-          provenance: 'Atelier Archive No. 008',
+          provenance: 'Studio Archive No. 008',
           hanging_bracket: 'brass_chains',
           wall_position: 'center',
           sconce_light: false
@@ -1763,7 +1763,7 @@ async function performDatabaseInitialization(): Promise<void> {
       {
         id: 'art-007',
         title: 'Composition with Hand-Strung Beadwork & Metal Shards',
-        artist: 'Dhrisni & Guwahati Guild',
+        artist: 'Dhrisni & Studio Guild',
         image_url: '/assets/product_beaded_bralette.jpg',
         thumbnail_url: '/assets/product_beaded_bralette.jpg',
         description: 'Intricate micro-beadwork suspended between faceted hematite stones and polished scrap metal offcuts, creating fluid shimmering weight.',
@@ -1802,7 +1802,7 @@ async function performDatabaseInitialization(): Promise<void> {
         metadata: JSON.stringify({
           medium: 'Boned silk corset, reclaimed alloy embellishments, raw steel closures',
           dimensions_cm: '85 × 114 cm',
-          provenance: 'Guwahati Master Collection',
+          provenance: 'Studio Master Collection',
           hanging_bracket: 'brass_chains',
           wall_position: 'center',
           sconce_light: true

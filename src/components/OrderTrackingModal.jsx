@@ -51,7 +51,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderNumber
         stages: [
           {
             title: 'Order Confirmed',
-            desc: `Craft ticket generated at atelier for ${ord.itemsCount} piece${ord.itemsCount > 1 ? 's' : ''}.`,
+            desc: `Craft ticket generated at studio for ${ord.itemsCount} piece${ord.itemsCount > 1 ? 's' : ''}.`,
             done: true
           },
           {
@@ -61,7 +61,7 @@ export default function OrderTrackingModal({ isOpen, onClose, initialOrderNumber
           },
           {
             title: 'Handmade by Artisans',
-            desc: 'Sculpted under Dhrisni’s direct studio supervision in Guwahati, Assam.',
+            desc: 'Sculpted under Dhrisni’s direct studio supervision in Studio.',
             done: isFulfilled,
             current: !isFulfilled
           },

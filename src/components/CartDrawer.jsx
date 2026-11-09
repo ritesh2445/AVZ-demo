@@ -211,7 +211,7 @@ export default function CartDrawer({
 
   const handleWhatsAppCheckout = () => {
     playSound('warp');
-    const itemsList = items.map((i) => `• ${i.name} (${i.selectedSize || 'Standard'}) - ₹${i.price} x ${i.quantity || 1}`).join('%0A');
+    const itemsList = items.map((i) => `• ${i.name} - ₹${i.price} x ${i.quantity || 1}`).join('%0A');
     const msg = `Hello AVZ Team, I would like to reserve the following order:%0A%0A${itemsList}%0A%0A*Total:* ₹${totalInr}%0A*Delivery City:* ${checkoutData.city || 'India'}%0A*Name:* ${checkoutData.fullName || 'Patron'}%0A%0APlease share UPI / payment details to confirm reservation.`;
     window.open(`https://wa.me/917304264901?text=${msg}`, '_blank');
   };
@@ -478,7 +478,7 @@ export default function CartDrawer({
                 {thankYouTitle || 'ORDER RESERVED • OUR TEAM NOTIFIED'}
               </h3>
               <p className="text-xs text-zinc-400 font-montserrat max-w-sm leading-relaxed">
-                {thankYouMessage || 'Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.'}
+                {thankYouMessage || 'Your order is confirmed. Dhrisni and our Studio team are preparing your custom presentation box and certificate.'}
               </p>
               <div className="p-4 rounded-xl bg-black/80 border border-white/15 text-xs font-mono text-zinc-300 w-full text-center space-y-2">
                 <span className="text-white block font-medium text-sm">
@@ -814,7 +814,7 @@ export default function CartDrawer({
                       </div>
 
                       <div className="text-[10px] font-mono text-zinc-400 mt-0.5">
-                        SIZE: {item.selectedSize} {item.stock === 1 && '• 1 OF 1 ARCHIVE'}
+                        FREE SIZE • ADJUSTABLE {item.stock === 1 && '• 1 OF 1 ARCHIVE'}
                       </div>
 
                       <div className="flex items-center justify-between mt-2">

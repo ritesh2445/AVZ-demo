@@ -37,7 +37,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
   // New artwork form state
   const [newArt, setNewArt] = useState({
     title: '',
-    artist: 'Dhrisni & The AVZ Atelier',
+    artist: 'Dhrisni & The AVZ Studio',
     image_url: '/assets/editorial_hero_portrait.jpg',
     year: new Date().getFullYear().toString(),
     category: 'Archival Haute Couture',
@@ -48,7 +48,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
     is_published: 1,
     description: '',
     medium: 'Salvaged microcircuits, steel spikes, upcycled textile',
-    provenance: 'AVZ Guwahati Studio',
+    provenance: 'AVZ Studio Archive',
     dimensions_cm: '75 × 100 cm',
     sconce_light: true,
     hanging_bracket: 'brass_chains'
@@ -99,7 +99,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
       setIsCreatingNew(false);
       setNewArt({
         title: '',
-        artist: 'Dhrisni & The AVZ Atelier',
+        artist: 'Dhrisni & The AVZ Studio',
         image_url: '/assets/editorial_hero_portrait.jpg',
         year: new Date().getFullYear().toString(),
         category: 'Archival Haute Couture',
@@ -110,7 +110,7 @@ export default function MuseumGalleryAdminTab({ showNotification }: { showNotifi
         is_published: 1,
         description: '',
         medium: 'Salvaged microcircuits, steel spikes, upcycled textile',
-        provenance: 'AVZ Guwahati Studio',
+        provenance: 'AVZ Studio Archive',
         dimensions_cm: '75 × 100 cm',
         sconce_light: true,
         hanging_bracket: 'brass_chains'

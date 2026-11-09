@@ -130,7 +130,7 @@ export async function PATCH(
       await db.execute({
         sql: `UPDATE orders SET
           payment_status = 'cancelled',
-          cancellation_reason = COALESCE(cancellation_reason, 'Cancelled by atelier administrator'),
+          cancellation_reason = COALESCE(cancellation_reason, 'Cancelled by studio administrator'),
           cancelled_at = COALESCE(cancelled_at, ?),
           updated_at = ?
           WHERE id = ?`,
@@ -177,10 +177,10 @@ export async function PATCH(
             grand_total: Number(current.grand_total),
             payment_method: String(current.payment_method || ''),
             payment_status: String(current.payment_status || ''),
-            cancellation_reason: 'Cancelled by atelier administrator',
+            cancellation_reason: 'Cancelled by studio administrator',
             cancelled_at: now
           },
-          'Cancelled by atelier administrator'
+          'Cancelled by studio administrator'
         ).catch((err) => console.warn('[EMAIL NOTICE]: Failed to send cancellation email:', err));
       }
     }

@@ -343,7 +343,7 @@ export default function LoadingExperience({ onComplete }) {
         <div className="relative z-10 w-full flex items-center justify-between text-xs font-mono tracking-widest uppercase">
           <div className="flex items-center gap-3 text-silver/80">
             <span className="w-2 h-2 rounded-full bg-[#f472b6] animate-ping" />
-            <span>AVZ VAGANZA • GUWAHATI STUDIO</span>
+            <span>AVZ VAGANZA • THE STUDIO</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-silver/50 hidden md:inline">DHRISTROYER WEARABLE ART ARCHIVE</span>

@@ -320,7 +320,7 @@ export default function MatrixRainIntro({ onComplete }) {
           }}
           className="mb-4 uppercase font-mono text-center"
         >
-          AVZ VAGANZA • GUWAHATI ATELIER
+          AVZ VAGANZA • THE STUDIO
         </div>
 
         {/* Main pillar word (Neon glowing like PRNKS title) */}

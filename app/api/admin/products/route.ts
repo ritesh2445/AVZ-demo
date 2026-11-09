@@ -56,7 +56,7 @@ export async function GET(request: Request) {
               p.id,
               (p.name || 'product').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
               p.name,
-              p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni in Guwahati.',
+              p.description || 'Handcrafted 1-of-1 wearable art by Dhrisni in our Studio.',
               p.price || 2500,
               p.compare_at_price || null,
               sku,

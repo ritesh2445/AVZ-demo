@@ -147,7 +147,7 @@ export default function MediaAndSectionManager({
     price: '3200',
     category: 'Tops',
     tag: 'KEY PIECE',
-    description: 'Signature atelier statement piece sculpted with cold-forged spikes.'
+    description: 'Signature studio statement piece sculpted with cold-forged spikes.'
   });
 
   // 4. Collection Archive Form
@@ -157,15 +157,15 @@ export default function MediaAndSectionManager({
     category: 'Tops',
     stock: '1',
     sku: '',
-    description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.',
-    sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)'] as string[]
+    description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in our Studio.',
+    sizes: ['Free Size'] as string[]
   });
   const [customSizeInput, setCustomSizeInput] = useState('');
 
   // 5. The Archive Gallery Form
   const [museumForm, setMuseumForm] = useState({
     title: '',
-    artist: 'Dhrisni & The AVZ Atelier',
+    artist: 'Dhrisni & The AVZ Studio',
     year: new Date().getFullYear().toString(),
     category: 'Archival Haute Couture',
     frame_style: 'ornate_baroque',
@@ -316,13 +316,13 @@ export default function MediaAndSectionManager({
       category: 'Tops',
       stock: '1',
       sku: '',
-      description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in Guwahati atelier.',
-      sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)']
+      description: 'Handcrafted 1-of-1 wearable art piece by Dhrisni in our Studio.',
+      sizes: ['Free Size']
     });
     setCustomSizeInput('');
     setMuseumForm({
       title: '',
-      artist: 'Dhrisni & The AVZ Atelier',
+      artist: 'Dhrisni & The AVZ Studio',
       year: new Date().getFullYear().toString(),
       category: 'Archival Haute Couture',
       frame_style: 'ornate_baroque',
@@ -341,7 +341,7 @@ export default function MediaAndSectionManager({
       price: '3200',
       category: 'Tops',
       tag: 'KEY PIECE',
-      description: 'Signature atelier statement piece sculpted with cold-forged spikes.'
+      description: 'Signature studio statement piece sculpted with cold-forged spikes.'
     });
     setLookbookForm({
       title: '',
@@ -375,7 +375,7 @@ export default function MediaAndSectionManager({
         if (Array.isArray(item.variants) && item.variants.length > 0) {
           return item.variants.map((v: any) => typeof v === 'object' ? (v.size || v.name) : v).filter(Boolean);
         }
-        return ['One Size (Adjustable)'];
+        return ['Free Size'];
       })();
 
       setCollectionForm({
@@ -390,7 +390,7 @@ export default function MediaAndSectionManager({
     } else if (type === 'archive_gallery') {
       setMuseumForm({
         title: item.title || '',
-        artist: item.artist || 'Dhrisni & The AVZ Atelier',
+        artist: item.artist || 'Dhrisni & The AVZ Studio',
         year: String(item.year || '2024'),
         category: item.category || 'Archival Haute Couture',
         frame_style: item.frame_style || 'ornate_baroque',
@@ -1039,7 +1039,7 @@ export default function MediaAndSectionManager({
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono text-neutral-400 mb-1">Atelier Story / Description</label>
+                    <label className="block text-[11px] font-mono text-neutral-400 mb-1">Studio Story / Description</label>
                     <textarea
                       rows={2}
                       value={vaultForm.story}
@@ -1258,7 +1258,7 @@ export default function MediaAndSectionManager({
                         type="button"
                         onClick={() => setCollectionForm(prev => ({
                           ...prev,
-                          sizes: ['One Size (Adjustable)', 'S (Bust 32-34in)', 'M (Bust 34-36in)', 'L (Bust 36-38in)']
+                          sizes: ['Free Size']
                         }))}
                         className="text-[10px] font-mono text-pink/80 hover:text-pink transition-colors hover:underline"
                       >

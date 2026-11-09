@@ -121,7 +121,7 @@ export async function GET() {
       wallConfig: {
         wallColor: '#4a0f18',
         title: 'THE VAULT ARCHIVE',
-        subtitle: 'Handcrafted 1-of-1 Wearable Art • Guwahati Studio',
+        subtitle: 'Handcrafted 1-of-1 Wearable Art • Studio',
         ambientSound: 'wooden_glide'
       }
     });
@@ -133,7 +133,7 @@ export async function GET() {
       wallConfig: {
         wallColor: '#4a0f18',
         title: 'THE VAULT ARCHIVE',
-        subtitle: 'Handcrafted 1-of-1 Wearable Art • Guwahati Studio',
+        subtitle: 'Handcrafted 1-of-1 Wearable Art • Studio',
         ambientSound: 'wooden_glide'
       }
     });

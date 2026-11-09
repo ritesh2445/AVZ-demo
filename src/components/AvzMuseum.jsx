@@ -242,7 +242,7 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
 
           <p className="text-[#c5b099] text-xs sm:text-sm max-w-2xl font-serif italic mt-2.5 leading-relaxed">
             {cmsMuseum?.description ||
-              'In a world drowning in fast fashion and AI generation, things made by real human hands are the ultimate luxury. 1-of-1 wearable art relics from our Guwahati studio.'}
+              'In a world drowning in fast fashion and AI generation, things made by real human hands are the ultimate luxury. 1-of-1 wearable art relics from our Studio.'}
           </p>
         </div>
 

@@ -144,7 +144,7 @@ export default function RequestPieceModal({
               PIECE REQUEST RECEIVED
             </h3>
             <p className="text-xs text-zinc-300 font-montserrat leading-relaxed max-w-md mx-auto">
-              Thank you, <strong className="text-pink">{name}</strong>. Founder Dhrisni and our Guwahati studio team have received your request for <strong className="text-white">{pieceTitle}</strong> and will connect directly via WhatsApp/email with production timeline details.
+              Thank you, <strong className="text-pink">{name}</strong>. Founder Dhrisni and our Studio team have received your request for <strong className="text-white">{pieceTitle}</strong> and will connect directly via WhatsApp/email with production timeline details.
             </p>
             <div className="pt-4">
               <button

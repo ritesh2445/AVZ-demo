@@ -375,7 +375,7 @@ export default function GroupOrderModal({
           buyerPhone: fullPhone,
           shippingAddress: {
             address_line1: shippingData.address,
-            city: shippingData.city || 'Guwahati',
+            city: shippingData.city || 'Mumbai',
             state: shippingData.state || 'Assam',
             pincode: shippingData.pincode
           },
@@ -487,7 +487,7 @@ export default function GroupOrderModal({
                 onClick={onClose}
                 className="w-full py-3.5 rounded-full bg-white hover:bg-pink text-black font-mono font-bold text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95 cursor-pointer"
               >
-                RETURN TO ATELIER
+                RETURN TO STUDIO
               </button>
             </div>
           ) : isCheckoutStep ? (
@@ -579,7 +579,7 @@ export default function GroupOrderModal({
                         type="text"
                         value={shippingData.city}
                         onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
-                        placeholder="e.g. Guwahati"
+                        placeholder="e.g. Mumbai"
                         className="w-full bg-black/80 border border-white/20 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
                       />
                     </div>

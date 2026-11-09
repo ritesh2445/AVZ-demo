@@ -5,16 +5,9 @@ import {
   ShoppingBag,
   ShieldCheck,
   Sparkles,
-  Ruler,
   AlertCircle,
-  Info,
   RefreshCw,
-  Heart,
-  Users,
-  Flame,
-  Star,
-  CheckCircle2,
-  MessageCircle
+  Heart
 } from 'lucide-react';
 import { formatPrice } from '../data/brandData';
 import { playSound } from '../utils/audio';
@@ -36,11 +29,6 @@ export default function ProductDetailModal({
   useModalScrollLock(Boolean(product));
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(product?.sizes ? product.sizes[0] : 'One Size');
-  const [showSizeEstimator, setShowSizeEstimator] = useState(false);
-  const [bustInches, setBustInches] = useState('');
-  const [waistInches, setWaistInches] = useState('');
-  const [recommendedSize, setRecommendedSize] = useState('');
   const [errorNotice, setErrorNotice] = useState('');
 
   useEffect(() => {
@@ -56,7 +44,7 @@ export default function ProductDetailModal({
   useEffect(() => {
     if (product) {
       setActiveImageIndex(0);
-      setSelectedSize(product.sizes ? product.sizes[0] : 'One Size');
+      setSelectedSize('Free Size');
       setErrorNotice('');
     }
   }, [product?.id]);
@@ -82,25 +70,9 @@ export default function ProductDetailModal({
     playSound('chord');
     onAddToCart({
       ...product,
-      selectedSize
+      selectedSize: 'Free Size'
     });
     setErrorNotice('');
-  };
-
-  const handleCalculateFit = (e) => {
-    e.preventDefault();
-    const bust = parseFloat(bustInches);
-    const waist = parseFloat(waistInches);
-    if (!bust || !waist) return;
-
-    playSound('snap');
-    if (bust <= 33 && waist <= 26) {
-      setRecommendedSize('XS / S (Tailored Fit)');
-    } else if (bust <= 36 && waist <= 30) {
-      setRecommendedSize('M (Standard Fit)');
-    } else {
-      setRecommendedSize('L / Custom Studio Order');
-    }
   };
 
   return (
@@ -189,7 +161,7 @@ export default function ProductDetailModal({
               ORIGIN & CRAFTSMANSHIP
             </div>
             <p className="text-[11px] font-montserrat text-zinc-300 leading-relaxed">
-              Every garment is individually crafted by hand at our Guwahati studio, combining deadstock textiles with reclaimed industrial hardware.
+              Every garment is individually crafted by hand at our Studio, combining deadstock textiles with reclaimed industrial hardware.
             </p>
           </div>
         </div>
@@ -199,7 +171,7 @@ export default function ProductDetailModal({
           <div className="pr-12 md:pr-14">
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 uppercase mb-2">
               <span className="text-white font-medium tracking-wider">{product.category}</span>
-              <span className="tracking-widest text-zinc-500 hidden sm:inline">GUWAHATI STUDIO</span>
+              <span className="tracking-widest text-zinc-500 hidden sm:inline">STUDIO ARCHIVE</span>
             </div>
 
             <div className="mb-3">
@@ -223,95 +195,20 @@ export default function ProductDetailModal({
               {formatPrice(product.price, currency)}
             </div>
 
-            <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed mb-5">
+            <p className="text-zinc-300 text-xs sm:text-sm font-montserrat leading-relaxed mb-4">
               {product.description}
             </p>
 
             {/* Materials Badge */}
-            <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-zinc-300 mb-5">
+            <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 text-xs font-mono text-zinc-300 mb-4">
               <span className="text-zinc-400 uppercase font-medium tracking-wider block mb-0.5">RAW HARDWARE & CRAFT:</span>
               <span className="text-white leading-relaxed">{Array.isArray(product.materials) ? product.materials.join(' • ') : product.materials}</span>
             </div>
 
-            {/* Sizing Selection & Fit Guide */}
-            <div className="mb-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono uppercase text-zinc-400 tracking-wider">SELECT SIZE:</span>
-                <button
-                  onClick={() => setShowSizeEstimator(!showSizeEstimator)}
-                  className="text-[11px] font-mono text-zinc-400 hover:text-white flex items-center gap-1 cursor-pointer bg-transparent border-none p-0 transition-colors"
-                >
-                  <Ruler className="w-3.5 h-3.5" />
-                  <span>{showSizeEstimator ? 'Hide Size Guide' : 'Size & Fit Guide'}</span>
-                </button>
-              </div>
-
-              {/* Interactive Fit Calculator Form */}
-              {showSizeEstimator && (
-                <div className="p-4 rounded-xl bg-black/80 border border-white/15 mb-3 text-xs space-y-3 animate-fade-in">
-                  <div className="text-white font-mono font-medium text-[11px] uppercase flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
-                    <span>CUSTOM SIZING GUIDE:</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-[10px] font-mono text-zinc-400 mb-1">BUST (INCHES):</label>
-                      <input
-                        type="number"
-                        placeholder="e.g. 34"
-                        value={bustInches}
-                        onChange={(e) => setBustInches(e.target.value)}
-                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-white/50"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-mono text-zinc-400 mb-1">WAIST (INCHES):</label>
-                      <input
-                        type="number"
-                        placeholder="e.g. 26"
-                        value={waistInches}
-                        onChange={(e) => setWaistInches(e.target.value)}
-                        className="w-full bg-black border border-white/20 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-white/50"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleCalculateFit}
-                    className="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-medium cursor-pointer transition-all"
-                  >
-                    CALCULATE ESTIMATED FIT
-                  </button>
-                  {recommendedSize && (
-                    <div className="p-2.5 rounded-lg bg-black border border-white/20 text-zinc-300 font-mono text-[11px] flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-zinc-400" />
-                      <span>RECOMMENDED: <strong>{recommendedSize}</strong></span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="flex items-center gap-2 flex-wrap">
-                {product.sizes ? (
-                  product.sizes.map((sz) => (
-                    <button
-                      key={sz}
-                      onClick={() => {
-                        playSound('pip');
-                        setSelectedSize(sz);
-                      }}
-                      className={`px-4 py-2 rounded-full text-xs font-mono cursor-pointer transition-all border ${
-                        selectedSize === sz
-                          ? 'bg-white text-black border-white font-bold'
-                          : 'bg-white/5 text-zinc-400 border-white/15 hover:border-white/40 hover:text-white'
-                      }`}
-                    >
-                      {sz}
-                    </button>
-                  ))
-                ) : (
-                  <span className="text-xs font-mono text-zinc-500">One Size / Adjustable Hardware</span>
-                )}
-              </div>
+            {/* Sizing: Free Size / Adjustable for All Pieces */}
+            <div className="mb-5 p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono">
+              <span className="text-zinc-400 uppercase tracking-wider">FIT & SILHOUETTE:</span>
+              <span className="text-pink font-semibold uppercase tracking-wider">FREE SIZE • ADJUSTABLE</span>
             </div>
 
             {/* Error Notice */}
@@ -351,6 +248,7 @@ export default function ProductDetailModal({
                 <button
                   onClick={() => {
                     handleAdd();
+                    onClose();
                     onOpenCart?.();
                   }}
                   disabled={product.stock === 1 && isAlreadyInCart}
@@ -376,7 +274,7 @@ export default function ProductDetailModal({
 
               <span className="flex items-center gap-1 text-zinc-500">
                 <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" />
-                Guwahati Studio Certified
+                Studio Certified
               </span>
             </div>
           </div>

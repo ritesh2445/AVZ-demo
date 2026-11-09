@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | AVZ VAGANZA',
   },
   description:
-    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (@Dhristroyer). Sustainable avant-garde luxury fashion, sculptural wearable art, cyber-grunge couture, reclaimed metals, heavy chainmail, solid spikes, and custom 1-of-1 pieces handcrafted in Guwahati, Assam.',
+    'AVZ Vaganza (Aveezah Vaganza) by Dhrisni (@Dhristroyer). Sustainable avant-garde luxury fashion, sculptural wearable art, cyber-grunge couture, reclaimed metals, heavy chainmail, solid spikes, and custom 1-of-1 pieces handcrafted in our Studio.',
   keywords: [
     'AVZ Vaganza',
     'Aveezah Vaganza',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'industrial punk streetwear',
     'sustainable luxury fashion label',
     'one of a kind fashion pieces',
-    'handcrafted clothing Guwahati Assam',
+    'handcrafted avant-garde wearable art',
     'celebrity wearable art designer',
     'spike bodice',
     'sculptural metal top',
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AVZ VAGANZA | Wearable Art by Dhrisni (Dhristroyer)',
     description:
-      'Sculptural wearable art, upcycled metals, spikes, and handmade cyber-couture by Dhrisni. Handcrafted in Guwahati, Assam.',
+      'Sculptural wearable art, upcycled metals, spikes, and handmade cyber-couture by Dhrisni. Handcrafted in our Studio.',
     creator: '@dhristroyer',
     images: [`${APP_URL}/assets/editorial_hero_portrait.jpg`],
   },
@@ -184,7 +184,7 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Curated Wearable Art Archive',
-    description: 'One-of-a-kind sculptural garments and wearable art handcrafted by Dhrisni in Guwahati.',
+    description: 'One-of-a-kind sculptural garments and wearable art handcrafted by Dhrisni in our Studio.',
     numberOfItems: PRODUCTS.length,
     itemListElement: PRODUCTS.map((prod, index) => ({
       '@type': 'ListItem',

@@ -1,5 +1,5 @@
 /**
- * AVZ Vaganza — Atelier Transactional Email Service
+ * AVZ Vaganza — Studio Transactional Email Service
  * Powered by Resend API (HTTP-based for full Cloudflare Workers & Node.js runtime compatibility)
  */
 
@@ -145,7 +145,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 14px 0; border-bottom: 1px solid #231A2A; color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 14px;">
-        <strong style="color: #FFFFFF;">${item.name || item.title || 'Atelier Garment'}</strong>
+        <strong style="color: #FFFFFF;">${item.name || item.title || 'Studio Garment'}</strong>
         ${item.size ? `<br><span style="color: #BE185D; font-size: 11px; text-transform: uppercase; font-family: monospace;">Size: ${item.size}</span>` : ''}
       </td>
       <td style="padding: 14px 0; border-bottom: 1px solid #231A2A; text-align: center; color: #A1A1AA; font-family: monospace; font-size: 13px;">
@@ -177,7 +177,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
                 DHRISNI
               </h1>
               <p style="margin: 6px 0 0; color: #BE185D; font-family: monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">
-                AVEZAH VAGANZA • ATELIER GUWAHATI
+                AVEZAH VAGANZA • THE STUDIO
               </p>
             </td>
           </tr>
@@ -195,7 +195,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
                 Greetings, ${order.customer_name || 'Valued Patron'},
               </h2>
               <p style="margin: 0 0 20px; color: #A1A1AA; font-size: 14px; line-height: 1.6;">
-                Your order has been logged into the atelier dispatch ledger. Dhrisni and the studio are preparing your wearable art piece for priority handling and careful packaging.
+                Your order has been logged into the studio dispatch ledger. Dhrisni and the studio are preparing your wearable art piece for priority handling and careful packaging.
               </p>
 
               <!-- Order Identification Badge -->
@@ -214,7 +214,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
 
               <!-- Purchased Items Table -->
               <h3 style="margin: 0 0 12px; color: #FFFFFF; font-family: monospace; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;">
-                Purchased Atelier Pieces
+                Purchased Studio Pieces
               </h3>
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 20px;">
                 <thead>
@@ -278,7 +278,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
           <tr>
             <td style="background-color: #0A060E; padding: 24px; text-align: center; border-top: 1px solid #231A2A; color: #52525B; font-size: 11px; line-height: 1.6;">
               <p style="margin: 0 0 6px;">
-                AVEZAH VAGANZA ATELIER • GUWAHATI, ASSAM, INDIA
+                AVEZAH VAGANZA STUDIO • GUWAHATI, ASSAM, INDIA
               </p>
               <p style="margin: 0;">
                 All wearable sculptures are original intellectual property of Dhrisni (@Dhristroyer). Compliant with the Digital Personal Data Protection Act, 2023.
@@ -295,7 +295,7 @@ export async function sendOrderConfirmationEmail(order: OrderEmailPayload) {
 
   return await dispatchResendEmail({
     to: order.customer_email,
-    subject: `Order Confirmed: ${order.order_number} • AVZ Vaganza Atelier`,
+    subject: `Order Confirmed: ${order.order_number} • AVZ Vaganza Studio`,
     html
   });
 }
@@ -311,7 +311,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 10px 0; border-bottom: 1px solid #231A2A; color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px;">
-        ${item.name || item.title || 'Atelier Garment'} ${item.size ? `(${item.size})` : ''}
+        ${item.name || item.title || 'Studio Garment'} ${item.size ? `(${item.size})` : ''}
       </td>
       <td style="padding: 10px 0; border-bottom: 1px solid #231A2A; text-align: center; color: #A1A1AA; font-family: monospace; font-size: 12px;">
         x${item.quantity || 1}
@@ -342,7 +342,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
                 DHRISNI
               </h1>
               <p style="margin: 6px 0 0; color: #BE185D; font-family: monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">
-                AVEZAH VAGANZA • ATELIER GUWAHATI
+                AVEZAH VAGANZA • THE STUDIO
               </p>
             </td>
           </tr>
@@ -360,7 +360,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
                 Order Cancellation Processed
               </h2>
               <p style="margin: 0 0 20px; color: #A1A1AA; font-size: 14px; line-height: 1.6;">
-                Dear ${order.customer_name || 'Valued Patron'}, order <strong style="color: #FFFFFF; font-family: monospace;">${order.order_number}</strong> has been successfully cancelled in accordance with our atelier order policy.
+                Dear ${order.customer_name || 'Valued Patron'}, order <strong style="color: #FFFFFF; font-family: monospace;">${order.order_number}</strong> has been successfully cancelled in accordance with our studio order policy.
               </p>
 
               <!-- Cancellation Metadata Box -->
@@ -369,7 +369,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
                   <strong style="color: #FFFFFF;">Cancellation Reason:</strong> ${cancellationReason}
                 </p>
                 <p style="margin: 0; font-size: 13px; color: #A1A1AA;">
-                  <strong style="color: #FFFFFF;">Inventory Status:</strong> Released and restocked into atelier availability.
+                  <strong style="color: #FFFFFF;">Inventory Status:</strong> Released and restocked into studio availability.
                 </p>
                 <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #231A2A; font-size: 13px; color: #F4C2C2;">
                   ${isPaid ?
@@ -394,7 +394,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
                 <tr>
                   <td align="center">
                     <a href="https://aveezahvaganza.com/#shop" style="display: inline-block; background-color: #27272A; color: #FFFFFF; font-family: monospace; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; padding: 12px 24px; border-radius: 10px; border: 1px solid #3F3F46;">
-                      Return to AVZ Atelier Catalog
+                      Return to AVZ Studio Catalog
                     </a>
                   </td>
                 </tr>
@@ -410,7 +410,7 @@ export async function sendOrderCancellationEmail(order: OrderEmailPayload, reaso
           <tr>
             <td style="background-color: #0A060E; padding: 24px; text-align: center; border-top: 1px solid #231A2A; color: #52525B; font-size: 11px; line-height: 1.6;">
               <p style="margin: 0;">
-                AVEZAH VAGANZA ATELIER • GUWAHATI, ASSAM, INDIA • DPDP ACT COMPLIANT
+                AVEZAH VAGANZA STUDIO • GUWAHATI, ASSAM, INDIA • DPDP ACT COMPLIANT
               </p>
             </td>
           </tr>
@@ -467,7 +467,7 @@ export async function sendFulfillmentDispatchEmail(order: OrderEmailPayload, car
                 Your Wearable Art is on the Way
               </h2>
               <p style="margin: 0 0 20px; color: #A1A1AA; font-size: 14px; line-height: 1.6;">
-                Dear ${order.customer_name || 'Valued Patron'}, order <strong style="color: #FFFFFF; font-family: monospace;">${order.order_number}</strong> has departed our Guwahati studio via priority express courier.
+                Dear ${order.customer_name || 'Valued Patron'}, order <strong style="color: #FFFFFF; font-family: monospace;">${order.order_number}</strong> has departed our Studio via priority express courier.
               </p>
 
               <div style="background-color: #171120; border: 1px solid #231A2A; border-radius: 12px; padding: 18px; margin-bottom: 24px;">
@@ -495,7 +495,7 @@ export async function sendFulfillmentDispatchEmail(order: OrderEmailPayload, car
           </tr>
           <tr>
             <td style="background-color: #0A060E; padding: 20px; text-align: center; border-top: 1px solid #231A2A; color: #52525B; font-size: 11px;">
-              AVEZAH VAGANZA ATELIER • GUWAHATI, ASSAM
+              AVEZAH VAGANZA STUDIO • GUWAHATI, ASSAM
             </td>
           </tr>
         </table>

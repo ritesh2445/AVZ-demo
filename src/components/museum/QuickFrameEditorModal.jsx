@@ -402,7 +402,7 @@ export default function QuickFrameEditorModal({
                 name="provenance"
                 value={formData.provenance}
                 onChange={handleChange}
-                placeholder="e.g. AVZ Guwahati Studio"
+                placeholder="e.g. AVZ Studio Archive"
                 className="w-full px-3 py-1.5 bg-black/70 border border-[#d4af37]/50 text-white font-serif text-xs focus:outline-none"
               />
             </div>

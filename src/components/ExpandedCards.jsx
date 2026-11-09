@@ -33,7 +33,7 @@ const DEFAULT_VAULT_CARDS = (FEATURED_PIECES && FEATURED_PIECES.length > 0)
       {
         imgUrl: ASSET_MANIFEST?.products?.chainmailArmor || "/assets/look_chainmail_armor.jpg",
         alt: "Chainmail Cyber Armour",
-        title: "Guwahati Chainmail Armour",
+        title: "Studio Chainmail Armour",
         category: "STATEMENT PIECE",
         price: 5200
       },
@@ -151,7 +151,7 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
             THE VAULT <span className="text-zinc-500 font-light">PIECES</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm font-mono tracking-wider text-left mt-2 max-w-md">
-            Archival specimens & 1-of-1 wearable art relics handcrafted in our Guwahati studio.
+            Archival specimens & 1-of-1 wearable art relics handcrafted in our Studio.
           </p>
         </div>
 

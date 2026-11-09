@@ -85,7 +85,7 @@ export function ContactSection() {
           STUDIO <span className="text-zinc-500 font-light">SUPPORT</span>
         </h2>
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base font-montserrat mt-2 max-w-3xl leading-relaxed">
-          Direct communication channels to our Guwahati studio, founder creative direction desk, and customer styling team.
+          Direct communication channels to our Studio, founder creative direction desk, and customer styling team.
         </p>
       </div>
 

@@ -29,7 +29,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-01",
     "title": "Cyberpunk Spiked Denim Corset",
-    "artist": "Dhrisni & AVZ Atelier",
+    "artist": "Dhrisni & AVZ Studio",
     "image_url": "/assets/museum/museum_piece_01.webp",
     "thumbnail_url": "/assets/museum/museum_piece_01.webp",
     "description": "Custom sculpted bodice with high-tensile eyelets and brutalist chrome spikes engineered directly into reinforced denim ribs. Built for dark techno rooms and high-stakes runway.",
@@ -44,7 +44,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Deconstructed raw 14oz denim, 48 industrial chrome cone spikes, boned corset armature",
       "dimensions_cm": "Bust 32-35\" / Custom Laced",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": true,
@@ -54,10 +54,10 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-02",
     "title": "Fluid Stainless Chainmail Cowl",
-    "artist": "Guwahati Guild & Dhrisni",
+    "artist": "Studio Guild & Dhrisni",
     "image_url": "/assets/museum/museum_piece_02.webp",
     "thumbnail_url": "/assets/museum/museum_piece_02.webp",
-    "description": "Over 1,800 rings linked by hand ring-by-ring in our Guwahati atelier. Cold to the touch, heavy in your hands, cascading across collarbones like shimmering mercury.",
+    "description": "Over 1,800 rings linked by hand ring-by-ring in our Studio. Cold to the touch, heavy in your hands, cascading across collarbones like shimmering mercury.",
     "year": "2024-2026",
     "category": "Fluid Armor",
     "frame_style": "gilded_rococo",
@@ -69,7 +69,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "1,800 surgical stainless steel rings, hand-knit liquid drape, heavy toggle clasps",
       "dimensions_cm": "Torso Wrap / Fluid Drape",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": false,
@@ -79,7 +79,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-04",
     "title": "Subcultural Spiked Spine Harness",
-    "artist": "AVZ Atelier",
+    "artist": "AVZ Studio",
     "image_url": "/assets/museum/museum_piece_04.webp",
     "thumbnail_url": "/assets/museum/museum_piece_04.webp",
     "description": "An aggressive silhouette traced along the spine. Articulated alloy spikes flex with torso motion while heavy chrome rings anchor the load.",
@@ -94,7 +94,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Hand-dyed bridle leather, lathe-turned alloy spikes, chrome O-rings",
       "dimensions_cm": "Fully Adjustable Modular Straps",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": false,
@@ -104,7 +104,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-05",
     "title": "Reclaimed Sculptural Chainmail Bodice",
-    "artist": "Dhrisni & Guwahati Guild",
+    "artist": "Dhrisni & Studio Guild",
     "image_url": "/assets/museum/museum_piece_05.webp",
     "thumbnail_url": "/assets/museum/museum_piece_05.webp",
     "description": "Hand-linked stainless steel rings and cold-forged industrial spikes sculpted to body contours.",
@@ -119,7 +119,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Salvaged telecom PCB circuit traces, golden solder pathways, genuine leather backing",
       "dimensions_cm": "Bust 34A-36B",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": true,
@@ -144,7 +144,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Laser-scored aluminum shards, rivet reinforcements, structured denim ribcage",
       "dimensions_cm": "Bust 32-34\"",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": false,
@@ -169,7 +169,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Black rigid denim, 120 silver eyelets, aircraft steel cable corset lace",
       "dimensions_cm": "Bust 30-34\" Adjustable",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": true,
@@ -194,7 +194,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Deep crimson silk velvet, hand-linked brass chains, antique gold embroidery",
       "dimensions_cm": "Full Floor Length",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": false,
@@ -204,7 +204,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-11",
     "title": "Brutalist Welded Wire Collar",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_11.webp",
     "thumbnail_url": "/assets/museum/museum_piece_11.webp",
     "description": "An imposing architectural neck sculpture that frames the jawline like an avant-garde Elizabethan ruff forged from high-voltage conduit.",
@@ -219,7 +219,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Cold-bent high-tensile steel wire, brass brazing joints, clear anti-tarnish coat",
       "dimensions_cm": "Neck 13-15\" Collar",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": true,
@@ -229,7 +229,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-14",
     "title": "Industrial Webbing & Chain Harness",
-    "artist": "AVZ Atelier",
+    "artist": "AVZ Studio",
     "image_url": "/assets/museum/museum_piece_14.webp",
     "thumbnail_url": "/assets/museum/museum_piece_14.webp",
     "description": "Multi-point body harness that distributes physical weight evenly. Fully modular design that pairs over hoodies, jackets, or bare skin.",
@@ -244,7 +244,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Military-grade ballistic webbing, welded steel O-rings, swivel snap hooks",
       "dimensions_cm": "Universal Body Harness",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": false,
@@ -269,7 +269,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Archival screenprint, vintage textured laid paper, museum mounting",
       "dimensions_cm": "30 × 42 cm Salon Poster",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": false,
@@ -279,7 +279,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-17",
     "title": "Draped Stainless Mail Halter",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_17.webp",
     "thumbnail_url": "/assets/museum/museum_piece_17.webp",
     "description": "Flowing stainless steel micro-mesh that liquidly drapes over the décolletage. Breathable, hypoallergenic, and impervious to wear.",
@@ -294,7 +294,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "316L stainless steel chainmail, double lobster claps, neck loop",
       "dimensions_cm": "Chest 32-36\" Fluid Fit",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": true,
@@ -319,7 +319,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Military surplus nylon, safety orange lining, reclaimed steel hardware",
       "dimensions_cm": "Chest 40\" Cropped Fit",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": false,
@@ -344,7 +344,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Deconstructed combat boots, heavy leather tongues, speed hooks, steel shanks",
       "dimensions_cm": "Waist 24-27\" Extreme Taper",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": true,
@@ -369,7 +369,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "C-type photographic master print on archival rag, gilded framing",
       "dimensions_cm": "Panoramic Display",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": false,
@@ -379,7 +379,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-23",
     "title": "Frost Blue Crochet Armor Top",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_23.webp",
     "thumbnail_url": "/assets/museum/museum_piece_23.webp",
     "description": "Hand-crocheted over 40 intensive hours by the Guwahati women guild. Dense structural knit contrasted by delicate dangling silver bells.",
@@ -394,7 +394,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Heavy recycled cotton cord, hand-twisted floral crochet motifs, silver bell charms",
       "dimensions_cm": "Bust 32-36\" Flexible",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": true,
@@ -404,7 +404,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-25",
     "title": "Pearlite Shimmer Crochet Vest",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_25.webp",
     "thumbnail_url": "/assets/museum/museum_piece_25.webp",
     "description": "Intricate macro-crochet patterning infused with subtle iridescent lurex fibers that illuminate under ultraviolet light.",
@@ -419,7 +419,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Metallic lurex threads, off-white raw cotton, pearl bead accents",
       "dimensions_cm": "Chest 34-38\"",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": true,
@@ -444,7 +444,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Hand-dyed purple raw canvas, asymmetric shoulder capelet, brass grommets",
       "dimensions_cm": "Bust 32-36\"",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": false,
@@ -469,7 +469,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Combat boot uppers, steel lace eyelets, heavy pull tabs, canvas lining",
       "dimensions_cm": "Waist 24-27\"",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": false,
@@ -494,7 +494,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Bolted turned steel spikes, double-needle topstitching",
       "dimensions_cm": "Detail Study",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": false,
@@ -519,7 +519,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Charcoal denim, steel hardware, archival framing",
       "dimensions_cm": "Editorial Print",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": true,
@@ -529,7 +529,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-37",
     "title": "Sculptural Cyber Armor [Process Archive]",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_37.webp",
     "thumbnail_url": "/assets/museum/museum_piece_37.webp",
     "description": "Archival atelier documentation of cold-formed metal plates and reclaimed hardware contours.",
@@ -544,7 +544,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Salvaged computer boards, copper ribbon cable, raw solder",
       "dimensions_cm": "Studio Archive",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": true,
@@ -554,7 +554,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-38",
     "title": "Monochrome Studio Architecture Study",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_38.webp",
     "thumbnail_url": "/assets/museum/museum_piece_38.webp",
     "description": "High-contrast studio silhouette study of industrial hardware styling in monochrome.",
@@ -569,7 +569,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Telecom relay board fragments, brass rivets, leather cuff",
       "dimensions_cm": "Wrist 6-7.5\"",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": false,
@@ -594,7 +594,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Armored denim, turned steel spikes",
       "dimensions_cm": "Editorial Print",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "brass_chains",
       "wall_position": "center",
       "sconce_light": false,
@@ -604,7 +604,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
     "id": "art-41",
     "title": "Pearlite Crochet Top [Back View Detail]",
-    "artist": "Guwahati Guild",
+    "artist": "Studio Guild",
     "image_url": "/assets/museum/museum_piece_41.webp",
     "thumbnail_url": "/assets/museum/museum_piece_41.webp",
     "description": "Detailed rear perspective showing the hand-twisted corset back lacing that ensures an exact anatomical fit.",
@@ -619,7 +619,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Recycled cotton cord, intricate open-back ladder lacing, brass beads",
       "dimensions_cm": "Adjustable Back",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",
       "wall_position": "center",
       "sconce_light": true,
@@ -644,7 +644,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "metadata": {
       "medium": "Raw industrial denim, salvage alloy embellishments, raw steel closures, hand embroidery",
       "dimensions_cm": "Runway Custom Masterpiece",
-      "provenance": "AVZ Guwahati Studio Permanent Collection",
+      "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "hidden",
       "wall_position": "center",
       "sconce_light": false,

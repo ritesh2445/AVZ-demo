@@ -726,7 +726,7 @@ export default function AuthModal({
                           Cancel Order {cancellingOrder.orderNumber}?
                         </h4>
                         <p className="text-[11px] text-zinc-300 mt-1 leading-relaxed">
-                          Garment items will be automatically restocked into atelier inventory. If paid online, an automated full refund is initiated to your payment source.
+                          Garment items will be automatically restocked into studio inventory. If paid online, an automated full refund is initiated to your payment source.
                         </p>
                       </div>
                     </div>
@@ -804,7 +804,7 @@ export default function AuthModal({
                       }}
                       className="inline-block py-2 px-4 rounded-xl bg-gradient-to-r from-pink to-purple-500 text-black font-mono text-xs font-bold uppercase tracking-wider cursor-pointer"
                     >
-                      Explore Atelier Catalog
+                      Explore Studio Catalog
                     </button>
                   </div>
                 ) : (
@@ -1414,7 +1414,7 @@ export default function AuthModal({
                       type="text"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      placeholder="e.g. Guwahati / Pune"
+                      placeholder="e.g. Mumbai / Pune"
                       className="w-full bg-black/60 border border-white/15 focus:border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
                     />
                   </div>

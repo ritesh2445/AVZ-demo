@@ -92,7 +92,7 @@ export default function DhristroyerAnimatedHeading() {
           </div>
           <span className="text-white/20">•</span>
           <div className="text-[#f472b6]">
-            <span>GUWAHATI STUDIO</span>
+            <span>THE STUDIO</span>
           </div>
           <span className="text-white/20 hidden sm:inline">•</span>
           <div className="text-silver/50 hidden sm:inline">

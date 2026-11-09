@@ -27,7 +27,7 @@ export default function NotFound() {
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-black font-semibold text-xs uppercase tracking-widest rounded hover:bg-neutral-200 transition-all duration-200"
           >
             <ArrowLeft className="w-4 h-4" />
-            Return to Atelier
+            Return to Studio
           </Link>
 
           <Link

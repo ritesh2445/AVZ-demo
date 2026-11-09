@@ -129,7 +129,7 @@ export default function MuseumArtworkModal({
                   <strong className="text-[#fae596] font-mono text-[10px] tracking-wider uppercase block">
                     Origin & Studio:
                   </strong>
-                  <span>{meta.provenance || 'Guwahati Studio, Assam'}</span>
+                  <span>{meta.provenance || 'Studio Archive'}</span>
                 </div>
               </div>
             </div>

@@ -27,7 +27,7 @@ export const BRAND_INFO = {
       { title: "Maximalism Over Minimalism", text: "We fiercely reject cookie-cutter minimalism. Raw textures, metallic spikes, hand-linked chainmail, and industrial hardware collide." },
       { title: "Human Hands Over Machine Sameness", text: "In a world drowning in fast fashion and AI generation, things built by real human hands are the ultimate luxury." },
       { title: "Upcycling & Reclaimed Textiles", text: "Tired of stuffed closets and landfill waste, we transform discarded garments and unconventional hardware into one-of-a-kind armor." },
-      { title: "Empowering Women Artisans", text: "We hire and train women directly under Dhrisni's close personal supervision in our Guwahati studio." }
+      { title: "Empowering Women Artisans", text: "We hire and train women directly under Dhrisni's close personal supervision in our Studio." }
     ]
   },
   pricingTiers: [
@@ -155,9 +155,7 @@ export const PRODUCTS = [
       "Upcycled Hardware"
     ],
     "sizes": [
-      "S (Bust 32-34in)",
-      "M (Bust 34-36in)",
-      "L (Bust 36-38in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bralettes/bralettes_30.webp",
@@ -167,7 +165,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bralettes/bralettes_30.webp",
     "description": "Bra with spikes studded — individually hand-set metallic cone spikes over a structured bra base. Raw metallic rebellion and punk cyber-couture.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Hand-set conical metallic spikes with reinforced inner lining",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -190,9 +188,7 @@ export const PRODUCTS = [
       "Industrial Hardware"
     ],
     "sizes": [
-      "S (Bust 32-34in)",
-      "M (Bust 34-36in)",
-      "L (Bust 36-38in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bralettes/bralettes_33.webp",
@@ -203,7 +199,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bralettes/bralettes_33.webp",
     "description": "Bra w keyboard studded — deconstructed mechanical keyboard keycaps individually set across structured bust cups. Tactile maximalism and wearable sculpture.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Upcycled salvaged tactile keycaps",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -226,7 +222,7 @@ export const PRODUCTS = [
       "Pleated Mesh Hem"
     ],
     "sizes": [
-      "Size: Small"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/co_ords/co_ords_07.webp",
@@ -240,7 +236,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/co_ords/co_ords_07.webp",
     "description": "Jersey upcycled corset & skirt — reconstructed sports jersey tailored into a boned corset bodice with heavy front industrial zipper and matching pleated skirt.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "1-of-1 archival upcycled jersey reconstruction",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -263,7 +259,7 @@ export const PRODUCTS = [
       "Adjustable Snaps"
     ],
     "sizes": [
-      "One Size (Adjustable)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/armcuffs/armcuffs_01.webp",
@@ -274,7 +270,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/armcuffs/armcuffs_01.webp",
     "description": "Armcuffs w spikes — studded forearm and wrist gauntlets with hand-set metallic spikes. Statement armor for subcultural and editorial styling.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Heavy industrial conical spikes",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -297,7 +293,7 @@ export const PRODUCTS = [
       "Upcycled Hardware Clasp"
     ],
     "sizes": [
-      "One Size (Adjustable Waist)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/belts/belts_01.webp",
@@ -308,7 +304,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/belts/belts_01.webp",
     "description": "Belt with fabrics hanging — multi-textured waist harness adorned with cascading purple and printed fabric frills and free-hanging ribbons.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Upcycled deadstock fabric frills",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -331,7 +327,7 @@ export const PRODUCTS = [
       "Stainless Steel Chainmail Links"
     ],
     "sizes": [
-      "One Size (Adjustable Chain Drape)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/body_chainmail/body_chainmail_13.webp",
@@ -345,7 +341,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/body_chainmail/body_chainmail_13.webp",
     "description": "Beaded bralette w spikes and punk theme — intricate bib collar of cascading hand-beaded loops, stainless steel chain links, and metallic spikes.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Over 500 hand-threaded glass beads and steel links",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -368,7 +364,7 @@ export const PRODUCTS = [
       "Satin Ribbons & Chains"
     ],
     "sizes": [
-      "One Size (Shoulder Bag)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bags/bags_03.webp",
@@ -380,7 +376,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bags/bags_03.webp",
     "description": "Bag with acid paint denim jeans upcycled — one-of-a-kind slouchy shoulder bag deconstructed from brown denim jeans with psychedelic neon painting, charms, and satin ties.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Deconstructed vintage jeans with hand-painted artwork",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -403,8 +399,7 @@ export const PRODUCTS = [
       "Elastic Stretch Support"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_16.webp",
@@ -414,7 +409,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_16.webp",
     "description": "Tube top rexine black with spikes forming cross — sleek black leatherette tube top with heavy metallic cone spikes arranged in an extended crucifix motif down the torso.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Hand-riveted spikes with structured boning",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -437,7 +432,7 @@ export const PRODUCTS = [
       "Blood-Red Gems & Safety Pins"
     ],
     "sizes": [
-      "Size: Small"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_20.webp",
@@ -451,7 +446,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_20.webp",
     "description": "Cross top halter purple with gold and red embellishment — halter neck cross-silhouette top in rich purple fabric lavishly embellished with metallic filigree, hanging charms, and safety-pin hardware.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Intricate hand-embellished vintage charms",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -474,9 +469,7 @@ export const PRODUCTS = [
       "Lobster Clasps"
     ],
     "sizes": [
-      "S (Bust 32-34in)",
-      "M (Bust 34-36in)",
-      "L (Bust 36-38in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/body_chainmail/body_chainmail_14.webp"
@@ -484,7 +477,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/body_chainmail/body_chainmail_14.webp",
     "description": "Bra made out of chain links — fluid metallic armor constructed entirely from hand-interlinked stainless steel rings. Ergonomic contouring and adjustable chain ties.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Corrosion-resistant surgical steel jump rings",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -507,7 +500,7 @@ export const PRODUCTS = [
       "Adjustable Hardware"
     ],
     "sizes": [
-      "One Size (Adjustable Body Chain)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bralettes/bralettes_08.webp",
@@ -520,7 +513,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bralettes/bralettes_08.webp",
     "description": "Bralette/ bodychain made with pink and purple beads — multi-layered wearable jewelry draped across the bust with thousands of hand-strung beads in violet and magenta.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Over 1,200 micro-beads individually hand-threaded",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -543,7 +536,7 @@ export const PRODUCTS = [
       "Snap Fasteners"
     ],
     "sizes": [
-      "One Size (Adjustable)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/armcuffs/armcuffs_02.webp",
@@ -553,7 +546,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/armcuffs/armcuffs_02.webp",
     "description": "Hand cuffs w spikes — minimal yet fierce black wristbands studded with double rows of chrome spikes. Heavy punk styling.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Adjustable multi-snap wrist clasp",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -576,7 +569,7 @@ export const PRODUCTS = [
       "Vintage Ribbons & Lace"
     ],
     "sizes": [
-      "One Size (Headpiece with Mask & Ties)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/headgears/headgears_03.webp",
@@ -590,7 +583,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/headgears/headgears_03.webp",
     "description": "Denim headgear with green plastic bottle flowers and ribbons and laces vaganza — avant-garde sculptural headpiece and mask sculpted from frayed denim seams, heat-formed plastic bottle flowers, and draping ribbons.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Upcycled zero-waste wearable sculpture",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -613,7 +606,7 @@ export const PRODUCTS = [
       "Draped Hardware Chains"
     ],
     "sizes": [
-      "One Size (Oversized Boxy Silhouette)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/jackets/jackets_04.webp",
@@ -627,7 +620,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/jackets/jackets_04.webp",
     "description": "Jacket fur brown jhumkhas — rich chocolate brown faux fur cropped jacket adorned with dozens of traditional Indian brass jhumkas and connecting chain swags.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Authentic brass jhumka hardware hand-stitched",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -650,7 +643,7 @@ export const PRODUCTS = [
       "Heavy Eyelet Hardware"
     ],
     "sizes": [
-      "Size: Small"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/co_ords/co_ords_16.webp",
@@ -665,7 +658,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/co_ords/co_ords_16.webp",
     "description": "Silver corset and black fur skirt — sculptural two-piece ensemble featuring an engraved silver-finish corset top paired with a micro mini skirt trimmed in dense black faux fur.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Hand-structured corset boning with metal grommets",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -688,7 +681,7 @@ export const PRODUCTS = [
       "Raw Asymmetric Hemline"
     ],
     "sizes": [
-      "Size: 34 Medium"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/co_ords/co_ords_20.webp",
@@ -702,7 +695,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/co_ords/co_ords_20.webp",
     "description": "Cavewoman bra and leopard skirt — ferocious wild-animal print co-ord pairing an asymmetric ruched bralette with an uneven raw-hem leopard skirt.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Subcultural Y2K grunge styling",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -725,7 +718,7 @@ export const PRODUCTS = [
       "Draped Silver Tone Chains"
     ],
     "sizes": [
-      "Size: small"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_38.webp",
@@ -736,7 +729,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_38.webp",
     "description": "Cross shape halter top with black butterfly choker and silver elements — architectural cross-formed metallic top connected with chains and accompanied by a signature butterfly choker.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Archived piece — request a custom commission",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -759,8 +752,7 @@ export const PRODUCTS = [
       "Lace-Up Back"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_23.webp",
@@ -770,7 +762,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_23.webp",
     "description": "Crocheted top with flowers multi colored — hand-knit kaleidoscopic crop top blooming with vibrant three-dimensional crochet flowers over a supportive frame.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Individually hand-crocheted 3D flowers",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -793,8 +785,7 @@ export const PRODUCTS = [
       "Satin Ties"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bralettes/bralettes_13.webp",
@@ -808,7 +799,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bralettes/bralettes_13.webp",
     "description": "White pearls crocheted on bikini top — ethereal halter bikini top hand-woven with hundreds of luminous white pearls crocheted into an organic mesh.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Hand-crocheted pearl architecture",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -831,8 +822,7 @@ export const PRODUCTS = [
       "Plush Headgear"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/co_ords/co_ords_26.webp",
@@ -842,7 +832,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/co_ords/co_ords_26.webp",
     "description": "Pink starfish bra + Barbie short skirt + green & pink fluffy headgear — the quintessential maximalist trio: sculpted hot pink starfish bralette, frayed denim mini edged with neon pink faux fur, and fluffy headpiece.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Three-piece complete editorial ensemble",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -865,7 +855,7 @@ export const PRODUCTS = [
       "Draped Halter Harness"
     ],
     "sizes": [
-      "One Size (Adjustable Torso Drape)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/body_chainmail/body_chainmail_22.webp",
@@ -878,7 +868,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/body_chainmail/body_chainmail_22.webp",
     "description": "Spiral wired  chained top in silver — concentric wire spirals coiled and woven with steel chains to create a sculptural breastplate that cascades down the torso.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Hand-coiled silver-tone steel wire",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -901,9 +891,7 @@ export const PRODUCTS = [
       "Snap Fasteners"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "S-M (Bust 32-35in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/bralettes/bralettes_23.webp",
@@ -919,7 +907,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/bralettes/bralettes_23.webp",
     "description": "Bralette in the illusion of taped bust — deconstructed black vinyl crosses creating the visual illusion of electrical tape with chain linkages and comfortable inner lining.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Durable industrial hardware connectors",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -942,7 +930,7 @@ export const PRODUCTS = [
       "Silver Hardware Accents"
     ],
     "sizes": [
-      "Size: Small-Medium"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_08.webp",
@@ -958,7 +946,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_08.webp",
     "description": "Blouse with spikes — traditional Indian grey saree blouse transformed into high-impact wearable armor with hundreds of pointed cone spikes covering the bodice.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Custom tailored base with metallic spike field",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -981,7 +969,7 @@ export const PRODUCTS = [
       "Matching Metallic Mini Skirt"
     ],
     "sizes": [
-      "One Size (Custom Studio Fit)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/corsets/corsets_03.webp",
@@ -998,7 +986,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/corsets/corsets_03.webp",
     "description": "Corset in silver color made out of shoe and brown fur and similar skirt for a set — avant-garde runway set where athletic sneakers were unstitched and re-formed into a boned corset trimmed with brown fur, paired with metallic mini skirt.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Deconstructed sneaker upper wearable architecture",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -1021,8 +1009,7 @@ export const PRODUCTS = [
       "Backless Strappy Tie Closure"
     ],
     "sizes": [
-      "XS-S (Bust 30-33in)",
-      "M-L (Bust 34-37in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/tops/tops_10.webp",
@@ -1034,7 +1021,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/tops/tops_10.webp",
     "description": "Red heart top with spikes backless — sculpted crimson heart-shaped halter crop top studded with gleaming spikes with an open criss-cross strappy back.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Heart silhouette with conical spike studs",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -1057,7 +1044,7 @@ export const PRODUCTS = [
       "Rose & Ribbon Waist Hardware"
     ],
     "sizes": [
-      "Size: Small (Waist 24-27in)"
+      "Free Size"
     ],
     "images": [
       "/assets/collection/skirts/skirts_03.webp",
@@ -1067,7 +1054,7 @@ export const PRODUCTS = [
     "image": "/assets/collection/skirts/skirts_03.webp",
     "description": "Red skirt w checks and fishnet mini size — pleated red and white gingham mini skirt overlaid with deconstructed black fishnet mesh, red rose rosette, and ribbon tails.",
     "details": [
-      "100% Handcrafted by Dhrisni in Guwahati",
+      "100% Handcrafted by Dhrisni in our Studio",
       "Gingham check with fishnet overlay and flower pin",
       "AVZ Vaganza Certificate of Authenticity included"
     ],
@@ -1117,7 +1104,7 @@ export const MUSEUM_ITEMS = [
     priceTier: "Full Outfits & Heavy Art (₹3,000+)",
     originalOwner: "Custom Order (Berlin)",
     image: ASSET_MANIFEST.products.reworkedJacket,
-    story: "Constructed from a discarded 1980s motorcycle jacket found in a thrift crate in Guwahati. Cropped high above the bust line, with massive chrome shoulders that evoke dystopian post-apocalyptic royalty.",
+    story: "Constructed from a discarded 1980s motorcycle jacket found in a thrift crate. Cropped high above the bust line, with massive chrome shoulders that evoke dystopian post-apocalyptic royalty.",
     recreationNote: "Requires full shoulder and arm measurements for custom armhole drafting."
   },
   {
@@ -1158,17 +1145,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_01.webp",
     "alt": "Dhristroyer Cyberpunk Spikeria Bralette",
-    "description": "Dhristroyer Cyberpunk Spikeria Bralette — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Dhristroyer Cyberpunk Spikeria Bralette — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1193,17 +1178,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_02.webp",
     "alt": "Hand-Riveted Spikeria Bodice Armor",
-    "description": "Hand-Riveted Spikeria Bodice Armor — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Hand-Riveted Spikeria Bodice Armor — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1211,8 +1194,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-03",
     "sku": "AVZ-FT-003",
-    "name": "Guwahati Stainless Chainmail Cuirass",
-    "title": "Guwahati Stainless Chainmail Cuirass",
+    "name": "Stainless Chainmail Cuirass",
+    "title": "Stainless Chainmail Cuirass",
     "category": "Body chainmail",
     "price": 5200,
     "tag": "BEST SELLER",
@@ -1227,18 +1210,16 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_03.webp"
     ],
     "imgUrl": "/assets/featured/featured_03.webp",
-    "alt": "Guwahati Stainless Chainmail Cuirass",
-    "description": "Guwahati Stainless Chainmail Cuirass — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Stainless Chainmail Cuirass",
+    "description": "Stainless Chainmail Cuirass — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1246,8 +1227,8 @@ export const FEATURED_PIECES = [
   {
     "id": "featured-04",
     "sku": "AVZ-FT-004",
-    "name": "Guwahati Hand-Riveted Spike Gauntlet",
-    "title": "Guwahati Hand-Riveted Spike Gauntlet",
+    "name": "Hand-Riveted Spike Gauntlet",
+    "title": "Hand-Riveted Spike Gauntlet",
     "category": "Arm cuffs",
     "price": 1800,
     "tag": "UPCYCLED TECH",
@@ -1262,18 +1243,16 @@ export const FEATURED_PIECES = [
       "/assets/featured/featured_04.webp"
     ],
     "imgUrl": "/assets/featured/featured_04.webp",
-    "alt": "Guwahati Hand-Riveted Spike Gauntlet",
-    "description": "Guwahati Hand-Riveted Spike Gauntlet — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "alt": "Hand-Riveted Spike Gauntlet",
+    "description": "Hand-Riveted Spike Gauntlet — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1298,17 +1277,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_10.webp",
     "alt": "Raw Steel O-Ring Harness Matrix",
-    "description": "Raw Steel O-Ring Harness Matrix — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Raw Steel O-Ring Harness Matrix — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1333,17 +1310,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_12.webp",
     "alt": "Spiked Cybernetic Moto Shoulder Guard",
-    "description": "Spiked Cybernetic Moto Shoulder Guard — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Spiked Cybernetic Moto Shoulder Guard — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1368,17 +1343,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_16.webp",
     "alt": "Acid-Wash Reclaimed Hardware Cargo Skirt",
-    "description": "Acid-Wash Reclaimed Hardware Cargo Skirt — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Acid-Wash Reclaimed Hardware Cargo Skirt — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1403,17 +1376,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_18.webp",
     "alt": "Psychedelic Acid-Wash Denim Relic Bag",
-    "description": "Psychedelic Acid-Wash Denim Relic Bag — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Psychedelic Acid-Wash Denim Relic Bag — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1438,17 +1409,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_19.webp",
     "alt": "Hand-Linked Stainless Mesh Slip Top",
-    "description": "Hand-Linked Stainless Mesh Slip Top — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Hand-Linked Stainless Mesh Slip Top — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1473,17 +1442,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_20.webp",
     "alt": "Barbed Hardware Kinetic Choker",
-    "description": "Barbed Hardware Kinetic Choker — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Barbed Hardware Kinetic Choker — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1508,17 +1475,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_21.webp",
     "alt": "Cyber-Goth Spiked Rib Cage Bodice",
-    "description": "Cyber-Goth Spiked Rib Cage Bodice — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Cyber-Goth Spiked Rib Cage Bodice — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1543,17 +1508,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_24.webp",
     "alt": "Reconstructed Denim Shrug & Sleeve Bolero",
-    "description": "Reconstructed Denim Shrug & Sleeve Bolero — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Reconstructed Denim Shrug & Sleeve Bolero — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1578,17 +1541,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_30.webp",
     "alt": "Spike-Studded Asymmetric Collar Piece",
-    "description": "Spike-Studded Asymmetric Collar Piece — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Spike-Studded Asymmetric Collar Piece — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1613,17 +1574,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_32.webp",
     "alt": "Deconstructed Zipper Kinetic Mesh Top",
-    "description": "Deconstructed Zipper Kinetic Mesh Top — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Deconstructed Zipper Kinetic Mesh Top — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1648,17 +1607,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_35.webp",
     "alt": "Multi-Buckle Industrial Waist Cincher",
-    "description": "Multi-Buckle Industrial Waist Cincher — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Multi-Buckle Industrial Waist Cincher — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1683,17 +1640,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_38.webp",
     "alt": "Deconstructed Cyber Denim Flares (Archival)",
-    "description": "Deconstructed Cyber Denim Flares (Archival) — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Deconstructed Cyber Denim Flares (Archival) — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1718,17 +1673,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_41.webp",
     "alt": "Sculpted Silver Wire Tendril Bustier",
-    "description": "Sculpted Silver Wire Tendril Bustier — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Sculpted Silver Wire Tendril Bustier — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1753,17 +1706,15 @@ export const FEATURED_PIECES = [
     ],
     "imgUrl": "/assets/featured/featured_47.webp",
     "alt": "Barbed Wire Chainmail Spine Drape",
-    "description": "Barbed Wire Chainmail Spine Drape — authentic wearable art creation handcrafted by Dhrisni in the Guwahati studio. Built from raw hardware and reclaimed elements.",
+    "description": "Barbed Wire Chainmail Spine Drape — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
     "details": [
-      "Handcrafted by Dhrisni in the Guwahati studio",
+      "Handcrafted by Dhrisni in our Studio",
       "Authentic upcycled hardware and custom metalwork",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
     "sizes": [
-      "XS / S",
-      "M / L",
-      "Custom Studio Sizing"
+      "Free Size"
     ],
     "inMuseum": false,
     "featured": true
@@ -1788,7 +1739,7 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-02",
-    "code": "LOOK 002 • GUWAHATI TACTILE GRIT",
+    "code": "LOOK 002 • STUDIO TACTILE GRIT",
     "title": "Raw Hands, Pure Grit",
     "subtitle": "Studio Stories & Hand-Linked Armor from Assam",
     "image": "/assets/lookbook/lookbook_03.webp",
@@ -1796,7 +1747,7 @@ export const LOOKBOOK_ENTRIES = [
       "/assets/lookbook/lookbook_04.webp"
     ],
     "aspect": "portrait",
-    "caption": "Behind the scenes at the Guwahati workshop. Hand-threading 16-gauge chain links.",
+    "caption": "Behind the scenes at our Studio workshop. Hand-threading 16-gauge chain links.",
     "story": "Every piece passes through Dhrisni's hands and the women she has personally trained. No conveyor belts. No sweatshops. Just pure tactile rebellion.",
     "materials": "Deconstructed Electronic Boards, Steel Ringlets, High-Tensile Filament",
     "vibe": "Artisanal Maximalism"
@@ -1887,7 +1838,7 @@ export const LOOKBOOK_ENTRIES = [
     ],
     "aspect": "portrait",
     "caption": "Strobe-lit editorial framing the reflective polymer corset.",
-    "story": "Born from late-night studio sessions in Guwahati where discarded tech finds second life under UV strobe pulses.",
+    "story": "Born from late-night studio sessions where discarded tech finds second life under UV strobe pulses.",
     "materials": "Reflective Polymer, Salvaged Cables, Industrial Grommets",
     "vibe": "Cyber-Underground"
   },
@@ -2141,7 +2092,7 @@ export const LOOKBOOK_ENTRIES = [
       "/assets/lookbook/lookbook_50.webp"
     ],
     "aspect": "portrait",
-    "caption": "Signature editorial campaign portrait directed by Dhrisni in Guwahati.",
+    "caption": "Signature editorial campaign portrait directed by Dhrisni in our Studio.",
     "story": "The definitive statement of Aveezah Vaganza. A manifesto written in solder, denim, and steel by Dhristroyer herself.",
     "materials": "Upcycled Hardware, Hand-Linked Stainless Rings, Studio Relics",
     "vibe": "Crown Archival Art"

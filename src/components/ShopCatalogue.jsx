@@ -763,7 +763,7 @@ function ShopCatalogue({
       ...prod,
       rank: `EDITION ${String(idx + 1).padStart(2, '0')}`,
       badge: prod.stock === 0 ? 'SOLD OUT' : prod.stock === 1 ? '1 OF 1 ARCHIVE' : 'STUDIO PIECE',
-      socialTag: (prod.category || 'AVZ ATELIER').toUpperCase()
+      socialTag: (prod.category || 'AVZ STUDIO').toUpperCase()
     }));
   }, [activeProducts]);
 
@@ -813,7 +813,7 @@ function ShopCatalogue({
             COLLECTION <span className="text-zinc-500 font-light">ARCHIVE</span>
           </h2>
           <p className="text-zinc-400 text-xs sm:text-sm max-w-xl font-montserrat mt-1.5 sm:mt-2 leading-relaxed text-left">
-            1-of-1 sculptural corsets, chainmail breastplates, and tailored outerwear handcrafted in our Guwahati studio.
+            1-of-1 sculptural corsets, chainmail breastplates, and tailored outerwear handcrafted in our Studio.
           </p>
         </div>
 

@@ -35,7 +35,7 @@ const CUSTOM_ORDER_STEPS = [
     step: "03",
     title: "CRAFTING",
     subtitle: "Handcrafted in Studio",
-    desc: "Handcrafted with care by Dhrisni & women artisans in Guwahati."
+    desc: "Handcrafted with care by Dhrisni & women artisans in our Studio."
   },
   {
     step: "04",
@@ -112,7 +112,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
       <div className="w-full mb-10 pb-6 border-b border-white/10 text-left">
         <div className="section-badge-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-3 text-[10px] sm:text-[11px] font-mono tracking-widest uppercase shadow-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse shrink-0" />
-          <span>CUSTOM ORDERS • HANDCRAFTED IN GUWAHATI</span>
+          <span>CUSTOM ORDERS • HANDCRAFTED IN OUR STUDIO</span>
         </div>
 
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-mono font-medium tracking-[0.16em] text-white uppercase mb-2 leading-tight text-left">
@@ -120,7 +120,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
         </h2>
 
         <p className="text-zinc-300 text-xs sm:text-sm lg:text-base leading-relaxed font-montserrat max-w-4xl text-left">
-          {cmsCustomOrders?.tagline || 'Every custom AVZ piece is individually designed and handcrafted by Dhrisni and our Guwahati studio team. We never mass-produce: each piece is tailored to your measurements, hardware preferences, and unique style.'}
+          {cmsCustomOrders?.tagline || 'Every custom AVZ piece is individually designed and handcrafted by Dhrisni and our Studio team. We never mass-produce: each piece is tailored to your measurements, hardware preferences, and unique style.'}
         </p>
 
         {/* 4-Step Order Process */}
@@ -409,7 +409,7 @@ function CustomOrders({ initialReference = '', onInquirySubmitted, cmsCustomOrde
 
               <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 mt-3 px-1">
                 <span>WE RESPOND WITHIN 24 HOURS</span>
-                <span>HANDMADE IN GUWAHATI</span>
+                <span>HANDMADE IN OUR STUDIO</span>
               </div>
             </div>
           </form>

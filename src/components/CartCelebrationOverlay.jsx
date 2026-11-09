@@ -583,7 +583,7 @@ export default function CartCelebrationOverlay({ theme = 'sparkles', promoCode, 
   // Theme metadata banner config
   const themeDetails = {
     diwali: {
-      title: 'SHUBH DIWALI ATELIER PRIVILEGE',
+      title: 'SHUBH DIWALI PRIVILEGE',
       subtitle: 'Auspicious festive discount applied with golden diyas & crackers',
       icon: '🪔',
       border: 'border-amber-400/40',
@@ -602,7 +602,7 @@ export default function CartCelebrationOverlay({ theme = 'sparkles', promoCode, 
     },
     cyberpunk: {
       title: 'CYBER PROTOCOL • CIPHER OVERRIDE ACTIVE',
-      subtitle: 'Matrix algorithmic discount applied to your atelier order',
+      subtitle: 'Matrix algorithmic discount applied to your order',
       icon: '⚡',
       border: 'border-cyan-400/40',
       bg: 'bg-gradient-to-r from-cyan-950/90 via-black/90 to-fuchsia-950/90',
@@ -610,7 +610,7 @@ export default function CartCelebrationOverlay({ theme = 'sparkles', promoCode, 
       text: 'text-cyan-300'
     },
     luxury_gold: {
-      title: 'ATELIER ROYAL RESERVE PRIVILEGE',
+      title: 'STUDIO ROYAL RESERVE PRIVILEGE',
       subtitle: 'Couture gold medallion privilege unlocked on your order',
       icon: '🪙',
       border: 'border-yellow-400/40',
@@ -628,7 +628,7 @@ export default function CartCelebrationOverlay({ theme = 'sparkles', promoCode, 
       text: 'text-rose-300'
     },
     sparkles: {
-      title: 'ATELIER PRIVILEGE CODE UNLOCKED',
+      title: 'STUDIO PRIVILEGE CODE UNLOCKED',
       subtitle: 'Special celebratory savings applied to your cart bag',
       icon: '✨',
       border: 'border-purple-400/40',

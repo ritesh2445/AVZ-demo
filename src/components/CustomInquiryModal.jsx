@@ -56,7 +56,7 @@ export default function CustomInquiryModal({ isOpen, onClose, inquiryData }) {
         </div>
 
         <div className="px-6 text-[10px] font-mono tracking-widest text-zinc-400 uppercase mb-2">
-          CUSTOM ORDER LOGGED • GUWAHATI STUDIO
+          CUSTOM ORDER LOGGED • STUDIO
         </div>
 
         <h2 className="px-4 text-xl sm:text-2xl font-mono font-medium uppercase text-white mb-2 leading-tight">

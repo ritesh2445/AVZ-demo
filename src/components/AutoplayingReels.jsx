@@ -83,7 +83,7 @@ const DEFAULT_REELS = [
     vimeo_url: 'https://vimeo.com/1243095629/47f3f9c6c6',
     fallback_video: 'https://player.vimeo.com/video/1243095629?h=47f3f9c6c6&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
     poster: '/assets/product_diva_top.jpg',
-    tag: 'ATELIER'
+    tag: 'STUDIO'
   },
   {
     id: 'reel-04',
@@ -97,7 +97,7 @@ const DEFAULT_REELS = [
   {
     id: 'reel-05',
     title: 'Wearable Art Showcase',
-    subtitle: '1-of-1 handmade creations from our Guwahati studio',
+    subtitle: '1-of-1 handmade creations from our Studio',
     vimeo_url: 'https://vimeo.com/1243095628/95ae4f7ecd',
     fallback_video: 'https://player.vimeo.com/video/1243095628?h=95ae4f7ecd&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0',
     poster: '/assets/editorial_hero_portrait.jpg',

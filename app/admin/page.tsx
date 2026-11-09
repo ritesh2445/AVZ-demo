@@ -1577,7 +1577,7 @@ export default function AdminDashboardPage() {
                             ? new Date(typeof req.created_at === 'number' && req.created_at < 10000000000 ? req.created_at * 1000 : req.created_at).toLocaleDateString()
                             : 'Recent';
                           const cleanPhone = (req.customer_phone || '').replace(/[^0-9]/g, '');
-                          const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hi ${req.customer_name || 'there'}, this is AVZ Atelier following up on your request for "${req.piece_title}".`)}` : null;
+                          const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hi ${req.customer_name || 'there'}, this is AVZ Studio following up on your request for "${req.piece_title}".`)}` : null;
 
                           return (
                             <tr key={req.id} className="hover:bg-[#16101F]/60 transition-colors">
@@ -2386,7 +2386,7 @@ export default function AdminDashboardPage() {
                       <textarea
                         name="thankYouMessage"
                         rows={2}
-                        defaultValue={storefrontSettings.order_thank_you_message?.message || 'Your order is confirmed. Dhrisni and our Guwahati studio team are preparing your custom presentation box and certificate.'}
+                        defaultValue={storefrontSettings.order_thank_you_message?.message || 'Your order is confirmed. Dhrisni and our Studio team are preparing your custom presentation box and certificate.'}
                         placeholder="Personalized message displayed to customer upon verified payment..."
                         className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                       />
@@ -3849,7 +3849,7 @@ export default function AdminDashboardPage() {
                   defaultValue="sparkles"
                   className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2.5 text-white focus:outline-none focus:border-[#F4C2C2]"
                 >
-                  <option value="sparkles">✨ Classic Atelier Sparkles & Stars</option>
+                  <option value="sparkles">✨ Classic Studio Sparkles & Stars</option>
                   <option value="diwali">🪔 Diwali (Glowing Diyas & Firecrackers)</option>
                   <option value="holi">🎨 Holi (Vibrant Gulal Color Splash)</option>
                   <option value="cyberpunk">⚡ Cyberpunk (Matrix & Glitch Sparks)</option>

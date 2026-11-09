@@ -483,7 +483,7 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 {/* Details Badges */}
                 <div className="lookbook-specs p-4 rounded-2xl text-xs font-mono mb-6 space-y-1.5 text-left shadow-inner bg-white/5 border border-white/10 text-zinc-300">
                   <div><strong className="text-white">Materials:</strong> {activeLook.materials || 'Reclaimed electronics, spikes, upcycled denim, steel'}</div>
-                  <div><strong className="text-white">Craftsmanship:</strong> 100% Handcrafted by Dhrisni in Guwahati</div>
+                  <div><strong className="text-white">Craftsmanship:</strong> 100% Handcrafted by Dhrisni in our Studio</div>
                   <div><strong className="text-white">Vibe:</strong> {activeLook.vibe || 'Haute Wearable Art'}</div>
                   {activeLook.caption && (
                     <div className="lookbook-caption pt-1 text-[11px] text-zinc-400">{activeLook.caption}</div>
