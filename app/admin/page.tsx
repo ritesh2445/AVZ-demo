@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard, ShoppingBag, Package, Warehouse, Layers, Users,
@@ -69,6 +69,7 @@ export default function AdminDashboardPage() {
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [isCustomCategory, setIsCustomCategory] = useState<boolean>(false);
   const [customCategoryInput, setCustomCategoryInput] = useState<string>('');
+  const [productSkuInput, setProductSkuInput] = useState<string>('');
   const [productImages, setProductImages] = useState<string[]>([]);
   const [productUrlInput, setProductUrlInput] = useState<string>('');
   const [productPickerOpen, setProductPickerOpen] = useState<boolean>(false);
@@ -377,6 +378,25 @@ export default function AdminDashboardPage() {
     ];
     const fromProds = products.map(p => p.category).filter(Boolean);
     return Array.from(new Set([...defaultCats, ...fromProds]));
+  }, [products]);
+
+  // Suggest the next sequential SKU based on existing studio catalog (IN0027, etc.)
+  const generateNextSuggestedSku = useCallback((category?: string) => {
+    // 1. Check if the studio is using IN0001, IN0025, IN0026 format
+    const inNumbers = products
+      .map(p => (p.sku || '').trim())
+      .filter(sku => /^IN\d+$/i.test(sku))
+      .map(sku => parseInt(sku.replace(/^IN/i, ''), 10))
+      .filter(n => !isNaN(n));
+
+    if (inNumbers.length > 0) {
+      const maxNum = Math.max(...inNumbers);
+      return `IN${String(maxNum + 1).padStart(4, '0')}`;
+    }
+
+    // 2. Otherwise generate clean AVZ category code
+    const catPrefix = (category || 'ART').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'ART';
+    return `AVZ-${catPrefix}-${String(products.length + 1).padStart(2, '0')}`;
   }, [products]);
 
   // Instant 0ms client-side product filtering (fixes search & category filter completely)
@@ -1872,6 +1892,7 @@ export default function AdminDashboardPage() {
                     setProductUrlInput('');
                     setIsCustomCategory(false);
                     setCustomCategoryInput('');
+                    setProductSkuInput(generateNextSuggestedSku());
                     setProductModalOpen(true);
                   }}
                   className="bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] hover:opacity-90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
@@ -2025,6 +2046,7 @@ export default function AdminDashboardPage() {
                                   setProductUrlInput('');
                                   setIsCustomCategory(false);
                                   setCustomCategoryInput('');
+                                  setProductSkuInput(p.sku || generateNextSuggestedSku(p.category));
                                   setProductModalOpen(true);
                                 }}
                                 className="p-1.5 rounded-lg bg-[#22172C] hover:bg-[#301934] text-[#F4C2C2] cursor-pointer"
@@ -4029,13 +4051,26 @@ export default function AdminDashboardPage() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="text-neutral-400 text-xs">SKU (Product Code)</label>
-                    <span className="text-[10px] text-neutral-500 font-mono">auto-generates if empty</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const activeCat = isCustomCategory ? customCategoryInput : (document.getElementById('p_category') as HTMLSelectElement)?.value;
+                        const nextCode = generateNextSuggestedSku(activeCat);
+                        setProductSkuInput(nextCode);
+                      }}
+                      className="text-[10px] text-[#BE185D] hover:text-[#F4C2C2] font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                      title="Auto-fill next sequential SKU (e.g. IN0027)"
+                    >
+                      <Sparkles className="w-2.5 h-2.5 text-[#BE185D]" />
+                      Auto-fill Next SKU
+                    </button>
                   </div>
                   <input
                     id="p_sku"
-                    defaultValue={selectedProduct?.sku || ''}
-                    placeholder="e.g. IN0028 or AVZ-TOP-01"
-                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white font-mono text-xs"
+                    value={productSkuInput}
+                    onChange={(e) => setProductSkuInput(e.target.value)}
+                    placeholder="e.g. IN0027 or AVZ-TOP-01"
+                    className="w-full bg-[#181122] border border-neutral-800 focus:border-[#BE185D] rounded-lg p-2 text-white font-mono text-xs outline-none"
                   />
                 </div>
                 <div>
@@ -4324,7 +4359,7 @@ export default function AdminDashboardPage() {
               <button
                 onClick={async () => {
                   const title = (document.getElementById('p_title') as HTMLInputElement)?.value?.trim();
-                  let sku = (document.getElementById('p_sku') as HTMLInputElement)?.value?.trim();
+                  let sku = productSkuInput.trim() || (document.getElementById('p_sku') as HTMLInputElement)?.value?.trim();
                   
                   // Category resolution (supports custom typed category or dropdown selection)
                   let category = 'Tops';
@@ -4341,10 +4376,9 @@ export default function AdminDashboardPage() {
                     }
                   }
 
-                  // Auto-generate clean SKU if left empty by the admin
+                  // Auto-generate clean sequential SKU if empty
                   if (!sku) {
-                    const prefix = category.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'ART';
-                    sku = `AVZ-${prefix}-${Math.floor(100 + Math.random() * 900)}`;
+                    sku = generateNextSuggestedSku(category);
                   }
 
                   const price = Number((document.getElementById('p_price') as HTMLInputElement)?.value);
