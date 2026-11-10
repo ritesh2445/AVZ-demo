@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import LoadingExperience from './components/LoadingExperience';
 import MatrixRainIntro from './components/MatrixRainIntro';
 import Navbar from './components/Navbar';
