@@ -96,6 +96,8 @@ export default function MediaAndSectionManager({
   const [formPhotos, setFormPhotos] = useState<string[]>([]);
   const [pickerModalOpen, setPickerModalOpen] = useState<boolean>(false);
   const [pickerSearch, setPickerSearch] = useState<string>('');
+  const [pickerPage, setPickerPage] = useState<number>(1);
+  const PICKER_PAGE_SIZE = 24;
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
 
   // Section 2 Data Stores
@@ -115,7 +117,7 @@ export default function MediaAndSectionManager({
   // 1. Vault Pieces Form
   const [vaultForm, setVaultForm] = useState({
     title: '',
-    price: '3800',
+    price: '0',
     tag: '1 OF 1',
     category: 'Bralettes',
     story: 'Archival masterpiece from the private vault, hand-crafted with upcycled hardware.'
@@ -135,7 +137,7 @@ export default function MediaAndSectionManager({
   // 3. Key Pieces Form
   const [keyPieceForm, setKeyPieceForm] = useState({
     title: '',
-    price: '3200',
+    price: '0',
     category: 'Tops',
     tag: 'KEY PIECE',
     description: 'Signature studio statement piece sculpted with cold-forged spikes.'
@@ -144,7 +146,7 @@ export default function MediaAndSectionManager({
   // 4. Collection Archive Form
   const [collectionForm, setCollectionForm] = useState({
     name: '',
-    price: '2500',
+    price: '0',
     category: 'Tops',
     stock: '1',
     sku: '',
@@ -218,6 +220,45 @@ export default function MediaAndSectionManager({
     fetchMuseum();
     fetchProducts();
   }, []);
+
+  // Lock background body scroll when any modal is open
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    if (pickerModalOpen || confirmDeleteAsset || confirmDeleteItem) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [pickerModalOpen, confirmDeleteAsset, confirmDeleteItem]);
+
+  // Fast filtered & paginated assets for the Media Pool picker modal (eliminates lag completely)
+  const filteredPickerAssets = useMemo(() => {
+    const query = pickerSearch.trim().toLowerCase();
+    if (!query) return mediaAssets;
+    return mediaAssets.filter(a =>
+      (a.title && a.title.toLowerCase().includes(query)) ||
+      (a.url && a.url.toLowerCase().includes(query)) ||
+      (a.alt_text && a.alt_text.toLowerCase().includes(query))
+    );
+  }, [mediaAssets, pickerSearch]);
+
+  const totalPickerPages = Math.ceil(filteredPickerAssets.length / PICKER_PAGE_SIZE) || 1;
+  const paginatedPickerAssets = useMemo(() => {
+    const start = (pickerPage - 1) * PICKER_PAGE_SIZE;
+    return filteredPickerAssets.slice(start, start + PICKER_PAGE_SIZE);
+  }, [filteredPickerAssets, pickerPage]);
+
+  // Toggle photo in form (add if not present, remove if already present)
+  const handleTogglePhotoInForm = (url: string) => {
+    if (formPhotos.includes(url)) {
+      setFormPhotos(prev => prev.filter(u => u !== url));
+    } else {
+      setFormPhotos(prev => [...prev, url]);
+      showNotification('Photo attached to section!', 'success');
+    }
+  };
 
   // --- UPLOAD PHOTOS INTO SECTION 1 ---
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -302,7 +343,7 @@ export default function MediaAndSectionManager({
     setFormPhotos([]);
     setCollectionForm({
       name: '',
-      price: '2500',
+      price: '0',
       category: 'Tops',
       stock: '1',
       sku: '',
@@ -320,14 +361,14 @@ export default function MediaAndSectionManager({
     });
     setVaultForm({
       title: '',
-      price: '3800',
+      price: '0',
       tag: '1 OF 1',
       category: 'Bralettes',
       story: 'Archival masterpiece from the private vault, hand-crafted with upcycled hardware.'
     });
     setKeyPieceForm({
       title: '',
-      price: '3200',
+      price: '0',
       category: 'Tops',
       tag: 'KEY PIECE',
       description: 'Signature studio statement piece sculpted with cold-forged spikes.'
@@ -990,18 +1031,6 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Price (INR ₹) *</label>
-                      <input
-                        type="number"
-                        required
-                        value={vaultForm.price}
-                        onChange={(e) => setVaultForm(prev => ({ ...prev, price: e.target.value }))}
-                        placeholder="3800"
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
                       <label className="block text-[11px] font-mono text-neutral-400 mb-1">Badge Tag</label>
                       <select
                         value={vaultForm.tag}
@@ -1015,7 +1044,7 @@ export default function MediaAndSectionManager({
                       </select>
                     </div>
 
-                    <div>
+                    <div className="sm:col-span-2">
                       <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
                       <select
                         value={vaultForm.category}
@@ -1122,18 +1151,6 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Price (INR ₹) *</label>
-                      <input
-                        type="number"
-                        required
-                        value={keyPieceForm.price}
-                        onChange={(e) => setKeyPieceForm(prev => ({ ...prev, price: e.target.value }))}
-                        placeholder="3200"
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
                       <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
                       <select
                         value={keyPieceForm.category}
@@ -1144,7 +1161,7 @@ export default function MediaAndSectionManager({
                       </select>
                     </div>
 
-                    <div>
+                    <div className="sm:col-span-2">
                       <label className="block text-[11px] font-mono text-neutral-400 mb-1">Badge Tag</label>
                       <input
                         type="text"
@@ -1192,18 +1209,6 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Price (INR ₹) *</label>
-                      <input
-                        type="number"
-                        required
-                        value={collectionForm.price}
-                        onChange={(e) => setCollectionForm(prev => ({ ...prev, price: e.target.value }))}
-                        placeholder="2500"
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
                       <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
                       <select
                         value={collectionForm.category}
@@ -1212,17 +1217,6 @@ export default function MediaAndSectionManager({
                       >
                         {SHOP_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Stock (1 for 1-of-1)</label>
-                      <input
-                        type="number"
-                        value={collectionForm.stock}
-                        onChange={(e) => setCollectionForm(prev => ({ ...prev, stock: e.target.value }))}
-                        placeholder="1"
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      />
                     </div>
                   </div>
 
@@ -1664,71 +1658,151 @@ export default function MediaAndSectionManager({
       {pickerModalOpen && (
         <div
           onClick={() => setPickerModalOpen(false)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-4xl bg-[#120b1c] border border-pink/30 rounded-3xl p-6 shadow-2xl flex flex-col max-h-[85vh]"
+            className="w-full max-w-4xl bg-[#120b1c] border border-pink/30 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col h-[85vh] max-h-[720px] overflow-hidden"
           >
-            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4 shrink-0">
               <div>
-                <h3 className="font-cinzel text-lg font-bold text-white">Select Photos from Media Pool</h3>
-                <p className="text-xs font-mono text-neutral-400 mt-0.5">Click any photo to attach it to the current product/piece</p>
+                <h3 className="font-cinzel text-base sm:text-lg font-bold text-white">Select Photos from Media Pool</h3>
+                <p className="text-xs font-mono text-neutral-400 mt-0.5">
+                  Click any photo to toggle selection • {formPhotos.length} photo{formPhotos.length === 1 ? '' : 's'} attached
+                </p>
               </div>
               <button
+                type="button"
                 onClick={() => setPickerModalOpen(false)}
-                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white cursor-pointer"
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Search */}
-            <div className="mb-4">
+            {/* Search Bar */}
+            <div className="mb-4 shrink-0 relative">
+              <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={pickerSearch}
-                onChange={(e) => setPickerSearch(e.target.value)}
-                placeholder="Search photos..."
-                className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-4 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                onChange={(e) => {
+                  setPickerSearch(e.target.value);
+                  setPickerPage(1);
+                }}
+                placeholder="Search photos by title, filename, or tag..."
+                className="w-full bg-[#1b1325] border border-white/15 rounded-xl pl-10 pr-9 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
               />
+              {pickerSearch && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPickerSearch('');
+                    setPickerPage(1);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
-            {/* Grid */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 overflow-y-auto pr-2 custom-scrollbar flex-1">
-              {mediaAssets
-                .filter(a => !pickerSearch || a.title?.toLowerCase().includes(pickerSearch.toLowerCase()) || a.url?.toLowerCase().includes(pickerSearch.toLowerCase()))
-                .map(asset => {
-                  const isAttached = formPhotos.includes(asset.url);
-                  return (
-                    <button
-                      key={asset.id}
-                      onClick={() => handleAddPhotoToForm(asset.url)}
-                      className={`group relative aspect-square rounded-xl overflow-hidden border transition-all text-left bg-black cursor-pointer ${
-                        isAttached ? 'border-pink ring-2 ring-pink' : 'border-white/10 hover:border-pink'
-                      }`}
-                    >
-                      <img src={asset.url} alt={asset.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      {isAttached && (
-                        <div className="absolute top-1.5 right-1.5">
-                          <span className="w-4 h-4 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px]">
-                            ✓
-                          </span>
+            {/* Grid Area */}
+            <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
+              {paginatedPickerAssets.length === 0 ? (
+                <div className="h-full min-h-[220px] flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl bg-black/20">
+                  <ImageIcon className="w-10 h-10 text-neutral-600 mb-2" />
+                  <p className="text-xs font-mono text-neutral-400">No photos found matching your search</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
+                  {paginatedPickerAssets.map(asset => {
+                    const isAttached = formPhotos.includes(asset.url);
+                    const attachedIdx = formPhotos.indexOf(asset.url);
+                    return (
+                      <button
+                        key={asset.id}
+                        type="button"
+                        onClick={() => handleTogglePhotoInForm(asset.url)}
+                        className={`group relative w-full aspect-square block rounded-xl overflow-hidden border transition-all bg-black cursor-pointer ${
+                          isAttached
+                            ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                            : 'border-white/10 hover:border-pink/60'
+                        }`}
+                      >
+                        <img
+                          src={asset.url}
+                          alt={asset.title || 'Media'}
+                          loading="lazy"
+                          className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
+                        />
+                        {isAttached && (
+                          <div className="absolute top-1.5 right-1.5 z-10">
+                            <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
+                              #{attachedIdx + 1}
+                            </span>
+                          </div>
+                        )}
+                        <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
                         </div>
-                      )}
-                    </button>
-                  );
-                })}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between">
-              <span className="text-xs font-mono text-neutral-400">{formPhotos.length} photos currently attached</span>
-              <button
-                onClick={() => setPickerModalOpen(false)}
-                className="px-5 py-2 rounded-xl bg-pink text-black font-mono font-bold text-xs uppercase cursor-pointer"
-              >
-                Done
-              </button>
+            {/* Pagination Controls & Done Button */}
+            <div className="pt-3 border-t border-white/10 mt-3 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono text-neutral-400">
+                  {filteredPickerAssets.length} total • <span className="text-pink font-bold">{formPhotos.length} selected</span>
+                </span>
+                {totalPickerPages > 1 && (
+                  <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      type="button"
+                      disabled={pickerPage <= 1}
+                      onClick={() => setPickerPage(p => Math.max(1, p - 1))}
+                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      ← Prev
+                    </button>
+                    <span className="text-xs font-mono text-neutral-300 px-1">
+                      {pickerPage} / {totalPickerPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={pickerPage >= totalPickerPages}
+                      onClick={() => setPickerPage(p => Math.min(totalPickerPages, p + 1))}
+                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      Next →
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                {formPhotos.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setFormPhotos([])}
+                    className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white font-mono text-xs cursor-pointer transition-colors"
+                  >
+                    Clear All
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setPickerModalOpen(false)}
+                  className="px-6 py-2 rounded-xl bg-pink text-black font-mono font-bold text-xs uppercase cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
+                >
+                  Done ({formPhotos.length})
+                </button>
+              </div>
             </div>
           </div>
         </div>

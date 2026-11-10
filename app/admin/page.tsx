@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard, ShoppingBag, Package, Warehouse, Layers, Users,
@@ -67,6 +67,11 @@ export default function AdminDashboardPage() {
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [productModalOpen, setProductModalOpen] = useState(false);
+  const [productImages, setProductImages] = useState<string[]>([]);
+  const [productUrlInput, setProductUrlInput] = useState<string>('');
+  const [productPickerOpen, setProductPickerOpen] = useState<boolean>(false);
+  const [productPickerSearch, setProductPickerSearch] = useState<string>('');
+  const [productPickerPage, setProductPickerPage] = useState<number>(1);
   const [isUploadingR2, setIsUploadingR2] = useState(false);
   const [shippingRates, setShippingRates] = useState<{
     express_courier_fee: number;
@@ -192,6 +197,77 @@ export default function AdminDashboardPage() {
       e.target.value = '';
     }
   };
+
+  // Upload multiple images simultaneously for Product Creation/Editing
+  const handleUploadMultipleProductImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploadingR2(true);
+    showNotification(`Uploading ${files.length} asset${files.length > 1 ? 's' : ''} to Cloudflare R2...`, 'success');
+
+    try {
+      const newUrls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('folder', 'products');
+        formData.append('title', file.name.replace(/\.[^/.]+$/, ''));
+
+        const res = await fetch('/api/admin/media/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success && data.media?.url) {
+          newUrls.push(data.media.url);
+        }
+      }
+
+      if (newUrls.length > 0) {
+        setProductImages(prev => [...prev, ...newUrls]);
+        showNotification(`Attached ${newUrls.length} new photo${newUrls.length > 1 ? 's' : ''}!`, 'success');
+        const medRes = await fetch('/api/admin/media');
+        const medData = await medRes.json();
+        if (medData.assets) setMediaAssets(medData.assets);
+      } else {
+        showNotification('Failed to upload photos to R2', 'error');
+      }
+    } catch (err: any) {
+      showNotification(err.message || 'Upload to Cloudflare R2 failed', 'error');
+    } finally {
+      setIsUploadingR2(false);
+      if (e.target) e.target.value = '';
+    }
+  };
+
+  // Fast filtered & paginated assets for the Product Media Pool picker
+  const filteredProductPickerAssets = useMemo(() => {
+    const query = productPickerSearch.trim().toLowerCase();
+    if (!query) return mediaAssets;
+    return mediaAssets.filter(a =>
+      (a.title && a.title.toLowerCase().includes(query)) ||
+      (a.url && a.url.toLowerCase().includes(query)) ||
+      (a.alt_text && a.alt_text.toLowerCase().includes(query))
+    );
+  }, [mediaAssets, productPickerSearch]);
+
+  const totalProductPickerPages = Math.ceil(filteredProductPickerAssets.length / 24) || 1;
+  const paginatedProductPickerAssets = useMemo(() => {
+    const start = (productPickerPage - 1) * 24;
+    return filteredProductPickerAssets.slice(start, start + 24);
+  }, [filteredProductPickerAssets, productPickerPage]);
+
+  const handleToggleProductImageFromPool = (url: string) => {
+    if (productImages.includes(url)) {
+      setProductImages(prev => prev.filter(u => u !== url));
+    } else {
+      setProductImages(prev => [...prev, url]);
+      showNotification('Photo attached to product!', 'success');
+    }
+  };
   const [inventoryModalOpen, setInventoryModalOpen] = useState(false);
   const [inventoryTarget, setInventoryTarget] = useState<any>(null);
   const [inventoryAdjustment, setInventoryAdjustment] = useState<number>(1);
@@ -294,6 +370,7 @@ export default function AdminDashboardPage() {
     contentEditSection ||
     (inventoryModalOpen && inventoryTarget) ||
     productModalOpen ||
+    productPickerOpen ||
     newCollectionModalOpen ||
     newPromoModalOpen ||
     newSquadModalOpen ||
@@ -1752,6 +1829,8 @@ export default function AdminDashboardPage() {
                 <button
                   onClick={() => {
                     setSelectedProduct(null);
+                    setProductImages([]);
+                    setProductUrlInput('');
                     setProductModalOpen(true);
                   }}
                   className="bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] hover:opacity-90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
@@ -1845,6 +1924,11 @@ export default function AdminDashboardPage() {
                               <button
                                 onClick={() => {
                                   setSelectedProduct(p);
+                                  const imgs: string[] = Array.isArray(p.images) && p.images.length > 0
+                                    ? p.images
+                                    : (p.image ? [p.image] : []);
+                                  setProductImages(imgs);
+                                  setProductUrlInput('');
                                   setProductModalOpen(true);
                                 }}
                                 className="p-1.5 rounded-lg bg-[#22172C] hover:bg-[#301934] text-[#F4C2C2] cursor-pointer"
@@ -3890,45 +3974,175 @@ export default function AdminDashboardPage() {
                   />
                 </div>
               </div>
+              {/* MULTI-PHOTO ATTACHMENT MANAGER */}
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-neutral-400">Primary Product Image</label>
-                  <span className="text-[10px] text-pink font-mono flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Cloudflare R2 + Edge CDN
-                  </span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <label className="block text-neutral-300 font-bold text-xs uppercase">Product Photos ({productImages.length})</label>
+                    <span className="text-[10px] text-pink font-mono flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Cloudflare R2 Multi-Angle
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProductPickerSearch('');
+                      setProductPickerPage(1);
+                      setProductPickerOpen(true);
+                    }}
+                    className="text-xs font-mono text-pink hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Select from Media Pool</span>
+                  </button>
                 </div>
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    id="p_image"
-                    value={productImagePreview}
-                    onChange={(e) => setProductImagePreview(e.target.value)}
-                    placeholder="Upload to R2 below or paste image URL"
-                    className="flex-1 bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white font-mono text-xs"
-                  />
-                  <label className="cursor-pointer px-3 py-2 rounded-lg bg-pink/20 hover:bg-pink/30 border border-pink/40 text-pink text-xs font-mono font-bold flex items-center gap-1.5 transition-all shrink-0 active:scale-95">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>{isUploadingR2 ? 'Uploading...' : 'Upload to R2'}</span>
+
+                {/* Upload & Add URL controls */}
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 mb-3">
+                  <div className="sm:col-span-8 flex gap-2">
                     <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      disabled={isUploadingR2}
-                      onChange={(e) => handleUploadImageFile(e, 'p_image')}
+                      type="text"
+                      value={productUrlInput}
+                      onChange={(e) => setProductUrlInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const val = productUrlInput.trim();
+                          if (val && !productImages.includes(val)) {
+                            setProductImages(prev => [...prev, val]);
+                            setProductUrlInput('');
+                          }
+                        }
+                      }}
+                      placeholder="Paste photo URL here..."
+                      className="flex-1 bg-[#181122] border border-neutral-800 rounded-lg px-3 py-2 text-white font-mono text-xs focus:border-pink focus:outline-none"
                     />
-                  </label>
-                </div>
-                {productImagePreview && (
-                  <div className="relative w-24 h-28 rounded-lg overflow-hidden border border-neutral-800 bg-black mt-2 group shadow-md">
-                    <img src={productImagePreview} alt="Product Preview" className="w-full h-full object-cover" />
                     <button
                       type="button"
-                      onClick={() => setProductImagePreview('')}
-                      className="absolute top-1 right-1 p-1 rounded-full bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => {
+                        const val = productUrlInput.trim();
+                        if (val && !productImages.includes(val)) {
+                          setProductImages(prev => [...prev, val]);
+                          setProductUrlInput('');
+                        }
+                      }}
+                      className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold shrink-0 cursor-pointer transition-colors"
                     >
-                      <X className="w-3 h-3" />
+                      + Add
                     </button>
+                  </div>
+
+                  <div className="sm:col-span-4">
+                    <label className="cursor-pointer w-full py-2 px-3 rounded-lg bg-pink/20 hover:bg-pink/30 border border-pink/40 text-pink text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 text-center">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{isUploadingR2 ? 'Uploading...' : 'Upload Photos'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        disabled={isUploadingR2}
+                        onChange={handleUploadMultipleProductImages}
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Attached Photos Grid */}
+                {productImages.length === 0 ? (
+                  <div className="border border-dashed border-neutral-800 rounded-xl p-6 text-center bg-black/30">
+                    <ImageIcon className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
+                    <p className="text-xs font-cinzel text-neutral-300">No photos attached yet</p>
+                    <p className="text-[10px] font-mono text-neutral-500 mt-0.5">
+                      Click "Upload Photos" above or "Select from Media Pool" to attach multiple photos
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-56 overflow-y-auto pr-1 custom-scrollbar">
+                    {productImages.map((imgUrl, idx) => (
+                      <div
+                        key={idx}
+                        className={`group relative aspect-[4/5] rounded-xl overflow-hidden border bg-black transition-all ${
+                          idx === 0 ? 'border-pink ring-2 ring-pink/50' : 'border-neutral-800 hover:border-neutral-700'
+                        }`}
+                      >
+                        <img src={imgUrl} alt={`Product shot ${idx + 1}`} className="w-full h-full object-cover" />
+
+                        {/* Primary Badge */}
+                        {idx === 0 ? (
+                          <div className="absolute top-1.5 left-1.5 z-10">
+                            <span className="px-1.5 py-0.5 rounded bg-pink text-black text-[8px] font-mono uppercase font-bold shadow">
+                              Cover Shot
+                            </span>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProductImages(prev => [prev[idx], ...prev.filter((_, i) => i !== idx)]);
+                            }}
+                            className="absolute top-1.5 left-1.5 z-10 px-1.5 py-0.5 rounded bg-black/80 hover:bg-pink hover:text-black text-[8px] font-mono uppercase font-bold text-neutral-300 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                            title="Set as Primary Cover"
+                          >
+                            Set Cover
+                          </button>
+                        )}
+
+                        {/* Top-Right Remove Button */}
+                        <button
+                          type="button"
+                          onClick={() => setProductImages(prev => prev.filter((_, i) => i !== idx))}
+                          className="absolute top-1.5 right-1.5 z-10 p-1 rounded-full bg-black/80 hover:bg-red-600 text-white transition-colors cursor-pointer"
+                          title="Remove photo"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+
+                        {/* Bottom Bar: Reordering */}
+                        <div className="absolute inset-x-0 bottom-0 p-1 bg-black/80 flex items-center justify-between text-[9px] font-mono text-neutral-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <span>#{idx + 1}</span>
+                          <div className="flex items-center gap-1">
+                            {idx > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setProductImages(prev => {
+                                    const copy = [...prev];
+                                    const temp = copy[idx];
+                                    copy[idx] = copy[idx - 1];
+                                    copy[idx - 1] = temp;
+                                    return copy;
+                                  });
+                                }}
+                                className="px-1 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                                title="Move left"
+                              >
+                                ←
+                              </button>
+                            )}
+                            {idx < productImages.length - 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setProductImages(prev => {
+                                    const copy = [...prev];
+                                    const temp = copy[idx];
+                                    copy[idx] = copy[idx + 1];
+                                    copy[idx + 1] = temp;
+                                    return copy;
+                                  });
+                                }}
+                                className="px-1 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                                title="Move right"
+                              >
+                                →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -3982,13 +4196,12 @@ export default function AdminDashboardPage() {
                   const category = (document.getElementById('p_category') as HTMLSelectElement)?.value;
                   const price = Number((document.getElementById('p_price') as HTMLInputElement)?.value);
                   const inventory_quantity = Number((document.getElementById('p_stock') as HTMLInputElement)?.value);
-                  const imageRaw = (document.getElementById('p_image') as HTMLInputElement)?.value?.trim() || '';
                   const status = (document.getElementById('p_status') as HTMLSelectElement)?.value || 'published';
                   const is_featured = (document.getElementById('p_featured') as HTMLInputElement)?.checked ?? false;
                   const description = (document.getElementById('p_description') as HTMLTextAreaElement)?.value || '1-of-1 wearable art hand-sculpted by Dhrisni.';
-                  const images = imageRaw.includes(',')
-                    ? imageRaw.split(',').map((s) => s.trim()).filter(Boolean)
-                    : [imageRaw || '/assets/editorial_hero_portrait.jpg'];
+                  const images = productImages.length > 0
+                    ? productImages
+                    : ['/assets/editorial_hero_portrait.jpg'];
 
                   if (!title || !sku || isNaN(price)) {
                     showNotification('Title, SKU, and Price are required.', 'error');
@@ -4029,6 +4242,160 @@ export default function AdminDashboardPage() {
               >
                 {selectedProduct ? 'Save Changes' : 'Create Piece'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QUICK MULTI-PHOTO PICKER MODAL FOR PRODUCT CATALOG */}
+      {productPickerOpen && (
+        <div
+          onClick={() => setProductPickerOpen(false)}
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-4xl bg-[#120b1c] border border-pink/30 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col h-[85vh] max-h-[720px] overflow-hidden"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4 shrink-0">
+              <div>
+                <h3 className="font-cinzel text-base sm:text-lg font-bold text-white">Select Product Photos from Media Pool</h3>
+                <p className="text-xs font-mono text-neutral-400 mt-0.5">
+                  Click any photo to attach or remove • {productImages.length} photo{productImages.length === 1 ? '' : 's'} attached
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setProductPickerOpen(false)}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white cursor-pointer transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Bar */}
+            <div className="mb-4 shrink-0 relative">
+              <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={productPickerSearch}
+                onChange={(e) => {
+                  setProductPickerSearch(e.target.value);
+                  setProductPickerPage(1);
+                }}
+                placeholder="Search photos by title, filename, or tag..."
+                className="w-full bg-[#1b1325] border border-white/15 rounded-xl pl-10 pr-9 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+              />
+              {productPickerSearch && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProductPickerSearch('');
+                    setProductPickerPage(1);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Grid Area */}
+            <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
+              {paginatedProductPickerAssets.length === 0 ? (
+                <div className="h-full min-h-[220px] flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl bg-black/20">
+                  <ImageIcon className="w-10 h-10 text-neutral-600 mb-2" />
+                  <p className="text-xs font-mono text-neutral-400">No photos found matching your search</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
+                  {paginatedProductPickerAssets.map(asset => {
+                    const isAttached = productImages.includes(asset.url);
+                    const attachedIdx = productImages.indexOf(asset.url);
+                    return (
+                      <button
+                        key={asset.id}
+                        type="button"
+                        onClick={() => handleToggleProductImageFromPool(asset.url)}
+                        className={`group relative w-full aspect-square block rounded-xl overflow-hidden border transition-all bg-black cursor-pointer ${
+                          isAttached
+                            ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                            : 'border-white/10 hover:border-pink/60'
+                        }`}
+                      >
+                        <img
+                          src={asset.url}
+                          alt={asset.title || 'Media'}
+                          loading="lazy"
+                          className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
+                        />
+                        {isAttached && (
+                          <div className="absolute top-1.5 right-1.5 z-10">
+                            <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
+                              #{attachedIdx + 1}
+                            </span>
+                          </div>
+                        )}
+                        <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                          <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Pagination Controls & Done Button */}
+            <div className="pt-3 border-t border-white/10 mt-3 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono text-neutral-400">
+                  {filteredProductPickerAssets.length} total • <span className="text-pink font-bold">{productImages.length} selected</span>
+                </span>
+                {totalProductPickerPages > 1 && (
+                  <div className="flex items-center gap-1.5 ml-2">
+                    <button
+                      type="button"
+                      disabled={productPickerPage <= 1}
+                      onClick={() => setProductPickerPage(p => Math.max(1, p - 1))}
+                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      ← Prev
+                    </button>
+                    <span className="text-xs font-mono text-neutral-300 px-1">
+                      {productPickerPage} / {totalProductPickerPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={productPickerPage >= totalProductPickerPages}
+                      onClick={() => setProductPickerPage(p => Math.min(totalProductPickerPages, p + 1))}
+                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      Next →
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                {productImages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setProductImages([])}
+                    className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white font-mono text-xs cursor-pointer transition-colors"
+                  >
+                    Clear All
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setProductPickerOpen(false)}
+                  className="px-6 py-2 rounded-xl bg-pink text-black font-mono font-bold text-xs uppercase cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
+                >
+                  Done ({productImages.length})
+                </button>
+              </div>
             </div>
           </div>
         </div>
