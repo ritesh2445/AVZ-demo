@@ -78,6 +78,8 @@ export default function MediaAndSectionManager({
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
   const [loadingMedia, setLoadingMedia] = useState<boolean>(true);
   const [mediaSearch, setMediaSearch] = useState<string>('');
+  const [mediaPoolPage, setMediaPoolPage] = useState<number>(1);
+  const MEDIA_POOL_PAGE_SIZE = 28;
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDeleteAsset, setConfirmDeleteAsset] = useState<MediaAsset | null>(null);
@@ -256,7 +258,6 @@ export default function MediaAndSectionManager({
       setFormPhotos(prev => prev.filter(u => u !== url));
     } else {
       setFormPhotos(prev => [...prev, url]);
-      showNotification('Photo attached to section!', 'success');
     }
   };
 
@@ -318,11 +319,12 @@ export default function MediaAndSectionManager({
     }
   };
 
-  // Add photo to current form (supports multiple!)
+  // Add photo to current form (supports multiple, toggles cleanly without lag)
   const handleAddPhotoToForm = (url: string) => {
     if (!formPhotos.includes(url)) {
       setFormPhotos(prev => [...prev, url]);
-      showNotification('Photo added to selection!', 'success');
+    } else {
+      setFormPhotos(prev => prev.filter(u => u !== url));
     }
   };
 
@@ -676,6 +678,12 @@ export default function MediaAndSectionManager({
     );
   }, [mediaAssets, mediaSearch]);
 
+  const totalMediaPoolPages = Math.ceil(cleanFilteredAssets.length / MEDIA_POOL_PAGE_SIZE) || 1;
+  const paginatedMediaPoolAssets = useMemo(() => {
+    const start = (mediaPoolPage - 1) * MEDIA_POOL_PAGE_SIZE;
+    return cleanFilteredAssets.slice(start, start + MEDIA_POOL_PAGE_SIZE);
+  }, [cleanFilteredAssets, mediaPoolPage]);
+
   // Paginated Collection Archive
   const paginatedCollection = useMemo(() => {
     let list = collectionProducts;
@@ -726,16 +734,22 @@ export default function MediaAndSectionManager({
               <input
                 type="text"
                 value={mediaSearch}
-                onChange={(e) => setMediaSearch(e.target.value)}
+                onChange={(e) => {
+                  setMediaSearch(e.target.value);
+                  setMediaPoolPage(1);
+                }}
                 placeholder="Search photos..."
                 className="w-full bg-[#181124] border border-white/10 text-white text-xs pl-8 pr-7 py-2.5 rounded-xl font-mono focus:outline-none focus:border-pink"
               />
               {mediaSearch && (
                 <button
-                  onClick={() => setMediaSearch('')}
+                  onClick={() => {
+                    setMediaSearch('');
+                    setMediaPoolPage(1);
+                  }}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
@@ -776,79 +790,112 @@ export default function MediaAndSectionManager({
             <p className="text-sm font-cinzel text-neutral-300">No photos found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 max-h-[500px] overflow-y-auto overscroll-contain pr-2 custom-scrollbar">
-            {cleanFilteredAssets.map((asset) => {
-              const isAttached = formPhotos.includes(asset.url);
-              return (
-                <div
-                  key={asset.id}
-                  className={`group relative bg-[#130d1d] border rounded-2xl overflow-hidden transition-all flex flex-col justify-between ${
-                    isAttached
-                      ? 'border-pink ring-2 ring-pink/50 shadow-[0_0_15px_rgba(244,63,94,0.3)]'
-                      : 'border-white/10 hover:border-pink/40'
-                  }`}
-                >
-                  {/* Image View */}
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
+              {paginatedMediaPoolAssets.map((asset) => {
+                const isAttached = formPhotos.includes(asset.url);
+                return (
                   <div
-                    onClick={() => handleAddPhotoToForm(asset.url)}
-                    className="aspect-square bg-black/90 relative overflow-hidden cursor-pointer"
+                    key={asset.id}
+                    className={`group relative bg-[#130d1d] border rounded-2xl overflow-hidden transition-all flex flex-col justify-between ${
+                      isAttached
+                        ? 'border-pink ring-2 ring-pink/50 shadow-[0_0_15px_rgba(244,63,94,0.3)]'
+                        : 'border-white/10 hover:border-pink/40'
+                    }`}
                   >
-                    <img
-                      src={asset.url}
-                      alt={asset.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-
-                    {isAttached && (
-                      <div className="absolute top-2 right-2 z-10">
-                        <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-xs shadow-lg">
-                          ✓
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Actions Bar */}
-                  <div className="p-2 flex items-center justify-between border-t border-white/10 bg-[#130d1d]">
-                    <button
-                      onClick={() => handleQuickUseFromPool(asset)}
-                      className={`text-[9px] font-mono font-bold uppercase px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                        isAttached
-                          ? 'bg-pink text-black'
-                          : 'bg-white/10 text-white hover:bg-pink hover:text-black'
-                      }`}
+                    {/* Image View */}
+                    <div
+                      onClick={() => handleAddPhotoToForm(asset.url)}
+                      className="aspect-square bg-black/90 relative overflow-hidden cursor-pointer"
                     >
-                      {isAttached ? 'Attached' : '+ Use'}
-                    </button>
+                      <img
+                        src={asset.url}
+                        alt={asset.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
 
-                    <div className="flex items-center gap-1">
+                      {isAttached && (
+                        <div className="absolute top-2 right-2 z-10">
+                          <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-xs shadow-lg">
+                            ✓
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Actions Bar */}
+                    <div className="p-2 flex items-center justify-between border-t border-white/10 bg-[#130d1d]">
                       <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(asset.url);
-                          showNotification('URL copied', 'success');
-                        }}
-                        className="p-1 text-neutral-400 hover:text-white"
-                        title="Copy image URL"
+                        onClick={() => handleQuickUseFromPool(asset)}
+                        className={`text-[9px] font-mono font-bold uppercase px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                          isAttached
+                            ? 'bg-pink text-black'
+                            : 'bg-white/10 text-white hover:bg-pink hover:text-black'
+                        }`}
                       >
-                        <Copy className="w-3 h-3" />
+                        {isAttached ? 'Attached' : '+ Use'}
                       </button>
 
-                      {/* Delete button */}
-                      <button
-                        onClick={() => setConfirmDeleteAsset(asset)}
-                        disabled={deletingId === asset.id}
-                        className="p-1 text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded transition-colors"
-                        title="Delete photo permanently"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(asset.url);
+                            showNotification('URL copied', 'success');
+                          }}
+                          className="p-1 text-neutral-400 hover:text-white"
+                          title="Copy image URL"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </button>
+
+                        {/* Delete button */}
+                        <button
+                          onClick={() => setConfirmDeleteAsset(asset)}
+                          disabled={deletingId === asset.id}
+                          className="p-1 text-red-400 hover:text-red-300 hover:bg-red-950/40 rounded transition-colors"
+                          title="Delete photo permanently"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination Controls for Section 1 */}
+            {totalMediaPoolPages > 1 && (
+              <div className="pt-4 mt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+                <span className="text-neutral-400">
+                  Showing {(mediaPoolPage - 1) * MEDIA_POOL_PAGE_SIZE + 1}–{Math.min(mediaPoolPage * MEDIA_POOL_PAGE_SIZE, cleanFilteredAssets.length)} of {cleanFilteredAssets.length} photos
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={mediaPoolPage <= 1}
+                    onClick={() => setMediaPoolPage(p => Math.max(1, p - 1))}
+                    className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                  >
+                    ← Prev
+                  </button>
+                  <span className="px-2 text-neutral-300 font-bold">
+                    Page {mediaPoolPage} / {totalMediaPoolPages}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={mediaPoolPage >= totalMediaPoolPages}
+                    onClick={() => setMediaPoolPage(p => Math.min(totalMediaPoolPages, p + 1))}
+                    className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                  >
+                    Next →
+                  </button>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            )}
+          </>
         )}
       </section>
 
@@ -1658,7 +1705,7 @@ export default function MediaAndSectionManager({
       {pickerModalOpen && (
         <div
           onClick={() => setPickerModalOpen(false)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -1735,6 +1782,7 @@ export default function MediaAndSectionManager({
                           src={asset.url}
                           alt={asset.title || 'Media'}
                           loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
                         />
                         {isAttached && (
@@ -1814,7 +1862,7 @@ export default function MediaAndSectionManager({
       {confirmDeleteAsset && (
         <div
           onClick={() => setConfirmDeleteAsset(null)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -1855,7 +1903,7 @@ export default function MediaAndSectionManager({
       {confirmDeleteItem && (
         <div
           onClick={() => setConfirmDeleteItem(null)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}

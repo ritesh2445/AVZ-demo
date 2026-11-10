@@ -265,7 +265,6 @@ export default function AdminDashboardPage() {
       setProductImages(prev => prev.filter(u => u !== url));
     } else {
       setProductImages(prev => [...prev, url]);
-      showNotification('Photo attached to product!', 'success');
     }
   };
   const [inventoryModalOpen, setInventoryModalOpen] = useState(false);
@@ -3913,7 +3912,7 @@ export default function AdminDashboardPage() {
 
       {/* MODAL: CREATE / EDIT PRODUCT */}
       {productModalOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4">
           <div className="bg-[#120D1A] border border-[#301934] rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-base font-cinzel font-bold text-white">
               {selectedProduct ? 'Edit Catalog Piece' : 'Add New Product'}
@@ -4251,7 +4250,7 @@ export default function AdminDashboardPage() {
       {productPickerOpen && (
         <div
           onClick={() => setProductPickerOpen(false)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
+          className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-3 sm:p-6 overscroll-contain animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -4328,6 +4327,7 @@ export default function AdminDashboardPage() {
                           src={asset.url}
                           alt={asset.title || 'Media'}
                           loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
                         />
                         {isAttached && (
