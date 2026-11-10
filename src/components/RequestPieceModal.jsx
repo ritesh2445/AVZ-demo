@@ -248,22 +248,19 @@ export default function RequestPieceModal({
                 <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
                   WhatsApp / Phone Number *
                 </label>
-                <div className="flex gap-2">
-                  <div className="shrink-0 bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-xs text-pink font-mono font-bold flex items-center gap-1">
-                    <span>🇮🇳</span>
-                    <select
-                      value={countryCode}
-                      onChange={(e) => setCountryCode(e.target.value)}
-                      className="bg-transparent text-pink outline-none cursor-pointer"
-                    >
-                      <option value="+91" className="bg-[#0e0914] text-white">+91 (India)</option>
-                      <option value="+1" className="bg-[#0e0914] text-white">+1 (USA/CA)</option>
-                      <option value="+44" className="bg-[#0e0914] text-white">+44 (UK)</option>
-                      <option value="+971" className="bg-[#0e0914] text-white">+971 (UAE)</option>
-                      <option value="+65" className="bg-[#0e0914] text-white">+65 (SG)</option>
-                    </select>
-                  </div>
-                  <div className="relative flex-1 flex items-center">
+                <div className="flex rounded-xl border border-white/15 focus-within:border-pink/70 bg-black/60 transition-colors overflow-hidden">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="bg-black text-pink text-xs font-mono font-bold px-3 py-2.5 outline-none cursor-pointer border-r border-white/10 shrink-0"
+                  >
+                    <option value="+91" className="bg-[#0e0914] text-white">+91</option>
+                    <option value="+1" className="bg-[#0e0914] text-white">+1 (US)</option>
+                    <option value="+44" className="bg-[#0e0914] text-white">+44 (UK)</option>
+                    <option value="+971" className="bg-[#0e0914] text-white">+971 (UAE)</option>
+                    <option value="+65" className="bg-[#0e0914] text-white">+65 (SG)</option>
+                  </select>
+                  <div className="relative flex-1 min-w-0 flex items-center">
                     <Phone className="w-4 h-4 text-zinc-500 absolute left-3.5 pointer-events-none" />
                     <input
                       type="tel"
@@ -272,7 +269,7 @@ export default function RequestPieceModal({
                       onChange={handlePhoneChange}
                       placeholder="10-digit number"
                       maxLength={10}
-                      className="w-full bg-black/60 border border-white/15 focus:border-pink/70 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
+                      className="w-full bg-transparent pl-10 pr-3.5 py-2.5 text-xs text-white font-mono outline-none transition-colors"
                     />
                   </div>
                 </div>

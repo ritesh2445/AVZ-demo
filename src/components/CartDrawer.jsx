@@ -589,7 +589,7 @@ export default function CartDrawer({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">Email *</label>
                   <input
@@ -603,24 +603,21 @@ export default function CartDrawer({
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono uppercase text-silver/70 mb-1">WhatsApp / Phone *</label>
-                  <div className="flex gap-2">
-                    <div className="shrink-0 bg-black/80 border border-white/15 rounded-xl px-2.5 py-2 text-xs text-pink font-mono font-bold flex items-center gap-1">
-                      <span>🇮🇳</span>
-                      <select
-                        value={countryCode}
-                        onChange={(e) => {
-                          setCountryCode(e.target.value);
-                          setCheckoutData({ ...checkoutData, phone: `${e.target.value} ${phoneDigits}` });
-                        }}
-                        className="bg-transparent text-pink outline-none cursor-pointer text-xs"
-                      >
-                        <option value="+91" className="bg-[#12091c] text-white">+91 (IN)</option>
-                        <option value="+1" className="bg-[#12091c] text-white">+1 (US)</option>
-                        <option value="+44" className="bg-[#12091c] text-white">+44 (UK)</option>
-                        <option value="+971" className="bg-[#12091c] text-white">+971 (AE)</option>
-                        <option value="+65" className="bg-[#12091c] text-white">+65 (SG)</option>
-                      </select>
-                    </div>
+                  <div className="flex rounded-xl border border-white/15 focus-within:border-pink bg-black/80 transition-colors overflow-hidden">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => {
+                        setCountryCode(e.target.value);
+                        setCheckoutData({ ...checkoutData, phone: `${e.target.value} ${phoneDigits}` });
+                      }}
+                      className="bg-black text-pink text-xs font-mono font-bold px-2.5 py-2 outline-none cursor-pointer border-r border-white/10 shrink-0"
+                    >
+                      <option value="+91" className="bg-[#12091c] text-white">+91</option>
+                      <option value="+1" className="bg-[#12091c] text-white">+1 (US)</option>
+                      <option value="+44" className="bg-[#12091c] text-white">+44 (UK)</option>
+                      <option value="+971" className="bg-[#12091c] text-white">+971 (AE)</option>
+                      <option value="+65" className="bg-[#12091c] text-white">+65 (SG)</option>
+                    </select>
                     <input
                       required
                       type="tel"
@@ -632,7 +629,7 @@ export default function CartDrawer({
                       }}
                       placeholder="10-digit number"
                       maxLength={10}
-                      className="flex-1 bg-black/80 border border-white/15 px-3.5 py-2 rounded-xl text-xs text-white font-mono outline-none focus:border-pink"
+                      className="flex-1 min-w-0 bg-transparent px-3 py-2 text-xs text-white font-mono outline-none"
                     />
                   </div>
                   <span className="text-[9px] font-mono text-zinc-500 block mt-1">
