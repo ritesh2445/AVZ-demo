@@ -168,6 +168,24 @@ export default function MediaAndSectionManager({
     description: 'Reclaimed metal chains, steel spikes, and upcycled industrial hardware.'
   });
 
+  // Custom Category States
+  const [isCustomCollectionCategory, setIsCustomCollectionCategory] = useState(false);
+  const [customCollectionCategory, setCustomCollectionCategory] = useState('');
+
+  const [isCustomVaultCategory, setIsCustomVaultCategory] = useState(false);
+  const [customVaultCategory, setCustomVaultCategory] = useState('');
+
+  const [isCustomKeyCategory, setIsCustomKeyCategory] = useState(false);
+  const [customKeyCategory, setCustomKeyCategory] = useState('');
+
+  // Dynamically combine default shop categories with any custom categories present in database
+  const dynamicShopCategories = useMemo(() => {
+    const fromProds = collectionProducts.map((p: any) => p.category).filter(Boolean);
+    const fromVault = vaultPieces.map((p: any) => p.category).filter(Boolean);
+    const fromKey = keyPiecesList.map((p: any) => p.category).filter(Boolean);
+    return Array.from(new Set([...SHOP_CATEGORIES, ...fromProds, ...fromVault, ...fromKey]));
+  }, [collectionProducts, vaultPieces, keyPiecesList]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmDeleteItem, setConfirmDeleteItem] = useState<{ type: SectionTab; item: any } | null>(null);
 
@@ -342,6 +360,12 @@ export default function MediaAndSectionManager({
   const resetActiveForm = () => {
     setEditingItemId(null);
     setFormPhotos([]);
+    setIsCustomCollectionCategory(false);
+    setCustomCollectionCategory('');
+    setIsCustomVaultCategory(false);
+    setCustomVaultCategory('');
+    setIsCustomKeyCategory(false);
+    setCustomKeyCategory('');
     setCollectionForm({
       name: '',
       price: '0',
@@ -510,6 +534,9 @@ export default function MediaAndSectionManager({
       if (activeSubSection === 'vault') {
         const endpoint = editingItemId ? `/api/admin/products/${editingItemId}` : '/api/admin/products';
         const method = editingItemId ? 'PUT' : 'POST';
+        const finalVaultCategory = isCustomVaultCategory && customVaultCategory.trim()
+          ? customVaultCategory.trim()
+          : vaultForm.category;
         const sku = `AVZ-VLT-${Date.now().toString().slice(-4)}`;
 
         const res = await fetch(endpoint, {
@@ -518,7 +545,7 @@ export default function MediaAndSectionManager({
           body: JSON.stringify({
             title: vaultForm.title.trim(),
             price: Number(vaultForm.price),
-            category: vaultForm.category,
+            category: finalVaultCategory,
             tag: vaultForm.tag,
             sku,
             inventory_quantity: 1,
@@ -565,6 +592,9 @@ export default function MediaAndSectionManager({
       else if (activeSubSection === 'key_pieces') {
         const endpoint = editingItemId ? `/api/admin/products/${editingItemId}` : '/api/admin/products';
         const method = editingItemId ? 'PUT' : 'POST';
+        const finalKeyCategory = isCustomKeyCategory && customKeyCategory.trim()
+          ? customKeyCategory.trim()
+          : keyPieceForm.category;
         const sku = `AVZ-KEY-${Date.now().toString().slice(-4)}`;
 
         const res = await fetch(endpoint, {
@@ -573,7 +603,7 @@ export default function MediaAndSectionManager({
           body: JSON.stringify({
             title: keyPieceForm.title.trim(),
             price: Number(keyPieceForm.price),
-            category: keyPieceForm.category,
+            category: finalKeyCategory,
             tag: keyPieceForm.tag,
             sku,
             inventory_quantity: 1,
@@ -598,7 +628,10 @@ export default function MediaAndSectionManager({
       else if (activeSubSection === 'collection') {
         const endpoint = editingItemId ? `/api/admin/products/${editingItemId}` : '/api/admin/products';
         const method = editingItemId ? 'PUT' : 'POST';
-        const autoSku = collectionForm.sku.trim() || `AVZ-${collectionForm.category.substring(0, 3).toUpperCase()}-${Date.now().toString().slice(-4)}`;
+        const finalCollectionCategory = isCustomCollectionCategory && customCollectionCategory.trim()
+          ? customCollectionCategory.trim()
+          : collectionForm.category;
+        const autoSku = collectionForm.sku.trim() || `AVZ-${finalCollectionCategory.replace(/[^a-zA-Z]/g, '').substring(0, 3).toUpperCase() || 'COL'}-${Date.now().toString().slice(-4)}`;
 
         const res = await fetch(endpoint, {
           method,
@@ -606,7 +639,7 @@ export default function MediaAndSectionManager({
           body: JSON.stringify({
             title: collectionForm.name.trim(),
             price: Number(collectionForm.price),
-            category: collectionForm.category,
+            category: finalCollectionCategory,
             inventory_quantity: Number(collectionForm.stock) || 1,
             sku: autoSku,
             description: collectionForm.description.trim(),
@@ -1092,14 +1125,41 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div className="sm:col-span-2">
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
-                      <select
-                        value={vaultForm.category}
-                        onChange={(e) => setVaultForm(prev => ({ ...prev, category: e.target.value }))}
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      >
-                        {SHOP_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-neutral-400">Category</label>
+                        <button
+                          type="button"
+                          onClick={() => setIsCustomVaultCategory(!isCustomVaultCategory)}
+                          className="text-[10px] text-pink hover:text-[#F4C2C2] underline font-mono cursor-pointer"
+                        >
+                          {isCustomVaultCategory ? '← Choose Existing' : '+ Custom Category'}
+                        </button>
+                      </div>
+                      {isCustomVaultCategory ? (
+                        <input
+                          type="text"
+                          placeholder="Type new category (e.g. Sculptural Armor, Chokers)..."
+                          value={customVaultCategory}
+                          onChange={(e) => setCustomVaultCategory(e.target.value)}
+                          className="w-full bg-[#1b1325] border border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                          autoFocus
+                        />
+                      ) : (
+                        <select
+                          value={vaultForm.category}
+                          onChange={(e) => {
+                            if (e.target.value === '__custom__') {
+                              setIsCustomVaultCategory(true);
+                            } else {
+                              setVaultForm(prev => ({ ...prev, category: e.target.value }));
+                            }
+                          }}
+                          className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                        >
+                          {dynamicShopCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                          <option value="__custom__" className="text-pink font-bold">+ Create New Category...</option>
+                        </select>
+                      )}
                     </div>
                   </div>
 
@@ -1198,14 +1258,41 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
-                      <select
-                        value={keyPieceForm.category}
-                        onChange={(e) => setKeyPieceForm(prev => ({ ...prev, category: e.target.value }))}
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      >
-                        {SHOP_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-neutral-400">Category</label>
+                        <button
+                          type="button"
+                          onClick={() => setIsCustomKeyCategory(!isCustomKeyCategory)}
+                          className="text-[10px] text-pink hover:text-[#F4C2C2] underline font-mono cursor-pointer"
+                        >
+                          {isCustomKeyCategory ? '← Choose Existing' : '+ Custom'}
+                        </button>
+                      </div>
+                      {isCustomKeyCategory ? (
+                        <input
+                          type="text"
+                          placeholder="e.g. Sculptural Armor..."
+                          value={customKeyCategory}
+                          onChange={(e) => setCustomKeyCategory(e.target.value)}
+                          className="w-full bg-[#1b1325] border border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                          autoFocus
+                        />
+                      ) : (
+                        <select
+                          value={keyPieceForm.category}
+                          onChange={(e) => {
+                            if (e.target.value === '__custom__') {
+                              setIsCustomKeyCategory(true);
+                            } else {
+                              setKeyPieceForm(prev => ({ ...prev, category: e.target.value }));
+                            }
+                          }}
+                          className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                        >
+                          {dynamicShopCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                          <option value="__custom__" className="text-pink font-bold">+ Create New Category...</option>
+                        </select>
+                      )}
                     </div>
 
                     <div className="sm:col-span-2">
@@ -1256,14 +1343,41 @@ export default function MediaAndSectionManager({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-mono text-neutral-400 mb-1">Category</label>
-                      <select
-                        value={collectionForm.category}
-                        onChange={(e) => setCollectionForm(prev => ({ ...prev, category: e.target.value }))}
-                        className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
-                      >
-                        {SHOP_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-neutral-400">Category</label>
+                        <button
+                          type="button"
+                          onClick={() => setIsCustomCollectionCategory(!isCustomCollectionCategory)}
+                          className="text-[10px] text-pink hover:text-[#F4C2C2] underline font-mono cursor-pointer"
+                        >
+                          {isCustomCollectionCategory ? '← Choose Existing' : '+ Custom Category'}
+                        </button>
+                      </div>
+                      {isCustomCollectionCategory ? (
+                        <input
+                          type="text"
+                          placeholder="Type new category (e.g. Sculptural Armor, Chokers)..."
+                          value={customCollectionCategory}
+                          onChange={(e) => setCustomCollectionCategory(e.target.value)}
+                          className="w-full bg-[#1b1325] border border-pink/60 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                          autoFocus
+                        />
+                      ) : (
+                        <select
+                          value={collectionForm.category}
+                          onChange={(e) => {
+                            if (e.target.value === '__custom__') {
+                              setIsCustomCollectionCategory(true);
+                            } else {
+                              setCollectionForm(prev => ({ ...prev, category: e.target.value }));
+                            }
+                          }}
+                          className="w-full bg-[#1b1325] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
+                        >
+                          {dynamicShopCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                          <option value="__custom__" className="text-pink font-bold">+ Create New Category...</option>
+                        </select>
+                      )}
                     </div>
                   </div>
 
@@ -1415,7 +1529,7 @@ export default function MediaAndSectionManager({
                   className="bg-[#1b1325] border border-white/15 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-pink focus:outline-none"
                 >
                   <option value="All">All Categories</option>
-                  {SHOP_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  {dynamicShopCategories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
 
                 <input

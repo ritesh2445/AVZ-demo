@@ -67,6 +67,8 @@ export default function AdminDashboardPage() {
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [productModalOpen, setProductModalOpen] = useState(false);
+  const [isCustomCategory, setIsCustomCategory] = useState<boolean>(false);
+  const [customCategoryInput, setCustomCategoryInput] = useState<string>('');
   const [productImages, setProductImages] = useState<string[]>([]);
   const [productUrlInput, setProductUrlInput] = useState<string>('');
   const [productPickerOpen, setProductPickerOpen] = useState<boolean>(false);
@@ -1868,6 +1870,8 @@ export default function AdminDashboardPage() {
                     setSelectedProduct(null);
                     setProductImages([]);
                     setProductUrlInput('');
+                    setIsCustomCategory(false);
+                    setCustomCategoryInput('');
                     setProductModalOpen(true);
                   }}
                   className="bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] hover:opacity-90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
@@ -2019,6 +2023,8 @@ export default function AdminDashboardPage() {
                                     : (p.image ? [p.image] : []);
                                   setProductImages(imgs);
                                   setProductUrlInput('');
+                                  setIsCustomCategory(false);
+                                  setCustomCategoryInput('');
                                   setProductModalOpen(true);
                                 }}
                                 className="p-1.5 rounded-lg bg-[#22172C] hover:bg-[#301934] text-[#F4C2C2] cursor-pointer"
@@ -4021,24 +4027,62 @@ export default function AdminDashboardPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-neutral-400 mb-1">SKU</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-neutral-400 text-xs">SKU (Product Code)</label>
+                    <span className="text-[10px] text-neutral-500 font-mono">auto-generates if empty</span>
+                  </div>
                   <input
                     id="p_sku"
-                    defaultValue={selectedProduct?.sku || `AVZ-ART-${Math.floor(10 + Math.random() * 90)}`}
-                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
+                    defaultValue={selectedProduct?.sku || ''}
+                    placeholder="e.g. IN0028 or AVZ-TOP-01"
+                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white font-mono text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-neutral-400 mb-1">Category</label>
-                  <select
-                    id="p_category"
-                    defaultValue={selectedProduct?.category || 'Wearable Art'}
-                    className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
-                  >
-                    {availableProductCategories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-neutral-400 text-xs">Category</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomCategory(!isCustomCategory);
+                        if (!isCustomCategory && !customCategoryInput) {
+                          setCustomCategoryInput('');
+                        }
+                      }}
+                      className="text-[10px] text-[#BE185D] hover:text-[#F4C2C2] underline font-mono cursor-pointer"
+                    >
+                      {isCustomCategory ? '← Choose Existing' : '+ Custom Category'}
+                    </button>
+                  </div>
+                  {isCustomCategory ? (
+                    <div className="relative">
+                      <input
+                        id="p_custom_category"
+                        type="text"
+                        placeholder="Type new category (e.g. Armor, Chokers)..."
+                        value={customCategoryInput}
+                        onChange={(e) => setCustomCategoryInput(e.target.value)}
+                        className="w-full bg-[#181122] border border-[#BE185D]/60 focus:border-[#BE185D] rounded-lg p-2 text-white text-xs outline-none"
+                        autoFocus
+                      />
+                    </div>
+                  ) : (
+                    <select
+                      id="p_category"
+                      defaultValue={selectedProduct?.category || 'Tops'}
+                      onChange={(e) => {
+                        if (e.target.value === '__custom__') {
+                          setIsCustomCategory(true);
+                        }
+                      }}
+                      className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white text-xs"
+                    >
+                      {availableProductCategories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                      <option value="__custom__" className="text-[#BE185D] font-bold">+ Create New Category...</option>
+                    </select>
+                  )}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -4279,9 +4323,30 @@ export default function AdminDashboardPage() {
               </button>
               <button
                 onClick={async () => {
-                  const title = (document.getElementById('p_title') as HTMLInputElement)?.value;
-                  const sku = (document.getElementById('p_sku') as HTMLInputElement)?.value;
-                  const category = (document.getElementById('p_category') as HTMLSelectElement)?.value;
+                  const title = (document.getElementById('p_title') as HTMLInputElement)?.value?.trim();
+                  let sku = (document.getElementById('p_sku') as HTMLInputElement)?.value?.trim();
+                  
+                  // Category resolution (supports custom typed category or dropdown selection)
+                  let category = 'Tops';
+                  if (isCustomCategory && customCategoryInput.trim()) {
+                    category = customCategoryInput.trim();
+                  } else {
+                    const selectCat = (document.getElementById('p_category') as HTMLSelectElement)?.value;
+                    if (selectCat && selectCat !== '__custom__') {
+                      category = selectCat;
+                    } else if (customCategoryInput.trim()) {
+                      category = customCategoryInput.trim();
+                    } else if (selectedProduct?.category) {
+                      category = selectedProduct.category;
+                    }
+                  }
+
+                  // Auto-generate clean SKU if left empty by the admin
+                  if (!sku) {
+                    const prefix = category.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'ART';
+                    sku = `AVZ-${prefix}-${Math.floor(100 + Math.random() * 900)}`;
+                  }
+
                   const price = Number((document.getElementById('p_price') as HTMLInputElement)?.value);
                   const inventory_quantity = Number((document.getElementById('p_stock') as HTMLInputElement)?.value);
                   const status = (document.getElementById('p_status') as HTMLSelectElement)?.value || 'published';
@@ -4291,8 +4356,8 @@ export default function AdminDashboardPage() {
                     ? productImages
                     : ['/assets/editorial_hero_portrait.jpg'];
 
-                  if (!title || !sku || isNaN(price)) {
-                    showNotification('Title, SKU, and Price are required.', 'error');
+                  if (!title || isNaN(price)) {
+                    showNotification('Product title and price are required.', 'error');
                     return;
                   }
 
