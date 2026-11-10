@@ -20,18 +20,12 @@ export async function GET(request: Request) {
     const category = searchParams.get('category') || '';
     const status = searchParams.get('status') || '';
 
-    // Auto-sync products with authentic CSV catalog if count differs
+    // Auto-seed initial catalog only if database is completely empty
     try {
       const countCheck = await db.execute("SELECT COUNT(*) as count FROM products");
       const currentCount = Number(countCheck.rows[0]?.count || 0);
 
-      if (currentCount !== fallbackProducts.length) {
-        const skuPlaceholders = fallbackProducts.map(() => '?').join(',');
-        await db.execute({
-          sql: `DELETE FROM products WHERE sku NOT IN (${skuPlaceholders})`,
-          args: fallbackProducts.map((p: any) => p.sku)
-        });
-
+      if (currentCount === 0) {
         const statements: any[] = [];
         for (const p of fallbackProducts) {
           const sku = p.sku || `AVZ-${p.id}`;

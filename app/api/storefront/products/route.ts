@@ -14,20 +14,20 @@ export async function GET(request: Request) {
     const featured = searchParams.get('featured');
     const forceSync = searchParams.get('sync') === 'true';
 
-    // Auto-sync consolidated CSV products into database
+    // Auto-seed consolidated CSV products into database if empty
     try {
-      const validSkus = new Set(fallbackProducts.map((p: any) => p.sku));
       const countCheck = await db.execute("SELECT COUNT(*) as count FROM products");
       const currentCount = Number(countCheck.rows[0]?.count || 0);
 
-      // Trigger sync if count doesn't match the 26 consolidated products, or if forced
-      if (currentCount !== fallbackProducts.length || forceSync) {
-        // Delete any legacy/redundant products not in the authentic CSV inventory
-        const skuPlaceholders = fallbackProducts.map(() => '?').join(',');
-        await db.execute({
-          sql: `DELETE FROM products WHERE sku NOT IN (${skuPlaceholders})`,
-          args: fallbackProducts.map((p: any) => p.sku)
-        });
+      // Trigger seed only if table is completely empty, or if explicitly forced
+      if (currentCount === 0 || forceSync) {
+        if (forceSync) {
+          const skuPlaceholders = fallbackProducts.map(() => '?').join(',');
+          await db.execute({
+            sql: `DELETE FROM products WHERE sku NOT IN (${skuPlaceholders})`,
+            args: fallbackProducts.map((p: any) => p.sku)
+          });
+        }
 
         const statements: any[] = [];
 

@@ -358,6 +358,45 @@ export default function AdminDashboardPage() {
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState('');
 
+  // Available product categories dynamically combined with default catalog categories
+  const availableProductCategories = useMemo(() => {
+    const defaultCats = [
+      'Jackets',
+      'Tops',
+      'Corsets',
+      'Bralettes',
+      'Co-ord sets',
+      'Skirts',
+      'Body chainmail',
+      'Arm cuffs',
+      'Belts',
+      'Bags',
+      'Headgear',
+      'Wearable Art'
+    ];
+    const fromProds = products.map(p => p.category).filter(Boolean);
+    return Array.from(new Set([...defaultCats, ...fromProds]));
+  }, [products]);
+
+  // Instant 0ms client-side product filtering (fixes search & category filter completely)
+  const filteredProducts = useMemo(() => {
+    const q = productSearch.trim().toLowerCase();
+    const cat = productCategoryFilter.trim().toLowerCase();
+
+    return products.filter(p => {
+      const matchesSearch = !q ||
+        (p.title && String(p.title).toLowerCase().includes(q)) ||
+        (p.sku && String(p.sku).toLowerCase().includes(q)) ||
+        (p.description && String(p.description).toLowerCase().includes(q)) ||
+        (p.category && String(p.category).toLowerCase().includes(q));
+
+      const matchesCat = !cat || cat === 'all' ||
+        (p.category && String(p.category).toLowerCase() === cat);
+
+      return matchesSearch && matchesCat;
+    });
+  }, [products, productSearch, productCategoryFilter]);
+
   const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 4000);
@@ -457,7 +496,7 @@ export default function AdminDashboardPage() {
       }
 
       // Products
-      const prodRes = await fetch(`/api/admin/products?search=${productSearch}&category=${productCategoryFilter}`);
+      const prodRes = await fetch('/api/admin/products');
       if (prodRes.ok) {
         const prodData = await prodRes.json();
         setProducts(prodData.products || []);
@@ -543,7 +582,7 @@ export default function AdminDashboardPage() {
     if (!loadingSession && adminUser) {
       fetchData();
     }
-  }, [loadingSession, adminUser, orderSearch, orderPaymentFilter, orderFulfillmentFilter, orderPage, productSearch, productCategoryFilter]);
+  }, [loadingSession, adminUser, orderSearch, orderPaymentFilter, orderFulfillmentFilter, orderPage]);
 
   // Real-Time Live Sync: Automatically poll orders & piece-requests every 6 seconds
   useEffect(() => {
@@ -1848,22 +1887,52 @@ export default function AdminDashboardPage() {
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
                     placeholder="Search by title, SKU, or keywords..."
-                    className="w-full bg-[#161020] border border-neutral-800 rounded-lg py-2 pl-9 pr-3 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#F4C2C2]"
+                    className="w-full bg-[#161020] border border-neutral-800 rounded-lg py-2 pl-9 pr-8 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-pink"
                   />
+                  {productSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setProductSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white cursor-pointer"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                <select
-                  value={productCategoryFilter}
-                  onChange={(e) => setProductCategoryFilter(e.target.value)}
-                  className="bg-[#161020] border border-neutral-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#F4C2C2]"
-                >
-                  <option value="">All Categories</option>
-                  <option value="Jackets">Jackets</option>
-                  <option value="Tops">Tops</option>
-                  <option value="Corsets">Corsets</option>
-                  <option value="Bralettes">Bralettes</option>
-                  <option value="Arm cuffs">Arm cuffs</option>
-                  <option value="Wearable Art">Wearable Art</option>
-                </select>
+                <div className="flex items-center gap-2">
+                  <select
+                    value={productCategoryFilter}
+                    onChange={(e) => setProductCategoryFilter(e.target.value)}
+                    className="flex-1 bg-[#161020] border border-neutral-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-pink"
+                  >
+                    <option value="">All Categories</option>
+                    {availableProductCategories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  {(productSearch || productCategoryFilter) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductSearch('');
+                        setProductCategoryFilter('');
+                      }}
+                      className="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-neutral-300 text-xs font-mono shrink-0 cursor-pointer transition-colors"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Status Indicator */}
+              <div className="flex items-center justify-between text-xs font-mono text-neutral-400 px-1">
+                <span>
+                  Showing <span className="text-white font-bold">{filteredProducts.length}</span> of {products.length} products
+                </span>
+                {(productSearch || productCategoryFilter) && (
+                  <span className="text-pink font-semibold">Filtered view</span>
+                )}
               </div>
 
               {/* PRODUCT GRID / TABLE */}
@@ -1882,7 +1951,30 @@ export default function AdminDashboardPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-neutral-800/60">
-                      {products.map((p) => (
+                      {filteredProducts.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="py-14 text-center">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <Package className="w-8 h-8 text-neutral-600 mb-1" />
+                              <p className="text-sm font-cinzel text-neutral-300">No products match your search or filter</p>
+                              <p className="text-xs font-mono text-neutral-500">Try searching for a different title, SKU, or clear your filters.</p>
+                              {(productSearch || productCategoryFilter) && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setProductSearch('');
+                                    setProductCategoryFilter('');
+                                  }}
+                                  className="mt-3 px-4 py-1.5 rounded-xl bg-pink/20 hover:bg-pink/30 text-pink text-xs font-mono font-bold cursor-pointer transition-colors"
+                                >
+                                  Clear Filters
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredProducts.map((p) => (
                         <tr key={p.id} className="hover:bg-[#161120] transition-colors">
                           <td className="py-4 px-4">
                             <div className="flex items-center gap-3">
@@ -1951,7 +2043,7 @@ export default function AdminDashboardPage() {
                             </div>
                           </td>
                         </tr>
-                      ))}
+                      )))}
                     </tbody>
                   </table>
                 </div>
@@ -3944,12 +4036,9 @@ export default function AdminDashboardPage() {
                     defaultValue={selectedProduct?.category || 'Wearable Art'}
                     className="w-full bg-[#181122] border border-neutral-800 rounded-lg p-2 text-white"
                   >
-                    <option value="Jackets">Jackets</option>
-                    <option value="Tops">Tops</option>
-                    <option value="Corsets">Corsets</option>
-                    <option value="Bralettes">Bralettes</option>
-                    <option value="Arm cuffs">Arm cuffs</option>
-                    <option value="Wearable Art">Wearable Art</option>
+                    {availableProductCategories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
                   </select>
                 </div>
               </div>
