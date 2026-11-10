@@ -265,8 +265,7 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
     emailDispatched,
     message: emailDispatched
       ? 'One-Time Passcode dispatched to your authorized administrator address.'
-      : 'Two-Factor Authentication required. Enter your 6-digit security code.',
-    otp: otpCode
+      : 'Two-Factor Authentication required. Enter your 6-digit security code.'
   };
 }
 
@@ -290,18 +289,18 @@ export async function verifyAdminOtp(email: string, code: string): Promise<{ suc
   const user = res.rows[0];
   const attempts = Number(user.otp_attempts || 0);
 
-  const masterBackupCode = process.env.ADMIN_2FA_BACKUP_CODE || '829101';
-  const isMasterCode = code.trim() === masterBackupCode;
+  const masterBackupCode = process.env.ADMIN_2FA_BACKUP_CODE?.trim();
+  const isMasterCode = Boolean(masterBackupCode && code.trim() === masterBackupCode);
 
   if (!isMasterCode) {
     if (attempts >= 5) {
-      return { success: false, message: 'Maximum attempts exceeded. Please request a new OTP.' };
+      return { success: false, message: 'Maximum attempts exceeded. Please request a new verification code.' };
     }
     if (!user.otp_code || !user.otp_expires_at) {
-      return { success: false, message: 'No active OTP request. Enter Studio Master 2FA: 829101' };
+      return { success: false, message: 'No active verification code request. Please request a new code.' };
     }
     if (Date.now() > Number(user.otp_expires_at)) {
-      return { success: false, message: 'OTP has expired. Enter Studio Master 2FA: 829101' };
+      return { success: false, message: 'Verification code has expired. Please request a new code.' };
     }
   }
 
@@ -337,7 +336,7 @@ export async function verifyAdminOtp(email: string, code: string): Promise<{ suc
     supabaseVerified ||
     (user.otp_code && user.otp_code === code.trim());
   if (!isMatch) {
-    return { success: false, message: 'Incorrect passcode. Please try again or use 829101.' };
+    return { success: false, message: 'Incorrect 6-digit verification code. Please check your email and try again.' };
   }
 
   // Invalidate OTP immediately to ensure single-use
