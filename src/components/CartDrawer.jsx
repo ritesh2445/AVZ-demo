@@ -36,9 +36,27 @@ export default function CartDrawer({
   onOpenSquadModal,
   currentUser = null,
   onOpenAuthModal,
+  paymentSettings,
   purchasesEnabled = true,
-  purchasesDisabledMessage = ''
+  purchasesDisabledMessage = '',
+  thankYouTitle = '',
+  thankYouMessage = ''
 }) {
+  const allowOnline = paymentSettings?.online_payments !== false;
+  const allowCOD = paymentSettings?.cod !== false;
+
+  const availablePaymentMethods = [];
+  if (allowOnline) {
+    availablePaymentMethods.push('UPI / Instant QR Code (GPay, PhonePe)');
+    availablePaymentMethods.push('Credit / Debit Cards (Razorpay)');
+  }
+  if (allowCOD) {
+    availablePaymentMethods.push('Cash on Delivery (COD Verified)');
+  }
+  if (availablePaymentMethods.length === 0) {
+    availablePaymentMethods.push('UPI / Instant QR Code (GPay, PhonePe)');
+  }
+
   const isAuthenticated = Boolean(currentUser && !currentUser.isGuest && currentUser.email);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -58,8 +76,14 @@ export default function CartDrawer({
     city: '',
     state: '',
     pincode: '',
-    paymentMethod: 'UPI / Instant QR Code'
+    paymentMethod: availablePaymentMethods[0] || 'UPI / Instant QR Code (GPay, PhonePe)'
   });
+
+  useEffect(() => {
+    if (availablePaymentMethods.length > 0 && !availablePaymentMethods.includes(checkoutData.paymentMethod)) {
+      setCheckoutData(prev => ({ ...prev, paymentMethod: availablePaymentMethods[0] }));
+    }
+  }, [paymentSettings]);
   const [orderComplete, setOrderComplete] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -669,7 +693,7 @@ export default function CartDrawer({
               <div className="pt-2">
                 <label className="block text-[10px] font-mono uppercase text-silver/70 mb-2">Select Payment Method</label>
                 <div className="flex flex-col gap-2">
-                  {['UPI / Instant QR Code (GPay, PhonePe)', 'Credit / Debit Cards (Razorpay)', 'Cash on Delivery (COD Verified)'].map((m) => (
+                  {availablePaymentMethods.map((m) => (
                     <label
                       key={m}
                       className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${

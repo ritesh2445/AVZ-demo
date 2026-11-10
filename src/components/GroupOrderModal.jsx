@@ -30,9 +30,24 @@ export default function GroupOrderModal({
   onOpenAuthModal,
   onGroupCartCreated,
   onBrowseCatalog,
+  paymentSettings,
   currency = 'INR'
 }) {
   useModalScrollLock(isOpen);
+
+  const allowOnline = paymentSettings?.online_payments !== false;
+  const allowCOD = paymentSettings?.cod !== false;
+  const availablePaymentMethods = [];
+  if (allowOnline) {
+    availablePaymentMethods.push('UPI / Instant QR Code (GPay, PhonePe)');
+    availablePaymentMethods.push('Credit / Debit Cards (Razorpay)');
+  }
+  if (allowCOD) {
+    availablePaymentMethods.push('Cash on Delivery (COD Verified)');
+  }
+  if (availablePaymentMethods.length === 0) {
+    availablePaymentMethods.push('UPI / Instant QR Code (GPay, PhonePe)');
+  }
 
   const [copied, setCopied] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -47,7 +62,7 @@ export default function GroupOrderModal({
   const [statusError, setStatusError] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
   const [phoneDigits, setPhoneDigits] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('UPI / Instant QR Code (GPay, PhonePe)');
+  const [paymentMethod, setPaymentMethod] = useState(availablePaymentMethods[0] || 'UPI / Instant QR Code (GPay, PhonePe)');
   const [squadOffers, setSquadOffers] = useState([]);
   const [shippingData, setShippingData] = useState({
     fullName: currentUser?.name || '',
@@ -58,6 +73,12 @@ export default function GroupOrderModal({
     state: 'Assam',
     pincode: ''
   });
+
+  useEffect(() => {
+    if (availablePaymentMethods.length > 0 && !availablePaymentMethods.includes(paymentMethod)) {
+      setPaymentMethod(availablePaymentMethods[0]);
+    }
+  }, [paymentSettings]);
 
   useEffect(() => {
     setActiveGroup(groupCart);
@@ -600,7 +621,7 @@ export default function GroupOrderModal({
                   <div className="pt-2">
                     <label className="block text-[10px] font-mono uppercase text-silver/70 mb-2">Select Payment Method</label>
                     <div className="flex flex-col gap-2">
-                      {['UPI / Instant QR Code (GPay, PhonePe)', 'Credit / Debit Cards (Razorpay)', 'Cash on Delivery (COD Verified)'].map((m) => (
+                      {availablePaymentMethods.map((m) => (
                         <label
                           key={m}
                           onClick={() => setPaymentMethod(m)}

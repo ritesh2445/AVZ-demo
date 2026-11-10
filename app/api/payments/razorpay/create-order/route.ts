@@ -199,6 +199,29 @@ export async function POST(request: Request) {
                   paymentMethod === 'Cash on Delivery' || 
                   /cash on delivery/i.test(paymentMethod || '');
 
+    // Check dynamic payment method toggles from storefront_settings
+    let paymentSettings = { online_payments: true, cod: true };
+    try {
+      const pmRes = await db.execute("SELECT value FROM storefront_settings WHERE key = 'payment_methods'");
+      if (pmRes.rows.length > 0) {
+        paymentSettings = { ...paymentSettings, ...JSON.parse(String(pmRes.rows[0].value)) };
+      }
+    } catch {}
+
+    if (isCOD && paymentSettings.cod === false) {
+      return NextResponse.json(
+        { error: 'Cash on Delivery is currently paused by store management. Please select an online payment option.' },
+        { status: 400 }
+      );
+    }
+
+    if (!isCOD && paymentSettings.online_payments === false) {
+      return NextResponse.json(
+        { error: 'Online payment is currently paused by store management. Please choose Cash on Delivery.' },
+        { status: 400 }
+      );
+    }
+
     // Handle Cash on Delivery directly: persist to DB immediately without calling Razorpay
     if (isCOD) {
       const orderId = `ord_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
@@ -267,8 +290,10 @@ export async function POST(request: Request) {
       });
     }
 
-    const keyId = process.env.RAZORPAY_KEY_ID?.trim();
-    const keySecret = process.env.RAZORPAY_KEY_SECRET?.trim();
+    const rawKeyId = process.env.RAZORPAY_KEY_ID;
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keyId = rawKeyId?.replace(/^["']|["']$/g, '').trim();
+    const keySecret = rawKeySecret?.replace(/^["']|["']$/g, '').trim();
 
     // Production Security: Inform user if Razorpay Key ID is not configured
     if (isProduction) {

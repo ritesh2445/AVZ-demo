@@ -37,7 +37,8 @@ export default function AdminDashboardPage() {
   const [storefrontSettings, setStorefrontSettings] = useState<any>({
     maintenance_mode: { enabled: false, title: 'STORE UNDER MAINTENANCE', message: 'Site updates underway.' },
     announcement: { enabled: false, text: '🪐 COMPLIMENTARY DOMESTIC DISPATCH ON ORDERS OVER ₹5,000', link: '#shop' },
-    purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for new creations.' }
+    purchases_enabled: { enabled: true, disabled_message: 'Purchases temporarily paused for new creations.' },
+    payment_methods: { online_payments: true, cod: true }
   });
   const [maintenanceModalOpen, setMaintenanceModalOpen] = useState(false);
   const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
@@ -989,6 +990,40 @@ export default function AdminDashboardPage() {
       fetchSettings();
     } catch {
       showNotification('Error saving storefront messages', 'error');
+    }
+  };
+
+  // Handler: Toggle Checkout Payment Options (Online UPI/Cards vs Cash on Delivery)
+  const handleTogglePaymentOption = async (option: 'online_payments' | 'cod') => {
+    const current = storefrontSettings?.payment_methods || { online_payments: true, cod: true };
+    const nextVal = {
+      ...current,
+      [option]: !current[option]
+    };
+    if (!nextVal.online_payments && !nextVal.cod) {
+      showNotification('At least one payment option (Online or COD) must remain enabled.', 'error');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/storefront/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'payment_methods', value: nextVal })
+      });
+      if (res.ok) {
+        setStorefrontSettings((prev: any) => ({
+          ...prev,
+          payment_methods: nextVal
+        }));
+        showNotification(
+          `${option === 'online_payments' ? 'Online Payment (Razorpay)' : 'Cash on Delivery'} is now ${nextVal[option] ? 'ACTIVE' : 'DISABLED'}.`,
+          'success'
+        );
+      } else {
+        showNotification('Failed to update payment setting.', 'error');
+      }
+    } catch {
+      showNotification('Network error updating payment setting.', 'error');
     }
   };
 
@@ -2274,20 +2309,95 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
 
-                <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-5">
-                  <h3 className="text-sm font-bold text-white font-cinzel mb-3">Supported Payment Rails</h3>
-                  <div className="space-y-2 text-xs font-mono text-neutral-300">
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Check className="w-4 h-4" /> UPI & Instant QR (GPay, PhonePe, Paytm)
+                <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-5 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
+                    <h3 className="text-sm font-bold text-white font-cinzel uppercase flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-pink" />
+                      Checkout Payment Options
+                    </h3>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-pink/20 text-[#F4C2C2] font-bold uppercase">
+                      Live Toggles
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 font-mono">
+                    Turn on or off the payment options shown to customers at checkout. Keep only online, only cash on delivery, or both.
+                  </p>
+
+                  <div className="space-y-3 pt-1">
+                    {/* 1. Online Payments Toggle */}
+                    <div className={`p-3 rounded-xl border transition-all ${
+                      (storefrontSettings.payment_methods?.online_payments ?? true)
+                        ? 'bg-emerald-950/20 border-emerald-500/40'
+                        : 'bg-[#161020] border-neutral-800 opacity-60'
+                    }`}>
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-xs text-white">Online Payment (UPI & Cards)</span>
+                            <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                              (storefrontSettings.payment_methods?.online_payments ?? true)
+                                ? 'bg-emerald-500/20 text-emerald-300'
+                                : 'bg-neutral-800 text-neutral-400'
+                            }`}>
+                              {(storefrontSettings.payment_methods?.online_payments ?? true) ? 'ACTIVE' : 'OFF'}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-neutral-400 font-mono block mt-1">
+                            Razorpay: UPI (GPay/PhonePe/Paytm), Debit/Credit Cards, Net Banking
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleTogglePaymentOption('online_payments')}
+                          className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                            (storefrontSettings.payment_methods?.online_payments ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                          }`}
+                        >
+                          <div
+                            className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                              (storefrontSettings.payment_methods?.online_payments ?? true) ? 'translate-x-5' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Check className="w-4 h-4" /> Credit & Debit Cards (Visa, MasterCard, RuPay)
-                    </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Check className="w-4 h-4" /> Net Banking (50+ Indian Banks)
-                    </div>
-                    <div className="flex items-center gap-2 text-emerald-400">
-                      <Check className="w-4 h-4" /> Cash on Delivery (COD with Admin Toggle)
+
+                    {/* 2. Cash on Delivery (COD) Toggle */}
+                    <div className={`p-3 rounded-xl border transition-all ${
+                      (storefrontSettings.payment_methods?.cod ?? true)
+                        ? 'bg-emerald-950/20 border-emerald-500/40'
+                        : 'bg-[#161020] border-neutral-800 opacity-60'
+                    }`}>
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-xs text-white">Cash on Delivery (Pay on Delivery)</span>
+                            <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                              (storefrontSettings.payment_methods?.cod ?? true)
+                                ? 'bg-emerald-500/20 text-emerald-300'
+                                : 'bg-neutral-800 text-neutral-400'
+                            }`}>
+                              {(storefrontSettings.payment_methods?.cod ?? true) ? 'ACTIVE' : 'OFF'}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-neutral-400 font-mono block mt-1">
+                            Client pays cash directly to the courier upon doorstep receipt
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleTogglePaymentOption('cod')}
+                          className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                            (storefrontSettings.payment_methods?.cod ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                          }`}
+                        >
+                          <div
+                            className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                              (storefrontSettings.payment_methods?.cod ?? true) ? 'translate-x-5' : 'translate-x-0'
+                            }`}
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2460,6 +2570,98 @@ export default function AdminDashboardPage() {
                 <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase tracking-wider shrink-0">
                   ACTIVE & ENFORCED
                 </span>
+              </div>
+
+              {/* PAYMENT RAILS & CHECKOUT TOGGLES */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-800 pb-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-white font-cinzel uppercase flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-pink" />
+                      Checkout Payment Options (Toggle Rails)
+                    </h3>
+                    <p className="text-xs text-neutral-400 font-mono mt-0.5">
+                      Turn on or off specific payment methods available to customers during checkout.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold uppercase w-fit">
+                    Live Toggle Controls
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Option 1: Online Payments */}
+                  <div className={`p-4 rounded-xl border transition-all ${
+                    (storefrontSettings.payment_methods?.online_payments ?? true)
+                      ? 'bg-emerald-950/20 border-emerald-500/40'
+                      : 'bg-[#161020] border-neutral-800 opacity-60'
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs font-cinzel text-white">Online Payment (UPI & Cards)</span>
+                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                            (storefrontSettings.payment_methods?.online_payments ?? true) ? 'bg-emerald-500/20 text-emerald-300' : 'bg-neutral-800 text-neutral-400'
+                          }`}>
+                            {(storefrontSettings.payment_methods?.online_payments ?? true) ? 'ACTIVE' : 'OFF'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-mono text-neutral-400 mt-1.5 leading-relaxed">
+                          Razorpay gateway: UPI (GPay, PhonePe, Paytm, BHIM QR), Debit/Credit Cards, and Net Banking.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePaymentOption('online_payments')}
+                        className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                          (storefrontSettings.payment_methods?.online_payments ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                        }`}
+                      >
+                        <div
+                          className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                            (storefrontSettings.payment_methods?.online_payments ?? true) ? 'translate-x-6' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Option 2: Cash on Delivery */}
+                  <div className={`p-4 rounded-xl border transition-all ${
+                    (storefrontSettings.payment_methods?.cod ?? true)
+                      ? 'bg-emerald-950/20 border-emerald-500/40'
+                      : 'bg-[#161020] border-neutral-800 opacity-60'
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs font-cinzel text-white">Cash on Delivery (Pay on Delivery)</span>
+                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                            (storefrontSettings.payment_methods?.cod ?? true) ? 'bg-emerald-500/20 text-emerald-300' : 'bg-neutral-800 text-neutral-400'
+                          }`}>
+                            {(storefrontSettings.payment_methods?.cod ?? true) ? 'ACTIVE' : 'OFF'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-mono text-neutral-400 mt-1.5 leading-relaxed">
+                          Allow customers to order without immediate payment and pay cash directly to the courier.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePaymentOption('cod')}
+                        className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                          (storefrontSettings.payment_methods?.cod ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                        }`}
+                      >
+                        <div
+                          className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                            (storefrontSettings.payment_methods?.cod ?? true) ? 'translate-x-6' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">
@@ -2733,6 +2935,98 @@ export default function AdminDashboardPage() {
                 <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase tracking-wider shrink-0">
                   ACTIVE & ENFORCED
                 </span>
+              </div>
+
+              {/* PAYMENT RAILS & CHECKOUT TOGGLES */}
+              <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-800 pb-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-white font-cinzel uppercase flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-pink" />
+                      Checkout Payment Options (Toggle Rails)
+                    </h3>
+                    <p className="text-xs text-neutral-400 font-mono mt-0.5">
+                      Turn on or off specific payment methods available to customers during checkout.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold uppercase w-fit">
+                    Live Toggle Controls
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Option 1: Online Payments */}
+                  <div className={`p-4 rounded-xl border transition-all ${
+                    (storefrontSettings.payment_methods?.online_payments ?? true)
+                      ? 'bg-emerald-950/20 border-emerald-500/40'
+                      : 'bg-[#161020] border-neutral-800 opacity-60'
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs font-cinzel text-white">Online Payment (UPI & Cards)</span>
+                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                            (storefrontSettings.payment_methods?.online_payments ?? true) ? 'bg-emerald-500/20 text-emerald-300' : 'bg-neutral-800 text-neutral-400'
+                          }`}>
+                            {(storefrontSettings.payment_methods?.online_payments ?? true) ? 'ACTIVE' : 'OFF'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-mono text-neutral-400 mt-1.5 leading-relaxed">
+                          Razorpay gateway: UPI (GPay, PhonePe, Paytm, BHIM QR), Debit/Credit Cards, and Net Banking.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePaymentOption('online_payments')}
+                        className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                          (storefrontSettings.payment_methods?.online_payments ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                        }`}
+                      >
+                        <div
+                          className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                            (storefrontSettings.payment_methods?.online_payments ?? true) ? 'translate-x-6' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Option 2: Cash on Delivery */}
+                  <div className={`p-4 rounded-xl border transition-all ${
+                    (storefrontSettings.payment_methods?.cod ?? true)
+                      ? 'bg-emerald-950/20 border-emerald-500/40'
+                      : 'bg-[#161020] border-neutral-800 opacity-60'
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs font-cinzel text-white">Cash on Delivery (Pay on Delivery)</span>
+                          <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase ${
+                            (storefrontSettings.payment_methods?.cod ?? true) ? 'bg-emerald-500/20 text-emerald-300' : 'bg-neutral-800 text-neutral-400'
+                          }`}>
+                            {(storefrontSettings.payment_methods?.cod ?? true) ? 'ACTIVE' : 'OFF'}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-mono text-neutral-400 mt-1.5 leading-relaxed">
+                          Allow customers to order without immediate payment and pay cash directly to the courier.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleTogglePaymentOption('cod')}
+                        className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer shrink-0 ${
+                          (storefrontSettings.payment_methods?.cod ?? true) ? 'bg-[#BE185D]' : 'bg-neutral-700'
+                        }`}
+                      >
+                        <div
+                          className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                            (storefrontSettings.payment_methods?.cod ?? true) ? 'translate-x-6' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="bg-[#100C17] border border-[#231A2A] rounded-2xl p-6">

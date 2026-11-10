@@ -6,11 +6,13 @@ export async function POST(request: Request) {
   try {
     const rawBody = await request.text();
     const signature = request.headers.get('x-razorpay-signature');
-    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const rawSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const webhookSecret = rawSecret?.replace(/^["']|["']$/g, '').trim();
     const isProduction = process.env.NODE_ENV === 'production';
 
     // 1. Fail closed in production if webhook secret is missing
     if (isProduction && !webhookSecret) {
+      console.error('[RAZORPAY WEBHOOK ERROR]: RAZORPAY_WEBHOOK_SECRET is not configured in production.');
       return NextResponse.json(
         { error: 'Webhook secret unconfigured in production environment.' },
         { status: 500 }
@@ -20,6 +22,7 @@ export async function POST(request: Request) {
     // 2. Strict Webhook Signature Verification against exact raw body
     if (webhookSecret) {
       if (!signature) {
+        console.warn('[RAZORPAY WEBHOOK WARNING]: Missing x-razorpay-signature header in webhook request');
         return NextResponse.json(
           { error: 'Missing x-razorpay-signature header' },
           { status: 400 }
@@ -35,6 +38,7 @@ export async function POST(request: Request) {
       const receivedBuffer = Buffer.from(signature, 'utf8');
 
       if (expectedBuffer.length !== receivedBuffer.length || !crypto.timingSafeEqual(expectedBuffer, receivedBuffer)) {
+        console.warn('[RAZORPAY WEBHOOK WARNING]: Invalid webhook signature mismatch');
         return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 400 });
       }
     }

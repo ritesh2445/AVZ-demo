@@ -213,9 +213,10 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
   }
 
   // 2. Resend Email Delivery (If Supabase was not dispatched and Resend is configured)
-  const resendApiKey = process.env.RESEND_API_KEY;
+  const rawApiKey = process.env.RESEND_API_KEY;
+  const resendApiKey = rawApiKey?.replace(/^["']|["']$/g, '').trim();
   if (!emailDispatched && resendApiKey && resendApiKey !== 're_test_mock_key') {
-    const fromAddress = process.env.RESEND_FROM_EMAIL || 'AVZ Vaganza Studio <onboarding@resend.dev>';
+    const fromAddress = (process.env.RESEND_FROM_EMAIL || 'AVZ Vaganza Studio <onboarding@resend.dev>').replace(/^["']|["']$/g, '').trim();
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -246,6 +247,10 @@ export async function generateAdminOtp(email: string): Promise<{ success: boolea
 
       if (emailRes.ok) {
         emailDispatched = true;
+        console.log(`[RESEND OTP SUCCESS]: Code dispatched via Resend to ${normalized}`);
+      } else {
+        const errBody = await emailRes.text();
+        console.warn(`[RESEND OTP ERROR ${emailRes.status}]:`, errBody);
       }
     } catch (err: any) {
       clearTimeout(timeoutId);
@@ -450,7 +455,7 @@ export async function loginAdminWithPassword(
     success: true,
     requires2FA: true,
     email: normalized,
-    message: 'Password verified. 6-digit Two-Factor (2FA) verification code sent to your registered email.'
+    message: '6-digit Two-Factor (2FA) verification code sent to your registered email.'
   };
 }
 

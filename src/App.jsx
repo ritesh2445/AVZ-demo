@@ -863,6 +863,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
           onOpenGroupOrder={() => setGroupOrderModalOpen(true)}
           currentUser={currentUser}
           onOpenAuthModal={() => setAuthModalOpen(true)}
+          paymentSettings={storefrontConfig?.payment_methods}
           purchasesEnabled={storefrontConfig?.purchases_enabled?.enabled ?? true}
           purchasesDisabledMessage={storefrontConfig?.purchases_enabled?.disabled_message}
           thankYouTitle={storefrontConfig?.order_thank_you_message?.title}
@@ -886,6 +887,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         onCheckoutGroup={(grp) => {
           setCartOpen(true);
         }}
+        paymentSettings={storefrontConfig?.payment_methods}
         currency={currency}
       />
 

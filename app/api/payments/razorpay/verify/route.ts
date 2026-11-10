@@ -11,7 +11,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Order and payment IDs are required' }, { status: 400 });
     }
 
-    const secret = process.env.RAZORPAY_KEY_SECRET;
+    const rawSecret = process.env.RAZORPAY_KEY_SECRET;
+    const secret = rawSecret?.replace(/^["']|["']$/g, '').trim();
     const isProduction = process.env.NODE_ENV === 'production';
 
     // 1. Production Security: Fail closed if secret is missing in production
