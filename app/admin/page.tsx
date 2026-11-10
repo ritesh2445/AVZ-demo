@@ -1188,7 +1188,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070609] text-silver flex flex-col font-sans select-none antialiased">
+    <div className="h-screen max-h-screen overflow-hidden bg-[#070609] text-silver flex flex-col font-sans select-none antialiased">
       {/* Toast Notification */}
       {notification && (
         <div
@@ -1203,7 +1203,7 @@ export default function AdminDashboardPage() {
       )}
 
       {/* TOP HEADER: Branding & Storefront Controls Bar */}
-      <header className="h-16 border-b border-[#231A2A] bg-[#0E0A14]/90 backdrop-blur-md px-3 sm:px-6 flex items-center justify-between sticky top-0 z-40">
+      <header className="h-16 border-b border-[#231A2A] bg-[#0E0A14] px-3 sm:px-6 flex items-center justify-between shrink-0 z-40">
         <div className="flex items-center gap-2 sm:gap-6">
           {/* Mobile hamburger menu toggle */}
           <button
@@ -1360,7 +1360,7 @@ export default function AdminDashboardPage() {
         </aside>
 
         {/* WORKSPACE CONTENT AREA */}
-        <main className="flex-1 overflow-y-auto bg-[#070609] p-4 sm:p-6 lg:p-8 min-w-0">
+        <main className="flex-1 overflow-y-auto overscroll-contain bg-[#070609] p-4 sm:p-6 lg:p-8 min-w-0">
           {/* MODULE 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-8 max-w-7xl mx-auto">

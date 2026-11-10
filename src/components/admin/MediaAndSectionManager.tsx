@@ -776,7 +776,7 @@ export default function MediaAndSectionManager({
             <p className="text-sm font-cinzel text-neutral-300">No photos found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 max-h-[500px] overflow-y-auto overscroll-contain pr-2 custom-scrollbar">
             {cleanFilteredAssets.map((asset) => {
               const isAttached = formPhotos.includes(asset.url);
               return (

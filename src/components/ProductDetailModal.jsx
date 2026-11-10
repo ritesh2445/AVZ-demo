@@ -44,7 +44,6 @@ export default function ProductDetailModal({
   useEffect(() => {
     if (product) {
       setActiveImageIndex(0);
-      setSelectedSize('Free Size');
       setErrorNotice('');
     }
   }, [product?.id]);
