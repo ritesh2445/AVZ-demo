@@ -567,7 +567,7 @@ export const INITIAL_GALLERY_ARTWORKS: GalleryArtwork[] = [
     "display_order": 22,
     "is_published": 1,
     "metadata": {
-      "medium": "Telecom relay board fragments, brass rivets, leather cuff",
+      "medium": "Cold-forged industrial alloy, brass rivets, reclaimed leather cuff",
       "dimensions_cm": "Wrist 6-7.5\"",
       "provenance": "AVZ Studio Permanent Collection",
       "hanging_bracket": "wire",

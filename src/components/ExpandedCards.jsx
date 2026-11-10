@@ -11,59 +11,59 @@ const DEFAULT_VAULT_CARDS = (FEATURED_PIECES && FEATURED_PIECES.length > 0)
       imgUrl: p.imgUrl || p.image || p.images?.[0],
       alt: p.alt || p.title || p.name,
       title: p.title || p.name,
-      category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'BEST SELLER'}` : 'BEST SELLER',
+      category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'VAULT PIECE'}` : 'VAULT PIECE',
       price: p.price,
       data: p
     }))
   : [
       {
-        imgUrl: ASSET_MANIFEST?.products?.archiveBralette || "/assets/product_archive_bralette.jpg",
-        alt: "The Original Dhristroyer Spiked Armor Bralette",
-        title: "Archival Spikeria Bralette",
-        category: "ARCHIVE · 1-OF-1",
-        price: 3800
+        imgUrl: "/assets/collection/co_ords/co_ords_16.webp",
+        alt: "Black Cat Co ord Set",
+        title: "Black Cat Co ord Set",
+        category: "CO-ORD SETS · VAULT MASTERPIECE",
+        price: 2200
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.spikeBodice || "/assets/look_spike_bodice.jpg",
-        alt: "Spike Bodice Armour",
-        title: "Hand-Riveted Spike Bodice",
-        category: "HANDMADE PIECE",
-        price: 4500
+        imgUrl: "/assets/collection/tops/tops_16.webp",
+        alt: "Spike tube top",
+        title: "Spike tube top",
+        category: "TOPS · BEST SELLER",
+        price: 2000
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.chainmailArmor || "/assets/look_chainmail_armor.jpg",
-        alt: "Chainmail Cyber Armour",
-        title: "Studio Chainmail Armour",
-        category: "STATEMENT PIECE",
-        price: 5200
+        imgUrl: "/assets/collection/bags/bags_03.webp",
+        alt: "Psychedelic brown denim bag",
+        title: "Psychedelic brown denim bag",
+        category: "BAGS · 1-OF-1 ARCHIVE",
+        price: 999
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.motherboardCuff || "/assets/prod_motherboard_cuff.jpg",
-        alt: "Reclaimed Metal Apex Cuff",
-        title: "Reclaimed Metal Gauntlet",
-        category: "UPCYCLED METAL",
-        price: 1800
+        imgUrl: "/assets/collection/bralettes/bralettes_30.webp",
+        alt: "Spikeria bra",
+        title: "Spikeria bra",
+        category: "BRALETTES · BEST SELLER",
+        price: 1999
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.reworkedJacket || "/assets/product_reworked_jacket.jpg",
-        alt: "Reworked Denim Jacket",
-        title: "Syllabic Denim Kinetic Relic",
-        category: "REWORKED ARCHIVE",
-        price: 3600
+        imgUrl: "/assets/collection/co_ords/co_ords_07.webp",
+        alt: "Jersey co ord",
+        title: "Jersey co ord",
+        category: "CO-ORD SETS · STUDIO 1-OF-1",
+        price: 3500
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.beadedBralette || "/assets/product_beaded_bralette.jpg",
-        alt: "Beaded Wire Bralette",
-        title: "Crystalline Cyber Bralette",
-        category: "SCULPTED WIRE",
-        price: 2900
+        imgUrl: "/assets/collection/bralettes/bralettes_33.webp",
+        alt: "Keyboard bra",
+        title: "Keyboard bra",
+        category: "BRALETTES · TACTILE ART",
+        price: 2500
       },
       {
-        imgUrl: ASSET_MANIFEST?.products?.divaTop || "/assets/product_diva_top.jpg",
-        alt: "Diva Hardware Corset",
-        title: "Hardware Diva Corset",
-        category: "RUNWAY ICON",
-        price: 3200
+        imgUrl: "/assets/collection/jackets/jackets_04.webp",
+        alt: "Jhumka jacket",
+        title: "Jhumka jacket",
+        category: "JACKETS · HERITAGE RELIC",
+        price: 2600
       }
     ];
 

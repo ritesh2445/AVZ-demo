@@ -709,7 +709,7 @@ export const PRODUCTS = [
     "title": "Silver Jesus cross charm top",
     "price": 999,
     "compare_at_price": null,
-    "stock": 0,
+    "stock": 1,
     "category": "Tops",
     "tag": "SOLD OUT",
     "materials": [
@@ -1033,7 +1033,7 @@ export const PRODUCTS = [
     "sku": "IN0026",
     "name": "Check mini red skirt",
     "title": "Check mini red skirt",
-    "price": 1600,
+    "price": 1800,
     "compare_at_price": null,
     "stock": 1,
     "category": "Skirts",
@@ -1066,320 +1066,96 @@ export const PRODUCTS = [
 // AVZ MUSEUM ARCHIVE ENTRIES
 export const MUSEUM_ITEMS = [
   {
-    id: "mus-001",
-    name: "The Original Dhristroyer Motherboard Bralette (Archived Prototype 01)",
-    shortName: "Original Motherboard",
-    aspectRatio: 220 / 415,
-    year: "2023",
-    tag: "ARCHIVE · SOLD OUT",
-    materials: "Reclaimed Industrial Metal, Steel Wire, Velvet Ties",
-    priceTier: "Core Statement Pieces (₹1,000 – ₹3,000)",
-    originalOwner: "Private Collection (Mumbai)",
-    image: ASSET_MANIFEST.products.archiveBralette,
-    story: "The piece that sparked the entire AVZ Vaganza movement. Dhrisni hand-cut an obsolete Intel Pentium motherboard on her bedroom floor using heavy garden snips. It became viral on Instagram, establishing her signature juxtaposition of cold silicon chips against soft velvet ties.",
-    recreationNote: "Because computer chip layouts vary, your custom version will feature its own unique microprocessor architecture."
+    "id": "mus-001",
+    "name": "Cyberpunk Spiked Denim Corset",
+    "shortName": "Spiked Denim Corset",
+    "aspectRatio": 0.6666666666666666,
+    "year": "2024-2026",
+    "tag": "ARCHIVE · MUSEUM EXHIBITION",
+    "materials": "Deconstructed raw 14oz denim, 48 industrial chrome cone spikes, boned corset armature",
+    "priceTier": "Core Statement Pieces (₹1,000 – ₹3,000)",
+    "originalOwner": "AVZ Studio Permanent Collection",
+    "image": "/assets/museum/museum_piece_01.webp",
+    "story": "Custom sculpted bodice with high-tensile eyelets and brutalist chrome spikes engineered directly into reinforced denim ribs. Built for dark techno rooms and high-stakes runway.",
+    "recreationNote": "Handcrafted upon custom request with bespoke boning tailored to your exact anatomical measurements."
   },
   {
-    id: "mus-002",
-    name: "The Mechanical Keycap 'CTRL+Z' Choker Harness",
-    shortName: "'CTRL+Z' Choker",
-    aspectRatio: 360 / 460,
-    year: "2024",
-    tag: "ARCHIVE · SOLD OUT",
-    materials: "IBM Model M Keycaps, Silver Chainmail, Stainless Steel Carabiner",
-    priceTier: "Accessories & Small Pieces (Under ₹1,000)",
-    originalOwner: "Created for Boiler Room Delhi",
-    image: ASSET_MANIFEST.products.beadedBralette,
-    story: "Worn under strobe lights at an underground warehouse rave. The mechanical keys click when tapped, making it an interactive audio-visual garment.",
-    recreationNote: "Keycap labels and colors can be customized to your preferred keyboard shortcuts."
+    "id": "mus-002",
+    "name": "Fluid Stainless Chainmail Cowl",
+    "shortName": "Chainmail Cowl",
+    "aspectRatio": 0.782608695652174,
+    "year": "2024",
+    "tag": "ARCHIVE · MUSEUM EXHIBITION",
+    "materials": "1,800 surgical stainless steel rings, hand-knit liquid drape, heavy toggle clasps",
+    "priceTier": "Core Statement Pieces (₹1,000 – ₹3,000)",
+    "originalOwner": "Boiler Room & Salon Showcase",
+    "image": "/assets/museum/museum_piece_02.webp",
+    "story": "Over 1,800 rings linked by hand ring-by-ring in our Studio. Cold to the touch, heavy in your hands, cascading across collarbones like shimmering mercury.",
+    "recreationNote": "Hand-linked ring-by-ring to custom neck and chest dimensions."
   },
   {
-    id: "mus-003",
-    name: "The Heavy Industry Spiked Moto Shrug",
-    shortName: "Spiked Moto Shrug",
-    aspectRatio: 245 / 435,
-    year: "2024",
-    tag: "ARCHIVE · SOLD OUT",
-    materials: "Reclaimed Biker Leather, 72 Solid Steel Spikes, Raw Hardware",
-    priceTier: "Full Outfits & Heavy Art (₹3,000+)",
-    originalOwner: "Custom Order (Berlin)",
-    image: ASSET_MANIFEST.products.reworkedJacket,
-    story: "Constructed from a discarded 1980s motorcycle jacket found in a thrift crate. Cropped high above the bust line, with massive chrome shoulders that evoke dystopian post-apocalyptic royalty.",
-    recreationNote: "Requires full shoulder and arm measurements for custom armhole drafting."
+    "id": "mus-003",
+    "name": "Sculptural Shoe-Armor Hybrid Corset",
+    "shortName": "Boot Armor Corset",
+    "aspectRatio": 0.5632183908045977,
+    "year": "2024",
+    "tag": "ARCHIVE · RUNWAY ICON",
+    "materials": "Deconstructed combat boots, heavy leather tongues, speed hooks, steel shanks",
+    "priceTier": "Full Outfits & Heavy Art (₹3,000+)",
+    "originalOwner": "Runway Exhibition Archive",
+    "image": "/assets/museum/museum_piece_21.webp",
+    "story": "The infamous AVZ boot-corset made from disassembled combat boots. The steel shanks provide natural boning while speed-lacing wraps the waist in aggressive posture.",
+    "recreationNote": "Requires full waist and ribcage measurements for custom leather drafting."
   },
   {
-    id: "mus-004",
-    name: "Mermaidcore Cyber-Chitin Bodice",
-    shortName: "Cyber-Chitin Bodice",
-    aspectRatio: 832 / 1152,
-    year: "2024",
-    tag: "ARCHIVE · SOLD OUT",
-    materials: "Iridescent Tech Scrap, Wire Weave, Glass Crystal Beads",
-    priceTier: "Core Statement Pieces (₹1,000 – ₹3,000)",
-    originalOwner: "Fashion Creator Editorial Feature",
-    image: ASSET_MANIFEST.editorialHero,
-    story: "A synthesis of oceanic biological curves and synthetic e-waste. Reflects baby pink and lavender iridescence under directional lighting.",
-    recreationNote: "Takes 3 weeks of delicate wire sculpting."
+    "id": "mus-004",
+    "name": "Dhristroyer Imperial Relic Corset",
+    "shortName": "Imperial Relic Corset",
+    "aspectRatio": 0.7222222222222222,
+    "year": "2024",
+    "tag": "ARCHIVE · MASTERPIECE",
+    "materials": "Raw industrial denim, salvage alloy embellishments, raw steel closures, hand embroidery",
+    "priceTier": "Core Statement Pieces (₹1,000 – ₹3,000)",
+    "originalOwner": "Dhrisni Private Collection",
+    "image": "/assets/museum/museum_piece_42.webp",
+    "story": "The crown jewel of Dhrisni's private collection. A triumph of maximalist post-industrial craftsmanship incorporating every core studio discipline: raw denim, cold steel, and handcrafted hardware.",
+    "recreationNote": "Available exclusively as a bespoke one-of-one commission."
   }
 ];
 
 // FEATURED PIECES (BEST SELLERS) — Curated from authentic studio vault
 export const FEATURED_PIECES = [
   {
-    "id": "featured-01",
-    "sku": "AVZ-FT-001",
-    "name": "Dhristroyer Cyberpunk Spikeria Bralette",
-    "title": "Dhristroyer Cyberpunk Spikeria Bralette",
-    "category": "Bralettes",
-    "price": 3800,
-    "tag": "BEST SELLER",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_01.webp",
-    "images": [
-      "/assets/featured/featured_01.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_01.webp",
-    "alt": "Dhristroyer Cyberpunk Spikeria Bralette",
-    "description": "Dhristroyer Cyberpunk Spikeria Bralette — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-02",
-    "sku": "AVZ-FT-002",
-    "name": "Hand-Riveted Spikeria Bodice Armor",
-    "title": "Hand-Riveted Spikeria Bodice Armor",
-    "category": "Corsets",
-    "price": 4500,
-    "tag": "STUDIO 1-OF-1",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_02.webp",
-    "images": [
-      "/assets/featured/featured_02.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_02.webp",
-    "alt": "Hand-Riveted Spikeria Bodice Armor",
-    "description": "Hand-Riveted Spikeria Bodice Armor — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-03",
-    "sku": "AVZ-FT-003",
-    "name": "Stainless Chainmail Cuirass",
-    "title": "Stainless Chainmail Cuirass",
-    "category": "Body chainmail",
-    "price": 5200,
-    "tag": "BEST SELLER",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_03.webp",
-    "images": [
-      "/assets/featured/featured_03.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_03.webp",
-    "alt": "Stainless Chainmail Cuirass",
-    "description": "Stainless Chainmail Cuirass — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-04",
-    "sku": "AVZ-FT-004",
-    "name": "Hand-Riveted Spike Gauntlet",
-    "title": "Hand-Riveted Spike Gauntlet",
-    "category": "Arm cuffs",
-    "price": 1800,
-    "tag": "UPCYCLED TECH",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_04.webp",
-    "images": [
-      "/assets/featured/featured_04.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_04.webp",
-    "alt": "Hand-Riveted Spike Gauntlet",
-    "description": "Hand-Riveted Spike Gauntlet — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-10",
-    "sku": "AVZ-FT-010",
-    "name": "Raw Steel O-Ring Harness Matrix",
-    "title": "Raw Steel O-Ring Harness Matrix",
-    "category": "Belts",
-    "price": 2400,
-    "tag": "BEST SELLER",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_10.webp",
-    "images": [
-      "/assets/featured/featured_10.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_10.webp",
-    "alt": "Raw Steel O-Ring Harness Matrix",
-    "description": "Raw Steel O-Ring Harness Matrix — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-12",
-    "sku": "AVZ-FT-012",
-    "name": "Spiked Cybernetic Moto Shoulder Guard",
-    "title": "Spiked Cybernetic Moto Shoulder Guard",
-    "category": "Arm cuffs",
-    "price": 2900,
-    "tag": "BEST SELLER",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_12.webp",
-    "images": [
-      "/assets/featured/featured_12.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_12.webp",
-    "alt": "Spiked Cybernetic Moto Shoulder Guard",
-    "description": "Spiked Cybernetic Moto Shoulder Guard — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-16",
-    "sku": "AVZ-FT-016",
-    "name": "Acid-Wash Reclaimed Hardware Cargo Skirt",
-    "title": "Acid-Wash Reclaimed Hardware Cargo Skirt",
-    "category": "Skirts",
-    "price": 3600,
-    "tag": "STUDIO PIECE",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_16.webp",
-    "images": [
-      "/assets/featured/featured_16.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_16.webp",
-    "alt": "Acid-Wash Reclaimed Hardware Cargo Skirt",
-    "description": "Acid-Wash Reclaimed Hardware Cargo Skirt — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-18",
-    "sku": "AVZ-FT-018",
-    "name": "Psychedelic Acid-Wash Denim Relic Bag",
-    "title": "Psychedelic Acid-Wash Denim Relic Bag",
-    "category": "Bags",
+    "id": "featured-in0015",
+    "sku": "IN0015",
+    "name": "Black Cat Co ord Set",
+    "title": "Black Cat Co ord Set",
+    "category": "Co-ord sets",
     "price": 2200,
-    "tag": "UPCYCLED TECH",
-    "stock": 5,
+    "tag": "VAULT MASTERPIECE",
+    "stock": 1,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Textured Silver Boned Corset",
+      "Black Faux Fur Trim Mini Skirt",
+      "Heavy Eyelet Hardware"
     ],
-    "image": "/assets/featured/featured_18.webp",
+    "image": "/assets/collection/co_ords/co_ords_16.webp",
     "images": [
-      "/assets/featured/featured_18.webp"
+      "/assets/collection/co_ords/co_ords_16.webp",
+      "/assets/collection/co_ords/co_ords_02.webp",
+      "/assets/collection/co_ords/co_ords_03.webp",
+      "/assets/collection/co_ords/co_ords_05.webp",
+      "/assets/collection/co_ords/co_ords_11.webp",
+      "/assets/collection/co_ords/co_ords_22.webp",
+      "/assets/collection/co_ords/co_ords_31.webp",
+      "/assets/collection/co_ords/co_ords_37.webp"
     ],
-    "imgUrl": "/assets/featured/featured_18.webp",
-    "alt": "Psychedelic Acid-Wash Denim Relic Bag",
-    "description": "Psychedelic Acid-Wash Denim Relic Bag — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/co_ords/co_ords_16.webp",
+    "alt": "Black Cat Co ord Set",
+    "description": "Silver corset and black fur skirt — sculptural two-piece ensemble featuring an engraved silver-finish corset top paired with a micro mini skirt trimmed in dense black faux fur.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1387,32 +1163,35 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "featured-19",
-    "sku": "AVZ-FT-019",
-    "name": "Hand-Linked Stainless Mesh Slip Top",
-    "title": "Hand-Linked Stainless Mesh Slip Top",
+    "id": "featured-in0008",
+    "sku": "IN0008",
+    "name": "Spike tube top",
+    "title": "Spike tube top",
     "category": "Tops",
-    "price": 3900,
+    "price": 2000,
     "tag": "BEST SELLER",
-    "stock": 5,
+    "stock": 3,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Black Rexine Bodice",
+      "Metallic Spikes Cross Motif",
+      "Elastic Stretch Support"
     ],
-    "image": "/assets/featured/featured_19.webp",
+    "image": "/assets/collection/tops/tops_16.webp",
     "images": [
-      "/assets/featured/featured_19.webp"
+      "/assets/collection/tops/tops_16.webp",
+      "/assets/collection/tops/tops_22.webp",
+      "/assets/collection/tops/tops_41.webp"
     ],
-    "imgUrl": "/assets/featured/featured_19.webp",
-    "alt": "Hand-Linked Stainless Mesh Slip Top",
-    "description": "Hand-Linked Stainless Mesh Slip Top — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/tops/tops_16.webp",
+    "alt": "Spike tube top",
+    "description": "Tube top rexine black with spikes forming cross — sleek black leatherette tube top with heavy metallic cone spikes arranged in an extended crucifix motif down the torso.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1420,131 +1199,37 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "featured-20",
-    "sku": "AVZ-FT-020",
-    "name": "Barbed Hardware Kinetic Choker",
-    "title": "Barbed Hardware Kinetic Choker",
-    "category": "Neckpieces",
-    "price": 1750,
-    "tag": "STUDIO PIECE",
-    "stock": 5,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_20.webp",
-    "images": [
-      "/assets/featured/featured_20.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_20.webp",
-    "alt": "Barbed Hardware Kinetic Choker",
-    "description": "Barbed Hardware Kinetic Choker — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-21",
-    "sku": "AVZ-FT-021",
-    "name": "Cyber-Goth Spiked Rib Cage Bodice",
-    "title": "Cyber-Goth Spiked Rib Cage Bodice",
-    "category": "Corsets",
-    "price": 4600,
-    "tag": "ARCHIVE 1-OF-1",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_21.webp",
-    "images": [
-      "/assets/featured/featured_21.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_21.webp",
-    "alt": "Cyber-Goth Spiked Rib Cage Bodice",
-    "description": "Cyber-Goth Spiked Rib Cage Bodice — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-24",
-    "sku": "AVZ-FT-024",
-    "name": "Reconstructed Denim Shrug & Sleeve Bolero",
-    "title": "Reconstructed Denim Shrug & Sleeve Bolero",
-    "category": "Jackets",
-    "price": 3800,
-    "tag": "ARCHIVE 1-OF-1",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_24.webp",
-    "images": [
-      "/assets/featured/featured_24.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_24.webp",
-    "alt": "Reconstructed Denim Shrug & Sleeve Bolero",
-    "description": "Reconstructed Denim Shrug & Sleeve Bolero — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-30",
-    "sku": "AVZ-FT-030",
-    "name": "Spike-Studded Asymmetric Collar Piece",
-    "title": "Spike-Studded Asymmetric Collar Piece",
-    "category": "Neckpieces",
-    "price": 1850,
+    "id": "featured-in0007",
+    "sku": "IN0007",
+    "name": "Psychedelic brown denim bag",
+    "title": "Psychedelic brown denim bag",
+    "category": "Bags",
+    "price": 999,
     "tag": "BEST SELLER",
-    "stock": 5,
+    "stock": 1,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Upcycled Acid-Washed Denim Jeans",
+      "Neon Hand-Painted Motifs",
+      "Satin Ribbons & Chains"
     ],
-    "image": "/assets/featured/featured_30.webp",
+    "image": "/assets/collection/bags/bags_03.webp",
     "images": [
-      "/assets/featured/featured_30.webp"
+      "/assets/collection/bags/bags_03.webp",
+      "/assets/collection/bags/bags_01.webp",
+      "/assets/collection/bags/bags_02.webp",
+      "/assets/collection/bags/bags_04.webp",
+      "/assets/collection/bags/bags_05.webp"
     ],
-    "imgUrl": "/assets/featured/featured_30.webp",
-    "alt": "Spike-Studded Asymmetric Collar Piece",
-    "description": "Spike-Studded Asymmetric Collar Piece — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/bags/bags_03.webp",
+    "alt": "Psychedelic brown denim bag",
+    "description": "Bag with acid paint denim jeans upcycled — one-of-a-kind slouchy shoulder bag deconstructed from brown denim jeans with psychedelic neon painting, charms, and satin ties.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1552,32 +1237,35 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "featured-32",
-    "sku": "AVZ-FT-032",
-    "name": "Deconstructed Zipper Kinetic Mesh Top",
-    "title": "Deconstructed Zipper Kinetic Mesh Top",
-    "category": "Tops",
-    "price": 3300,
+    "id": "featured-in0001",
+    "sku": "IN0001",
+    "name": "Spikeria bra",
+    "title": "Spikeria bra",
+    "category": "Bralettes",
+    "price": 1999,
     "tag": "BEST SELLER",
-    "stock": 5,
+    "stock": 50,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Hand-Set Metallic Spikes",
+      "Reinforced Bra Base",
+      "Upcycled Hardware"
     ],
-    "image": "/assets/featured/featured_32.webp",
+    "image": "/assets/collection/bralettes/bralettes_30.webp",
     "images": [
-      "/assets/featured/featured_32.webp"
+      "/assets/collection/bralettes/bralettes_30.webp",
+      "/assets/collection/bralettes/bralettes_31.webp",
+      "/assets/collection/bralettes/bralettes_32.webp"
     ],
-    "imgUrl": "/assets/featured/featured_32.webp",
-    "alt": "Deconstructed Zipper Kinetic Mesh Top",
-    "description": "Deconstructed Zipper Kinetic Mesh Top — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/bralettes/bralettes_30.webp",
+    "alt": "Spikeria bra",
+    "description": "Bra with spikes studded — individually hand-set metallic cone spikes over a structured bra base. Raw metallic rebellion and punk cyber-couture.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1585,32 +1273,76 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "featured-35",
-    "sku": "AVZ-FT-035",
-    "name": "Multi-Buckle Industrial Waist Cincher",
-    "title": "Multi-Buckle Industrial Waist Cincher",
-    "category": "Corsets",
-    "price": 3600,
-    "tag": "ARCHIVE 1-OF-1",
+    "id": "featured-in0002",
+    "sku": "IN0002",
+    "name": "Keyboard bra",
+    "title": "Keyboard bra",
+    "category": "Bralettes",
+    "price": 2500,
+    "tag": "BEST SELLER",
+    "stock": 100,
+    "materials": [
+      "Upcycled Mechanical Keycaps",
+      "Structured Bra Cups",
+      "Industrial Hardware"
+    ],
+    "image": "/assets/collection/bralettes/bralettes_33.webp",
+    "images": [
+      "/assets/collection/bralettes/bralettes_33.webp",
+      "/assets/collection/bralettes/bralettes_03.webp",
+      "/assets/collection/bralettes/bralettes_04.webp",
+      "/assets/collection/bralettes/bralettes_05.webp"
+    ],
+    "imgUrl": "/assets/collection/bralettes/bralettes_33.webp",
+    "alt": "Keyboard bra",
+    "description": "Bra w keyboard studded — deconstructed mechanical keyboard keycaps individually set across structured bust cups. Tactile maximalism and wearable sculpture.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0003",
+    "sku": "IN0003",
+    "name": "Jersey co ord",
+    "title": "Jersey co ord",
+    "category": "Co-ord sets",
+    "price": 3500,
+    "tag": "KEY PIECE",
     "stock": 1,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Upcycled Sports Jersey",
+      "Heavy Front Zipper",
+      "Pleated Mesh Hem"
     ],
-    "image": "/assets/featured/featured_35.webp",
+    "image": "/assets/collection/co_ords/co_ords_07.webp",
     "images": [
-      "/assets/featured/featured_35.webp"
+      "/assets/collection/co_ords/co_ords_07.webp",
+      "/assets/collection/co_ords/co_ords_01.webp",
+      "/assets/collection/co_ords/co_ords_08.webp",
+      "/assets/collection/co_ords/co_ords_09.webp",
+      "/assets/collection/co_ords/co_ords_19.webp",
+      "/assets/collection/co_ords/co_ords_23.webp",
+      "/assets/collection/co_ords/co_ords_25.webp"
     ],
-    "imgUrl": "/assets/featured/featured_35.webp",
-    "alt": "Multi-Buckle Industrial Waist Cincher",
-    "description": "Multi-Buckle Industrial Waist Cincher — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/co_ords/co_ords_07.webp",
+    "alt": "Jersey co ord",
+    "description": "Jersey upcycled corset & skirt — reconstructed sports jersey tailored into a boned corset bodice with heavy front industrial zipper and matching pleated skirt.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1618,98 +1350,39 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
   },
   {
-    "id": "featured-38",
-    "sku": "AVZ-FT-038",
-    "name": "Deconstructed Cyber Denim Flares (Archival)",
-    "title": "Deconstructed Cyber Denim Flares (Archival)",
-    "category": "Pants",
-    "price": 4900,
-    "tag": "ARCHIVE 1-OF-1",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_38.webp",
-    "images": [
-      "/assets/featured/featured_38.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_38.webp",
-    "alt": "Deconstructed Cyber Denim Flares (Archival)",
-    "description": "Deconstructed Cyber Denim Flares (Archival) — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-41",
-    "sku": "AVZ-FT-041",
-    "name": "Sculpted Silver Wire Tendril Bustier",
-    "title": "Sculpted Silver Wire Tendril Bustier",
-    "category": "Corsets",
-    "price": 4700,
-    "tag": "ARCHIVE 1-OF-1",
-    "stock": 1,
-    "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
-    ],
-    "image": "/assets/featured/featured_41.webp",
-    "images": [
-      "/assets/featured/featured_41.webp"
-    ],
-    "imgUrl": "/assets/featured/featured_41.webp",
-    "alt": "Sculpted Silver Wire Tendril Bustier",
-    "description": "Sculpted Silver Wire Tendril Bustier — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
-    "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
-      "AVZ Vaganza authenticity certificate included"
-    ],
-    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
-    "sizes": [
-      "Free Size"
-    ],
-    "inMuseum": false,
-    "featured": true
-  },
-  {
-    "id": "featured-47",
-    "sku": "AVZ-FT-046",
-    "name": "Barbed Wire Chainmail Spine Drape",
-    "title": "Barbed Wire Chainmail Spine Drape",
+    "id": "featured-in0006",
+    "sku": "IN0006",
+    "name": "Spike beaded bralette body chainmail",
+    "title": "Spike beaded bralette body chainmail",
     "category": "Body chainmail",
-    "price": 5400,
-    "tag": "ARCHIVE 1-OF-1",
-    "stock": 1,
+    "price": 1800,
+    "tag": "KEY PIECE",
+    "stock": 5,
     "materials": [
-      "Upcycled Hardware",
-      "Reclaimed Metals",
-      "Artisanal Studio Elements"
+      "Hand-Strung Seed Beads",
+      "Metallic Cone Spikes",
+      "Stainless Steel Chainmail Links"
     ],
-    "image": "/assets/featured/featured_47.webp",
+    "image": "/assets/collection/body_chainmail/body_chainmail_13.webp",
     "images": [
-      "/assets/featured/featured_47.webp"
+      "/assets/collection/body_chainmail/body_chainmail_13.webp",
+      "/assets/collection/body_chainmail/body_chainmail_01.webp",
+      "/assets/collection/body_chainmail/body_chainmail_03.webp",
+      "/assets/collection/body_chainmail/body_chainmail_07.webp",
+      "/assets/collection/body_chainmail/body_chainmail_08.webp",
+      "/assets/collection/body_chainmail/body_chainmail_09.webp",
+      "/assets/collection/body_chainmail/body_chainmail_10.webp"
     ],
-    "imgUrl": "/assets/featured/featured_47.webp",
-    "alt": "Barbed Wire Chainmail Spine Drape",
-    "description": "Barbed Wire Chainmail Spine Drape — authentic wearable art creation handcrafted by Dhrisni in our Studio. Built from raw hardware and reclaimed elements.",
+    "imgUrl": "/assets/collection/body_chainmail/body_chainmail_13.webp",
+    "alt": "Spike beaded bralette body chainmail",
+    "description": "Beaded bralette w spikes and punk theme — intricate bib collar of cascading hand-beaded loops, stainless steel chain links, and metallic spikes.",
     "details": [
-      "Handcrafted by Dhrisni in our Studio",
-      "Authentic upcycled hardware and custom metalwork",
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
       "AVZ Vaganza authenticity certificate included"
     ],
     "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
@@ -1717,7 +1390,551 @@ export const FEATURED_PIECES = [
       "Free Size"
     ],
     "inMuseum": false,
-    "featured": true
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0009",
+    "sku": "IN0009",
+    "name": "Purple jibaro cross top",
+    "title": "Purple jibaro cross top",
+    "category": "Tops",
+    "price": 1500,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Lustrous Purple Silk/Satin",
+      "Gold Threadwork & Filigree",
+      "Blood-Red Gems & Safety Pins"
+    ],
+    "image": "/assets/collection/tops/tops_20.webp",
+    "images": [
+      "/assets/collection/tops/tops_20.webp",
+      "/assets/collection/tops/tops_07.webp",
+      "/assets/collection/tops/tops_19.webp",
+      "/assets/collection/tops/tops_26.webp",
+      "/assets/collection/tops/tops_27.webp",
+      "/assets/collection/tops/tops_34.webp",
+      "/assets/collection/bralettes/bralettes_20.webp"
+    ],
+    "imgUrl": "/assets/collection/tops/tops_20.webp",
+    "alt": "Purple jibaro cross top",
+    "description": "Cross top halter purple with gold and red embellishment — halter neck cross-silhouette top in rich purple fabric lavishly embellished with metallic filigree, hanging charms, and safety-pin hardware.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0010",
+    "sku": "IN0010",
+    "name": "Chainmail bra",
+    "title": "Chainmail bra",
+    "category": "Bralettes",
+    "price": 1800,
+    "tag": "KEY PIECE",
+    "stock": 50,
+    "materials": [
+      "Hand-Linked Stainless Steel Rings",
+      "Reinforced Neck & Back Chains",
+      "Lobster Clasps"
+    ],
+    "image": "/assets/collection/body_chainmail/body_chainmail_14.webp",
+    "images": [
+      "/assets/collection/body_chainmail/body_chainmail_14.webp"
+    ],
+    "imgUrl": "/assets/collection/body_chainmail/body_chainmail_14.webp",
+    "alt": "Chainmail bra",
+    "description": "Bra made out of chain links — fluid metallic armor constructed entirely from hand-interlinked stainless steel rings. Ergonomic contouring and adjustable chain ties.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0011",
+    "sku": "IN0011",
+    "name": "Purple pink beaded bralette",
+    "title": "Purple pink beaded bralette",
+    "category": "Bralettes",
+    "price": 1500,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Hand-Strung Glass & Acrylic Beads",
+      "Multi-Strand Bib Cascade",
+      "Adjustable Hardware"
+    ],
+    "image": "/assets/collection/bralettes/bralettes_08.webp",
+    "images": [
+      "/assets/collection/bralettes/bralettes_08.webp",
+      "/assets/collection/bralettes/bralettes_01.webp",
+      "/assets/collection/bralettes/bralettes_06.webp",
+      "/assets/collection/bralettes/bralettes_07.webp",
+      "/assets/collection/bralettes/bralettes_09.webp",
+      "/assets/collection/bralettes/bralettes_10.webp"
+    ],
+    "imgUrl": "/assets/collection/bralettes/bralettes_08.webp",
+    "alt": "Purple pink beaded bralette",
+    "description": "Bralette/ bodychain made with pink and purple beads — multi-layered wearable jewelry draped across the bust with thousands of hand-strung beads in violet and magenta.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0013",
+    "sku": "IN0013",
+    "name": "Denim upcycled headgear",
+    "title": "Denim upcycled headgear",
+    "category": "Headgear",
+    "price": 1700,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Deconstructed Reclaimed Denim",
+      "Handcrafted Plastic Bottle Flowers",
+      "Vintage Ribbons & Lace"
+    ],
+    "image": "/assets/collection/headgears/headgears_03.webp",
+    "images": [
+      "/assets/collection/headgears/headgears_03.webp",
+      "/assets/collection/headgears/headgears_01.webp",
+      "/assets/collection/headgears/headgears_02.webp",
+      "/assets/collection/headgears/headgears_04.webp",
+      "/assets/collection/headgears/headgears_05.webp",
+      "/assets/collection/headgears/headgears_06.webp",
+      "/assets/collection/headgears/headgears_07.webp"
+    ],
+    "imgUrl": "/assets/collection/headgears/headgears_03.webp",
+    "alt": "Denim upcycled headgear",
+    "description": "Denim headgear with green plastic bottle flowers and ribbons and laces vaganza — avant-garde sculptural headpiece and mask sculpted from frayed denim seams, heat-formed plastic bottle flowers, and draping ribbons.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0014",
+    "sku": "IN0014",
+    "name": "Jhumka jacket",
+    "title": "Jhumka jacket",
+    "category": "Jackets",
+    "price": 2600,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Lush Brown Faux Fur",
+      "Traditional Brass Jhumka Bells",
+      "Draped Hardware Chains"
+    ],
+    "image": "/assets/collection/jackets/jackets_04.webp",
+    "images": [
+      "/assets/collection/jackets/jackets_04.webp",
+      "/assets/collection/jackets/jackets_01.webp",
+      "/assets/collection/jackets/jackets_02.webp",
+      "/assets/collection/jackets/jackets_03.webp",
+      "/assets/collection/jackets/jackets_05.webp",
+      "/assets/collection/jackets/jackets_06.webp",
+      "/assets/collection/jackets/jackets_10.webp"
+    ],
+    "imgUrl": "/assets/collection/jackets/jackets_04.webp",
+    "alt": "Jhumka jacket",
+    "description": "Jacket fur brown jhumkhas — rich chocolate brown faux fur cropped jacket adorned with dozens of traditional Indian brass jhumkas and connecting chain swags.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0016",
+    "sku": "IN0016",
+    "name": "Cheetah print cavewoman set",
+    "title": "Cheetah print cavewoman set",
+    "category": "Co-ord sets",
+    "price": 1999,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Cheetah & Leopard Pattern Velour",
+      "Brown Fur Accents",
+      "Raw Asymmetric Hemline"
+    ],
+    "image": "/assets/collection/co_ords/co_ords_20.webp",
+    "images": [
+      "/assets/collection/co_ords/co_ords_20.webp",
+      "/assets/collection/co_ords/co_ords_10.webp",
+      "/assets/collection/co_ords/co_ords_14.webp",
+      "/assets/collection/co_ords/co_ords_24.webp",
+      "/assets/collection/co_ords/co_ords_35.webp",
+      "/assets/collection/co_ords/co_ords_36.webp",
+      "/assets/collection/co_ords/co_ords_38.webp"
+    ],
+    "imgUrl": "/assets/collection/co_ords/co_ords_20.webp",
+    "alt": "Cheetah print cavewoman set",
+    "description": "Cavewoman bra and leopard skirt — ferocious wild-animal print co-ord pairing an asymmetric ruched bralette with an uneven raw-hem leopard skirt.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0018",
+    "sku": "IN0018",
+    "name": "Flowery",
+    "title": "Flowery",
+    "category": "Tops",
+    "price": 1799,
+    "tag": "KEY PIECE",
+    "stock": 6,
+    "materials": [
+      "Hand-Crocheted Cotton Yarn",
+      "Multi-Colored 3D Floral Appliques",
+      "Lace-Up Back"
+    ],
+    "image": "/assets/collection/tops/tops_23.webp",
+    "images": [
+      "/assets/collection/tops/tops_23.webp",
+      "/assets/collection/tops/tops_06.webp",
+      "/assets/collection/tops/tops_33.webp"
+    ],
+    "imgUrl": "/assets/collection/tops/tops_23.webp",
+    "alt": "Flowery",
+    "description": "Crocheted top with flowers multi colored — hand-knit kaleidoscopic crop top blooming with vibrant three-dimensional crochet flowers over a supportive frame.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0019",
+    "sku": "IN0019",
+    "name": "Pearlite crochet top",
+    "title": "Pearlite crochet top",
+    "category": "Tops",
+    "price": 1500,
+    "tag": "KEY PIECE",
+    "stock": 12,
+    "materials": [
+      "Freshwater-Style White Pearls",
+      "Crocheted Metallic Thread Base",
+      "Satin Ties"
+    ],
+    "image": "/assets/collection/bralettes/bralettes_13.webp",
+    "images": [
+      "/assets/collection/bralettes/bralettes_13.webp",
+      "/assets/collection/bralettes/bralettes_11.webp",
+      "/assets/collection/bralettes/bralettes_12.webp",
+      "/assets/collection/bralettes/bralettes_14.webp",
+      "/assets/collection/bralettes/bralettes_15.webp",
+      "/assets/collection/bralettes/bralettes_16.webp",
+      "/assets/collection/bralettes/bralettes_17.webp"
+    ],
+    "imgUrl": "/assets/collection/bralettes/bralettes_13.webp",
+    "alt": "Pearlite crochet top",
+    "description": "White pearls crocheted on bikini top — ethereal halter bikini top hand-woven with hundreds of luminous white pearls crocheted into an organic mesh.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0020",
+    "sku": "IN0020",
+    "name": "Barbie set",
+    "title": "Barbie set",
+    "category": "Co-ord sets",
+    "price": 3500,
+    "tag": "KEY PIECE",
+    "stock": 12,
+    "materials": [
+      "Sculpted Pink Starfish Bra",
+      "Distressed Denim Mini with Pink Fur Trim",
+      "Plush Headgear"
+    ],
+    "image": "/assets/collection/co_ords/co_ords_26.webp",
+    "images": [
+      "/assets/collection/co_ords/co_ords_26.webp",
+      "/assets/collection/co_ords/co_ords_27.webp",
+      "/assets/collection/co_ords/co_ords_28.webp"
+    ],
+    "imgUrl": "/assets/collection/co_ords/co_ords_26.webp",
+    "alt": "Barbie set",
+    "description": "Pink starfish bra + Barbie short skirt + green & pink fluffy headgear — the quintessential maximalist trio: sculpted hot pink starfish bralette, frayed denim mini edged with neon pink faux fur, and fluffy headpiece.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0021",
+    "sku": "IN0021",
+    "name": "Spiral body chainmail top",
+    "title": "Spiral body chainmail top",
+    "category": "Body chainmail",
+    "price": 2500,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Architectural Spiral Coiled Wire",
+      "Hand-Linked Stainless Steel Chains",
+      "Draped Halter Harness"
+    ],
+    "image": "/assets/collection/body_chainmail/body_chainmail_22.webp",
+    "images": [
+      "/assets/collection/body_chainmail/body_chainmail_22.webp",
+      "/assets/collection/body_chainmail/body_chainmail_15.webp",
+      "/assets/collection/body_chainmail/body_chainmail_16.webp",
+      "/assets/collection/body_chainmail/body_chainmail_17.webp",
+      "/assets/collection/body_chainmail/body_chainmail_19.webp",
+      "/assets/collection/body_chainmail/body_chainmail_21.webp"
+    ],
+    "imgUrl": "/assets/collection/body_chainmail/body_chainmail_22.webp",
+    "alt": "Spiral body chainmail top",
+    "description": "Spiral wired  chained top in silver — concentric wire spirals coiled and woven with steel chains to create a sculptural breastplate that cascades down the torso.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0023",
+    "sku": "IN0023",
+    "name": "Spike grey blouse/bra",
+    "title": "Spike grey blouse/bra",
+    "category": "Tops",
+    "price": 2000,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Heavy Hand-Set Metallic Spikes",
+      "Tailored Saree Blouse Base",
+      "Silver Hardware Accents"
+    ],
+    "image": "/assets/collection/tops/tops_08.webp",
+    "images": [
+      "/assets/collection/tops/tops_08.webp",
+      "/assets/collection/tops/tops_02.webp",
+      "/assets/collection/tops/tops_04.webp",
+      "/assets/collection/tops/tops_31.webp",
+      "/assets/collection/tops/tops_32.webp",
+      "/assets/collection/tops/tops_44.webp",
+      "/assets/collection/tops/tops_45.webp",
+      "/assets/collection/tops/tops_48.webp",
+      "/assets/collection/tops/tops_50.webp"
+    ],
+    "imgUrl": "/assets/collection/tops/tops_08.webp",
+    "alt": "Spike grey blouse/bra",
+    "description": "Blouse with spikes — traditional Indian grey saree blouse transformed into high-impact wearable armor with hundreds of pointed cone spikes covering the bodice.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0024",
+    "sku": "IN0024",
+    "name": "Silver shoe corset and skirt set",
+    "title": "Silver shoe corset and skirt set",
+    "category": "Co-ord sets",
+    "price": 3500,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Deconstructed Silver Athletic Sneaker",
+      "Brown Faux Fur Trim",
+      "Matching Metallic Mini Skirt"
+    ],
+    "image": "/assets/collection/corsets/corsets_03.webp",
+    "images": [
+      "/assets/collection/corsets/corsets_03.webp",
+      "/assets/collection/corsets/corsets_01.webp",
+      "/assets/collection/corsets/corsets_02.webp",
+      "/assets/collection/corsets/corsets_04.webp",
+      "/assets/collection/corsets/corsets_05.webp",
+      "/assets/collection/corsets/corsets_06.webp",
+      "/assets/collection/corsets/corsets_07.webp",
+      "/assets/collection/co_ords/co_ords_32.webp",
+      "/assets/collection/co_ords/co_ords_39.webp",
+      "/assets/collection/co_ords/co_ords_40.webp"
+    ],
+    "imgUrl": "/assets/collection/corsets/corsets_03.webp",
+    "alt": "Silver shoe corset and skirt set",
+    "description": "Corset in silver color made out of shoe and brown fur and similar skirt for a set — avant-garde runway set where athletic sneakers were unstitched and re-formed into a boned corset trimmed with brown fur, paired with metallic mini skirt.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0025",
+    "sku": "IN0025",
+    "name": "Spike red top",
+    "title": "Spike red top",
+    "category": "Tops",
+    "price": 2200,
+    "tag": "KEY PIECE",
+    "stock": 2,
+    "materials": [
+      "Sculpted Red Heart Bustier",
+      "Hand-Mounted Metallic Spikes",
+      "Backless Strappy Tie Closure"
+    ],
+    "image": "/assets/collection/tops/tops_10.webp",
+    "images": [
+      "/assets/collection/tops/tops_10.webp",
+      "/assets/collection/tops/tops_01.webp",
+      "/assets/collection/tops/tops_15.webp",
+      "/assets/collection/tops/tops_28.webp",
+      "/assets/collection/tops/tops_47.webp"
+    ],
+    "imgUrl": "/assets/collection/tops/tops_10.webp",
+    "alt": "Spike red top",
+    "description": "Red heart top with spikes backless — sculpted crimson heart-shaped halter crop top studded with gleaming spikes with an open criss-cross strappy back.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
+  },
+  {
+    "id": "featured-in0026",
+    "sku": "IN0026",
+    "name": "Check mini red skirt",
+    "title": "Check mini red skirt",
+    "category": "Skirts",
+    "price": 1800,
+    "tag": "KEY PIECE",
+    "stock": 1,
+    "materials": [
+      "Red Gingham Check Cotton",
+      "Overlaid Black Fishnet",
+      "Rose & Ribbon Waist Hardware"
+    ],
+    "image": "/assets/collection/skirts/skirts_03.webp",
+    "images": [
+      "/assets/collection/skirts/skirts_03.webp",
+      "/assets/collection/skirts/skirts_01.webp",
+      "/assets/collection/skirts/skirts_02.webp"
+    ],
+    "imgUrl": "/assets/collection/skirts/skirts_03.webp",
+    "alt": "Check mini red skirt",
+    "description": "Red skirt w checks and fishnet mini size — pleated red and white gingham mini skirt overlaid with deconstructed black fishnet mesh, red rose rosette, and ribbon tails.",
+    "details": [
+      "100% Handcrafted by Dhrisni in our Studio",
+      "Authentic upcycled hardware and custom wearable art",
+      "AVZ Vaganza authenticity certificate included"
+    ],
+    "care": "Handle with care. Spot clean with dry cloth. Store in AVZ dust bag.",
+    "sizes": [
+      "Free Size"
+    ],
+    "inMuseum": false,
+    "featured": true,
+    "customMade": false
   }
 ];
 
