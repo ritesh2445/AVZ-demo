@@ -122,14 +122,24 @@ export default function MediaAndSectionManager({
   // Synchronize when catalogProducts prop changes (e.g. when product is added in Products tab)
   useEffect(() => {
     if (Array.isArray(catalogProducts) && catalogProducts.length > 0) {
-      setCollectionProducts(catalogProducts);
+      const dedupe = (list: any[]) => {
+        const seen = new Set<string>();
+        return list.filter((p: any) => {
+          const key = (p.sku || p.id || p.title || p.name || '').toLowerCase().trim();
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      };
+
+      setCollectionProducts(dedupe(catalogProducts));
       const vault = catalogProducts.filter((p: any) => p.is_featured || p.category === 'Vault' || (p.tag && p.tag.includes('VAULT')));
-      if (vault.length > 0) setVaultPieces(vault);
+      if (vault.length > 0) setVaultPieces(dedupe(vault));
       const keys = catalogProducts.filter((p: any) => (p.tag && p.tag.includes('KEY')) || p.custom_made);
-      if (keys.length > 0) setKeyPiecesList(keys);
+      if (keys.length > 0) setKeyPiecesList(dedupe(keys));
 
       setLookbookEntriesList((prev) => {
-        return prev.map((entry) => {
+        const mapped = prev.map((entry) => {
           const skuMatch = entry.sku || entry.code?.match(/IN\d{4}/)?.[0];
           const matchedProd = catalogProducts.find(
             (p: any) => (skuMatch && p.sku === skuMatch) ||
@@ -149,6 +159,7 @@ export default function MediaAndSectionManager({
           }
           return entry;
         });
+        return dedupe(mapped);
       });
     }
   }, [catalogProducts]);

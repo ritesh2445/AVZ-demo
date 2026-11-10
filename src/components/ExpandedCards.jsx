@@ -71,19 +71,28 @@ function ExpandedCards({ items = [], onSelectProduct, currency = 'INR' }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const mobileTrackRef = useRef(null);
 
-  // Merge incoming catalog items with vault archive specimens
+  // Merge incoming catalog items with vault archive specimens with strict deduplication
   const cards = useMemo(() => {
-    if (items && items.length > 0) {
-      return items.map((p, idx) => ({
-        imgUrl: p.imgUrl || p.image || p.images?.[0] || DEFAULT_VAULT_CARDS[idx % DEFAULT_VAULT_CARDS.length].imgUrl,
-        alt: p.alt || p.title || p.name || `Vault Specimen ${idx + 1}`,
-        title: p.title || p.name || `Vault Specimen ${idx + 1}`,
-        category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'BEST SELLER'}` : (p.stock === 0 ? 'SOLD OUT · ARCHIVE' : 'BEST SELLER'),
-        price: p.price,
-        data: p
-      }));
-    }
-    return DEFAULT_VAULT_CARDS;
+    const rawList = (items && items.length > 0) ? items : DEFAULT_VAULT_CARDS;
+    const seen = new Set();
+    const uniqueItems = [];
+
+    rawList.forEach((p, idx) => {
+      const key = (p.sku || p.id || p.title || p.name || `specimen-${idx}`).toLowerCase().trim();
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueItems.push(p);
+      }
+    });
+
+    return uniqueItems.map((p, idx) => ({
+      imgUrl: p.imgUrl || p.image || p.images?.[0] || DEFAULT_VAULT_CARDS[idx % DEFAULT_VAULT_CARDS.length].imgUrl,
+      alt: p.alt || p.title || p.name || `Vault Specimen ${idx + 1}`,
+      title: p.title || p.name || `Vault Specimen ${idx + 1}`,
+      category: p.category ? `${p.category.toUpperCase()} · ${p.tag || 'BEST SELLER'}` : (p.stock === 0 ? 'SOLD OUT · ARCHIVE' : 'BEST SELLER'),
+      price: p.price,
+      data: p
+    }));
   }, [items]);
 
   const handleCardClick = (card, index) => {

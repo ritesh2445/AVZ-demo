@@ -40,12 +40,19 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   // Derive Vault Pieces directly from live catalog products to perfectly match Admin Media Vault section
   const vaultPieces = useMemo(() => {
     const fromDb = catalogProducts.filter((p) => p.is_featured || p.featured || p.category === 'Vault' || (p.tag && String(p.tag).toUpperCase().includes('VAULT')));
-    return fromDb.length > 0 ? fromDb : FEATURED_PIECES;
+    const raw = fromDb.length > 0 ? fromDb : FEATURED_PIECES;
+    const seen = new Set();
+    return raw.filter((p) => {
+      const key = (p.sku || p.id || p.title || p.name || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }, [catalogProducts]);
 
   // Derive Lookbook Entries dynamically synchronized with live catalog products
   const lookbookEntries = useMemo(() => {
-    return LOOKBOOK_ENTRIES.map((entry) => {
+    const mapped = LOOKBOOK_ENTRIES.map((entry) => {
       const sku = entry.sku || entry.code?.match(/IN\d{4}/)?.[0];
       const liveProd = catalogProducts.find(
         (p) => (sku && p.sku === sku) ||
@@ -67,6 +74,15 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         };
       }
       return entry;
+    });
+
+    // Enforce strict uniqueness: no duplicate product in Lookbook
+    const seen = new Set();
+    return mapped.filter((e) => {
+      const key = (e.sku || e.title || e.id || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
     });
   }, [catalogProducts]);
 

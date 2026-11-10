@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -211,6 +211,17 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
     setArtworks((prev) => prev.filter((a) => a.id !== deletedId));
   };
 
+  // Ensure 100% unique artworks inside The Archive Gallery (no double entry of any piece)
+  const uniqueArtworks = useMemo(() => {
+    const seen = new Set();
+    return (artworks || []).filter((a) => {
+      const key = (a.title || a.id || a.primary_image || a.image_url || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [artworks]);
+
   return (
     <section
       id="museum"
@@ -296,9 +307,9 @@ export default function AvzMuseum({ onRequestCustomCommission, theme = 'dark', c
             let i = 0;
             let globalIdx = 0;
 
-            while (i < artworks.length) {
-              const current = artworks[i];
-              const next = artworks[i + 1];
+            while (i < uniqueArtworks.length) {
+              const current = uniqueArtworks[i];
+              const next = uniqueArtworks[i + 1];
 
               const currentPos = current.metadata?.wall_position;
               const nextPos = next?.metadata?.wall_position;

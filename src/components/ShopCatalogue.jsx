@@ -728,9 +728,9 @@ function ShopCatalogue({
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filtering and sorting logic
+  // Filtering and sorting logic with strict deduplication
   const filteredProducts = useMemo(() => {
-    return activeProducts.filter((item) => {
+    const list = activeProducts.filter((item) => {
       const matchesCategory =
         selectedCategory === 'All' ||
         item.category.toLowerCase() === selectedCategory.toLowerCase();
@@ -752,13 +752,30 @@ function ShopCatalogue({
       if (sortBy === 'featured') return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
       return 0;
     });
+
+    const seen = new Set();
+    return list.filter((p) => {
+      const key = (p.sku || p.id || p.name || p.title || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }, [activeProducts, selectedCategory, selectedMaterial, sortBy, searchQuery]);
 
-  // Curated Best-sellers for Key Archive Pieces Carousel (matches Admin Media & Photo Key Pieces)
+  // Curated Best-sellers for Key Archive Pieces Carousel with strict deduplication
   const bestsellers = useMemo(() => {
     const keyPieces = activeProducts.filter((p) => (p.tag && String(p.tag).toUpperCase().includes('KEY')) || p.custom_made || p.customMade);
     const pool = keyPieces.length > 0 ? keyPieces : (activeProducts.filter((p) => p.featured || p.is_featured).length >= 4 ? activeProducts.filter((p) => p.featured || p.is_featured) : activeProducts.slice(0, 8));
-    return pool.slice(0, 12).map((prod, idx) => ({
+
+    const seen = new Set();
+    const uniquePool = pool.filter((p) => {
+      const key = (p.sku || p.id || p.name || p.title || '').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    return uniquePool.slice(0, 12).map((prod, idx) => ({
       ...prod,
       rank: `EDITION ${String(idx + 1).padStart(2, '0')}`,
       badge: prod.tag || (prod.stock === 0 ? 'SOLD OUT' : prod.stock === 1 ? '1 OF 1 ARCHIVE' : 'STUDIO PIECE'),
@@ -766,32 +783,42 @@ function ShopCatalogue({
     }));
   }, [activeProducts]);
 
-  // Sections for Mobile View Carousels
+  // Sections for Mobile View Carousels with strict deduplication
   const mobileSections = useMemo(() => {
+    const dedupe = (items) => {
+      const seen = new Set();
+      return items.filter((p) => {
+        const key = (p.sku || p.id || p.name || p.title || '').toLowerCase().trim();
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+
     return [
       {
         id: 'corsets-tops',
         title: 'CORSETRY & SCULPTURAL BODICES',
         badge: '01 • SIGNATURE',
-        items: activeProducts.filter((p) => ['corsets', 'bralettes', 'tops'].includes(p.category.toLowerCase()))
+        items: dedupe(activeProducts.filter((p) => ['corsets', 'bralettes', 'tops'].includes(p.category.toLowerCase())))
       },
       {
         id: 'outerwear-jackets',
         title: 'ARMOR & REWORKED JACKETS',
         badge: '02 • HEAVY ART',
-        items: activeProducts.filter((p) => ['jackets'].includes(p.category.toLowerCase()))
+        items: dedupe(activeProducts.filter((p) => ['jackets'].includes(p.category.toLowerCase())))
       },
       {
         id: 'jewelry-hardware',
         title: 'HARDWARE JEWELRY & RECLAIMED ACCENTS',
         badge: '03 • ARTIFACTS',
-        items: activeProducts.filter((p) => ['earrings', 'neckpieces', 'arm cuffs', 'belts', 'body chainmail'].includes(p.category.toLowerCase()))
+        items: dedupe(activeProducts.filter((p) => ['earrings', 'neckpieces', 'arm cuffs', 'belts', 'body chainmail'].includes(p.category.toLowerCase())))
       },
       {
         id: 'lower-sets',
         title: 'RUNWAY SILHOUETTES & CO-ORD SETS',
         badge: '04 • STRUCTURE',
-        items: activeProducts.filter((p) => ['pants', 'skirts', 'co-ord sets', 'bags'].includes(p.category.toLowerCase()))
+        items: dedupe(activeProducts.filter((p) => ['pants', 'skirts', 'co-ord sets', 'bags'].includes(p.category.toLowerCase())))
       }
     ].filter((sec) => sec.items.length > 0);
   }, [activeProducts]);
