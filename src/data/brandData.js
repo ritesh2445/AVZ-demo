@@ -2031,21 +2031,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-06",
-    "code": "LOOK 006 • IN0015 • BLACK CAT CO ORD SET",
-    "sku": "IN0015",
-    "title": "Black Cat Co ord Set",
-    "subtitle": "Silver Corset & Black Fur Skirt",
-    "image": "/assets/lookbook/lookbook_11.webp",
+    "code": "LOOK 006 • IN0001 • SPIKERIA BRA",
+    "sku": "IN0001",
+    "title": "Spikeria bra",
+    "subtitle": "Full Spiked Armor Bralette",
+    "image": "/assets/collection/bralettes/bralettes_30.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_12.webp"
+      "/assets/collection/bralettes/bralettes_29.webp"
     ],
     "aspect": "portrait",
-    "caption": "Runway statement ensemble pairing a molded silver structural corset bodice with deep black textured fur.",
-    "story": "Silver corset and black fur skirt. Runway statement ensemble pairing a molded silver structural corset bodice with deep black textured fur.",
-    "materials": "Silver metallic reclaimed hardware, reinforced corset boning, deconstructed plush black faux fur",
-    "vibe": "Dark Runway Elegance",
-    "category": "Co-ord sets",
-    "price": 2200
+    "caption": "The iconic studio spikeria bra studded with sharp metallic alloy spikes in full armor construction.",
+    "story": "Bra with spikes studded — individually hand-set metallic cone spikes over a structured bra base. Raw metallic rebellion and punk cyber-couture.",
+    "materials": "Hand-Set Metallic Spikes, Reinforced Bra Base, Upcycled Hardware",
+    "vibe": "Cyberpunk Armor",
+    "category": "Bralettes",
+    "price": 1999
   },
   {
     "id": "look-07",
@@ -2103,21 +2103,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-10",
-    "code": "LOOK 010 • IN0009 • PURPLE JIBARO CROSS TOP",
-    "sku": "IN0009",
-    "title": "Purple jibaro cross top",
-    "subtitle": "Cross Top Halter Purple with Gold & Red Embellishment (Detail)",
-    "image": "/assets/lookbook/lookbook_19.webp",
+    "code": "LOOK 010 • IN0002 • KEYBOARD BRA",
+    "sku": "IN0002",
+    "title": "Keyboard bra",
+    "subtitle": "Tactile Upcycled Computer Keyboard Bralette",
+    "image": "/assets/collection/bralettes/bralettes_33.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_20.webp"
+      "/assets/collection/bralettes/bralettes_32.webp"
     ],
     "aspect": "portrait",
-    "caption": "Studio close-up highlighting the hand-applied gold braids and ruby accents on royal purple canvas.",
-    "story": "Cross top halter purple with gold and red embellishment. Studio close-up highlighting the hand-applied gold braids and ruby accents.",
-    "materials": "Heavyweight purple fabric, metallic gold braids, red cabochon beads, lace-up spine straps",
-    "vibe": "Regal Avant-Garde",
-    "category": "Tops",
-    "price": 1500
+    "caption": "Avant-garde wearable sculpture hand-set with hundreds of authentic computer keyboard keys.",
+    "story": "Bra w keyboard studded — deconstructed mechanical keyboard keycaps individually set across structured bust cups. Tactile maximalism and wearable sculpture.",
+    "materials": "Upcycled Mechanical Keycaps, Structured Bra Cups, Industrial Hardware",
+    "vibe": "Tactile Art",
+    "category": "Bralettes",
+    "price": 2500
   },
   {
     "id": "look-11",
@@ -2139,21 +2139,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-12",
-    "code": "LOOK 012 • IN0015 • BLACK CAT CO ORD SET",
-    "sku": "IN0015",
-    "title": "Black Cat Co ord Set",
-    "subtitle": "Silver Corset & Black Fur Skirt (Full Silhouette)",
-    "image": "/assets/lookbook/lookbook_23.webp",
+    "code": "LOOK 012 • IN0020 • BARBIE SET",
+    "sku": "IN0020",
+    "title": "Barbie set",
+    "subtitle": "Pink Starfish Bra + Barbie Mini Skirt + Fluffy Headgear",
+    "image": "/assets/collection/co_ords/co_ords_26.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_24.webp"
+      "/assets/collection/co_ords/co_ords_27.webp"
     ],
     "aspect": "portrait",
-    "caption": "The full runway silhouette captured on model, balancing industrial silver boning against deep plush textures.",
-    "story": "Silver corset and black fur skirt. The full runway silhouette captured on model, balancing industrial silver boning against deep plush textures.",
-    "materials": "Silver metallic finish, flexible spiral steel bones, midnight black faux fur, rear eyelet lacing",
-    "vibe": "Dark Runway Elegance",
+    "caption": "Quintessential maximalist runway ensemble combining hot pink sculpted starfish with faux fur trim.",
+    "story": "Pink starfish bra + Barbie short skirt + green & pink fluffy headgear — the quintessential maximalist trio: sculpted hot pink starfish bralette, frayed denim mini edged with neon pink faux fur, and fluffy headpiece.",
+    "materials": "Sculpted Pink Starfish Bra, Distressed Denim Mini with Pink Fur Trim, Plush Headgear",
+    "vibe": "Maximalist Glam",
     "category": "Co-ord sets",
-    "price": 2200
+    "price": 3500
   },
   {
     "id": "look-13",
@@ -2229,21 +2229,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-17",
-    "code": "LOOK 017 • IN0007 • PSYCHEDELIC BROWN DENIM BAG",
-    "sku": "IN0007",
-    "title": "Psychedelic brown denim bag",
-    "subtitle": "Bag with Acid Paint Denim Jeans Upcycled",
-    "image": "/assets/lookbook/lookbook_33.webp",
+    "code": "LOOK 017 • IN0024 • SILVER SHOE CORSET AND SKIRT SET",
+    "sku": "IN0024",
+    "title": "Silver shoe corset and skirt set",
+    "subtitle": "Avant-Garde Sneaker-Formed Corset with Fur & Metallic Skirt",
+    "image": "/assets/collection/corsets/corsets_03.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_34.webp"
+      "/assets/collection/corsets/corsets_01.webp"
     ],
-    "aspect": "square",
-    "caption": "On-model capture featuring the one-of-one acid dye washed denim bag with brass chains and denim floral accents.",
-    "story": "Bag with acid paint denim jeans upcycled. Handcrafted shoulder bag repurposed from denim jeans with custom acid dye bleach swirl wash and vintage chain swags.",
-    "materials": "Upcycled acid-wash denim jeans, repurposed vintage brooches, chunky brass link chains, dual handle straps",
-    "vibe": "Wearable Archive Accessory",
-    "category": "Bags",
-    "price": 999
+    "aspect": "portrait",
+    "caption": "Deconstructed athletic shoes unstitched and re-formed into a boned corset trimmed with brown fur and paired skirt.",
+    "story": "Corset in silver color made out of shoe and brown fur and similar skirt for a set — avant-garde runway set where athletic sneakers were unstitched and re-formed into a boned corset trimmed with brown fur, paired with metallic mini skirt.",
+    "materials": "Deconstructed Silver Athletic Sneaker, Brown Faux Fur Trim, Matching Metallic Mini Skirt",
+    "vibe": "Deconstructed Runway",
+    "category": "Co-ord sets",
+    "price": 3500
   },
   {
     "id": "look-18",
@@ -2301,21 +2301,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-21",
-    "code": "LOOK 021 • IN0009 • PURPLE JIBARO CROSS TOP",
-    "sku": "IN0009",
-    "title": "Purple jibaro cross top",
-    "subtitle": "Cross Top Halter Purple with Gold & Red Embellishment (Runway Cut)",
-    "image": "/assets/lookbook/lookbook_41.webp",
+    "code": "LOOK 021 • IN0017 • SILVER JESUS CROSS CHARM TOP",
+    "sku": "IN0017",
+    "title": "Silver Jesus cross charm top",
+    "subtitle": "Grey Top with Silver Jesus Cross Charms",
+    "image": "/assets/collection/tops/tops_38.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_42.webp"
+      "/assets/collection/tops/tops_39.webp"
     ],
     "aspect": "portrait",
-    "caption": "Asymmetrical cross halter bodice showcasing ornate metallic galloon trims and deep purple draping.",
-    "story": "Cross top halter purple with gold and red embellishment. Asymmetrical cross halter bodice showcasing ornate metallic galloon trims and deep purple draping.",
-    "materials": "Structured royal purple weave, gold filigree trim, ruby glass drops, halter tie cords",
-    "vibe": "Regal Avant-Garde",
+    "caption": "Deconstructed grey crop top draped with vintage silver crucifix pendants and metallic chains.",
+    "story": "Cross shape halter top with black butterfly choker and silver elements — architectural cross-formed metallic top connected with chains and accompanied by a signature butterfly choker.",
+    "materials": "Silver Metallic Cross Halter, Black Butterfly Choker, Draped Silver Tone Chains",
+    "vibe": "Gothic Charm",
     "category": "Tops",
-    "price": 1500
+    "price": 999
   },
   {
     "id": "look-22",
@@ -2337,21 +2337,21 @@ export const LOOKBOOK_ENTRIES = [
   },
   {
     "id": "look-23",
-    "code": "LOOK 023 • IN0015 • BLACK CAT CO ORD SET",
-    "sku": "IN0015",
-    "title": "Black Cat Co ord Set",
-    "subtitle": "Silver Corset & Black Fur Skirt (Movement Study)",
-    "image": "/assets/lookbook/lookbook_45.webp",
+    "code": "LOOK 023 • IN0018 • FLOWERY",
+    "sku": "IN0018",
+    "title": "Flowery",
+    "subtitle": "Handcrafted 3D Floral Crop Bodice",
+    "image": "/assets/collection/tops/tops_23.webp",
     "altImages": [
-      "/assets/lookbook/lookbook_46.webp"
+      "/assets/collection/tops/tops_36.webp"
     ],
     "aspect": "portrait",
-    "caption": "Close crop focusing on the tactile contrast between cold metallic eyelets and tactile fur in low-key studio lighting.",
-    "story": "Silver corset and black fur skirt. Close crop focusing on the tactile contrast between cold metallic eyelets and tactile fur in low-key studio lighting.",
-    "materials": "Reclaimed silver hardware, boned corset armature, plush black fur",
-    "vibe": "Dark Glamour",
-    "category": "Co-ord sets",
-    "price": 2200
+    "caption": "Textural avant-garde top blooming with three-dimensional handcrafted fabric florals and lace rosettes.",
+    "story": "Crocheted top with flowers multi colored — hand-knit kaleidoscopic crop top blooming with vibrant three-dimensional crochet flowers over a supportive frame.",
+    "materials": "Hand-Crocheted Cotton Yarn, Multi-Colored 3D Floral Appliques, Lace-Up Back",
+    "vibe": "Sculptural Floral",
+    "category": "Tops",
+    "price": 1799
   },
   {
     "id": "look-24",
