@@ -754,15 +754,14 @@ function ShopCatalogue({
     });
   }, [activeProducts, selectedCategory, selectedMaterial, sortBy, searchQuery]);
 
-  // Curated Best-sellers for Key Archive Pieces Carousel
+  // Curated Best-sellers for Key Archive Pieces Carousel (matches Admin Media & Photo Key Pieces)
   const bestsellers = useMemo(() => {
-    // Curated or featured active products directly from live database
-    const featured = activeProducts.filter((p) => p.featured || p.is_featured);
-    const pool = featured.length >= 4 ? featured : activeProducts;
-    return pool.slice(0, 8).map((prod, idx) => ({
+    const keyPieces = activeProducts.filter((p) => (p.tag && String(p.tag).toUpperCase().includes('KEY')) || p.custom_made || p.customMade);
+    const pool = keyPieces.length > 0 ? keyPieces : (activeProducts.filter((p) => p.featured || p.is_featured).length >= 4 ? activeProducts.filter((p) => p.featured || p.is_featured) : activeProducts.slice(0, 8));
+    return pool.slice(0, 12).map((prod, idx) => ({
       ...prod,
       rank: `EDITION ${String(idx + 1).padStart(2, '0')}`,
-      badge: prod.stock === 0 ? 'SOLD OUT' : prod.stock === 1 ? '1 OF 1 ARCHIVE' : 'STUDIO PIECE',
+      badge: prod.tag || (prod.stock === 0 ? 'SOLD OUT' : prod.stock === 1 ? '1 OF 1 ARCHIVE' : 'STUDIO PIECE'),
       socialTag: (prod.category || 'AVZ STUDIO').toUpperCase()
     }));
   }, [activeProducts]);

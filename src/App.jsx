@@ -37,6 +37,12 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
   // Live catalog products from database with fallback to brand data
   const catalogProducts = Array.isArray(liveProducts) && liveProducts.length > 0 ? liveProducts : PRODUCTS;
 
+  // Derive Vault Pieces directly from live catalog products to perfectly match Admin Media Vault section
+  const vaultPieces = useMemo(() => {
+    const fromDb = catalogProducts.filter((p) => p.is_featured || p.featured || p.category === 'Vault' || (p.tag && String(p.tag).toUpperCase().includes('VAULT')));
+    return fromDb.length > 0 ? fromDb : FEATURED_PIECES;
+  }, [catalogProducts]);
+
   // 1. Loading sequence state: Only show on initial visit per session for instant navigation
   const [isLoading, setIsLoading] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -751,7 +757,7 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         {/* Section 2: Vault Piece Rail */}
         <section id="vault" className="w-full">
           <ExpandedCards
-            items={FEATURED_PIECES}
+            items={vaultPieces}
             onSelectProduct={setActiveProduct}
             currency={currency}
           />

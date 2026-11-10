@@ -101,6 +101,23 @@ export async function GET(request: Request) {
 
     const res = await db.execute({ sql, args });
 
+    // Build authoritative product catalog lookup so CSV uses real product names from the boutique catalog
+    const prodCatalogRes = await db.execute('SELECT id, sku, title FROM products');
+    const catalogBySku = new Map<string, string>();
+    const catalogById = new Map<string, string>();
+    for (const p of prodCatalogRes.rows) {
+      if (p.sku) catalogBySku.set(String(p.sku).trim().toUpperCase(), String(p.title).trim());
+      if (p.id) catalogById.set(String(p.id).trim(), String(p.title).trim());
+    }
+
+    const resolveItemTitle = (item: any): string => {
+      const sku = item.sku ? String(item.sku).trim().toUpperCase() : '';
+      if (sku && catalogBySku.has(sku)) return catalogBySku.get(sku)!;
+      const id = item.id ? String(item.id).trim() : '';
+      if (id && catalogById.has(id)) return catalogById.get(id)!;
+      return String(item.title || item.name || 'Wearable Art Piece').trim();
+    };
+
     // CSV Headers
     const headers = [
       'Order Number',
@@ -135,7 +152,7 @@ export async function GET(request: Request) {
       try { items = JSON.parse(String(ord.items)); } catch {}
 
       const skus = items.map((i: any) => i.sku || 'N/A').join(' | ');
-      const summary = items.map((i: any) => `${i.title} (x${i.quantity})`).join('; ');
+      const summary = items.map((i: any) => `${resolveItemTitle(i)} (x${i.quantity || 1})`).join('; ');
       const totalQty = items.reduce((sum: number, i: any) => sum + (Number(i.quantity) || 1), 0);
       const dateStr = new Date(Number(ord.created_at)).toISOString().split('T')[0];
 

@@ -399,6 +399,44 @@ export default function AdminDashboardPage() {
     return `AVZ-${catPrefix}-${String(products.length + 1).padStart(2, '0')}`;
   }, [products]);
 
+  // Download real boutique products catalog CSV (guaranteed authentic product names, zero AI hallucinations)
+  const exportProductsCsv = () => {
+    if (!products || products.length === 0) {
+      showNotification('No products in catalog to export.', 'error');
+      return;
+    }
+    const headers = ['SKU', 'Title', 'Category', 'Price (INR)', 'Inventory Stock', 'Status', 'Description'];
+    const rows = [headers.join(',')];
+
+    for (const p of products) {
+      const clean = (val: any) => {
+        if (val === null || val === undefined) return '""';
+        let str = String(val).trim().replace(/"/g, '""');
+        if (/^[=+\-@\t\r]/.test(str)) str = "'" + str;
+        return `"${str}"`;
+      };
+      rows.push([
+        clean(p.sku),
+        clean(p.title),
+        clean(p.category),
+        clean(p.price),
+        clean(p.inventory_quantity ?? p.stock ?? 1),
+        clean(p.status || 'published'),
+        clean(p.description || '')
+      ].join(','));
+    }
+
+    const blob = new Blob([rows.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `AVZ_Products_Catalog_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showNotification('Real Products Catalog CSV downloaded!', 'success');
+  };
+
   // Instant 0ms client-side product filtering (fixes search & category filter completely)
   const filteredProducts = useMemo(() => {
     const q = productSearch.trim().toLowerCase();
@@ -1885,21 +1923,31 @@ export default function AdminDashboardPage() {
                   <h2 className="text-xl font-cinzel font-bold text-white">Boutique Catalog & Products</h2>
                   <p className="text-xs text-neutral-400 mt-1 font-mono">Create, edit, duplicate, and archive 1-of-1 wearable art garments.</p>
                 </div>
-                <button
-                  onClick={() => {
-                    setSelectedProduct(null);
-                    setProductImages([]);
-                    setProductUrlInput('');
-                    setIsCustomCategory(false);
-                    setCustomCategoryInput('');
-                    setProductSkuInput(generateNextSuggestedSku());
-                    setProductModalOpen(true);
-                  }}
-                  className="bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] hover:opacity-90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add New Product
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={exportProductsCsv}
+                    className="px-3.5 py-2.5 rounded-xl border border-white/20 hover:border-[#BE185D]/60 text-neutral-200 hover:text-white font-mono text-xs flex items-center gap-1.5 cursor-pointer bg-[#181122] hover:bg-[#231535] transition-all"
+                    title="Export all boutique products to CSV"
+                  >
+                    <Download className="w-3.5 h-3.5 text-pink" />
+                    <span>Export Products CSV</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(null);
+                      setProductImages([]);
+                      setProductUrlInput('');
+                      setIsCustomCategory(false);
+                      setCustomCategoryInput('');
+                      setProductSkuInput(generateNextSuggestedSku());
+                      setProductModalOpen(true);
+                    }}
+                    className="bg-gradient-to-r from-[#BE185D] to-[#F4C2C2] hover:opacity-90 text-black font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 font-mono uppercase cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add New Product
+                  </button>
+                </div>
               </div>
 
               {/* SEARCH & FILTERS */}
@@ -2477,6 +2525,7 @@ export default function AdminDashboardPage() {
             <MediaAndSectionManager
               showNotification={showNotification}
               onRefreshProducts={fetchData}
+              catalogProducts={products}
             />
           )}
 

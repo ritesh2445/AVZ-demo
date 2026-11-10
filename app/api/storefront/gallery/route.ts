@@ -12,38 +12,26 @@ export async function GET() {
 
     let res;
     try {
-      // Purge duplicate angles not in the clean INITIAL_GALLERY_ARTWORKS set
-      try {
-        const validIds = INITIAL_GALLERY_ARTWORKS.map(a => a.id);
-        const placeholders = validIds.map(() => '?').join(',');
-        await db.execute({
-          sql: `DELETE FROM gallery_artworks WHERE id NOT IN (${placeholders})`,
-          args: validIds
-        });
-      } catch (cleanErr) {
-        // ignore
-      }
-
       res = await db.execute(`
         SELECT * FROM gallery_artworks 
-        WHERE is_published = 1 AND id NOT LIKE 'art-00%'
-        ORDER BY display_order ASC, created_at ASC
+        WHERE is_published = 1
+        ORDER BY display_order ASC, created_at DESC
       `);
     } catch (dbErr: any) {
       if (String(dbErr).includes('no such table')) {
         await bootstrapDatabaseSchema();
         res = await db.execute(`
           SELECT * FROM gallery_artworks 
-          WHERE is_published = 1 AND id NOT LIKE 'art-00%'
-          ORDER BY display_order ASC, created_at ASC
+          WHERE is_published = 1
+          ORDER BY display_order ASC, created_at DESC
         `);
       } else {
         throw dbErr;
       }
     }
 
-    // Auto-seed or expand initial masterpieces if database table count differs from clean artworks
-    if (!res.rows || res.rows.length !== INITIAL_GALLERY_ARTWORKS.length) {
+    // Auto-seed initial masterpieces only if database table is completely empty
+    if (!res.rows || res.rows.length === 0) {
       const now = Date.now();
       for (const art of INITIAL_GALLERY_ARTWORKS) {
         try {

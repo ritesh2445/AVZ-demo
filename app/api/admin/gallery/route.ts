@@ -18,18 +18,6 @@ export async function GET() {
 
     let res;
     try {
-      // Purge duplicate angles not in the clean INITIAL_GALLERY_ARTWORKS set
-      try {
-        const validIds = INITIAL_GALLERY_ARTWORKS.map(a => a.id);
-        const placeholders = validIds.map(() => '?').join(',');
-        await db.execute({
-          sql: `DELETE FROM gallery_artworks WHERE id NOT IN (${placeholders})`,
-          args: validIds
-        });
-      } catch (cleanErr) {
-        // ignore
-      }
-
       res = await db.execute(`
         SELECT * FROM gallery_artworks 
         ORDER BY display_order ASC, created_at DESC
@@ -46,7 +34,8 @@ export async function GET() {
       }
     }
 
-    if (!res.rows || res.rows.length !== INITIAL_GALLERY_ARTWORKS.length) {
+    // Only seed initial artworks if the gallery table is completely empty
+    if (!res.rows || res.rows.length === 0) {
       const now = Date.now();
       for (const art of INITIAL_GALLERY_ARTWORKS) {
         try {

@@ -41,6 +41,7 @@ interface MediaAsset {
 interface MediaAndSectionManagerProps {
   showNotification: (msg: string, type?: 'success' | 'error') => void;
   onRefreshProducts?: () => void;
+  catalogProducts?: any[];
 }
 
 const FRAME_OPTIONS = [
@@ -70,7 +71,8 @@ type SectionTab = 'vault' | 'lookbook' | 'key_pieces' | 'collection' | 'archive_
 
 export default function MediaAndSectionManager({
   showNotification,
-  onRefreshProducts
+  onRefreshProducts,
+  catalogProducts
 }: MediaAndSectionManagerProps) {
   // =========================================================================
   // SECTION 1: MASTER MEDIA UPLOAD & PHOTO POOL (Clean: images only, no tags)
@@ -109,6 +111,24 @@ export default function MediaAndSectionManager({
   const [keyPiecesList, setKeyPiecesList] = useState<any[]>([]);
   const [collectionProducts, setCollectionProducts] = useState<any[]>([]);
   const [museumArtworks, setMuseumArtworks] = useState<any[]>([]);
+  const [selectedAutofillProductId, setSelectedAutofillProductId] = useState<string>('');
+
+  // Existing products pool available for autofilling across all 5 sections
+  const existingProductsPool = useMemo(() => {
+    if (Array.isArray(catalogProducts) && catalogProducts.length > 0) return catalogProducts;
+    return collectionProducts;
+  }, [catalogProducts, collectionProducts]);
+
+  // Synchronize when catalogProducts prop changes (e.g. when product is added in Products tab)
+  useEffect(() => {
+    if (Array.isArray(catalogProducts) && catalogProducts.length > 0) {
+      setCollectionProducts(catalogProducts);
+      const vault = catalogProducts.filter((p: any) => p.is_featured || p.category === 'Vault' || (p.tag && p.tag.includes('VAULT')));
+      if (vault.length > 0) setVaultPieces(vault);
+      const keys = catalogProducts.filter((p: any) => (p.tag && p.tag.includes('KEY')) || p.custom_made);
+      if (keys.length > 0) setKeyPiecesList(keys);
+    }
+  }, [catalogProducts]);
 
   // Category filter and pagination for Section 4 (Collection Archive)
   const [collectionFilter, setCollectionFilter] = useState<string>('All');
@@ -360,6 +380,7 @@ export default function MediaAndSectionManager({
   const resetActiveForm = () => {
     setEditingItemId(null);
     setFormPhotos([]);
+    setSelectedAutofillProductId('');
     setIsCustomCollectionCategory(false);
     setCustomCollectionCategory('');
     setIsCustomVaultCategory(false);
@@ -406,6 +427,93 @@ export default function MediaAndSectionManager({
       story: 'A conceptual study in raw hardware and reconstructed silhouette.',
       materials: 'Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets'
     });
+  };
+
+  // Autofill form and photos from an existing boutique catalog product (works across all 5 sections)
+  const handleAutofillFromProduct = (productId: string) => {
+    setSelectedAutofillProductId(productId);
+    if (!productId) return;
+
+    const prod = existingProductsPool.find((p: any) => String(p.id) === String(productId));
+    if (!prod) return;
+
+    // 1. Extract and pre-attach photos from the product
+    let prodImages: string[] = [];
+    if (Array.isArray(prod.images) && prod.images.length > 0) {
+      prodImages = prod.images;
+    } else if (prod.image) {
+      prodImages = [prod.image];
+    } else if (prod.imgUrl) {
+      prodImages = [prod.imgUrl];
+    }
+    if (prodImages.length > 0) {
+      setFormPhotos(prodImages);
+    }
+
+    // 2. Autofill fields specific to current subsection
+    if (activeSubSection === 'vault') {
+      setVaultForm({
+        title: prod.title || prod.name || '',
+        price: String(prod.price || 2500),
+        tag: prod.tag || '1 OF 1',
+        category: prod.category || 'Bralettes',
+        story: prod.description || 'Archival masterpiece from the private vault, hand-crafted with upcycled hardware.'
+      });
+      setIsCustomVaultCategory(false);
+      setCustomVaultCategory('');
+    } else if (activeSubSection === 'lookbook') {
+      const codeSku = (prod.sku || `ARCHIVE-${Date.now().toString().slice(-4)}`).toUpperCase();
+      setLookbookForm({
+        title: prod.title || prod.name || '',
+        code: `LOOK • ${codeSku}`,
+        subtitle: `${prod.category || 'Wearable Art'} Crafted by Dhrisni in our Studio`,
+        caption: prod.title || prod.name || '',
+        story: prod.description || 'A conceptual study in raw hardware and reconstructed silhouette.',
+        materials: Array.isArray(prod.materials) ? prod.materials.join(', ') : 'Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets'
+      });
+    } else if (activeSubSection === 'key_pieces') {
+      setKeyPieceForm({
+        title: prod.title || prod.name || '',
+        price: String(prod.price || 2500),
+        category: prod.category || 'Tops',
+        tag: prod.tag || 'KEY PIECE',
+        description: prod.description || 'Signature studio statement piece sculpted with cold-forged spikes.'
+      });
+      setIsCustomKeyCategory(false);
+      setCustomKeyCategory('');
+    } else if (activeSubSection === 'collection') {
+      const extractedSizes = (() => {
+        if (Array.isArray(prod.sizes) && prod.sizes.length > 0) return prod.sizes;
+        if (Array.isArray(prod.variants) && prod.variants.length > 0) {
+          return prod.variants.map((v: any) => typeof v === 'object' ? (v.size || v.name) : v).filter(Boolean);
+        }
+        return ['Free Size'];
+      })();
+
+      setCollectionForm({
+        name: prod.title || prod.name || '',
+        price: String(prod.price || 2500),
+        category: prod.category || 'Tops',
+        stock: String(prod.inventory_quantity ?? prod.stock ?? 1),
+        sku: prod.sku || '',
+        description: prod.description || 'Handcrafted 1-of-1 wearable art piece by Dhrisni in our Studio.',
+        sizes: extractedSizes
+      });
+      setIsCustomCollectionCategory(false);
+      setCustomCollectionCategory('');
+    } else if (activeSubSection === 'archive_gallery') {
+      setMuseumForm({
+        title: prod.title || prod.name || '',
+        artist: 'Dhrisni & The AVZ Studio',
+        year: new Date().getFullYear().toString(),
+        category: prod.category || 'Archival Haute Couture',
+        frame_style: 'ornate_baroque',
+        dimensions_cm: '75 × 100 cm',
+        description: prod.description || 'Reclaimed metal chains, steel spikes, and upcycled industrial hardware.'
+      });
+    }
+
+    showNotification(`Autofilled details from "${prod.title || prod.name}"!`, 'success');
   };
 
   // --- EDIT TRIGGER: Populates Form Above ---
@@ -1086,6 +1194,49 @@ export default function MediaAndSectionManager({
 
           {/* Details Form (7 Cols) */}
           <div className="lg:col-span-7 bg-[#140e1c] border border-white/10 rounded-2xl p-5 sm:p-6">
+            {/* OPTION TO SELECT EXISTING PRODUCT TO AUTOFILL DETAILS (ALL 5 SECTIONS) */}
+            <div className="bg-[#1b1227] border border-pink/30 rounded-xl p-3.5 mb-5 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[11px] font-mono font-bold text-white flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-pink" />
+                  <span>Select Existing Product to Autofill Details</span>
+                </label>
+                {selectedAutofillProductId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedAutofillProductId('');
+                      resetActiveForm();
+                    }}
+                    className="text-[10px] font-mono text-pink hover:text-[#F4C2C2] underline cursor-pointer"
+                  >
+                    Clear Form
+                  </button>
+                )}
+              </div>
+              <p className="text-[10px] font-mono text-neutral-400 leading-relaxed">
+                Choose any piece from your boutique catalog to automatically fill title, price, category, story & attached photos into{' '}
+                <strong className="text-white">
+                  {activeSubSection === 'vault' ? 'The Vault Pieces' :
+                    activeSubSection === 'lookbook' ? 'Lookbook Archive' :
+                    activeSubSection === 'key_pieces' ? 'Key Pieces' :
+                    activeSubSection === 'collection' ? 'Collection Archive' : 'The Archive Gallery'}
+                </strong>. You can still modify any fields manually before publishing.
+              </p>
+              <select
+                value={selectedAutofillProductId}
+                onChange={(e) => handleAutofillFromProduct(e.target.value)}
+                className="w-full bg-[#120c1b] border border-white/20 focus:border-pink rounded-xl px-3 py-2.5 text-xs text-white font-mono outline-none cursor-pointer"
+              >
+                <option value="">-- Choose an existing product to autofill --</option>
+                {existingProductsPool.map((p: any) => (
+                  <option key={p.id} value={p.id}>
+                    {p.sku ? `[${p.sku}] ` : ''}{p.title || p.name} — ₹{p.price} ({p.category || 'Wearable Art'})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <form onSubmit={handleSaveItem} className="space-y-4">
               {/* SUB-SECTION 1: THE VAULT PIECES */}
               {activeSubSection === 'vault' && (
