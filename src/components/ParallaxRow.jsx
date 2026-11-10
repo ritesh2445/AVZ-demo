@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { playSound } from '../utils/audio';
 
-export default function ParallaxRow({ entries = [], onCommissionLook }) {
+export default function ParallaxRow({ entries = [], onCommissionLook, onSelectProduct, currency = 'INR' }) {
   const [activeLook, setActiveLook] = useState(null);
   useModalScrollLock(Boolean(activeLook));
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -469,9 +469,16 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                   <span className="w-2 h-2 rounded-full bg-pink animate-pulse" />
                   <span>{activeLook.code || `LOOK 0${currentSlide + 1}`} • {currentSlide + 1} OF {entries.length}</span>
                 </div>
-                <h3 className="lookbook-title text-2xl sm:text-3xl font-mono font-bold uppercase mb-2 leading-tight text-left text-white">
-                  {activeLook.title}
-                </h3>
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <h3 className="lookbook-title text-2xl sm:text-3xl font-mono font-bold uppercase leading-tight text-left text-white">
+                    {activeLook.title}
+                  </h3>
+                  {activeLook.price && (
+                    <span className="text-lg font-mono font-bold text-pink shrink-0">
+                      {currency === 'USD' ? `$${Math.round(Number(activeLook.price) / 83)}` : `₹${Number(activeLook.price).toLocaleString('en-IN')}`}
+                    </span>
+                  )}
+                </div>
                 <div className="lookbook-subtitle text-sm font-display mb-4 italic text-left text-pink">
                   "{activeLook.subtitle}"
                 </div>
@@ -482,6 +489,8 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
 
                 {/* Details Badges */}
                 <div className="lookbook-specs p-4 rounded-2xl text-xs font-mono mb-6 space-y-1.5 text-left shadow-inner bg-white/5 border border-white/10 text-zinc-300">
+                  {activeLook.sku && <div><strong className="text-white">SKU / Code:</strong> {activeLook.sku}</div>}
+                  {activeLook.category && <div><strong className="text-white">Category:</strong> {activeLook.category}</div>}
                   <div><strong className="text-white">Materials:</strong> {activeLook.materials || 'Reclaimed electronics, spikes, upcycled denim, steel'}</div>
                   <div><strong className="text-white">Craftsmanship:</strong> 100% Handcrafted by Dhrisni in our Studio</div>
                   <div><strong className="text-white">Vibe:</strong> {activeLook.vibe || 'Haute Wearable Art'}</div>
@@ -491,8 +500,33 @@ export default function ParallaxRow({ entries = [], onCommissionLook }) {
                 </div>
               </div>
 
-              {/* Commission CTA button */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                {onSelectProduct && (activeLook.linkedProduct || activeLook.sku) && (
+                  <button
+                    onClick={() => {
+                      playSound('click');
+                      closeLightbox();
+                      onSelectProduct(activeLook.linkedProduct || {
+                        id: activeLook.id,
+                        sku: activeLook.sku,
+                        title: activeLook.title,
+                        name: activeLook.title,
+                        price: activeLook.price,
+                        description: activeLook.story,
+                        materials: activeLook.materials,
+                        category: activeLook.category,
+                        image: activeLook.image,
+                        images: [activeLook.image, ...(activeLook.altImages || [])]
+                      });
+                    }}
+                    className="py-3.5 px-6 text-xs font-mono font-bold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 transition-all bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full"
+                  >
+                    <Eye className="w-4 h-4" />
+                    <span>VIEW IN SHOP CATALOG ↗</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => {
                     playSound('subdrop');

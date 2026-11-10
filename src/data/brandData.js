@@ -1724,378 +1724,453 @@ export const FEATURED_PIECES = [
 export const LOOKBOOK_ENTRIES = [
   {
     "id": "look-01",
-    "code": "LOOK 001 • THE SEVERED CIRCUIT",
-    "title": "The Severed Circuit",
-    "subtitle": "Silicon Corsetry at the Intersection of Tech & Haute Rebellion",
+    "code": "LOOK 001 • IN0013 • DENIM UPCYCLED HEADGEAR",
+    "sku": "IN0013",
+    "title": "Denim upcycled headgear",
+    "subtitle": "Denim Headgear with Green Plastic Bottle Flowers & Ribbons",
     "image": "/assets/lookbook/lookbook_01.webp",
     "altImages": [
       "/assets/lookbook/lookbook_02.webp"
     ],
     "aspect": "portrait",
-    "caption": "Model styled in Purple Jibaro Cross Top and Spike Cuffs under high-intensity neon.",
-    "story": "What happens when the technology designed to automate us is dismantled and reclaimed to adorn us? Dhrisni treats circuit boards not as e-waste, but as sacred cybernetic armor.",
-    "materials": "Reclaimed Metals, Stainless Chains, Hand-Set Spikes, Industrial Rivets",
-    "vibe": "Cyberpunk Couture"
+    "caption": "Handcrafted wearable art headgear featuring upcycled green bottle florals and delicate lace vaganza.",
+    "story": "Denim headgear with green plastic bottle flowers and ribbons and laces vaganza. Handcrafted wearable art sculpture designed by Dhrisni.",
+    "materials": "Reclaimed denim, upcycled plastic bottle florals, artisanal ribbons, delicate lace trimmings",
+    "vibe": "Archival Headpiece",
+    "category": "Headgear",
+    "price": 1700
   },
   {
     "id": "look-02",
-    "code": "LOOK 002 • STUDIO TACTILE GRIT",
-    "title": "Raw Hands, Pure Grit",
-    "subtitle": "Studio Stories & Hand-Linked Armor from Assam",
+    "code": "LOOK 002 • IN0003 • JERSEY CO ORD",
+    "sku": "IN0003",
+    "title": "Jersey co ord",
+    "subtitle": "Jersey Upcycled Corset & Skirt Set",
     "image": "/assets/lookbook/lookbook_03.webp",
     "altImages": [
       "/assets/lookbook/lookbook_04.webp"
     ],
     "aspect": "portrait",
-    "caption": "Behind the scenes at our Studio workshop. Hand-threading 16-gauge chain links.",
-    "story": "Every piece passes through Dhrisni's hands and the women she has personally trained. No conveyor belts. No sweatshops. Just pure tactile rebellion.",
-    "materials": "Deconstructed Electronic Boards, Steel Ringlets, High-Tensile Filament",
-    "vibe": "Artisanal Maximalism"
+    "caption": "Sculptural high-impact two-piece set meticulously reconstructed from reclaimed sports jersey textiles.",
+    "story": "Jersey upcycled corset & skirt. Sculptural high-impact two-piece set meticulously reconstructed from reclaimed sports jersey textiles.",
+    "materials": "Reconstructed vintage athletic jersey, structural corset boning, stretch ribbing, contrast stitching",
+    "vibe": "Subcultural Streetwear",
+    "category": "Co-ord sets",
+    "price": 3500
   },
   {
     "id": "look-03",
-    "code": "LOOK 003 • SOFT ARMOUR AFTER HOURS",
-    "title": "Soft Armour After Hours",
-    "subtitle": "Nightlife Velocity, Subculture & Archival Protection",
+    "code": "LOOK 003 • IN0009 • PURPLE JIBARO CROSS TOP",
+    "sku": "IN0009",
+    "title": "Purple jibaro cross top",
+    "subtitle": "Cross Top Halter Purple with Gold & Red Embellishment",
     "image": "/assets/lookbook/lookbook_05.webp",
     "altImages": [
       "/assets/lookbook/lookbook_06.webp"
     ],
     "aspect": "portrait",
-    "caption": "The Spiked Moto Shrug and Mesh Bralette captured in low-light rave velocity.",
-    "story": "AVZ clothes are built to move, sweat, dance, and hold space. They are defensive mechanisms against conformity and boring parties.",
-    "materials": "Distressed Heavy Denim, Industrial Zippers, Barbed Hardware",
-    "vibe": "Cyber-Grunge"
+    "caption": "Avant-garde asymmetrical halter top adorned with regal metallic trims and ruby drops.",
+    "story": "Cross top halter purple with gold and red embellishment. Avant-garde asymmetrical halter top adorned with regal metallic trims.",
+    "materials": "Royal purple structured canvas, gilded gold bullion trims, crimson drop embellishments, tie fastening",
+    "vibe": "Regal Avant-Garde",
+    "category": "Tops",
+    "price": 1500
   },
   {
     "id": "look-04",
-    "code": "LOOK 004 • WATERFALL KINETIC DRIFT",
-    "title": "Cascading Silver Relic",
-    "subtitle": "Organic Fluidity Clashing With Cold Stainless Steel",
+    "code": "LOOK 004 • IN0006 • SPIKE BEADED BRALETTE BODY CHAINMAIL",
+    "sku": "IN0006",
+    "title": "Spike beaded bralette body chainmail",
+    "subtitle": "Beaded Bralette with Spikes & Punk Theme",
     "image": "/assets/lookbook/lookbook_07.webp",
     "altImages": [
       "/assets/lookbook/lookbook_08.webp"
     ],
     "aspect": "landscape",
-    "caption": "Archival kinetic chain cuirass styled in dramatic outdoor mountain waterfall shoot.",
-    "story": "Shot on location against rushing mountain currents. The liquid steel mesh catches refracted water droplets like synthetic dragon scales.",
-    "materials": "Stainless Mesh, Heavy O-Rings, Water-Resistant Hardware",
-    "vibe": "Mermaidcore Brutalism"
+    "caption": "Intricately woven body chainmail dripping with metallic cone spikes and hand-strung beads.",
+    "story": "Beaded bralette w spikes and punk theme. Intricately woven body chainmail dripping with metallic cone spikes and hand-strung beads.",
+    "materials": "Hand-linked stainless steel chains, chrome cone spikes, iridescent glass beads, structural harness clasps",
+    "vibe": "Cyberpunk Armor",
+    "category": "Body chainmail",
+    "price": 1800
   },
   {
     "id": "look-05",
-    "code": "LOOK 005 • REWORKED ROMANCE",
-    "title": "Reworked Romance",
-    "subtitle": "Tenderness Clashing With Cold Metal Clasps",
+    "code": "LOOK 005 • IN0010 • CHAINMAIL BRA",
+    "sku": "IN0010",
+    "title": "Chainmail bra",
+    "subtitle": "Bra Made Out of Stainless Chain Links",
     "image": "/assets/lookbook/lookbook_09.webp",
     "altImages": [
       "/assets/lookbook/lookbook_10.webp"
     ],
     "aspect": "portrait",
-    "caption": "Dystopian Co-ord set styled with delicate lace and heavy carabiners.",
-    "story": "Maximalism doesn't mean harshness. It means feeling everything at maximum volume, where sweet romantic silhouettes collide with raw mechanics.",
-    "materials": "Upcycled Denim, Carabiner Clasps, Safety Wire Accents",
-    "vibe": "Post-Apocalyptic Romance"
+    "caption": "Fluid stainless steel rings individually hand-interlinked to create an impenetrable, liquid-shine silhouette.",
+    "story": "Bra made out of chain links. Fluid stainless steel rings individually hand-interlinked to create an impenetrable, liquid-shine silhouette.",
+    "materials": "100% Stainless steel rings, lobster clasp closures, reinforced comfort suspension chain",
+    "vibe": "Liquid Metal Armor",
+    "category": "Bralettes",
+    "price": 1800
   },
   {
     "id": "look-06",
-    "code": "LOOK 006 • LIQUID STEEL EXOSKELETON",
-    "title": "Liquid Steel Exoskeleton",
-    "subtitle": "Over 1,200 Hand-Linked Stainless Steel Rings",
+    "code": "LOOK 006 • IN0015 • BLACK CAT CO ORD SET",
+    "sku": "IN0015",
+    "title": "Black Cat Co ord Set",
+    "subtitle": "Silver Corset & Black Fur Skirt",
     "image": "/assets/lookbook/lookbook_11.webp",
     "altImages": [
       "/assets/lookbook/lookbook_12.webp"
     ],
     "aspect": "portrait",
-    "caption": "Heavy fluid chain drape that flexes with bodily contours.",
-    "story": "A modern homage to medieval body protection transformed into sultry clubwear armor. Cold to the touch, heavy in weight, impossible to ignore.",
-    "materials": "16-Gauge Stainless Steel, Glass Beads, Chrome Buckles",
-    "vibe": "Medieval Futurism"
+    "caption": "Runway statement ensemble pairing a molded silver structural corset bodice with deep black textured fur.",
+    "story": "Silver corset and black fur skirt. Runway statement ensemble pairing a molded silver structural corset bodice with deep black textured fur.",
+    "materials": "Silver metallic reclaimed hardware, reinforced corset boning, deconstructed plush black faux fur",
+    "vibe": "Dark Runway Elegance",
+    "category": "Co-ord sets",
+    "price": 2200
   },
   {
     "id": "look-07",
-    "code": "LOOK 007 • GLITCH HARNESS MATRIX",
-    "title": "Subcultural Bodice Spikes",
-    "subtitle": "Aggressive Geometry & Architectural Curves",
+    "code": "LOOK 007 • IN0026 • CHECK MINI RED SKIRT",
+    "sku": "IN0026",
+    "title": "Check mini red skirt",
+    "subtitle": "Red Skirt with Checks & Fishnet Mini Size",
     "image": "/assets/lookbook/lookbook_13.webp",
     "altImages": [
       "/assets/lookbook/lookbook_14.webp"
     ],
     "aspect": "portrait",
-    "caption": "Cone spikes precision-mounted on recycled structural denim framework.",
-    "story": "Defensive fashion engineered for those who refuse to be touched without permission. A sharp statement of autonomy and raw self-possession.",
-    "materials": "Heavy Cone Spikes, Reclaimed Black Denim, Reinforced Eyelets",
-    "vibe": "Dark Industrial Punk"
+    "caption": "Punk-rock pleated mini skirt layered with deconstructed distressed fishnet accents.",
+    "story": "Red skirt w checks and fishnet mini size. Punk-rock pleated mini skirt layered with distressed fishnet accents.",
+    "materials": "Red gingham woven plaid, industrial eyelet hardware, layered black fishnet lining",
+    "vibe": "Subcultural Punk",
+    "category": "Skirts",
+    "price": 1800
   },
   {
     "id": "look-08",
-    "code": "LOOK 008 • NEON SUBTERRANEAN",
-    "title": "Subterranean Cyber Pulse",
-    "subtitle": "Low-Frequency Night Visions & High-Gloss Hardware",
+    "code": "LOOK 008 • IN0019 • PEARLITE CROCHET TOP",
+    "sku": "IN0019",
+    "title": "Pearlite crochet top",
+    "subtitle": "White Pearls Crocheted on Bikini Top",
     "image": "/assets/lookbook/lookbook_15.webp",
     "altImages": [
       "/assets/lookbook/lookbook_16.webp"
     ],
     "aspect": "portrait",
-    "caption": "Strobe-lit editorial framing the reflective polymer corset.",
-    "story": "Born from late-night studio sessions where discarded tech finds second life under UV strobe pulses.",
-    "materials": "Reflective Polymer, Salvaged Cables, Industrial Grommets",
-    "vibe": "Cyber-Underground"
+    "caption": "Hand-knitted artisanal bikini bodice richly embellished with luminescent faux pearl clusters.",
+    "story": "White pearls crocheted on bikini top. Hand-knitted artisanal bikini bodice richly embellished with luminescent faux pearl clusters.",
+    "materials": "Organic cotton yarn, lustrous faux pearl cabochons, adjustable back tie fastening",
+    "vibe": "Artisanal Romance",
+    "category": "Tops",
+    "price": 1500
   },
   {
     "id": "look-09",
-    "code": "LOOK 009 • THE MONOLITHIC DRAPE",
-    "title": "Monolithic Mesh Shroud",
-    "subtitle": "Heavyweight Architectural Drapes with Bare Midriff",
+    "code": "LOOK 009 • IN0007 • PSYCHEDELIC BROWN DENIM BAG",
+    "sku": "IN0007",
+    "title": "Psychedelic brown denim bag",
+    "subtitle": "Bag with Acid Paint Denim Jeans Upcycled",
     "image": "/assets/lookbook/lookbook_17.webp",
     "altImages": [
       "/assets/lookbook/lookbook_18.webp"
     ],
     "aspect": "portrait",
-    "caption": "High-contrast studio silhouette capturing structural drape.",
-    "story": "Balancing monumental industrial mass with delicate, exposed human skin. Structural tension made wearable.",
-    "materials": "Steel Weave Mesh, Chrome D-Rings, Weathered Canvas",
-    "vibe": "Industrial Gothic"
+    "caption": "Shoulder bag handcrafted from repurposed denim jeans with custom acid dye bleach swirl wash.",
+    "story": "Bag with acid paint denim jeans upcycled. Shoulder bag handcrafted from repurposed denim jeans with custom acid dye bleach swirl wash and chain swags.",
+    "materials": "Upcycled heavy denim jeans, bleach-washed patterns, vintage bronze chain swags, floral denim brooches",
+    "vibe": "Wearable Archive Accessory",
+    "category": "Bags",
+    "price": 999
   },
   {
     "id": "look-10",
-    "code": "LOOK 010 • ETHEREAL CHITIN WIRE",
-    "title": "Crystalline Wire Chitin",
-    "subtitle": "Bespoke Hand-Sculpted Wire & Iridescent Facets",
+    "code": "LOOK 010 • IN0009 • PURPLE JIBARO CROSS TOP",
+    "sku": "IN0009",
+    "title": "Purple jibaro cross top",
+    "subtitle": "Cross Top Halter Purple with Gold & Red Embellishment (Detail)",
     "image": "/assets/lookbook/lookbook_19.webp",
     "altImages": [
       "/assets/lookbook/lookbook_20.webp"
     ],
     "aspect": "portrait",
-    "caption": "Intricate wire-sculpted bralette reflecting directional studio keylights.",
-    "story": "Organic curves mimicking alien carapace and deep-sea coral. Delicate in appearance, remarkably rigid in structural form.",
-    "materials": "Hand-Coiled Silver Wire, Crystal Beads, Fiber Optics",
-    "vibe": "Mermaidcore Glitch"
+    "caption": "Studio close-up highlighting the hand-applied gold braids and ruby accents on royal purple canvas.",
+    "story": "Cross top halter purple with gold and red embellishment. Studio close-up highlighting the hand-applied gold braids and ruby accents.",
+    "materials": "Heavyweight purple fabric, metallic gold braids, red cabochon beads, lace-up spine straps",
+    "vibe": "Regal Avant-Garde",
+    "category": "Tops",
+    "price": 1500
   },
   {
     "id": "look-11",
-    "code": "LOOK 011 • THE DECONSTRUCTED REBEL",
-    "title": "Syllabic Denim Kinetic Shrug",
-    "subtitle": "Multi-Zipped Reclaimed Denim & Exposed Seams",
+    "code": "LOOK 011 • IN0022 • CROSS TAPE BRALETTE",
+    "sku": "IN0022",
+    "title": "Cross tape bralette",
+    "subtitle": "Bralette in the Illusion of Taped Bust",
     "image": "/assets/lookbook/lookbook_21.webp",
     "altImages": [
       "/assets/lookbook/lookbook_22.webp"
     ],
     "aspect": "portrait",
-    "caption": "Modular denim shrug styled with raw edge distressing.",
-    "story": "Rescuing denim destined for landfills and reconstructing it into modular streetwear that transforms on the body.",
-    "materials": "Upcycled Denim Trove, Chunky YKK Zippers, Copper Rivets",
-    "vibe": "Tactile Street Couture"
+    "caption": "Graphic deconstructed cross silhouette crafted to simulate electrical tape with wearable comfort.",
+    "story": "Bralette in the illusion of taped bust. Graphic deconstructed cross silhouette crafted to simulate electrical tape with wearable comfort.",
+    "materials": "Glossy black coated vinyl, stretch base fabric, comfort elastic backing, adjustable clasps",
+    "vibe": "Brutalist Minimal",
+    "category": "Bralettes",
+    "price": 1200
   },
   {
     "id": "look-12",
-    "code": "LOOK 012 • TECH SCRAP GORGET",
-    "title": "Silicon Choker & Collar Armor",
-    "subtitle": "Golden Trace Pathways Salvaged from Obsolete Servers",
+    "code": "LOOK 012 • IN0015 • BLACK CAT CO ORD SET",
+    "sku": "IN0015",
+    "title": "Black Cat Co ord Set",
+    "subtitle": "Silver Corset & Black Fur Skirt (Full Silhouette)",
     "image": "/assets/lookbook/lookbook_23.webp",
     "altImages": [
       "/assets/lookbook/lookbook_24.webp"
     ],
     "aspect": "portrait",
-    "caption": "Close-up editorial crop highlighting microscopic copper circuits.",
-    "story": "Why should microchips stay hidden inside plastic shells? Dhrisni surfaces the hidden beauty of the machine age.",
-    "materials": "Reclaimed Metals, Gold-Plated Filigree, Velvet Backing",
-    "vibe": "Tech-Deco"
+    "caption": "The full runway silhouette captured on model, balancing industrial silver boning against deep plush textures.",
+    "story": "Silver corset and black fur skirt. The full runway silhouette captured on model, balancing industrial silver boning against deep plush textures.",
+    "materials": "Silver metallic finish, flexible spiral steel bones, midnight black faux fur, rear eyelet lacing",
+    "vibe": "Dark Runway Elegance",
+    "category": "Co-ord sets",
+    "price": 2200
   },
   {
     "id": "look-13",
-    "code": "LOOK 013 • DARK CARAPACE CUIRASS",
-    "title": "Riveted Obsidian Armor",
-    "subtitle": "Form-Fitted Bodice with Asymmetrical Cone Spikes",
+    "code": "LOOK 013 • IN0021 • SPIRAL BODY CHAINMAIL TOP",
+    "sku": "IN0021",
+    "title": "Spiral body chainmail top",
+    "subtitle": "Spiral Wired Chained Top in Silver",
     "image": "/assets/lookbook/lookbook_25.webp",
     "altImages": [
       "/assets/lookbook/lookbook_26.webp"
     ],
     "aspect": "portrait",
-    "caption": "Low-angle editorial angle highlighting sculpted metallic breastplate.",
-    "story": "Designed to intimidate and empower. An impenetrable outer shell for the nocturnal warrior.",
-    "materials": "Heavy Gauge Blackened Steel, Reinforced Canvas, Leather Straps",
-    "vibe": "Aggressive Haute"
+    "caption": "Concentric hand-wound wire coils interlaced with fluid chain links creating a futuristic kinetic bodice.",
+    "story": "Spiral wired chained top in silver. Concentric hand-wound wire coils interlaced with fluid chain links creating a futuristic kinetic bodice.",
+    "materials": "High-tensile silver wire spirals, stainless steel jump rings, adjustable neckline and torso chains",
+    "vibe": "Kinetic Sculpture",
+    "category": "Body chainmail",
+    "price": 2500
   },
   {
     "id": "look-14",
-    "code": "LOOK 014 • VERTEBRAE HARNESS DRIFT",
-    "title": "Biomechanical Spine Cage",
-    "subtitle": "Articulated Chrome Segments Tracing the Backbone",
+    "code": "LOOK 014 • IN0004 • SPIKE ARM CUFFS",
+    "sku": "IN0004",
+    "title": "Spike arm cuffs",
+    "subtitle": "Armcuffs with Spikes",
     "image": "/assets/lookbook/lookbook_27.webp",
     "altImages": [
       "/assets/lookbook/lookbook_28.webp"
     ],
     "aspect": "portrait",
-    "caption": "Rear editorial view capturing spine articulation.",
-    "story": "Tracing the curve of the human spine with cold metallic geometry. Every link moves harmoniously with body articulation.",
-    "materials": "Articulated Chrome Hardware, Heavy O-Rings, Ball Chains",
-    "vibe": "Biomechanical Couture"
+    "caption": "High-impact wrist and forearm armor studded with menacing polished nickel cone spikes.",
+    "story": "Armcuffs w spikes. High-impact wrist and forearm armor studded with menacing polished nickel cone spikes.",
+    "materials": "Heavy vegan leather straps, 1-inch polished nickel cone spikes, adjustable buckle hardware",
+    "vibe": "Defensive Hardware",
+    "category": "Arm cuffs",
+    "price": 600
   },
   {
     "id": "look-15",
-    "code": "LOOK 015 • DYSTOPIAN CO-ORD DRIFT",
-    "title": "Industrial Cargo Relic",
-    "subtitle": "Segmented Pockets & Heavy Strap Suspensions",
+    "code": "LOOK 015 • IN0005 • FRILLS BELT PURPLE",
+    "sku": "IN0005",
+    "title": "Frills belt purple",
+    "subtitle": "Belt with Fabrics Hanging",
     "image": "/assets/lookbook/lookbook_29.webp",
     "altImages": [
       "/assets/lookbook/lookbook_30.webp"
     ],
     "aspect": "portrait",
-    "caption": "Full-length runway frame showcasing segmented pocket harness.",
-    "story": "Utilitarian functionality elevated to conceptual runway high fashion. Ready for any subcultural battlefield.",
-    "materials": "Heavy Twill, Webbing Straps, Quick-Release Buckles",
-    "vibe": "Cyber-Military"
+    "caption": "Statement waist cincher with cascading raw-edge textile frills and distressed fabric tassels.",
+    "story": "Belt with fabrics hanging. Statement waist cincher with cascading raw-edge textile frills and distressed fabric tassels.",
+    "materials": "Distressed purple canvas, raw-cut chiffon frills, heavy grommeted utility belt strap",
+    "vibe": "Tactile Grunge",
+    "category": "Belts",
+    "price": 800
   },
   {
     "id": "look-16",
-    "code": "LOOK 016 • RAINWEAR MATRIX",
-    "title": "Hyper-Gloss Wet-Look Shrug",
-    "subtitle": "Reflective Industrial Textures Meeting Cold Metal Clad",
+    "code": "LOOK 016 • IN0025 • SPIKE RED TOP",
+    "sku": "IN0025",
+    "title": "Spike red top",
+    "subtitle": "Red Heart Top with Spikes Backless",
     "image": "/assets/lookbook/lookbook_31.webp",
     "altImages": [
       "/assets/lookbook/lookbook_32.webp"
     ],
     "aspect": "portrait",
-    "caption": "Moody ambient editorial capturing high-gloss vinyl reflections.",
-    "story": "Reflecting neon city lights across drenched pavements. The armor of the late-night nomad.",
-    "materials": "High-Gloss Vinyl, Steel Eyelets, Heavy Chains",
-    "vibe": "Dark Wave"
+    "caption": "Sculpted crimson heart-shaped halter crop top studded with gleaming silver spikes with an open back.",
+    "story": "Red heart top with spikes backless. Sculpted crimson heart-shaped halter crop top studded with gleaming silver spikes with an open back.",
+    "materials": "Crimson structured vinyl, silver punk cone spikes, backless criss-cross tie straps",
+    "vibe": "Aggressive Romance",
+    "category": "Tops",
+    "price": 2200
   },
   {
     "id": "look-17",
-    "code": "LOOK 017 • CROCHET MEETS CHROME",
-    "title": "Hand-Knit Balaclava Halo",
-    "subtitle": "Soft Hand-Dyed Yarn Encircled with Metallic Spikes",
+    "code": "LOOK 017 • IN0007 • PSYCHEDELIC BROWN DENIM BAG",
+    "sku": "IN0007",
+    "title": "Psychedelic brown denim bag",
+    "subtitle": "Bag with Acid Paint Denim Jeans Upcycled",
     "image": "/assets/lookbook/lookbook_33.webp",
     "altImages": [
       "/assets/lookbook/lookbook_34.webp"
     ],
     "aspect": "square",
-    "caption": "Editorial portrait showcasing the spiked crochet balaclava.",
-    "story": "The ultimate paradox: cozy artisanal knitting weaponized with sharp industrial steel.",
-    "materials": "Assam Cotton Yarn, Nickel Spikes, Steel Wire Frame",
-    "vibe": "Avant-Garde Rave"
+    "caption": "On-model capture featuring the one-of-one acid dye washed denim bag with brass chains and denim floral accents.",
+    "story": "Bag with acid paint denim jeans upcycled. Handcrafted shoulder bag repurposed from denim jeans with custom acid dye bleach swirl wash and vintage chain swags.",
+    "materials": "Upcycled acid-wash denim jeans, repurposed vintage brooches, chunky brass link chains, dual handle straps",
+    "vibe": "Wearable Archive Accessory",
+    "category": "Bags",
+    "price": 999
   },
   {
     "id": "look-18",
-    "code": "LOOK 018 • KEYCAP RELIC CORSET",
-    "title": "Mechanical Keycap Mosaic",
-    "subtitle": "Hundreds of Mechanical Keyboard Switches Hand-Set",
+    "code": "LOOK 018 • IN0008 • SPIKE TUBE TOP",
+    "sku": "IN0008",
+    "title": "Spike tube top",
+    "subtitle": "Tube Top Rexine Black with Spikes Forming Cross",
     "image": "/assets/lookbook/lookbook_35.webp",
     "altImages": [
       "/assets/lookbook/lookbook_36.webp"
     ],
     "aspect": "portrait",
-    "caption": "Micro-detail crop of vintage mechanical keyboard bodice.",
-    "story": "Typing out a tactile love letter to obsolete computing. Every key tells a forgotten story of human input.",
-    "materials": "Vintage Keycaps, Reclaimed Wire, Structural Canvas",
-    "vibe": "Post-Digital Art"
+    "caption": "Studio on-model editorial capturing the matte black rexine tube top with gleaming silver spike crucifix motif.",
+    "story": "Tube top rexine black with spikes forming cross. Tailored crop bodice constructed from black rexine with rows of high-impact cone spikes forming a sculptural cross.",
+    "materials": "Matte black rexine vinyl, high-density alloy pyramid and cone spikes, elasticized inner grip",
+    "vibe": "Subcultural Iconography",
+    "category": "Tops",
+    "price": 2000
   },
   {
     "id": "look-19",
-    "code": "LOOK 019 • LIQUID CHAINMAIL DRAPE",
-    "title": "Cascading Haltermail",
-    "subtitle": "Fluid Drapes of Polished Stainless Chain Links",
+    "code": "LOOK 019 • IN0016 • CHEETAH PRINT CAVEWOMAN SET",
+    "sku": "IN0016",
+    "title": "Cheetah print cavewoman set",
+    "subtitle": "Cavewoman Bra & Leopard Skirt Set",
     "image": "/assets/lookbook/lookbook_37.webp",
     "altImages": [
       "/assets/lookbook/lookbook_38.webp"
     ],
     "aspect": "portrait",
-    "caption": "Dynamic model pose demonstrating chainmail fluidity.",
-    "story": "Like liquid silver poured over collarbones and torso. Breathes with the wearer with reassuring weight.",
-    "materials": "18-Gauge Mirror-Polish Rings, Lobster Clasps",
-    "vibe": "Haute Armor"
+    "caption": "Raw predatory two-piece set featuring asymmetrical cheetah print textile draping with jagged deconstructed hems.",
+    "story": "Cavewoman bra and leopard skirt. Raw predatory two-piece set featuring asymmetrical cheetah print textile draping with jagged deconstructed hems.",
+    "materials": "Printed faux cheetah velour, distressed faux suede ties, rustic raw edge finish",
+    "vibe": "Feral Couture",
+    "category": "Co-ord sets",
+    "price": 1999
   },
   {
     "id": "look-20",
-    "code": "LOOK 020 • THE BARBED HALO",
-    "title": "Barbed Wire Headpiece",
-    "subtitle": "Blunted Steel Wire Hand-Shaped into Crown Silhouette",
+    "code": "LOOK 020 • IN0015 • BLACK CAT CO ORD SET",
+    "sku": "IN0015",
+    "title": "Black Cat Co ord Set",
+    "subtitle": "Silver Corset & Black Fur Skirt",
     "image": "/assets/lookbook/lookbook_39.webp",
     "altImages": [
       "/assets/lookbook/lookbook_40.webp"
     ],
     "aspect": "portrait",
-    "caption": "Studio headshot capturing illuminated barbed halo.",
-    "story": "Subverting religious iconography into modern subcultural empowerment. A crown for those who rule themselves.",
-    "materials": "Decorative Barbed Wire, Silver Filigree, Glass Drops",
-    "vibe": "Gothic Iconography"
+    "caption": "Editorial runway shoot of the iconic 'Black Cat' two-piece set pairing the molded silver eyelet corset with plush black faux fur.",
+    "story": "Silver corset and black fur skirt. Runway statement ensemble pairing a molded silver structural corset bodice with deep black textured fur and Egyptian ankh choker.",
+    "materials": "Silver eyelet corset bodice, structural front rings, premium midnight black faux fur, ankh hardware accent",
+    "vibe": "Dark Glamour",
+    "category": "Co-ord sets",
+    "price": 2200
   },
   {
     "id": "look-21",
-    "code": "LOOK 021 • ASYMMETRICAL ACID BOLERO",
-    "title": "Acid-Washed Denim Sleeve Bolero",
-    "subtitle": "One-Sleeve Architectural Construct with Chain Swags",
+    "code": "LOOK 021 • IN0009 • PURPLE JIBARO CROSS TOP",
+    "sku": "IN0009",
+    "title": "Purple jibaro cross top",
+    "subtitle": "Cross Top Halter Purple with Gold & Red Embellishment (Runway Cut)",
     "image": "/assets/lookbook/lookbook_41.webp",
     "altImages": [
       "/assets/lookbook/lookbook_42.webp"
     ],
     "aspect": "portrait",
-    "caption": "Action editorial capture featuring one-sleeve chain swing.",
-    "story": "Deliberate asymmetry breaking all rules of conventional garment drafting. Bold, disruptive, and effortless.",
-    "materials": "Acid-Wash Reclaimed Denim, Heavy Steel Swags",
-    "vibe": "Experimental Streetwear"
+    "caption": "Asymmetrical cross halter bodice showcasing ornate metallic galloon trims and deep purple draping.",
+    "story": "Cross top halter purple with gold and red embellishment. Asymmetrical cross halter bodice showcasing ornate metallic galloon trims and deep purple draping.",
+    "materials": "Structured royal purple weave, gold filigree trim, ruby glass drops, halter tie cords",
+    "vibe": "Regal Avant-Garde",
+    "category": "Tops",
+    "price": 1500
   },
   {
     "id": "look-22",
-    "code": "LOOK 022 • CYBERNETIC GIRDLE",
-    "title": "High-Waist Hardware Girdle",
-    "subtitle": "Dual Steel Ribs with Center Zipper Suspension",
+    "code": "LOOK 022 • IN0014 • JHUMKA JACKET",
+    "sku": "IN0014",
+    "title": "Jhumka jacket",
+    "subtitle": "Jacket Fur Brown Jhumkhas",
     "image": "/assets/lookbook/lookbook_43.webp",
     "altImages": [
       "/assets/lookbook/lookbook_44.webp"
     ],
     "aspect": "portrait",
-    "caption": "Close crop of cinched waist construction and dual roller buckles.",
-    "story": "Cinched geometry engineered to hold structure without compromising ease of motion on the dance floor.",
-    "materials": "Steel Boning, Heavy Gauge Elastic, Roller Buckles",
-    "vibe": "Industrial Fetish"
+    "caption": "Plush brown faux fur jacket adorned with traditional musical jhumka bells and oxidized metal bells that jingle with movement.",
+    "story": "Jacket fur brown jhumkhas. Plush brown faux fur jacket adorned with traditional musical jhumka bells and oxidized metal bells that jingle with movement.",
+    "materials": "Deep brown faux fur, traditional brass jhumkha ornaments, silk satin inner lining",
+    "vibe": "Heritage Maximalism",
+    "category": "Jackets",
+    "price": 2600
   },
   {
     "id": "look-23",
-    "code": "LOOK 023 • THE SHADOW CUIRASS",
-    "title": "Matte Black Steel Cuirass",
-    "subtitle": "Individually Cut Metal Scales Riveted to Black Denim",
+    "code": "LOOK 023 • IN0015 • BLACK CAT CO ORD SET",
+    "sku": "IN0015",
+    "title": "Black Cat Co ord Set",
+    "subtitle": "Silver Corset & Black Fur Skirt (Movement Study)",
     "image": "/assets/lookbook/lookbook_45.webp",
     "altImages": [
       "/assets/lookbook/lookbook_46.webp"
     ],
     "aspect": "portrait",
-    "caption": "Sculptural silhouette in low-key studio lighting.",
-    "story": "Subtle yet lethal. Under ambient light, the scales shimmer like beetle wings in darkness.",
-    "materials": "Powder-Coated Steel Scales, Waxed Thread, Black Denim",
-    "vibe": "Nocturnal Armor"
+    "caption": "Close crop focusing on the tactile contrast between cold metallic eyelets and tactile fur in low-key studio lighting.",
+    "story": "Silver corset and black fur skirt. Close crop focusing on the tactile contrast between cold metallic eyelets and tactile fur in low-key studio lighting.",
+    "materials": "Reclaimed silver hardware, boned corset armature, plush black fur",
+    "vibe": "Dark Glamour",
+    "category": "Co-ord sets",
+    "price": 2200
   },
   {
     "id": "look-24",
-    "code": "LOOK 024 • THE CHROME CORONA",
-    "title": "Radial Wire Sunburst Shrug",
-    "subtitle": "Stiffened Wire Tendrils Projecting outward from Shoulders",
+    "code": "LOOK 024 • IN0011 • PURPLE PINK BEADED BRALETTE",
+    "sku": "IN0011",
+    "title": "Purple pink beaded bralette",
+    "subtitle": "Bralette / Bodychain Made with Pink & Purple Beads",
     "image": "/assets/lookbook/lookbook_47.webp",
     "altImages": [
       "/assets/lookbook/lookbook_48.webp"
     ],
     "aspect": "portrait",
-    "caption": "Dramatic wide-angle frame showcasing the radial sunburst silhouette.",
-    "story": "An explosive silhouette that demands respect and commands physical space in any room.",
-    "materials": "Spring Steel Wire, Silver Solder, Leather Epaulettes",
-    "vibe": "Celestial Cyberpunk"
+    "caption": "Intricate handcrafted beadwork weaving shimmering candy pink and deep violet crystal beads across the bust.",
+    "story": "Bralette/ bodychain made with pink and purple beads. Intricate handcrafted beadwork weaving shimmering candy pink and deep violet crystal beads across the bust.",
+    "materials": "Faceted glass crystal beads, high-tensile wire thread, silver closure lobster clasps",
+    "vibe": "Iridescent Body Armor",
+    "category": "Bralettes",
+    "price": 1500
   },
   {
     "id": "look-25",
-    "code": "LOOK 025 • DHRISTROYER APEX EDITORIAL",
-    "title": "Dhristroyer Apex Campaign",
-    "subtitle": "Creative Direction & Styling by Dhrisni — The Masterwork",
+    "code": "LOOK 025 • IN0023 • SPIKE GREY BLOUSE/BRA",
+    "sku": "IN0023",
+    "title": "Spike grey blouse/bra",
+    "subtitle": "Blouse with Spikes",
     "image": "/assets/lookbook/lookbook_49.webp",
     "altImages": [
       "/assets/lookbook/lookbook_50.webp"
     ],
     "aspect": "portrait",
-    "caption": "Signature editorial campaign portrait directed by Dhrisni in our Studio.",
-    "story": "The definitive statement of Aveezah Vaganza. A manifesto written in solder, denim, and steel by Dhristroyer herself.",
-    "materials": "Upcycled Hardware, Hand-Linked Stainless Rings, Studio Relics",
-    "vibe": "Crown Archival Art"
+    "caption": "Traditional Indian grey saree blouse transformed into high-impact wearable armor with hundreds of hand-anchored metallic spikes.",
+    "story": "Blouse with spikes. Traditional Indian grey saree blouse transformed into high-impact wearable armor with hundreds of hand-anchored metallic spikes.",
+    "materials": "Grey textured saree fabric, hundreds of cone spikes, inner reinforced canvas lining, hook-and-eye closure",
+    "vibe": "Deconstructed Traditional",
+    "category": "Tops",
+    "price": 2000
   }
 ];
 

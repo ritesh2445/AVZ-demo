@@ -127,6 +127,29 @@ export default function MediaAndSectionManager({
       if (vault.length > 0) setVaultPieces(vault);
       const keys = catalogProducts.filter((p: any) => (p.tag && p.tag.includes('KEY')) || p.custom_made);
       if (keys.length > 0) setKeyPiecesList(keys);
+
+      setLookbookEntriesList((prev) => {
+        return prev.map((entry) => {
+          const skuMatch = entry.sku || entry.code?.match(/IN\d{4}/)?.[0];
+          const matchedProd = catalogProducts.find(
+            (p: any) => (skuMatch && p.sku === skuMatch) ||
+                        (p.title && entry.title && p.title.toLowerCase() === entry.title.toLowerCase()) ||
+                        (p.name && entry.title && p.name.toLowerCase() === entry.title.toLowerCase())
+          );
+          if (matchedProd) {
+            return {
+              ...entry,
+              title: matchedProd.title || matchedProd.name || entry.title,
+              story: matchedProd.description || entry.story,
+              caption: matchedProd.description || entry.caption,
+              materials: matchedProd.materials || entry.materials,
+              price: matchedProd.price !== undefined ? matchedProd.price : entry.price,
+              category: matchedProd.category || entry.category,
+            };
+          }
+          return entry;
+        });
+      });
     }
   }, [catalogProducts]);
 

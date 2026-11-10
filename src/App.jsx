@@ -43,6 +43,33 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
     return fromDb.length > 0 ? fromDb : FEATURED_PIECES;
   }, [catalogProducts]);
 
+  // Derive Lookbook Entries dynamically synchronized with live catalog products
+  const lookbookEntries = useMemo(() => {
+    return LOOKBOOK_ENTRIES.map((entry) => {
+      const sku = entry.sku || entry.code?.match(/IN\d{4}/)?.[0];
+      const liveProd = catalogProducts.find(
+        (p) => (sku && p.sku === sku) ||
+               (p.title && entry.title && p.title.toLowerCase() === entry.title.toLowerCase()) ||
+               (p.name && entry.title && p.name.toLowerCase() === entry.title.toLowerCase())
+      );
+
+      if (liveProd) {
+        return {
+          ...entry,
+          sku: liveProd.sku || entry.sku,
+          title: liveProd.title || liveProd.name || entry.title,
+          story: liveProd.description || entry.story,
+          materials: liveProd.materials || entry.materials,
+          category: liveProd.category || entry.category,
+          price: liveProd.price !== undefined ? liveProd.price : entry.price,
+          linkedProductId: liveProd.id,
+          linkedProduct: liveProd,
+        };
+      }
+      return entry;
+    });
+  }, [catalogProducts]);
+
   // 1. Loading sequence state: Only show on initial visit per session for instant navigation
   const [isLoading, setIsLoading] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -766,8 +793,10 @@ export default function App({ storefrontConfig, cmsContent, products: liveProduc
         {/* Section 3: Spatial Parallax Lookbook Drift */}
         <section id="lookbook" className="w-full">
           <ParallaxRow
-            entries={LOOKBOOK_ENTRIES}
+            entries={lookbookEntries}
             onCommissionLook={handleRequestCustom}
+            onSelectProduct={setActiveProduct}
+            currency={currency}
           />
         </section>
 
