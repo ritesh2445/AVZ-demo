@@ -99,6 +99,7 @@ export default function MediaAndSectionManager({
   const [pickerModalOpen, setPickerModalOpen] = useState<boolean>(false);
   const [pickerSearch, setPickerSearch] = useState<string>('');
   const [pickerPage, setPickerPage] = useState<number>(1);
+  const [pickerVisibleCount, setPickerVisibleCount] = useState<number>(48);
   const PICKER_PAGE_SIZE = 24;
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
 
@@ -235,7 +236,7 @@ export default function MediaAndSectionManager({
     }
   }, [pickerModalOpen, confirmDeleteAsset, confirmDeleteItem]);
 
-  // Fast filtered & paginated assets for the Media Pool picker modal (eliminates lag completely)
+  // Fast filtered & progressive streaming assets for the Media Pool picker modal
   const filteredPickerAssets = useMemo(() => {
     const query = pickerSearch.trim().toLowerCase();
     if (!query) return mediaAssets;
@@ -246,11 +247,9 @@ export default function MediaAndSectionManager({
     );
   }, [mediaAssets, pickerSearch]);
 
-  const totalPickerPages = Math.ceil(filteredPickerAssets.length / PICKER_PAGE_SIZE) || 1;
-  const paginatedPickerAssets = useMemo(() => {
-    const start = (pickerPage - 1) * PICKER_PAGE_SIZE;
-    return filteredPickerAssets.slice(start, start + PICKER_PAGE_SIZE);
-  }, [filteredPickerAssets, pickerPage]);
+  const visiblePickerAssets = useMemo(() => {
+    return filteredPickerAssets.slice(0, pickerVisibleCount);
+  }, [filteredPickerAssets, pickerVisibleCount]);
 
   // Toggle photo in form (add if not present, remove if already present)
   const handleTogglePhotoInForm = (url: string) => {
@@ -797,7 +796,8 @@ export default function MediaAndSectionManager({
                 return (
                   <div
                     key={asset.id}
-                    className={`group relative bg-[#130d1d] border rounded-2xl overflow-hidden transition-all flex flex-col justify-between ${
+                    style={{ contentVisibility: 'auto', containIntrinsicSize: '140px' }}
+                    className={`relative bg-[#130d1d] border rounded-2xl overflow-hidden transition-colors flex flex-col justify-between ${
                       isAttached
                         ? 'border-pink ring-2 ring-pink/50 shadow-[0_0_15px_rgba(244,63,94,0.3)]'
                         : 'border-white/10 hover:border-pink/40'
@@ -813,7 +813,7 @@ export default function MediaAndSectionManager({
                         alt={asset.title}
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover block"
                       />
 
                       {isAttached && (
@@ -1736,7 +1736,7 @@ export default function MediaAndSectionManager({
                 value={pickerSearch}
                 onChange={(e) => {
                   setPickerSearch(e.target.value);
-                  setPickerPage(1);
+                  setPickerVisibleCount(48);
                 }}
                 placeholder="Search photos by title, filename, or tag..."
                 className="w-full bg-[#1b1325] border border-white/15 rounded-xl pl-10 pr-9 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
@@ -1746,7 +1746,7 @@ export default function MediaAndSectionManager({
                   type="button"
                   onClick={() => {
                     setPickerSearch('');
-                    setPickerPage(1);
+                    setPickerVisibleCount(48);
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white cursor-pointer"
                 >
@@ -1755,81 +1755,94 @@ export default function MediaAndSectionManager({
               )}
             </div>
 
-            {/* Grid Area */}
-            <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
-              {paginatedPickerAssets.length === 0 ? (
+            {/* Grid Area with Smooth Progressive Infinite Scroll */}
+            <div
+              onScroll={(e) => {
+                const target = e.currentTarget;
+                if (target.scrollTop + target.clientHeight >= target.scrollHeight - 300) {
+                  if (visiblePickerAssets.length < filteredPickerAssets.length) {
+                    setPickerVisibleCount(prev => Math.min(prev + 36, filteredPickerAssets.length));
+                  }
+                }
+              }}
+              style={{ overscrollBehavior: 'contain', willChange: 'scroll-position' }}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2 custom-scrollbar transform-gpu"
+            >
+              {visiblePickerAssets.length === 0 ? (
                 <div className="h-full min-h-[220px] flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl bg-black/20">
                   <ImageIcon className="w-10 h-10 text-neutral-600 mb-2" />
                   <p className="text-xs font-mono text-neutral-400">No photos found matching your search</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
-                  {paginatedPickerAssets.map(asset => {
-                    const isAttached = formPhotos.includes(asset.url);
-                    const attachedIdx = formPhotos.indexOf(asset.url);
-                    return (
-                      <button
-                        key={asset.id}
-                        type="button"
-                        onClick={() => handleTogglePhotoInForm(asset.url)}
-                        className={`group relative w-full aspect-square block rounded-xl overflow-hidden border transition-all bg-black cursor-pointer ${
-                          isAttached
-                            ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
-                            : 'border-white/10 hover:border-pink/60'
-                        }`}
-                      >
-                        <img
-                          src={asset.url}
-                          alt={asset.title || 'Media'}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
-                        />
-                        {isAttached && (
-                          <div className="absolute top-1.5 right-1.5 z-10">
-                            <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
-                              #{attachedIdx + 1}
-                            </span>
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
+                    {visiblePickerAssets.map(asset => {
+                      const isAttached = formPhotos.includes(asset.url);
+                      const attachedIdx = formPhotos.indexOf(asset.url);
+                      return (
+                        <button
+                          key={asset.id}
+                          type="button"
+                          onClick={() => handleTogglePhotoInForm(asset.url)}
+                          style={{ contentVisibility: 'auto', containIntrinsicSize: '140px' }}
+                          className={`relative w-full aspect-square block rounded-xl overflow-hidden border transition-colors bg-[#0f0a17] cursor-pointer ${
+                            isAttached
+                              ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                              : 'border-white/10 hover:border-pink/60'
+                          }`}
+                        >
+                          <img
+                            src={asset.url}
+                            alt={asset.title || 'Media'}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover block"
+                          />
+                          {isAttached && (
+                            <div className="absolute top-1.5 right-1.5 z-10">
+                              <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
+                                #{attachedIdx + 1}
+                              </span>
+                            </div>
+                          )}
+                          <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+                            <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
                           </div>
-                        )}
-                        <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
-                        </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Progressive load more button */}
+                  {visiblePickerAssets.length < filteredPickerAssets.length && (
+                    <div className="py-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setPickerVisibleCount(prev => Math.min(prev + 48, filteredPickerAssets.length))}
+                        className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-neutral-300 hover:text-white cursor-pointer transition-colors"
+                      >
+                        Load More Photos ({visiblePickerAssets.length} of {filteredPickerAssets.length})
                       </button>
-                    );
-                  })}
-                </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
-            {/* Pagination Controls & Done Button */}
+            {/* Bottom Controls Bar */}
             <div className="pt-3 border-t border-white/10 mt-3 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-neutral-400">
-                  {filteredPickerAssets.length} total • <span className="text-pink font-bold">{formPhotos.length} selected</span>
+                  Showing <span className="text-white font-bold">{visiblePickerAssets.length}</span> of {filteredPickerAssets.length} • <span className="text-pink font-bold">{formPhotos.length} selected</span>
                 </span>
-                {totalPickerPages > 1 && (
-                  <div className="flex items-center gap-1.5 ml-2">
-                    <button
-                      type="button"
-                      disabled={pickerPage <= 1}
-                      onClick={() => setPickerPage(p => Math.max(1, p - 1))}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      ← Prev
-                    </button>
-                    <span className="text-xs font-mono text-neutral-300 px-1">
-                      {pickerPage} / {totalPickerPages}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={pickerPage >= totalPickerPages}
-                      onClick={() => setPickerPage(p => Math.min(totalPickerPages, p + 1))}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      Next →
-                    </button>
-                  </div>
+                {visiblePickerAssets.length < filteredPickerAssets.length && (
+                  <button
+                    type="button"
+                    onClick={() => setPickerVisibleCount(filteredPickerAssets.length)}
+                    className="text-[11px] font-mono text-pink hover:underline cursor-pointer ml-1"
+                  >
+                    Load All ({filteredPickerAssets.length})
+                  </button>
                 )}
               </div>
 

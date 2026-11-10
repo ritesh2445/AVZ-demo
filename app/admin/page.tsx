@@ -72,6 +72,7 @@ export default function AdminDashboardPage() {
   const [productPickerOpen, setProductPickerOpen] = useState<boolean>(false);
   const [productPickerSearch, setProductPickerSearch] = useState<string>('');
   const [productPickerPage, setProductPickerPage] = useState<number>(1);
+  const [productPickerVisibleCount, setProductPickerVisibleCount] = useState<number>(48);
   const [isUploadingR2, setIsUploadingR2] = useState(false);
   const [shippingRates, setShippingRates] = useState<{
     express_courier_fee: number;
@@ -243,7 +244,7 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // Fast filtered & paginated assets for the Product Media Pool picker
+  // Fast filtered & progressive streaming assets for the Product Media Pool picker
   const filteredProductPickerAssets = useMemo(() => {
     const query = productPickerSearch.trim().toLowerCase();
     if (!query) return mediaAssets;
@@ -254,11 +255,9 @@ export default function AdminDashboardPage() {
     );
   }, [mediaAssets, productPickerSearch]);
 
-  const totalProductPickerPages = Math.ceil(filteredProductPickerAssets.length / 24) || 1;
-  const paginatedProductPickerAssets = useMemo(() => {
-    const start = (productPickerPage - 1) * 24;
-    return filteredProductPickerAssets.slice(start, start + 24);
-  }, [filteredProductPickerAssets, productPickerPage]);
+  const visibleProductPickerAssets = useMemo(() => {
+    return filteredProductPickerAssets.slice(0, productPickerVisibleCount);
+  }, [filteredProductPickerAssets, productPickerVisibleCount]);
 
   const handleToggleProductImageFromPool = (url: string) => {
     if (productImages.includes(url)) {
@@ -4077,6 +4076,7 @@ export default function AdminDashboardPage() {
                     onClick={() => {
                       setProductPickerSearch('');
                       setProductPickerPage(1);
+                      setProductPickerVisibleCount(48);
                       setProductPickerOpen(true);
                     }}
                     className="text-xs font-mono text-pink hover:underline flex items-center gap-1 cursor-pointer"
@@ -4370,7 +4370,7 @@ export default function AdminDashboardPage() {
                 value={productPickerSearch}
                 onChange={(e) => {
                   setProductPickerSearch(e.target.value);
-                  setProductPickerPage(1);
+                  setProductPickerVisibleCount(48);
                 }}
                 placeholder="Search photos by title, filename, or tag..."
                 className="w-full bg-[#1b1325] border border-white/15 rounded-xl pl-10 pr-9 py-2.5 text-xs text-white font-mono focus:border-pink focus:outline-none"
@@ -4380,7 +4380,7 @@ export default function AdminDashboardPage() {
                   type="button"
                   onClick={() => {
                     setProductPickerSearch('');
-                    setProductPickerPage(1);
+                    setProductPickerVisibleCount(48);
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white cursor-pointer"
                 >
@@ -4389,81 +4389,94 @@ export default function AdminDashboardPage() {
               )}
             </div>
 
-            {/* Grid Area */}
-            <div className="flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar">
-              {paginatedProductPickerAssets.length === 0 ? (
+            {/* Grid Area with Smooth Progressive Infinite Scroll */}
+            <div
+              onScroll={(e) => {
+                const target = e.currentTarget;
+                if (target.scrollTop + target.clientHeight >= target.scrollHeight - 300) {
+                  if (visibleProductPickerAssets.length < filteredProductPickerAssets.length) {
+                    setProductPickerVisibleCount(prev => Math.min(prev + 36, filteredProductPickerAssets.length));
+                  }
+                }
+              }}
+              style={{ overscrollBehavior: 'contain', willChange: 'scroll-position' }}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2 custom-scrollbar transform-gpu"
+            >
+              {visibleProductPickerAssets.length === 0 ? (
                 <div className="h-full min-h-[220px] flex flex-col items-center justify-center text-center p-6 border border-dashed border-white/10 rounded-2xl bg-black/20">
                   <ImageIcon className="w-10 h-10 text-neutral-600 mb-2" />
                   <p className="text-xs font-mono text-neutral-400">No photos found matching your search</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
-                  {paginatedProductPickerAssets.map(asset => {
-                    const isAttached = productImages.includes(asset.url);
-                    const attachedIdx = productImages.indexOf(asset.url);
-                    return (
-                      <button
-                        key={asset.id}
-                        type="button"
-                        onClick={() => handleToggleProductImageFromPool(asset.url)}
-                        className={`group relative w-full aspect-square block rounded-xl overflow-hidden border transition-all bg-black cursor-pointer ${
-                          isAttached
-                            ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
-                            : 'border-white/10 hover:border-pink/60'
-                        }`}
-                      >
-                        <img
-                          src={asset.url}
-                          alt={asset.title || 'Media'}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover block group-hover:scale-105 transition-transform"
-                        />
-                        {isAttached && (
-                          <div className="absolute top-1.5 right-1.5 z-10">
-                            <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
-                              #{attachedIdx + 1}
-                            </span>
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 pb-2">
+                    {visibleProductPickerAssets.map(asset => {
+                      const isAttached = productImages.includes(asset.url);
+                      const attachedIdx = productImages.indexOf(asset.url);
+                      return (
+                        <button
+                          key={asset.id}
+                          type="button"
+                          onClick={() => handleToggleProductImageFromPool(asset.url)}
+                          style={{ contentVisibility: 'auto', containIntrinsicSize: '140px' }}
+                          className={`relative w-full aspect-square block rounded-xl overflow-hidden border transition-colors bg-[#0f0a17] cursor-pointer ${
+                            isAttached
+                              ? 'border-pink ring-2 ring-pink shadow-[0_0_12px_rgba(244,63,94,0.4)]'
+                              : 'border-white/10 hover:border-pink/60'
+                          }`}
+                        >
+                          <img
+                            src={asset.url}
+                            alt={asset.title || 'Media'}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover block"
+                          />
+                          {isAttached && (
+                            <div className="absolute top-1.5 right-1.5 z-10">
+                              <span className="w-5 h-5 rounded-full bg-pink text-black flex items-center justify-center font-bold text-[10px] shadow-lg">
+                                #{attachedIdx + 1}
+                              </span>
+                            </div>
+                          )}
+                          <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+                            <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
                           </div>
-                        )}
-                        <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-[9px] font-mono text-white truncate px-0.5">{asset.title || 'Photo'}</p>
-                        </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Progressive load more button */}
+                  {visibleProductPickerAssets.length < filteredProductPickerAssets.length && (
+                    <div className="py-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setProductPickerVisibleCount(prev => Math.min(prev + 48, filteredProductPickerAssets.length))}
+                        className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-mono text-neutral-300 hover:text-white cursor-pointer transition-colors"
+                      >
+                        Load More Photos ({visibleProductPickerAssets.length} of {filteredProductPickerAssets.length})
                       </button>
-                    );
-                  })}
-                </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
-            {/* Pagination Controls & Done Button */}
+            {/* Bottom Controls Bar */}
             <div className="pt-3 border-t border-white/10 mt-3 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-neutral-400">
-                  {filteredProductPickerAssets.length} total • <span className="text-pink font-bold">{productImages.length} selected</span>
+                  Showing <span className="text-white font-bold">{visibleProductPickerAssets.length}</span> of {filteredProductPickerAssets.length} • <span className="text-pink font-bold">{productImages.length} selected</span>
                 </span>
-                {totalProductPickerPages > 1 && (
-                  <div className="flex items-center gap-1.5 ml-2">
-                    <button
-                      type="button"
-                      disabled={productPickerPage <= 1}
-                      onClick={() => setProductPickerPage(p => Math.max(1, p - 1))}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      ← Prev
-                    </button>
-                    <span className="text-xs font-mono text-neutral-300 px-1">
-                      {productPickerPage} / {totalProductPickerPages}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={productPickerPage >= totalProductPickerPages}
-                      onClick={() => setProductPickerPage(p => Math.min(totalProductPickerPages, p + 1))}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      Next →
-                    </button>
-                  </div>
+                {visibleProductPickerAssets.length < filteredProductPickerAssets.length && (
+                  <button
+                    type="button"
+                    onClick={() => setProductPickerVisibleCount(filteredProductPickerAssets.length)}
+                    className="text-[11px] font-mono text-pink hover:underline cursor-pointer ml-1"
+                  >
+                    Load All ({filteredProductPickerAssets.length})
+                  </button>
                 )}
               </div>
 
