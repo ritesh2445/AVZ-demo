@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { isSoundEnabled } from '../utils/audio';
 
 // ─── Brand pillars to cycle through ────────────────────────────────────────
 const BRAND_PILLARS = [
@@ -23,6 +24,7 @@ const OUTRO_DELAY        = 400;   // binary-only moment before calling onComplet
 export default function MatrixRainIntro({ onComplete }) {
   const canvasRef      = useRef(null);
   const animIdRef      = useRef(null);
+  const audioRef       = useRef(null);
   const finishedRef    = useRef(false);
   const timersRef      = useRef([]);
   const onCompleteRef  = useRef(onComplete);
@@ -35,6 +37,46 @@ export default function MatrixRainIntro({ onComplete }) {
   const [textOpacity, setTextOpacity] = useState(0);
   const [glowOpacity, setGlowOpacity] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  // ── Ambient Matrix Audio Track (Plays during 2nd intro animation) ───────
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!isSoundEnabled()) return;
+
+    const audio = new Audio('/assets/audio/matrix_intro.mp3');
+    audio.preload = 'auto';
+    audio.volume = 0.9;
+    audioRef.current = audio;
+
+    const playAudio = () => {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          // If browser autoplay policies require user interaction
+          const unlock = () => {
+            audio.play().catch(() => {});
+            window.removeEventListener('pointerdown', unlock);
+            window.removeEventListener('keydown', unlock);
+            window.removeEventListener('touchstart', unlock);
+          };
+          window.addEventListener('pointerdown', unlock, { once: true });
+          window.addEventListener('keydown', unlock, { once: true });
+          window.addEventListener('touchstart', unlock, { once: true });
+        });
+      }
+    };
+
+    playAudio();
+
+    return () => {
+      if (audio) {
+        try {
+          audio.pause();
+          audio.currentTime = 0;
+        } catch (e) {}
+      }
+    };
+  }, []);
 
   // ── Cleanup helper ─────────────────────────────────────────────────────
   const clearAllTimers = useCallback(() => {
@@ -213,9 +255,20 @@ export default function MatrixRainIntro({ onComplete }) {
           if (idx + 1 < BRAND_PILLARS.length) {
             showPillar(idx + 1);
           } else {
-            // All pillars done → smooth fade out of binary rain into the site
+            // All pillars done → smooth fade out of binary rain and audio into the site
             schedule(() => {
               setIsFadingOut(true);
+              if (audioRef.current) {
+                const audio = audioRef.current;
+                const fadeInterval = setInterval(() => {
+                  if (audio.volume > 0.1) {
+                    audio.volume = Math.max(0, audio.volume - 0.15);
+                  } else {
+                    clearInterval(fadeInterval);
+                    try { audio.pause(); } catch (e) {}
+                  }
+                }, 40);
+              }
               schedule(() => {
                 if (!finishedRef.current) {
                   finishedRef.current = true;
